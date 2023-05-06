@@ -18,7 +18,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="#">Entidades</a>
+                        <a class="nav-link" aria-current="page" th:href="@{/entidadBase}">Entidades</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -38,11 +38,11 @@
                         <ul class="dropdown-menu multi-level" role="menu">
                             <li><a class="dropdown-item" th:href="@{/tipoIva}">IVA</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Tipo Empleado</a></li>
-                            <li><a class="dropdown-item" href="#">Puesto Empleado</a></li>
-                            <li><a class="dropdown-item" href="#">Sector</a></li>
-                            <li><a class="dropdown-item" href="#">Turno</a></li>
-                            <li><a class="dropdown-item" href="#">Departamento</a></li>
+                            <li><a class="dropdown-item" th:href="@{/tipoEmpleado}">Tipo Empleado</a></li>
+                            <li><a class="dropdown-item" th:href="@{/puesto}">Puesto Empleado</a></li>
+                            <li><a class="dropdown-item" th:href="@{/sector}">Sector</a></li>
+                            <li><a class="dropdown-item" th:href="@{/turno}">Turno</a></li>
+                            <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li>
                         </ul>
                     </li>
                 </ul>

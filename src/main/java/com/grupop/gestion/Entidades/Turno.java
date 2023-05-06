@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -17,13 +17,13 @@ public class Turno {
 
     private String descripcion;
     @Column(name = "hs_entrada")
-    private LocalDate hsEntrada;
+    private LocalTime hsEntrada;
     @Column(name = "hs_salida")
-    private LocalDate hsSalida;
+    private LocalTime hsSalida;
     @Column(name = "hs_entrada_receso")
-    private LocalDate hsEntradaReceso;
+    private LocalTime hsEntradaReceso;
     @Column(name = "hs_salida_receso")
-    private LocalDate hsSalidaReceso;
+    private LocalTime hsSalidaReceso;
 
-    private boolean inhabilitado;
+    private boolean inhabilitado = false;
 }

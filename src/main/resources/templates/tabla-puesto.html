@@ -55,16 +55,16 @@
 
     <main class="container mt-2">
         <div class="row">
-            <h1>Lista de Categorias Impuesto</h1>
+            <h1>Lista de Puestos Laborales</h1>
             <div class="col">
                 <div th:if="${exito}" th:text="${exito}" class="alert alert-primary" role="alert"></div>
 
-                <div th:if="${listaTipoIva.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
-                    Debe ingresar registros <a th:href="@{/tipoIva/form}" class="alert-link">Crear registro</a>
+                <div th:if="${listaPuesto.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
+                    Debe ingresar registros <a th:href="@{/puesto/form}" class="alert-link">Crear registro</a>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div th:unless="${listaTipoIva.isEmpty()}" class="table-responsive">
-                    <a class="btn btn-primary mb-2" th:href="@{/tipoIva/form}">Crear registro</a>
+                <div th:unless="${listaPuesto.isEmpty()}" class="table-responsive">
+                    <a class="btn btn-primary mb-2" th:href="@{/puesto/form}">Crear registro</a>
 
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -75,16 +75,16 @@
                                 </tr>
                         </thead>
                         <tbody>
-                                <tr th:each="iva : ${listaTipoIva}">
-                                    <td th:text="${iva.id}"></td>
-                                    <td th:text="${iva.descripcion}"></td>
+                                <tr th:each="pue : ${listaPuesto}">
+                                    <td th:text="${pue.id}"></td>
+                                    <td th:text="${pue.descripcion}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" th:href="@{tipoIva/form/__${iva.id}__}">Actualizar</a></li>
-                                            <li><a class="dropdown-item" th:href="@{/tipoIva/delete/__${iva.id}__}">Eliminar</a></li>
+                                            <li><a class="dropdown-item" th:href="@{puesto/form/__${pue.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item" th:href="@{puesto/delete/__${pue.id}__}">Eliminar</a></li>
                                         </ul></td>
                                 </tr>
                         </tbody>

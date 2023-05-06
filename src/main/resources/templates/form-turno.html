@@ -53,17 +53,38 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Tipos de Iva</h1>
+      <h1>Carga de Turno</h1>
       <div class="col-6">
 
 
-        <form th:action="@{/tipoIva/create}" th:object="${tipoIva}" method="post" autocomplete="off">
+        <form th:action="@{/turno/create}" th:object="${turno}" method="post" autocomplete="off">
           <input type="hidden" th:field="*{id}">
           <div class="form-floating mb-3">
             <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
             <label for="descripcion">Descripcion</label>
             <div class="invalid-feedback">La descripcion es requerida</div>
           </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsEntrada" th:field="*{hsEntrada}" class="form-control" required>
+            <label for="hsEntrada">hs Entrada</label>
+            <div class="invalid-feedback">La hs Entrada es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsSalida" th:field="*{hsSalida}" class="form-control" required>
+            <label for="hsSalida">hs Salida</label>
+            <div class="invalid-feedback">La hs Salida es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsEntradaReceso" th:field="*{hsEntradaReceso}" class="form-control" required>
+            <label for="hsEntradaReceso">hs Entrada Receso</label>
+            <div class="invalid-feedback">La hs Entrada Receso es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsSalidaReceso" th:field="*{hsSalidaReceso}" class="form-control" required>
+            <label for="hsSalidaReceso">hs Salida Receso</label>
+            <div class="invalid-feedback">La hs Salida Receso es requerida</div>
+          </div>
+
 
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
         </form>
@@ -75,21 +96,30 @@
           <tr class="table-dark">
             <th>Id</th>
             <th>Descripcion</th>
+            <th>Hs Entrada</th>
+            <th>Hs Salida</th>
+            <th>Hs Ent Receso</th>
+            <th>Hs Sal Receso</th>
             <th>Accion</th>
           </tr>
           </thead>
           <tbody>
-          <tr th:each="iva : ${listaTipoIva}">
-            <td th:text="${iva.id}"></td>
-            <td th:text="${iva.descripcion}"></td>
+          <tr th:each="tur : ${listaTurno}">
+            <td th:text="${tur.id}"></td>
+            <td th:text="${tur.descripcion}"></td>
+            <td th:text="${tur.hsEntrada}"></td>
+            <td th:text="${tur.hsSalida}"></td>
+            <td th:text="${tur.hsEntradaReceso}"></td>
+            <td th:text="${tur.hsSalidaReceso}"></td>
             <td>
               <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 Accion
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{tipoIva/form/__${iva.id}__}">Actualizar</a></li>
-                <li><a class="dropdown-item" th:href="@{/tipoIva/delete/__${iva.id}__}">Eliminar</a></li>
-              </ul></td>
+                <li><a class="dropdown-item" th:href="@{turno/form/__${tur.id}__}">Actualizar</a></li>
+                <li><a class="dropdown-item" th:href="@{turno/delete/__${tur.id}__}">Eliminar</a></li>
+              </ul>
+            </td>
           </tr>
           </tbody>
         </table>

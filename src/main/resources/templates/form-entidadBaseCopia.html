@@ -53,47 +53,107 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Tipos de Iva</h1>
-      <div class="col-6">
+      <h1>Carga de Entidad</h1>
+      <div class="col-12">
 
 
-        <form th:action="@{/tipoIva/create}" th:object="${tipoIva}" method="post" autocomplete="off">
+        <form th:action="@{/entidadBase/create}" th:object="${entidad}" method="post" autocomplete="off">
           <input type="hidden" th:field="*{id}">
           <div class="form-floating mb-3">
-            <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
-            <label for="descripcion">Descripcion</label>
-            <div class="invalid-feedback">La descripcion es requerida</div>
+            <input type="text" id="razonSocial" th:field="*{razonSocial}" class="form-control" required>
+            <label for="razonSocial">Razon Social</label>
+            <div class="invalid-feedback">La razon social es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="number" id="cuit" th:field="*{cuit}" class="form-control" required>
+            <label for="cuit">CUIT</label>
+            <div class="invalid-feedback">El CUIT es requerido</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" id="nombreFantasia" th:field="*{nombreFantasia}" class="form-control">
+            <label for="nombreFantasia">Nomb. Fantasia</label>
+          </div>
+          <!---SELECT-->
+          <div class="form-floating mb-3">
+            <select  th:field="*{tipoIva}" id="tipoIva" class="form-select" aria-label="Seleccionar IVA" required>
+              <option selected value="">Ingrese un IVA</option>
+              <option th:each="iva : ${listaIva}" th:text="${iva.descripcion}" th:value="${iva.id}"></option>
+            </select>
+            <label for="tipoIva">Tipo IVA</label>
+            <div class="invalid-feedback">El IVA es requerido!</div>
+          </div>
+
+          AGREGAR SI ES CLIENTE / PROVEEDOR / EMPLEADO
+
+          <div class="form-floating mb-3">
+            <input type="text" id="domicilio" th:field="*{domicilio}" class="form-control" required>
+            <label for="domicilio">Domicilio</label>
+            <div class="invalid-feedback">El domicilio es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" id="telefono" th:field="*{telefono}" class="form-control" required>
+            <label for="telefono">Telefono</label>
+            <div class="invalid-feedback">El telefono es requerido</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="text" id="correo" th:field="*{correo}" class="form-control" required>
+            <label for="correo">Correo</label>
+            <div class="invalid-feedback">El correo es requerida</div>
           </div>
 
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
         </form>
 
       </div>
-      <div class="col-6">
+
+      <!--- TABLA DE ENTIDADES
+      <div class="col">
         <table class="table table-hover table-bordered">
           <thead>
           <tr class="table-dark">
             <th>Id</th>
-            <th>Descripcion</th>
-            <th>Accion</th>
+            <th>Razon Social</th>
+            <th>CUIT</th>
+            <th>Nomb. Fantasia</th>
+            <th>Tipo IVA</th>
+            <th>Cliente</th>
+            <th>Proovedor</th>
+            <th>Empleado</th>
+            <th>Domicilio</th>
+            <th>Telefono</th>
+            <th>Correo</th>
           </tr>
           </thead>
           <tbody>
-          <tr th:each="iva : ${listaTipoIva}">
-            <td th:text="${iva.id}"></td>
-            <td th:text="${iva.descripcion}"></td>
+          <tr th:each="ent : ${listaEntidad}">
+            <td th:text="${ent.id}"></td>
+            <td th:text="${ent.razonSocial}"></td>
+            <td th:text="${ent.cuit}"></td>
+            <td th:text="${ent.nombreFantasia}"></td>
+            <td th:text="${ent.tipoIva}"></td>
+            <td th:text="${ent.cliente}"></td>
+            <td th:text="${ent.proveedor}"></td>
+            <td th:text="${ent.empleado}"></td>
+            <td th:text="${ent.domicilio}"></td>
+            <td th:text="${ent.telefono}"></td>
+            <td th:text="${ent.correo}"></td>
+
+
             <td>
               <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 Accion
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{tipoIva/form/__${iva.id}__}">Actualizar</a></li>
-                <li><a class="dropdown-item" th:href="@{/tipoIva/delete/__${iva.id}__}">Eliminar</a></li>
-              </ul></td>
+                <li><a class="dropdown-item" th:href="@{entidadBase/form/__${ent.id}__}">Actualizar</a></li>
+                <li><a class="dropdown-item" th:href="@{entidadBase/delete/__${ent.id}__}">Eliminar</a></li>
+              </ul>
+            </td>
           </tr>
           </tbody>
         </table>
       </div>
+      -->
+
     </div>
   </div>
 </main>

@@ -53,11 +53,11 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Tipos de Iva</h1>
+      <h1>Carga de Puestos Laborales</h1>
       <div class="col-6">
 
 
-        <form th:action="@{/tipoIva/create}" th:object="${tipoIva}" method="post" autocomplete="off">
+        <form th:action="@{/puesto/create}" th:object="${puesto}" method="post" autocomplete="off">
           <input type="hidden" th:field="*{id}">
           <div class="form-floating mb-3">
             <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
@@ -79,16 +79,16 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="iva : ${listaTipoIva}">
-            <td th:text="${iva.id}"></td>
-            <td th:text="${iva.descripcion}"></td>
+          <tr th:each="pue : ${listaPuesto}">
+            <td th:text="${pue.id}"></td>
+            <td th:text="${pue.descripcion}"></td>
             <td>
               <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 Accion
               </button>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{tipoIva/form/__${iva.id}__}">Actualizar</a></li>
-                <li><a class="dropdown-item" th:href="@{/tipoIva/delete/__${iva.id}__}">Eliminar</a></li>
+                <li><a class="dropdown-item" th:href="@{puesto/form/__${pue.id}__}">Actualizar</a></li>
+                <li><a class="dropdown-item" th:href="@{puesto/delete/__${pue.id}__}">Eliminar</a></li>
               </ul></td>
           </tr>
           </tbody>

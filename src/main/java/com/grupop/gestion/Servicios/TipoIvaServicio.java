@@ -18,7 +18,6 @@ public class TipoIvaServicio {
     public void crear(TipoIva dto){
         TipoIva tipoIva = new TipoIva();
         tipoIva.setDescripcion(dto.getDescripcion());
-        System.out.println(dto.getDescripcion());
         tipoIvaRepo.save(dto);
     }
 
