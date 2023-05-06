@@ -1,15 +1,13 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.Entidades.Departamento;
 import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import com.grupop.gestion.Servicios.TipoIvaServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -61,20 +59,20 @@ public class EntidadBaseControlador {
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
         return mav;
     }
-
-    //entidadBase/create
-    //entidadBase/create
     @PostMapping("/create")
     public RedirectView create(EntidadBase dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/entidadBase");
         try{
-            System.out.println("entre al metodo");
+            entidadBaseServicio.crear(dto);
+            attributes.addFlashAttribute("exito", "La operacion se ha realizado con exito");
         } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
+            attributes.addFlashAttribute("entidadBase", dto);
+            attributes.addFlashAttribute("exception", e.getMessage());
+            redirect.setUrl("/entidadBase/form");
         }
-
         return redirect;
     }
+
 
     @PostMapping("/update")
     public RedirectView update(EntidadBase dto, RedirectAttributes attributes){
