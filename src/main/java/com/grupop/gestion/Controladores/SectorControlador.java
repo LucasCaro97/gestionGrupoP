@@ -54,7 +54,7 @@ public class SectorControlador {
     @GetMapping("/form/{id}")
     public ModelAndView getFormUpdate(@PathVariable Long id){
         ModelAndView mav = new ModelAndView("form-sector");
-        mav.addObject("puesto", sectorServicio.buscarPorId(id));
+        mav.addObject("sector", sectorServicio.buscarPorId(id));
         mav.addObject("action", "update");
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         return mav;

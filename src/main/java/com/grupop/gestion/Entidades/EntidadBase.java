@@ -34,6 +34,9 @@ public class EntidadBase {
     @JoinColumn(name = "fk_empleado")
     @OneToOne
     private Empleado empleado;
+    @JoinColumn(name = "fk_vendedor")
+    @OneToOne
+    private Vendedor vendedor;
     private String domicilio;
     private Long telefono;
     private String correo;

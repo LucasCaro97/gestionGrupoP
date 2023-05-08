@@ -54,13 +54,13 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Entidad</h1>
-      <form class="row g-3 needs-validation" th:action="@{/entidadBase/__${action}__}" th:object="${entidad}"  method="post" autocomplete="off">
+      <h1>Entidad Base</h1>
+      <div class="row g-3" th:object="${entidad}"  method="post" autocomplete="off">
         <input type="hidden" th:field="*{id}">
 
         <div class="col-md-12">
           <label for="razonSocial" class="form-label">Razon Social: </label>
-          <input type="text" class="form-control" id="razonSocial" th:field="*{razonSocial}" placeholder="Ingese nombre o razon social" required>
+          <input type="text" class="form-control" id="razonSocial" th:field="*{razonSocial}" placeholder="Ingese nombre o razon social" readonly>
           <div class="valid-feedback">
             Looks good!
           </div>
@@ -68,7 +68,7 @@
 
         <div class="col-md-4">
           <label for="cuit" class="form-label">CUIT: </label>
-          <input type="number" class="form-control" id="cuit" th:field="*{cuit}" placeholder="20405046549">
+          <input type="number" class="form-control" id="cuit" th:field="*{cuit}" placeholder="20405046549" readonly>
           <div class="valid-feedback">
             Looks good!
           </div>
@@ -77,7 +77,7 @@
 
         <div class="col-md-4">
           <label for="nombreFantasia" class="form-label">Nombre Fantasia: </label>
-          <input type="text" class="form-control" id="nombreFantasia" th:field="*{nombreFantasia}" placeholder="Ingrese nombre fantasia">
+          <input type="text" class="form-control" id="nombreFantasia" th:field="*{nombreFantasia}" placeholder="Ingrese nombre fantasia" readonly>
           <div class="valid-feedback">
             Looks good!
           </div>
@@ -86,7 +86,7 @@
 
         <div class="col-md-4">
           <label for="tipoIva" class="form-label">Tipo IVA: </label>
-          <select  th:field="*{tipoIva}" id="tipoIva" class="form-select" aria-label="Seleccionar IVA" required>
+          <select  th:field="*{tipoIva}" id="tipoIva" class="form-select" aria-label="Seleccionar IVA" readonly>
             <option selected value="">Seleccione un IVA</option>
             <option th:each="iva : ${listaIva}" th:text="${iva.descripcion}" th:value="${iva.id}"></option>
           </select>
@@ -95,33 +95,73 @@
 
         <div class="col-md-6">
           <label for="domicilio" class="form-label">Domicilio: </label>
-          <input type="text" class="form-control" th:field="*{domicilio}" id="domicilio">
+          <input type="text" class="form-control" th:field="*{domicilio}" id="domicilio" readonly>
           <div class="invalid-feedback">
             El domicilio es requerido!
           </div>
         </div>
         <div class="col-md-3">
           <label for="telefono" class="form-label">Nro Telefono: </label>
-          <input type="number" class="form-control" th:field="*{telefono}" id="telefono">
+          <input type="number" class="form-control" th:field="*{telefono}" id="telefono" readonly>
           <div class="invalid-feedback">
             El telefono es requerido!
           </div>
         </div>
         <div class="col-md-3">
           <label for="correo" class="form-label">Correo Electronico: </label>
-          <input type="text" class="form-control" th:field="*{correo}" id="correo">
+          <input type="text" class="form-control" th:field="*{correo}" id="correo" readonly>
           <div class="invalid-feedback">
             El correo es requerido!
           </div>
         </div>
 
-        <div class="col-12">
-          <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
-        </div>
+        <h3>Tipo Empleado</h3>
+
+        <form th:object="${empleado}" th:action="@{/empleado/__${action}__}" method="post">
+          <input type="hidden" th:field="*{id}">
+
+          <div class="col-md-4">
+            <label for="tipoEmpleado" class="form-label">Tipo IVA: </label>
+            <select  th:field="*{tipoEmpleado}" id="tipoEmpleado" class="form-select" aria-label="Seleccionar tipo">
+              <option selected value="">Seleccionar tipo</option>
+              <option th:each="tipo : ${listaTipo}" th:text="${tipo.descripcion}" th:value="${tipo.id}"></option>
+            </select>
+            <div class="invalid-feedback">El tipo es requerido!</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="puesto" class="form-label">Puesto: </label>
+            <select  th:field="*{puesto}" id="puesto" class="form-select" aria-label="Seleccionar Puesto">
+              <option selected value="">Seleccione un Puesto</option>
+              <option th:each="pue : ${listaPuesto}" th:text="${pue.descripcion}" th:value="${pue.id}"></option>
+            </select>
+            <div class="invalid-feedback">El puesto es requerido!</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="sector" class="form-label">Sector: </label>
+            <select  th:field="*{sector}" id="sector" class="form-select" aria-label="Seleccionar Sector" readonly>
+              <option selected value="">Seleccione Sector</option>
+              <option th:each="sec : ${listaSector}" th:text="${sec.descripcion}" th:value="${sec.id}"></option>
+            </select>
+            <div class="invalid-feedback">El sector es requerido!</div>
+          </div>
+
+          <div class="col-md-4">
+            <label for="departamento" class="form-label">Departamento </label>
+            <select  th:field="*{departamento}" id="departamento" class="form-select" aria-label="Seleccionar Departamento" readonly>
+              <option selected value="">Seleccione un departamento</option>
+              <option th:each="dep : ${listaDep}" th:text="${dep.descripcion}" th:value="${dep.id}"></option>
+            </select>
+            <div class="invalid-feedback">El departamento es requerido!</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Crear</button>
+
+        </form>
 
 
-
-      </form>
+      </div>
 
     </div>
   </div>

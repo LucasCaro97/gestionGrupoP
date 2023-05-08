@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+
 public class Empleado {
 
     @Id
@@ -29,10 +30,11 @@ public class Empleado {
     @JoinColumn(name = "fk_departamento")
     @OneToOne
     private Departamento departamento;
-    @JoinColumn(name = "fk_vendedor")
-    @OneToOne
-    private Vendedor vendedor;
     @Column(name = "fecha_alta")
     private LocalDate fechaAlta = LocalDate.now();
 
+
+    public String toString() {
+        return this.getId().toString();
+    }
 }

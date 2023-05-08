@@ -17,7 +17,6 @@ public class ClienteControlador {
     @PostMapping("/create")
     public void create(){
         try{
-            clienteServicio.crear();
             System.out.printf("Cliente generado");
         } catch(Exception e){
             e.getMessage();

@@ -17,4 +17,8 @@ public class Proveedor {
     @Column(name = "fecha_alta")
     private LocalDate fechaAlta = LocalDate.now();
 
+
+    public String toString() {
+        return this.getId().toString();
+    }
 }

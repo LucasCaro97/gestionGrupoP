@@ -77,9 +77,11 @@
                                     <th>Cliente</th>
                                     <th>Proovedor</th>
                                     <th>Empleado</th>
+                                    <th>Vendedor</th>
                                     <th>Domicilio</th>
                                     <th>Telefono</th>
                                     <th>Correo</th>
+                                    <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
@@ -88,10 +90,11 @@
                                     <td th:text="${ent.razonSocial}"></td>
                                     <td th:text="${ent.cuit}"></td>
                                     <td th:text="${ent.nombreFantasia}"></td>
-                                    <td th:text="${ent.tipoIva}"></td>
+                                    <td th:text="${ent.tipoIva.descripcion}"></td>
                                     <td th:text="${ent.cliente}"></td>
                                     <td th:text="${ent.proveedor}"></td>
                                     <td th:text="${ent.empleado}"></td>
+                                    <td th:text="${ent.vendedor}"></td>
                                     <td th:text="${ent.domicilio}"></td>
                                     <td th:text="${ent.telefono}"></td>
                                     <td th:text="${ent.correo}"></td>
@@ -102,8 +105,11 @@
                                         Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" th:href="@{entidadBase/form/__${ent.id}__}">Actualizar</a></li>
-                                            <li><a class="dropdown-item" th:href="@{entidadBase/delete/__${ent.id}__}">Eliminar</a></li>
+                                            <li><a class="dropdown-item border" th:href="@{entidadBase/form/__${ent.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{/entidadBase/setClient/__${ent.id}__}">Alta Cliente</a></li>
+                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{entidadBase/setProv/__${ent.id}__}">Alta Proveedor</a></li>
+                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{entidadBase/setEmp/__${ent.id}__}">Alta Empleado</a></li>
+                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{entidadBase/setVend/__${ent.id}__}">Alta Vendedor</a></li>
                                         </ul>
                                     </td>
                                 </tr>

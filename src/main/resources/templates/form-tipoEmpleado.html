@@ -57,7 +57,7 @@
             <div class="col-6">
 
 
-                <form th:action="@{/tipoEmpleado/create}" th:object="${tipoEmpleado}" method="post" autocomplete="off">
+                <form th:action="@{/tipoEmpleado/__${action}__}" th:object="${tipoEmpleado}" method="post" autocomplete="off">
                     <input type="hidden" th:field="*{id}">
                     <div class="form-floating mb-3">
                         <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
@@ -75,21 +75,12 @@
                     <tr class="table-dark">
                         <th>Id</th>
                         <th>Descripcion</th>
-                        <th>Accion</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="tipoemp : ${listaTipoEmpleado}">
                         <td th:text="${tipoemp.id}"></td>
                         <td th:text="${tipoemp.descripcion}"></td>
-                        <td>
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                Accion
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" th:href="@{tipoEmpleado/form/__${tipoemp.id}__}">Actualizar</a></li>
-                                <li><a class="dropdown-item" th:href="@{/tipoEmpleado/delete/__${tipoemp.id}__}">Eliminar</a></li>
-                            </ul></td>
                     </tr>
                     </tbody>
                 </table>

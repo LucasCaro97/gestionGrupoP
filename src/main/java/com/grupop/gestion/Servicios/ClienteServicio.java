@@ -14,10 +14,16 @@ public class ClienteServicio {
 
         @Transactional
         public void crear(){
-                Cliente cli = new Cliente();
-                clienteRepo.save(cli);
+                Cliente cliente = new Cliente();
+                clienteRepo.save(cliente);
         }
 
         @Transactional
         public void eliminarPorId(Long id){ clienteRepo.findById(id);   }
+
+        @Transactional(readOnly = true)
+        public Long buscarUltimoId(){ return clienteRepo.findLastId(); }
+
+        @Transactional(readOnly = true)
+        public Cliente buscarPorId(Long id){ return clienteRepo.findById(id).get();}
 }

@@ -18,5 +18,7 @@ public class Cliente {
     private LocalDate fechaAlta = LocalDate.now();
 
 
-
+    public String toString() {
+        return this.getId().toString();
+    }
 }

@@ -100,7 +100,6 @@
             <th>Hs Salida</th>
             <th>Hs Ent Receso</th>
             <th>Hs Sal Receso</th>
-            <th>Accion</th>
           </tr>
           </thead>
           <tbody>
@@ -111,15 +110,6 @@
             <td th:text="${tur.hsSalida}"></td>
             <td th:text="${tur.hsEntradaReceso}"></td>
             <td th:text="${tur.hsSalidaReceso}"></td>
-            <td>
-              <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                Accion
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" th:href="@{turno/form/__${tur.id}__}">Actualizar</a></li>
-                <li><a class="dropdown-item" th:href="@{turno/delete/__${tur.id}__}">Eliminar</a></li>
-              </ul>
-            </td>
           </tr>
           </tbody>
         </table>

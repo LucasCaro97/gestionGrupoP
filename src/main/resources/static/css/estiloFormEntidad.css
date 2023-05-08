@@ -16,3 +16,22 @@
     margin-right: 3%;
     height: 35px;
 }
+
+.subentidad{
+    display: flex;
+}
+
+.lblSubentidad{
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.inputSubentidad{
+    width: 25%;
+}
+
+
+.btnSubentidad{
+    margin-top: 2px;
+    margin-left: 15px;
+}
