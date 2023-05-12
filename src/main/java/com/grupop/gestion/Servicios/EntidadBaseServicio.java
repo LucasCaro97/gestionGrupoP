@@ -113,6 +113,8 @@ public class EntidadBaseServicio {
 
             ent.setEmpleado(emp);
             entidadBaseRepo.save(ent);
+        }else {
+            System.out.println("La entidad ya es un empleado");
         }
 
     }
@@ -129,6 +131,8 @@ public class EntidadBaseServicio {
 
             ent.setVendedor(vendedor);
             entidadBaseRepo.save(ent);
+        }else {
+            System.out.println("La entidad ya es un vendedor");
         }
     }
 }

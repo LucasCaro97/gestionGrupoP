@@ -59,39 +59,48 @@
 </header>
 
 
-    <main class="container mt-2">
+<main class="container mt-2">
         <div class="row">
-            <h1>Lista de Departamentos</h1>
+            <h1>Lista de Monedas</h1>
             <div class="col">
                 <div th:if="${exito}" th:text="${exito}" class="alert alert-primary" role="alert"></div>
 
-                <div th:if="${listaDepartamento.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
-                    Debe ingresar registros <a th:href="@{/departamento/form}" class="alert-link">Crear registro</a>
+                <div th:if="${listaMoneda.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
+                    Debe ingresar registros <a th:href="@{/moneda/form}" class="alert-link">Crear registro</a>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div th:unless="${listaDepartamento.isEmpty()}" class="table-responsive">
-                    <a class="btn btn-primary mb-2" th:href="@{/departamento/form}">Crear registro</a>
+                <div th:unless="${listaMoneda.isEmpty()}" class="table-responsive">
+                    <a class="btn btn-primary mb-2" th:href="@{/moneda/form}">Crear registro</a>
 
                     <table class="table table-hover table-bordered">
                         <thead>
                                 <tr class="table-dark">
                                     <th>Id</th>
                                     <th>Descripcion</th>
+                                    <th>Simbolo</th>
+                                    <th>Abreviatura</th>
+                                    <th>Cotizacion</th>
+                                    <th>Cotizacion Vta</th>
                                     <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
-                                <tr th:each="dep : ${listaDepartamento}">
-                                    <td th:text="${dep.id}"></td>
-                                    <td th:text="${dep.descripcion}"></td>
+                                <tr th:each="mon : ${listaMoneda}">
+                                    <td th:text="${mon.id}"></td>
+                                    <td th:text="${mon.descripcion}"></td>
+                                    <td th:text="${mon.simbolo}"></td>
+                                    <td th:text="${mon.abreviatura}"></td>
+                                    <td th:text="${mon.cotizacion}"></td>
+                                    <td th:text="${mon.cotizacionVta}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" th:href="@{departamento/form/__${dep.id}__}">Actualizar</a></li>
-                                            <li><a class="dropdown-item" th:href="@{departamento/delete/__${dep.id}__}">Eliminar</a></li>
-                                        </ul></td>
+                                            <li><a class="dropdown-item" th:href="@{moneda/form/__${mon.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item" th:href="@{moneda/delete/__${mon.id}__}">Eliminar</a></li>
+                                        </ul>
+                                    </td>
                                 </tr>
                         </tbody>
                     </table>

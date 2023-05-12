@@ -59,11 +59,11 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Puestos Laborales</h1>
+      <h1>Carga de Tipos de Operaciones</h1>
       <div class="col-6">
 
 
-        <form th:action="@{/puesto/__${action}__}" th:object="${puesto}" method="post" autocomplete="off">
+        <form th:action="@{/tipoOperacion/__${action}__}" th:object="${tipoOperacion}" method="post" autocomplete="off">
           <input type="hidden" th:field="*{id}">
           <div class="form-floating mb-3">
             <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
@@ -84,9 +84,9 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="pue : ${listaPuesto}">
-            <td th:text="${pue.id}"></td>
-            <td th:text="${pue.descripcion}"></td>
+          <tr th:each="top : ${listaOperaciones}">
+            <td th:text="${top.id}"></td>
+            <td th:text="${top.descripcion}"></td>
           </tr>
           </tbody>
         </table>

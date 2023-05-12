@@ -55,15 +55,59 @@
     </div>
   </nav>
 </header>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">Grupo Piñhero</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" th:href="@{/entidadBase}">Entidades</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Operaciones
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Compras</a></li>
+              <li><a class="dropdown-item" href="#">Ventas</a></li>
+              <li><a class="dropdown-item" href="#">Pagos</a></li>
+              <li><a class="dropdown-item" href="#">Cobros</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Parametros Generales
+            </a>
+            <ul class="dropdown-menu multi-level" role="menu">
+              <li><a class="dropdown-item" th:href="@{/tipoIva}">IVA</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/tipoEmpleado}">Tipo Empleado</a></li>
+              <li><a class="dropdown-item" th:href="@{/puesto}">Puesto Empleado</a></li>
+              <li><a class="dropdown-item" th:href="@{/sector}">Sector</a></li>
+              <li><a class="dropdown-item" th:href="@{/turno}">Turno</a></li>
+              <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li><li>
+              <hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
+              <li><a class="dropdown-item" th:href="@{/formaDePago}">Forma de Pago</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
 
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Puestos Laborales</h1>
+      <h1>Carga de Forma de Pago</h1>
       <div class="col-6">
 
 
-        <form th:action="@{/puesto/__${action}__}" th:object="${puesto}" method="post" autocomplete="off">
+        <form th:action="@{/formaDePago/__${action}__}" th:object="${formaDePago}" method="post" autocomplete="off">
           <input type="hidden" th:field="*{id}">
           <div class="form-floating mb-3">
             <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
@@ -84,9 +128,9 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="pue : ${listaPuesto}">
-            <td th:text="${pue.id}"></td>
-            <td th:text="${pue.descripcion}"></td>
+          <tr th:each="fdp : ${listaPago}">
+            <td th:text="${fdp.id}"></td>
+            <td th:text="${fdp.descripcion}"></td>
           </tr>
           </tbody>
         </table>

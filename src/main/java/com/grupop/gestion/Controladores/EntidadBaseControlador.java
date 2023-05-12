@@ -1,14 +1,11 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Entidades.Departamento;
 import com.grupop.gestion.Entidades.EntidadBase;
-import com.grupop.gestion.Servicios.ClienteServicio;
 import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import com.grupop.gestion.Servicios.TipoIvaServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -16,7 +13,6 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.Map;
-import java.util.jar.Attributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +21,6 @@ public class EntidadBaseControlador {
 
     private final EntidadBaseServicio entidadBaseServicio;
     private final TipoIvaServicio tipoIvaServicio;
-    private final ClienteServicio clienteServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
