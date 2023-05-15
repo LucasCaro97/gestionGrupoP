@@ -42,12 +42,16 @@
               <li><a class="dropdown-item" th:href="@{/puesto}">Puesto Empleado</a></li>
               <li><a class="dropdown-item" th:href="@{/sector}">Sector</a></li>
               <li><a class="dropdown-item" th:href="@{/turno}">Turno</a></li>
-              <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li><li>
-              <hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
-              <li><a class="dropdown-item" th:href="@{/tipoPago}">Forma de Pago</a></li>
+              <li><a class="dropdown-item" th:href="@{/tipoDePago}">Tipo de Pago</a></li>
+              <li><a class="dropdown-item" th:href="@{/}">Forma de Pago</a></li>
               <li><a class="dropdown-item" th:href="@{/tipoOperacion}">Tipo Operacion</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" th:href="@{/tipoCuentaBanco}">Tipo Cuenta/Banco</a></li>
+              <li><a class="dropdown-item" th:href="@{/ctaBcoTja}">Cuentas Banco/Tarjeta</a></li>
+              <li><hr class="dropdown-divider"></li>
             </ul>
           </li>
         </ul>
@@ -59,11 +63,11 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Tipos de Operaciones</h1>
+      <h1>Carga de Tipo de Pago</h1>
       <div class="col-6">
 
 
-        <form th:action="@{/tipoOperacion/__${action}__}" th:object="${tipoOperacion}" method="post" autocomplete="off">
+        <form th:action="@{/tipoDePago/__${action}__}" th:object="${tipoPago}" method="post" autocomplete="off">
           <input type="hidden" th:field="*{id}">
           <div class="form-floating mb-3">
             <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
@@ -84,9 +88,9 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="top : ${listaOperaciones}">
-            <td th:text="${top.id}"></td>
-            <td th:text="${top.descripcion}"></td>
+          <tr th:each="fdp : ${listaPago}">
+            <td th:text="${fdp.id}"></td>
+            <td th:text="${fdp.descripcion}"></td>
           </tr>
           </tbody>
         </table>

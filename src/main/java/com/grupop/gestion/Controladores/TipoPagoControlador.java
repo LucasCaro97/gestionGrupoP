@@ -1,7 +1,7 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Entidades.FormaDePago;
-import com.grupop.gestion.Servicios.FormaDePagoServicio;
+import com.grupop.gestion.Entidades.TipoPago;
+import com.grupop.gestion.Servicios.TipoPagoServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,31 +18,31 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("formaDePago")
-public class FormaDePagoController {
+@RequestMapping("tipoDePago")
+public class TipoPagoControlador {
 
-    private final FormaDePagoServicio formaDePagoServicio;
+    private final TipoPagoServicio tipoPagoServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("tabla-formaDePago");
+        ModelAndView mav = new ModelAndView("tabla-tipoDePago");
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap != null) {    mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaPago", formaDePagoServicio.obtenerTodos());
+        mav.addObject("listaPago", tipoPagoServicio.obtenerTodos());
         return mav;
 
     }
 
     @GetMapping("/form")
     public ModelAndView getForm(HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("form-formaDePago");
+        ModelAndView mav = new ModelAndView("form-tipoDePago");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if(inputFlashMap!=null){
-            mav.addObject("formaDePago", inputFlashMap.get("formaDePago"));
+            mav.addObject("tipoPago", inputFlashMap.get("tipoPago"));
             mav.addObject("exception", inputFlashMap.get("exception"));
         }else{
-            mav.addObject("formaDePago", new FormaDePago());
-            mav.addObject("listaPago", formaDePagoServicio.obtenerTodos());
+            mav.addObject("tipoPago", new TipoPago());
+            mav.addObject("listaPago", tipoPagoServicio.obtenerTodos());
         }
         mav.addObject("action", "create");
         return mav;
@@ -50,47 +50,47 @@ public class FormaDePagoController {
 
     @GetMapping("/form/{id}")
     public ModelAndView getFormUpd(@PathVariable Long id){
-        ModelAndView mav = new ModelAndView("form-formaDePago");
+        ModelAndView mav = new ModelAndView("form-tipoDePago");
         mav.addObject("action", "update");
-        mav.addObject("formaDePago", formaDePagoServicio.obtenerPorId(id));
-        mav.addObject("listaPago", formaDePagoServicio.obtenerTodos());
+        mav.addObject("tipoPago", tipoPagoServicio.obtenerPorId(id));
+        mav.addObject("listaPago", tipoPagoServicio.obtenerTodos());
         return mav;
     }
 
     @PostMapping("/create")
-    public RedirectView create(FormaDePago dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/formaDePago");
+    public RedirectView create(TipoPago dto, RedirectAttributes attributes){
+        RedirectView redirect = new RedirectView("/tipoDePago");
         try{
-            formaDePagoServicio.crear(dto);
+            tipoPagoServicio.crear(dto);
             attributes.addFlashAttribute("exito", "Se ha creado correctamente la forma de pago");
         }catch (Exception e){
-            attributes.addFlashAttribute("formaDePago", dto);
+            attributes.addFlashAttribute("tipoPago", dto);
             attributes.addFlashAttribute("exception", e.getMessage());
-            redirect.setUrl("/formaDePago/form");
+            redirect.setUrl("/tipoDePago/form");
         }
         return redirect;
     }
 
 
     @PostMapping("/update")
-    public RedirectView update(FormaDePago dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/formaDePago");
+    public RedirectView update(TipoPago dto, RedirectAttributes attributes){
+        RedirectView redirect = new RedirectView("/tipoDePago");
         try {
-            formaDePagoServicio.actualizar(dto);
+            tipoPagoServicio.actualizar(dto);
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente la forma de pago");
         }catch(Exception e){
-            attributes.addFlashAttribute("formaDePago", dto);
+            attributes.addFlashAttribute("tipoPago", dto);
             attributes.addFlashAttribute("exception", e.getMessage());
-            redirect.setUrl("/formaDePago/form");
+            redirect.setUrl("/tipoDePago/form");
         }
         return redirect;
     }
 
 
-    @PostMapping("/delete")
+    @PostMapping("/delete/{id}")
     public RedirectView delete(@PathVariable Long id, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/formaDePago");
-        formaDePagoServicio.elimianrPorId(id);
+        RedirectView redirect = new RedirectView("/tipoDePago");
+        tipoPagoServicio.elimianrPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente la forma de pago");
         return redirect;
     }

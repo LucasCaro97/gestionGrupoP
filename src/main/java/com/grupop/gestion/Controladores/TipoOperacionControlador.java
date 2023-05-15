@@ -2,6 +2,7 @@ package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.TipoOperacion;
 import com.grupop.gestion.Servicios.TipoOperacionServicio;
+import com.grupop.gestion.Servicios.TipoPagoServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class TipoOperacionControlador {
 
     private final TipoOperacionServicio tipoOperacionServicio;
+    private final TipoPagoServicio tipoPagoServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -43,6 +45,7 @@ public class TipoOperacionControlador {
             mav.addObject("tipoOperacion", new TipoOperacion());
             mav.addObject("action", "create");
         }
+        mav.addObject("listaOperaciones", tipoOperacionServicio.obtenerTodos());
         return mav;
     }
 

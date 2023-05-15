@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grupo Piñhero</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/css/estiloFormEntidad.css}">
 </head>
 <body>
 
@@ -45,53 +46,9 @@
               <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li><li>
               <hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
-              <li><a class="dropdown-item" th:href="@{/formaDePago}">Forma de Pago</a></li>
+              <li><a class="dropdown-item" th:href="@{/tipoPago}">Forma de Pago</a></li>
               <li><a class="dropdown-item" th:href="@{/tipoOperacion}">Tipo Operacion</a></li>
               <li><a class="dropdown-item" th:href="@{/tipoCuentaBanco}">Tipo Cuenta/Banco</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Grupo Piñhero</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page" th:href="@{/entidadBase}">Entidades</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Operaciones
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Compras</a></li>
-              <li><a class="dropdown-item" href="#">Ventas</a></li>
-              <li><a class="dropdown-item" href="#">Pagos</a></li>
-              <li><a class="dropdown-item" href="#">Cobros</a></li>
-            </ul>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Parametros Generales
-            </a>
-            <ul class="dropdown-menu multi-level" role="menu">
-              <li><a class="dropdown-item" th:href="@{/tipoIva}">IVA</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" th:href="@{/tipoEmpleado}">Tipo Empleado</a></li>
-              <li><a class="dropdown-item" th:href="@{/puesto}">Puesto Empleado</a></li>
-              <li><a class="dropdown-item" th:href="@{/sector}">Sector</a></li>
-              <li><a class="dropdown-item" th:href="@{/turno}">Turno</a></li>
-              <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li><li>
-              <hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
-              <li><a class="dropdown-item" th:href="@{/formaDePago}">Forma de Pago</a></li>
             </ul>
           </li>
         </ul>
@@ -103,42 +60,78 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Forma de Pago</h1>
-      <div class="col-6">
+      <h1>Carga de Formas de Pago</h1>
+      <form class="row g-3 needs-validation" th:action="@{/formaDePago/__${action}__}" th:object="${formaDePago}"  method="post" autocomplete="off">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="col-md-6">
+          <label for="tipoOperacion" class="form-label">Tipo Operacion: </label>
+          <select th:field="*{tipoOperacion}" id="tipoOperacion" class="form-select" aria-label="Seleccionar tipo" required>
+            <option selecter value="">Seleccione tipo</option>
+            <option th:each="tipo : ${listaTipoOp}" th:text="${tipo.descripcion}" th:value="${tipo.id}"></option>
+          </select>
+        </div>
 
 
-        <form th:action="@{/formaDePago/__${action}__}" th:object="${formaDePago}" method="post" autocomplete="off">
-          <input type="hidden" th:field="*{id}">
-          <div class="form-floating mb-3">
-            <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
-            <label for="descripcion">Descripcion</label>
-            <div class="invalid-feedback">La descripcion es requerida</div>
+        <div class="col-md-6">
+          <label for="tipo" class="form-label">Tipo Pago: </label>
+          <select  th:field="*{tipoPago}" id="tipo" class="form-select" aria-label="Seleccionar IVA" required>
+            <option selected value="">Seleccione un tipo</option>
+            <option th:each="tipo : ${listaTipo}" th:text="${tipo.descripcion}" th:value="${tipo.id}"></option>
+          </select>
+        </div>
+
+
+        <div class="col-md-8">
+          <label for="descripcion" class="form-label">Descripcion: </label>
+          <input type="text" class="form-control" id="descripcion" th:field="*{descripcion}" placeholder="Ingese una descripcion" required>
+          <div class="valid-feedback">
+            Looks good!
           </div>
+        </div>
 
+        <div class="col-md-4">
+          <label for ="abreviatura" class="form-label">Abreviatura: </label>
+          <input type="text" class="form-control" id="abreviatura" th:field="*{abreviatura}">
+        </div>
+
+        <div class="col-md-4">
+          <label for ="cuenta" class="form-label">Cuenta: </label>
+          <input type="text" class="form-control" id="cuenta" th:field="*{cuenta}" placeholder="Termina siendo select">
+        </div>
+
+
+        <div class="col-md-4">
+          <label for="bancoTarjeta" class="form-label">Banco/Tarjeta: </label>
+          <select  th:field="*{bancoTarjeta}" id="bancoTarjeta" class="form-select" aria-label="Seleccionar banco/tarjeta" required>
+            <option selected value="">Seleccione bco/tarj</option>
+            <option th:each="bot : ${listaBot}" th:text="${bot.descripcion}" th:value="${bot.id}"></option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="moneda" class="form-label">Moneda: </label>
+          <select  th:field="*{moneda}" id="moneda" class="form-select" aria-label="Seleccionar moneda">
+            <option selected value="">Seleccione moneda</option>
+            <option th:each="mon : ${listaMon}" th:text="${mon.descripcion}" th:value="${mon.id}"></option>
+          </select>
+        </div>
+
+        <div class="col-12">
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
-        </form>
+        </div>
 
-      </div>
-      <div class="col-6">
-        <table class="table table-hover table-bordered">
-          <thead>
-          <tr class="table-dark">
-            <th>Id</th>
-            <th>Descripcion</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="fdp : ${listaPago}">
-            <td th:text="${fdp.id}"></td>
-            <td th:text="${fdp.descripcion}"></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+
+
+      </form>
+
     </div>
   </div>
 </main>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>
+
+

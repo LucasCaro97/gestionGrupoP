@@ -47,7 +47,7 @@
                             <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li><li>
                             <hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
-                            <li><a class="dropdown-item" th:href="@{/formaDePago}">Forma de Pago</a></li>
+                            <li><a class="dropdown-item" th:href="@{/tipoPago}">Forma de Pago</a></li>
                             <li><a class="dropdown-item" th:href="@{/tipoOperacion}">Tipo Operacion</a></li>
                             <li><a class="dropdown-item" th:href="@{/tipoCuentaBanco}">Tipo Cuenta/Banco</a></li>
                         </ul>
@@ -65,14 +65,11 @@
             <div class="col">
                 <div th:if="${exito}" th:text="${exito}" class="alert alert-primary" role="alert"></div>
 
-
-                <div th:if="${listaPago.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
+                <div th:if="${listafdp.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
                     Debe ingresar registros <a th:href="@{/formaDePago/form}" class="alert-link">Crear registro</a>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-
-
-                <div th:unless="${listaPago.isEmpty()}" class="table-responsive">
+                <div th:unless="${listafdp.isEmpty()}" class="table-responsive">
                     <a class="btn btn-primary mb-2" th:href="@{/formaDePago/form}">Crear registro</a>
 
                     <table class="table table-hover table-bordered">
@@ -80,26 +77,38 @@
                                 <tr class="table-dark">
                                     <th>Id</th>
                                     <th>Descripcion</th>
+                                    <th>Tipo Operacion</th>
+                                    <th>Tipo Pago</th>
+                                    <th>Abrev</th>
+                                    <th>Cuenta</th>
+                                    <th>Banco/Tarjeta</th>
+                                    <th>Moneda</th>
                                     <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
-                                <tr th:each="fdp : ${listaPago}">
+                                <tr th:each="fdp : ${listafdp}">
                                     <td th:text="${fdp.id}"></td>
                                     <td th:text="${fdp.descripcion}"></td>
+                                    <td th:text="${fdp.tipoOperacion.descripcion}"></td>
+                                    <td th:text="${fdp.tipoPago.descripcion}"></td>
+                                    <td th:text="${fdp.abreviatura}"></td>
+                                    <td th:text="${fdp.cuenta}"></td>
+                                    <td th:text="${fdp.bancoTarjeta.descripcion}"></td>
+                                    <td th:text="${fdp.moneda.descripcion}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" th:href="@{formaDePago/form/__${fdp.id}__}">Actualizar</a></li>
-                                            <li><a class="dropdown-item" th:href="@{formaDePago/delete/__${fdp.id}__}">Eliminar</a></li>
-                                        </ul></td>
+                                            <li><a class="dropdown-item border" th:href="@{formaDePago/form/__${fdp.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item border" th:href="@{formaDePago/delete/__${fdp.id}__}">Eliminar</a></li>
+                                        </ul>
+                                    </td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
-
 
             </div>
         </div>

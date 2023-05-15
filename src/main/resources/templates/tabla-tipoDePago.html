@@ -61,67 +61,45 @@
 
 <main class="container mt-2">
         <div class="row">
-            <h1>Lista de Entidades</h1>
+            <h1>Lista de Tipos de Pago</h1>
             <div class="col">
                 <div th:if="${exito}" th:text="${exito}" class="alert alert-primary" role="alert"></div>
 
-                <div th:if="${listaEntidad.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
-                    Debe ingresar registros <a th:href="@{/entidadBase/form}" class="alert-link">Crear registro</a>
+
+                <div th:if="${listaPago.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
+                    Debe ingresar registros <a th:href="@{/tipoDePago/form}" class="alert-link">Crear registro</a>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div th:unless="${listaEntidad.isEmpty()}" class="table-responsive">
-                    <a class="btn btn-primary mb-2" th:href="@{/entidadBase/form}">Crear registro</a>
+
+
+                <div th:unless="${listaPago.isEmpty()}" class="table-responsive">
+                    <a class="btn btn-primary mb-2" th:href="@{/tipoDePago/form}">Crear registro</a>
 
                     <table class="table table-hover table-bordered">
                         <thead>
                                 <tr class="table-dark">
                                     <th>Id</th>
-                                    <th>Razon Social</th>
-                                    <th>CUIT</th>
-                                    <th>Nomb. Fantasia</th>
-                                    <th>Tipo IVA</th>
-                                    <th>Cliente</th>
-                                    <th>Proovedor</th>
-                                    <th>Empleado</th>
-                                    <th>Vendedor</th>
-                                    <th>Domicilio</th>
-                                    <th>Telefono</th>
-                                    <th>Correo</th>
+                                    <th>Descripcion</th>
                                     <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
-                                <tr th:each="ent : ${listaEntidad}">
-                                    <td th:text="${ent.id}"></td>
-                                    <td th:text="${ent.razonSocial}"></td>
-                                    <td th:text="${ent.cuit}"></td>
-                                    <td th:text="${ent.nombreFantasia}"></td>
-                                    <td th:text="${ent.tipoIva.descripcion}"></td>
-                                    <td th:text="${ent.cliente}"></td>
-                                    <td th:text="${ent.proveedor}"></td>
-                                    <td th:text="${ent.empleado}"></td>
-                                    <td th:text="${ent.vendedor}"></td>
-                                    <td th:text="${ent.domicilio}"></td>
-                                    <td th:text="${ent.telefono}"></td>
-                                    <td th:text="${ent.correo}"></td>
-
-
+                                <tr th:each="fdp : ${listaPago}">
+                                    <td th:text="${fdp.id}"></td>
+                                    <td th:text="${fdp.descripcion}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item border" th:href="@{entidadBase/form/__${ent.id}__}">Actualizar</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{/entidadBase/setClient/__${ent.id}__}">Alta Cliente</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{entidadBase/setProv/__${ent.id}__}">Alta Proveedor</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{entidadBase/setEmp/__${ent.id}__}">Alta Empleado</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" th:href="@{entidadBase/setVend/__${ent.id}__}">Alta Vendedor</a></li>
-                                        </ul>
-                                    </td>
+                                            <li><a class="dropdown-item" th:href="@{tipoDePago/form/__${fdp.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item" th:href="@{tipoDePago/delete/__${fdp.id}__}">Eliminar</a></li>
+                                        </ul></td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
+
 
             </div>
         </div>

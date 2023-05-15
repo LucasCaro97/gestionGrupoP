@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grupo Piñhero</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" th:href="@{/css/estiloFormEntidad.css}">
 </head>
 <body>
 
@@ -59,42 +60,65 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Tipos de Operaciones</h1>
-      <div class="col-6">
+      <h1>Carga de Cuentas Totalizadoras</h1>
+      <form class="row g-3 needs-validation" th:action="@{/ctaTot/__${action}__}" th:object="${ctaTot}"  method="post" autocomplete="off">
+        <input type="hidden" th:field="*{id}">
 
-
-        <form th:action="@{/tipoOperacion/__${action}__}" th:object="${tipoOperacion}" method="post" autocomplete="off">
-          <input type="hidden" th:field="*{id}">
-          <div class="form-floating mb-3">
-            <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
-            <label for="descripcion">Descripcion</label>
-            <div class="invalid-feedback">La descripcion es requerida</div>
+        <div class="col-md-8">
+          <label for="descripcion" class="form-label">Descripcion: </label>
+          <input type="text" class="form-control" id="descripcion" th:field="*{descripcion}" placeholder="Ingese una descripcion" required>
+          <div class="valid-feedback">
+            Looks good!
           </div>
+        </div>
 
+        <div class="col-md-4">
+          <label for="nivel" class="form-label">Nivel: </label>
+          <select  th:field="*{nivel}" id="nivel" class="form-select" aria-label="Seleccionar madre" required>
+            <option selected value="">Seleccionar jerarquia</option>
+            <option th:each="xxx : ${listaNivel}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
+        </div>
+
+
+        <div class="col-md-4">
+          <label for="tipoTotalizadora" class="form-label">Tipo Totalizadora: </label>
+          <select  th:field="*{tipoTotalizadora}" id="tipoTotalizadora" class="form-select" aria-label="Seleccionar tipo">
+            <option selected value="">Seleccione tipo</option>
+            <option th:each="xxx : ${listaTipoTot}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="tipo" class="form-label">Cuenta Madre: </label>
+          <select  th:field="*{padre}" id="tipo" class="form-select" aria-label="Seleccionar madre">
+            <option selected value="">Nodo Madre</option>
+            <option th:each="xxx : ${listaTot}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
+        </div>
+
+
+
+        <div class="col-md-4">
+          <label for ="nomenclatura" class="form-label">Nomenclatura: </label>
+          <input type="text" class="form-control" id="nomenclatura" th:field="*{nomenclatura}" readonly>
+        </div>
+
+        <div class="col-12">
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
-        </form>
+        </div>
 
-      </div>
-      <div class="col-6">
-        <table class="table table-hover table-bordered">
-          <thead>
-          <tr class="table-dark">
-            <th>Id</th>
-            <th>Descripcion</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="top : ${listaOperaciones}">
-            <td th:text="${top.id}"></td>
-            <td th:text="${top.descripcion}"></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
+
+
+      </form>
+
     </div>
   </div>
 </main>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 </body>
 </html>
+
+
