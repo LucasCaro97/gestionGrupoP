@@ -14,12 +14,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Impuestos {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
     private Double porcentaje;
     private Double importe;
 
 
-
+    public String toString() {
+        return this.getDescripcion();
+    }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CuentasContables {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
     @JoinColumn(name = "fk_cta_totalizadora")
@@ -28,7 +28,7 @@ public class CuentasContables {
     private Moneda moneda;
     private String codigo;
     @JoinColumn(name = "fk_impuesto_cta")
-    @OneToMany
+    @ManyToMany
     private List<Impuestos> impuestos;
 
 

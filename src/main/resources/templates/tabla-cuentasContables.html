@@ -78,7 +78,6 @@
                                     <th>Id</th>
                                     <th>Descripcion</th>
                                     <th>Cta. Totalizadora</th>
-                                    <th>Clasificacion</th>
                                     <th>Moneda</th>
                                     <th>Codigo</th>
                                     <th>Accion</th>
@@ -87,11 +86,10 @@
                         <tbody>
                                 <tr th:each="xxx : ${listaCuentas}">
                                     <td th:text="${xxx.id}"></td>
-                                    <td th:text="${xxx.razonSocial}"></td>
-                                    <td th:text="${xxx.cuit}"></td>
-                                    <td th:text="${xxx.nombreFantasia}"></td>
-                                    <td th:text="${xxx.tipoIva.descripcion}"></td>
-                                    <td th:text="${xxx.cliente}"></td>
+                                    <td th:text="${xxx.descripcion}"></td>
+                                    <td th:text="${xxx.ctaTotalizadora.descripcion}"></td>
+                                    <td th:text="${xxx.moneda.descripcion}"></td>
+                                    <td th:text="${xxx.codigo}"></td>
 
 
                                     <td>

@@ -2,7 +2,7 @@ package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.CuentasContables;
 import com.grupop.gestion.Repositorios.CuentasContablesRepo;
-import com.grupop.gestion.Servicios.CuentasContablesServicio;
+import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,10 @@ import java.util.Map;
 public class CuentasContablesControlador {
 
     private final CuentasContablesServicio cuentasContablesServicio;
-
+    private final ClasifiacionCtaServicio clasifiacionCtaServicio;
+    private final MonedaServicio monedaServicio;
+    private final ImpuestosServicio impuestosServicio;
+    private final CuentasTotalizadorasServicio cuentasTotalizadorasServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request) {
@@ -45,6 +48,11 @@ public class CuentasContablesControlador {
             mav.addObject("cuenta", new CuentasContables());
         }
         mav.addObject("action", "create");
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
+        mav.addObject("listaClasif", clasifiacionCtaServicio.obtenerTodos());
+        mav.addObject("listaMonedas", monedaServicio.obtenerTodos());
+        mav.addObject("listaImpuestos", impuestosServicio.obtenerTodos());
+        mav.addObject("listaTotalizadoras", cuentasTotalizadorasServicio.obtenerTodos());
         return mav;
     }
 
@@ -53,6 +61,11 @@ public class CuentasContablesControlador {
         ModelAndView mav = new ModelAndView("form-cuentasContables");
         mav.addObject("cuenta", cuentasContablesServicio.obtenerPorid(id));
         mav.addObject("action", "update");
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
+        mav.addObject("listaClasif", clasifiacionCtaServicio.obtenerTodos());
+        mav.addObject("listaMonedas", monedaServicio.obtenerTodos());
+        mav.addObject("listaImpuestos", impuestosServicio.obtenerTodos());
+        mav.addObject("listaTotalizadoras", cuentasTotalizadorasServicio.obtenerTodos());
         return mav;
     }
 

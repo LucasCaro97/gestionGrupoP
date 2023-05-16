@@ -12,7 +12,7 @@ import lombok.Setter;
 @Table(name = "cuentas_totalizadoras")
 public class CuentasTotalizadoras {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
     @JoinColumn(name = "fk_tipo_totalizadora")
