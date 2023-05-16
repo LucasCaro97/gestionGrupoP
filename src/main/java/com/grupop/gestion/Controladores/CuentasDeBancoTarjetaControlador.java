@@ -1,6 +1,7 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.CuentasDeBancoTarjeta;
+import com.grupop.gestion.Servicios.CuentasContablesServicio;
 import com.grupop.gestion.Servicios.CuentasDeBancoTarjetaServicio;
 import com.grupop.gestion.Servicios.ProveedorServicio;
 import com.grupop.gestion.Servicios.TipoCuentaBancoServicio;
@@ -26,6 +27,7 @@ public class CuentasDeBancoTarjetaControlador {
     private final CuentasDeBancoTarjetaServicio cuentasDeBancoTarjetaServicio;
     private final ProveedorServicio proveedorServicio;
     private final TipoCuentaBancoServicio tipoCuentaBancoServicio;
+    private final CuentasContablesServicio cuentasContablesServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -50,6 +52,7 @@ public class CuentasDeBancoTarjetaControlador {
         }
         mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
         mav.addObject("listaTipo", tipoCuentaBancoServicio.obtenerTodos());
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("action", "create");
         return mav;
     }

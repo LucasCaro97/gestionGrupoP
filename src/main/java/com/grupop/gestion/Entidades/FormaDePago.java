@@ -22,7 +22,9 @@ public class FormaDePago {
     @ManyToOne
     private TipoPago tipoPago;
     private String abreviatura;
-    private Integer cuenta;
+    @JoinColumn(name = "fk_cuenta")
+    @OneToOne
+    private CuentasContables cuenta;
     @JoinColumn(name = "fk_bco_tja")
     @ManyToOne
     private CuentasDeBancoTarjeta bancoTarjeta;

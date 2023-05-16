@@ -28,6 +28,7 @@ public class FormaDePagoControlador {
     private final TipoPagoServicio tipoPagoServicio;
     private final CuentasDeBancoTarjetaServicio cuentasDeBancoTarjetaServicio;
     private final MonedaServicio monedaServicio;
+    private final CuentasContablesServicio cuentasContablesServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request) {
@@ -54,6 +55,7 @@ public class FormaDePagoControlador {
         mav.addObject("listaTipoOp", tipoOperacionServicio.obtenerTodos());
         mav.addObject("listaBot", cuentasDeBancoTarjetaServicio.obtenerTodos());
         mav.addObject("listaMon", monedaServicio.obtenerTodos());
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("action", "create");
         return mav;
     }
@@ -63,7 +65,11 @@ public class FormaDePagoControlador {
         ModelAndView mav = new ModelAndView("form-formaDePago");
         mav.addObject("action", "update");
         mav.addObject("formaDePago", formaDePagoServicio.obtenerPorId(id));
-        mav.addObject("listafdp", formaDePagoServicio.obtenerTodos());
+        mav.addObject("listaTipo", tipoPagoServicio.obtenerTodos());
+        mav.addObject("listaTipoOp", tipoOperacionServicio.obtenerTodos());
+        mav.addObject("listaBot", cuentasDeBancoTarjetaServicio.obtenerTodos());
+        mav.addObject("listaMon", monedaServicio.obtenerTodos());
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         return mav;
     }
 

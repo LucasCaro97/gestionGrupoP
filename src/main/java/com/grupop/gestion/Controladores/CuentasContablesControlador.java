@@ -88,7 +88,7 @@ public class CuentasContablesControlador {
         RedirectView redirect = new RedirectView("/cuentas");
         try {
             cuentasContablesServicio.actualizar(dto);
-            attributes.addFlashAttribute("exito", "Se ha creado correctamente la cuenta");
+            attributes.addFlashAttribute("exito", "Se ha actualizado correctamente la cuenta");
         } catch (Exception e) {
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("cuenta", dto);

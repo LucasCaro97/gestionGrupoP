@@ -33,7 +33,8 @@ public class CuentasTotalizadorasServicio {
         CuentasTotalizadoras cta = cuentasTotalizadorasRepo.findById(dto.getId()).get();
         cta.setDescripcion(dto.getDescripcion());
         cta.setTipoTotalizadora(dto.getTipoTotalizadora());
-//        cta.setPadre(dto.getPadre());
+        cta.setNivel(dto.getNivel());
+        cta.setPadre(dto.getPadre());
 //        cta.setNomenclatura(dto.getNomenclatura()); // CREAR METODO QUE CREE EL NIVEL DE JERARQUIAS COMPLETO
         cuentasTotalizadorasRepo.save(cta);
     }

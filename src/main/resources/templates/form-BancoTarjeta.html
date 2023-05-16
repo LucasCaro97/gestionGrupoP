@@ -74,10 +74,10 @@
 
         <div class="col-md-4">
           <label for="cuenta" class="form-label">Cuenta: </label>
-          <input type="number" class="form-control" id="cuenta" th:field="*{cuenta}" placeholder="Termina siendo select">
-          <div class="valid-feedback">
-            Looks good!
-          </div>
+          <select  th:field="*{cuenta}" id="cuenta" class="form-select" aria-label="Seleccionar cuenta" >
+            <option selected value="">Seleccione cuenta</option>
+            <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
         </div>
 
         <div class="col-md-4">
@@ -92,14 +92,17 @@
           <label for="proveedor" class="form-label">Proveedor: </label>
           <select  th:field="*{proveedor}" id="proveedor" class="form-select" aria-label="Seleccionar proveedor" >
             <option selected value="">Seleccione proveedor</option>
-            <option th:each="tbt : ${listaProveedores}" th:text="${tbt.id}" th:value="${tbt.id}"></option>
+            <option th:each="xxx : ${listaProveedores}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
           </select>
         </div>
 
 
         <div class="col-md-4">
-          <label for ="cuentaAcred" class="form-label">Cuenta Valores a Acreditarse: </label>
-          <input type="number" class="form-control" id="cuentaAcred" th:field="*{cuentaAcreditacion}" placeholder="Termina siendo select">
+          <label for="cuentaAcred" class="form-label">Cuenta valores a acreditarse: </label>
+          <select  th:field="*{cuentaAcreditacion}" id="cuentaAcred" class="form-select" aria-label="Seleccionar proveedor" >
+            <option selected value="">Seleccione cuenta</option>
+            <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
         </div>
 
 

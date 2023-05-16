@@ -16,14 +16,18 @@ public class CuentasDeBancoTarjeta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
-    private Integer cuenta; //cuenta_contable
+    @JoinColumn(name="fk_cuenta")
+    @OneToOne
+    private CuentasContables cuenta; //cuenta_contable
     @JoinColumn(name = "fk_tipo_cta_bco")
     @OneToOne
     private TipoCuentaBanco tipoCuentaBanco;
     @JoinColumn(name = "fk_proveedor")
     @OneToOne
     private Proveedor proveedor;
-    private Integer cuentaAcreditacion; //cuenta_contable
+    @JoinColumn(name = "fk_cta_acred")
+    @OneToOne
+    private CuentasContables cuentaAcreditacion; //cuenta_contable
     private String CBU;
     private String alias;
 
