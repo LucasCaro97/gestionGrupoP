@@ -1,4 +1,3 @@
-/*
 
 package com.grupop.gestion.Entidades;
 
@@ -21,4 +20,3 @@ public class ClasificacionCta {
     private String descripcion;
 
 }
- */

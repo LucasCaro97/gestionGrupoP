@@ -1,4 +1,4 @@
-/*
+
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.ClasificacionCta;
@@ -102,5 +102,3 @@ public class ClasificacionCtaControlador {
 
 }
 
-
- */

@@ -60,58 +60,26 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Monedas</h1>
+      <h1>Carga de Impuestos</h1>
+      <form class="row g-3 needs-validation" th:action="@{/clasificacionCta/__${action}__}" th:object="${clasificacion}"  method="post" autocomplete="off">
+        <input type="hidden" th:field="*{id}">
 
-      <form class="row g-3" th:action="@{/moneda/__${action}__}" th:object="${moneda}"  method="post" autocomplete="off">
-          <input type="hidden" th:field="*{id}">
-
-          <div class="col-md-8">
-            <label for="descripcion" class="form-label">Descripcion: </label>
-            <input type="text" class="form-control" id="descripcion" th:field="*{descripcion}" placeholder="Ingrese una descripcion" >
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-          </div>
-
-        <div class="col-md-4">
-          <label for="abreviatura" class="form-label">Abreviatura: </label>
-          <input type="text" class="form-control" id="abreviatura" th:field="*{abreviatura}" placeholder="USD" >
+        <div class="col-md-7">
+          <label for="descripcion" class="form-label">Descripcion: </label>
+          <input type="text" class="form-control" id="descripcion" th:field="*{descripcion}" placeholder="Ingese una descripcion" required>
           <div class="valid-feedback">
             Looks good!
           </div>
         </div>
 
-          <div class="col-md-4">
-            <label for="simbolo" class="form-label">Simbolo: </label>
-            <input type="text" class="form-control" id="simbolo" th:field="*{simbolo}" placeholder="US$">
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-          </div>
+        <div class="col-12">
+          <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
+        </div>
 
-
-          <div class="col-md-4">
-            <label for="cotizacion" class="form-label">Cotizacion: </label>
-            <input type="number" step="0.01" class="form-control" id="cotizacion" th:field="*{cotizacion}" placeholder="Ingrese importe">
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <label for="cotizacionVta" class="form-label">CotizacionVta: </label>
-            <input type="number" step="0.01" class="form-control" id="cotizacionVta" th:field="*{cotizacionVta}" placeholder="Ingrese importe">
-            <div class="valid-feedback">
-              Looks good!
-            </div>
-          </div>
-        <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
       </form>
 
-
-      </div>
-
     </div>
+  </div>
 </main>
 
 

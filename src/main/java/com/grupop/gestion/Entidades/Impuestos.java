@@ -12,12 +12,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ImpuestoCuenta {
+public class Impuestos {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
     private Double porcentaje;
+    private Double importe;
 
 
 

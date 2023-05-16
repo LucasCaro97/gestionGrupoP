@@ -1,7 +1,7 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Entidades.ImpuestoCuenta;
-import com.grupop.gestion.Servicios.ImpuestoCuentaServicio;
+import com.grupop.gestion.Entidades.Impuestos;
+import com.grupop.gestion.Servicios.ImpuestosServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,31 +18,31 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/impuestoCta")
-public class ImpuestoCuentaControlador {
+@RequestMapping("/impuestosCta")
+public class ImpuestosControlador {
 
-    private final ImpuestoCuentaServicio impuestoCuentaServicio;
+    private final ImpuestosServicio impuestosServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("tabla-impuestoCuentas");
+        ModelAndView mav = new ModelAndView("tabla-impuestos");
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
         if(inputFlashMap != null){ mav.addObject("exito", inputFlashMap.get("exito"));       }
-        mav.addObject("listaImpuestos", impuestoCuentaServicio.obtenerTodos());
+        mav.addObject("listaImpuestos", impuestosServicio.obtenerTodos());
         return mav;
     }
 
     @GetMapping("/form")
     public ModelAndView getForm(HttpServletRequest request){
-        ModelAndView mav = new ModelAndView("form-impuestoCuentas");
+        ModelAndView mav = new ModelAndView("form-impuestos");
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
         if(inputFlashMap != null){
             mav.addObject("impuesto", inputFlashMap.get("impuesto"));
             mav.addObject("exception", inputFlashMap.get("exception"));
         }else{
-            mav.addObject("impuesto", new ImpuestoCuenta());
+            mav.addObject("impuesto", new Impuestos());
         }
         mav.addObject("action", "create");
         return mav;
@@ -50,18 +50,18 @@ public class ImpuestoCuentaControlador {
 
     @GetMapping("/form/{id}")
     public ModelAndView getFormUpd(@PathVariable Long id){
-        ModelAndView mav = new ModelAndView("/form-impuestoCuentas");
-        mav.addObject("impuesto", impuestoCuentaServicio.obtenerPorId(id));
+        ModelAndView mav = new ModelAndView("form-impuestos");
+        mav.addObject("impuesto", impuestosServicio.obtenerPorId(id));
         mav.addObject("action", "update");
-        mav.addObject("listaIMpuestos", impuestoCuentaServicio.obtenerTodos());
+        mav.addObject("listaIMpuestos", impuestosServicio.obtenerTodos());
         return mav;
     }
 
     @PostMapping("/create")
-    public RedirectView create(ImpuestoCuenta dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/impuestoCta");
+    public RedirectView create(Impuestos dto, RedirectAttributes attributes){
+        RedirectView redirect = new RedirectView("/impuestosCta");
         try{
-            impuestoCuentaServicio.crear(dto);
+            impuestosServicio.crear(dto);
             attributes.addFlashAttribute("exito", "Se ha creado correctamente el impuesto");
         }catch (Exception e){
             attributes.addFlashAttribute("impuesto", dto);
@@ -72,10 +72,10 @@ public class ImpuestoCuentaControlador {
     }
 
     @PostMapping("update")
-    public RedirectView update(ImpuestoCuenta dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/impuestoCta");
+    public RedirectView update(Impuestos dto, RedirectAttributes attributes){
+        RedirectView redirect = new RedirectView("/impuestosCta");
         try{
-            impuestoCuentaServicio.actualizar(dto);
+            impuestosServicio.actualizar(dto);
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el impuesto");
         }catch (Exception e){
             attributes.addFlashAttribute("impuesto", dto);
@@ -87,8 +87,8 @@ public class ImpuestoCuentaControlador {
 
     @GetMapping("/delete")
     public RedirectView delete(@PathVariable Long id, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/impuestoCta");
-        impuestoCuentaServicio.eliminarPorId(id);
+        RedirectView redirect = new RedirectView("/impuestosCta");
+        impuestosServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado con exito el impuesto");
         return redirect;
     }
