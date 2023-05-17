@@ -43,12 +43,23 @@
               <li><a class="dropdown-item" th:href="@{/puesto}">Puesto Empleado</a></li>
               <li><a class="dropdown-item" th:href="@{/sector}">Sector</a></li>
               <li><a class="dropdown-item" th:href="@{/turno}">Turno</a></li>
-              <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li><li>
-              <hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
-              <li><a class="dropdown-item" th:href="@{/tipoPago}">Forma de Pago</a></li>
+              <li><a class="dropdown-item" th:href="@{/tipoDePago}">Tipo de Pago</a></li>
+              <li><a class="dropdown-item" th:href="@{/formaDePago}">Forma de Pago</a></li>
               <li><a class="dropdown-item" th:href="@{/tipoOperacion}">Tipo Operacion</a></li>
+              <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" th:href="@{/tipoCuentaBanco}">Tipo Cuenta/Banco</a></li>
+              <li><a class="dropdown-item" th:href="@{/ctaBcoTja}">Cuentas Banco/Tarjeta</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/tipoTot}">Tipo Totalizadora</a></li>
+              <li><a class="dropdown-item" th:href="@{/ctaTot}">Cuentas Totalizadoras</a></li>
+              <li><a class="dropdown-item" th:href="@{/impuestosCta}">Alta Impuestos</a></li>
+              <li><a class="dropdown-item" th:href="@{/clasificacionCta}">Clasificacion Ctas Cont</a></li>
+              <li><a class="dropdown-item" th:href="@{/cuentas}">Cuentas Contables</a></li>
+
+
             </ul>
           </li>
         </ul>
@@ -96,14 +107,17 @@
         </div>
 
         <div class="col-md-4">
-          <label for ="cuenta" class="form-label">Cuenta: </label>
-          <input type="text" class="form-control" id="cuenta" th:field="*{cuenta}" placeholder="Termina siendo select">
+          <label for="cuenta" class="form-label">Cuenta: </label>
+          <select  th:field="*{cuenta}" id="cuenta" class="form-select" aria-label="Seleccionar cuenta" required>
+            <option selected value="">Seleccione una cuenta</option>
+            <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
         </div>
 
 
         <div class="col-md-4">
           <label for="bancoTarjeta" class="form-label">Banco/Tarjeta: </label>
-          <select  th:field="*{bancoTarjeta}" id="bancoTarjeta" class="form-select" aria-label="Seleccionar banco/tarjeta" required>
+          <select  th:field="*{bancoTarjeta}" id="bancoTarjeta" class="form-select" aria-label="Seleccionar banco/tarjeta">
             <option selected value="">Seleccione bco/tarj</option>
             <option th:each="bot : ${listaBot}" th:text="${bot.descripcion}" th:value="${bot.id}"></option>
           </select>
@@ -111,7 +125,7 @@
 
         <div class="col-md-4">
           <label for="moneda" class="form-label">Moneda: </label>
-          <select  th:field="*{moneda}" id="moneda" class="form-select" aria-label="Seleccionar moneda">
+          <select  th:field="*{moneda}" id="moneda" class="form-select" aria-label="Seleccionar moneda" required>
             <option selected value="">Seleccione moneda</option>
             <option th:each="mon : ${listaMon}" th:text="${mon.descripcion}" th:value="${mon.id}"></option>
           </select>

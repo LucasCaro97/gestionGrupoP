@@ -47,4 +47,9 @@ public class CuentasContablesServicio {
 
     @Transactional
     public void eliminarPorId(Long id) { cuentasContablesRepo.deleteById(id); }
+
+    @Transactional(readOnly = true)
+    public List<CuentasContables> obtenerCuentas1111(){
+        return cuentasContablesRepo.obtenerCuentas1111();
+    }
 }

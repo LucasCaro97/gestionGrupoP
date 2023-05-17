@@ -3,6 +3,7 @@ package com.grupop.gestion.Controladores;
 import com.grupop.gestion.Entidades.ContadorTotalizadora;
 import com.grupop.gestion.Entidades.CuentasTotalizadoras;
 import com.grupop.gestion.Servicios.ContadorTotalizadoraServicio;
+import com.grupop.gestion.Servicios.CuentasContablesServicio;
 import com.grupop.gestion.Servicios.CuentasTotalizadorasServicio;
 import com.grupop.gestion.Servicios.TipoTotalizadoraServicio;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ public class CuentasTotalizadorasControlador {
     private final CuentasTotalizadorasServicio cuentasTotalizadorasServicio;
     private final TipoTotalizadoraServicio tipoTotalizadoraServicio;
     private final ContadorTotalizadoraServicio contadorTotalizadoraServicio;
+    private final CuentasContablesServicio cuentasContablesServicio;
 
 
     @GetMapping()
@@ -37,6 +39,7 @@ public class CuentasTotalizadorasControlador {
 
         if(inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito"));       }
         mav.addObject("listaCuentasTot", cuentasTotalizadorasServicio.obtenerTodos());
+        mav.addObject("listaCuentas1111", cuentasContablesServicio.obtenerCuentas1111());
         return  mav;
     }
 
