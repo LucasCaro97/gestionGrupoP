@@ -31,7 +31,7 @@ public class ManzanaServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Manzana> obtenerTodos(Long id){ return manzanaRepo.findAll(); }
+    public List<Manzana> obtenerTodos(){ return manzanaRepo.findAll(); }
 
     @Transactional(readOnly = true)
     public Manzana obtenerPorId(Long id){ return manzanaRepo.findById(id).get();}
