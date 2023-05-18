@@ -1,10 +1,14 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.Cliente;
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.ClienteRepo;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,4 +30,5 @@ public class ClienteServicio {
 
         @Transactional(readOnly = true)
         public Cliente buscarPorId(Long id){ return clienteRepo.findById(id).get();}
+
 }

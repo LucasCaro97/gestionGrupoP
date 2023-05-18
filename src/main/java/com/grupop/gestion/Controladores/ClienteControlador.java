@@ -1,11 +1,16 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Servicios.ClienteServicio;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,13 +19,5 @@ public class ClienteControlador {
 
     private final ClienteServicio clienteServicio;
 
-    @PostMapping("/create")
-    public void create(){
-        try{
-            System.out.printf("Cliente generado");
-        } catch(Exception e){
-            e.getMessage();
-        }
-    }
 
 }

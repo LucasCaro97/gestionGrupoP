@@ -14,6 +14,7 @@ public class Empleado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_empleado")
     private Long id;
     @JoinColumn(name = "fk_tipo_empleado")
     @OneToOne

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EmpleadoServicio {
@@ -41,4 +43,7 @@ public class EmpleadoServicio {
 
     @Transactional(readOnly = true)
     public Empleado buscarPorId(Long id){ return empleadoRepo.findById(id).get(); }
+
+    @Transactional(readOnly = true)
+    public List<Empleado> obtenerTodos(){ return empleadoRepo.findEmployee(); }
 }

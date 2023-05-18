@@ -29,6 +29,47 @@ public class EntidadBaseControlador {
 
         if(inputFlashMap != null) mav.addObject("exito", inputFlashMap.get("exito"));
         mav.addObject("listaEntidad", entidadBaseServicio.obtenerTodos());
+        mav.addObject("habilitaEdicion", "Accion");
+        return mav;
+    }
+
+    @GetMapping("/clientes")
+    public ModelAndView getAllClients(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("tabla-entidadBase");
+        Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(inputFlashMap != null) mav.addObject("exito", inputFlashMap.get("exito"));
+        mav.addObject("listaEntidad", entidadBaseServicio.obtenerClientes());
+        return mav;
+    }
+
+    @GetMapping("/proveedores")
+    public ModelAndView getAllSuppliers(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("tabla-entidadBase");
+        Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(inputFlashMap != null) mav.addObject("exito", inputFlashMap.get("exito"));
+        mav.addObject("listaEntidad", entidadBaseServicio.obtenerProveedores());
+        return mav;
+    }
+
+    @GetMapping("/empleados")
+    public ModelAndView getAllEmployees(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("tabla-entidadBase");
+        Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(inputFlashMap != null) mav.addObject("exito", inputFlashMap.get("exito"));
+        mav.addObject("listaEntidad", entidadBaseServicio.obtenerEmpleados());
+        return mav;
+    }
+
+    @GetMapping("/vendedores")
+    public ModelAndView getAllSellers(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("tabla-entidadBase");
+        Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(inputFlashMap != null) mav.addObject("exito", inputFlashMap.get("exito"));
+        mav.addObject("listaEntidad", entidadBaseServicio.obtenerVendedores());
         return mav;
     }
 

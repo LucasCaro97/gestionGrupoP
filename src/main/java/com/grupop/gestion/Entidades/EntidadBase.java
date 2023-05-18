@@ -13,6 +13,7 @@ public class EntidadBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_entidad")
     private Long id;
     private Long idAnt;
     @Column(name = "razon_social")

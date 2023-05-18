@@ -64,6 +64,7 @@ public class CuentasDeBancoTarjetaControlador {
         mav.addObject("bancoTarjeta", cuentasDeBancoTarjetaServicio.obtenerPorId(id));
         mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
         mav.addObject("listaTipo", tipoCuentaBancoServicio.obtenerTodos());
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("action", "update");
         return mav;
     }

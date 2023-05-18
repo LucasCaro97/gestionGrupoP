@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.Proveedor;
 import com.grupop.gestion.Repositorios.ProveedorRepo;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class ProveedorServicio {
     public Proveedor buscarPorId(Long id) {
         return proveedorRepo.findById(id).get();
     }
+
     @Transactional(readOnly = true)
-    public List<Proveedor> obtenerTodos() { return proveedorRepo.findAll(); }
+    public List<Proveedor> obtenerTodos() { return proveedorRepo.findSupplier(); }
 }

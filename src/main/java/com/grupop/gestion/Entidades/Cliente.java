@@ -13,6 +13,7 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_cliente")
     private Long id;
     @Column(name = "fecha_alta")
     private LocalDate fechaAlta = LocalDate.now();

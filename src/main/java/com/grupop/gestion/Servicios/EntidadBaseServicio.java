@@ -135,4 +135,13 @@ public class EntidadBaseServicio {
             System.out.println("La entidad ya es un vendedor");
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<EntidadBase> obtenerClientes() { return entidadBaseRepo.findClients(); }
+    @Transactional(readOnly = true)
+    public List<EntidadBase> obtenerProveedores(){ return entidadBaseRepo.findSuppliers(); }
+    @Transactional(readOnly = true)
+    public List<EntidadBase> obtenerEmpleados(){ return entidadBaseRepo.findEmployees(); }
+    @Transactional(readOnly = true)
+    public List<EntidadBase> obtenerVendedores() { return entidadBaseRepo.findSellers(); }
 }
