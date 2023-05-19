@@ -3,6 +3,8 @@ package com.grupop.gestion.Controladores;
 import com.grupop.gestion.Entidades.Lote;
 import com.grupop.gestion.Entidades.Urbanizacion;
 import com.grupop.gestion.Servicios.LoteServicio;
+import com.grupop.gestion.Servicios.ManzanaServicio;
+import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,8 @@ import java.util.Map;
 public class LoteControlador {
 
     private final LoteServicio loteServicio;
+    private final ManzanaServicio  manzanaServicio;
+    private final UrbanizacionServicio urbanizacionServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -44,6 +48,8 @@ public class LoteControlador {
             mav.addObject("lote", new Lote());
         }
         mav.addObject("action", "create");
+        mav.addObject("listaUrbs", urbanizacionServicio.obtenerTodos());
+        mav.addObject("listaManzanas", manzanaServicio.obtenerTodos());
         return mav;
     }
 

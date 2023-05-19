@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Añadir y quitar clases cuando se producen eventos de usuario</title>
+</head>
+<body>
+
+<!---
+<p>
+    <a href="#" id="enlaceajax">Haz clic!</a>
+</p>
+<div id="destino"></div>
+
+
+<p>
+    <a href="#" id="enlaceajax">Haz clic!</a>
+</p>
+<div id="cargando" style="display:none; color: green;">Cargando...</div>
+<div id="destino"></div>
+-->
+
+<h1>Select con jQuery</h1>
+
+<div class="selector-pais">
+    Elige un país
+    <select></select>
+</div>
+
+
+<!---
+$(document).ready(function () {
+$("#enlaceajax").click(function (evento) {
+//elimino el comportamiento por defecto del enlace
+evento.preventDefault();
+//Aquí pondría el código de la llamada a Ajax
+$("#destino").load("/urbanizacion/obtenerManzanasPorId/1");
+});
+});
+
+
+$(document).ready(function(){
+$("#enlaceajax").click(function(evento){
+evento.preventDefault();
+$("#cargando").css("display", "inline");
+$("#destino").load("pagina-lenta.php", function(){
+$("#cargando").css("display", "none");
+});
+});
+});
+-->
+
+$(document).ready(function() {
+$.ajax({
+type: "POST",
+url: "getPaises.php",
+success: function(response)
+{
+$('.selector-pais select').html(response).fadeIn();
+}
+});
+
+});
+
+
+</script>
+</body>
+</html>

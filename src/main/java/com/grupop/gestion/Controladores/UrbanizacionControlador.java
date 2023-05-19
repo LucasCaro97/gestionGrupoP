@@ -1,19 +1,22 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Urbanizacion;
+import com.grupop.gestion.Repositorios.ManzanaRepo;
+import com.grupop.gestion.Servicios.ManzanaServicio;
 import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,6 +25,8 @@ import java.util.Map;
 public class UrbanizacionControlador {
 
     private final UrbanizacionServicio urbanizacionServicio;
+    private final ManzanaServicio manzanaServicio;
+    private final ManzanaRepo manzanaRepo;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -43,6 +48,7 @@ public class UrbanizacionControlador {
             mav.addObject("urbanizacion", new Urbanizacion());
         }
         mav.addObject("action", "create");
+        //mav.addObject("listaManzanas", manzanaServicio.obtenerPorUrbanizacion() );
         return mav;
     }
 
@@ -91,5 +97,38 @@ public class UrbanizacionControlador {
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente la urbanizacion");
         return redirect;
     }
+
+    @GetMapping("/obtenerManzanasPorId/{id}")
+    public ResponseEntity<List<Manzana>> obtenerManzanasDeLaUrbanizacion(@PathVariable Long id){
+        System.out.println(manzanaRepo.findAll());
+        return ResponseEntity.ok(manzanaRepo.findAll());
+    }
+
+    /*
+    public ResponseEntity<Page<DatosListadoMedico>>  listadoMedicos(@PageableDefault() Pageable paginacion){
+//        return medicoRepository.findAll(paginacion).map(DatosListadoMedico::new);
+        return ResponseEntity.ok(medicoRepository.findAByActivoTrue(paginacion).map(DatosListadoMedico::new));
+    }
+
+    */
+
+    /*
+    @GetMapping(path="/existe")
+    public @ResponseBody ResponseEntity validarExistencia(@RequestParam(value="id")long codigo) {
+        System.out.println("Backend. codigo consultado es: "+codigo);
+        ResponseEntity respuesta=null;
+        if(servicio.consultarExistenciaProductoServicio(codigo)) {
+            System.out.println("encontrado codigo");
+            respuesta= new ResponseEntity(HttpStatus.OK);
+        }
+        else {
+            System.out.println("no existe codigo");
+            respuesta= new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return respuesta;
+    }
+
+     */
+
 
 }

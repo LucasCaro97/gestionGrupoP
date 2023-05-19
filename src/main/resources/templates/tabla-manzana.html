@@ -81,47 +81,39 @@
 
 <main class="container mt-2">
         <div class="row">
-            <h1>Lista de Urbanizaciones</h1>
+            <h1>Lista de Manzanas</h1>
             <div class="col">
                 <div th:if="${exito}" th:text="${exito}" class="alert alert-primary" role="alert"></div>
 
-                <div th:if="${listaUrbs.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
-                    Debe ingresar registros <a th:href="@{/urbanizacion/form}" class="alert-link">Crear registro</a>
+                <div th:if="${listaManzanas.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
+                    Debe ingresar registros <a th:href="@{/manzana/form}" class="alert-link">Crear registro</a>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div th:unless="${listaUrbs.isEmpty()}" class="table-responsive">
-                    <a class="btn btn-primary mb-2" th:href="@{/urbanizacion/form}">Crear registro</a>
+                <div th:unless="${listaManzanas.isEmpty()}" class="table-responsive">
+                    <a class="btn btn-primary mb-2" th:href="@{/manzana/form}">Crear registro</a>
 
                     <table class="table table-hover table-bordered">
                         <thead>
                                 <tr class="table-dark">
                                     <th>Id</th>
                                     <th>Descripcion</th>
-                                    <th>Superficie M2</th>
-                                    <th>Nro Plano</th>
-                                    <th>Nro Partida</th>
-                                    <th>Ubicacion</th>
-                                    <th>Ciudad</th>
+                                    <th>Urbanizacion</th>
                                     <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
-                                <tr th:each="xxx : ${listaUrbs}">
+                                <tr th:each="xxx : ${listaManzanas}">
                                     <td th:text="${xxx.id}"></td>
                                     <td th:text="${xxx.descripcion}"></td>
-                                    <td th:text="${xxx.superficieM2}"></td>
-                                    <td th:text="${xxx.nroPlano}"></td>
-                                    <td th:text="${xxx.nroPartida}"></td>
-                                    <td th:text="${xxx.ubicacion}"></td>
-                                    <td th:text="${xxx.ciudad}"></td>
+                                    <td th:text="${xxx.urbanizacion}"></td>
 
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item border" th:href="@{urbanizacion/form/__${xxx.id}__}">Actualizar</a></li>
-                                            <li><a class="dropdown-item border" th:href="@{urbanizacion/delete/__${xxx.id}__}">Eliminar</a></li>
+                                            <li><a class="dropdown-item border" th:href="@{manzana/form/__${xxx.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item border" th:href="@{manzana/form/__${xxx.id}__}">Eliminar</a></li>
                                         </ul>
                                     </td>
 

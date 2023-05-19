@@ -14,6 +14,9 @@ public class Manzana {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descripcion;
+    @JoinColumn(name = "fk_urb")
+    @ManyToOne
+    private Urbanizacion urbanizacion;
 
 
 }

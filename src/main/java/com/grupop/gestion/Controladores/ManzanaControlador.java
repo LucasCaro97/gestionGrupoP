@@ -4,6 +4,7 @@ package com.grupop.gestion.Controladores;
 import com.grupop.gestion.Entidades.Lote;
 import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Servicios.ManzanaServicio;
+import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -24,13 +25,14 @@ import java.util.Map;
 public class ManzanaControlador {
 
     private final ManzanaServicio manzanaServicio;
+    private final UrbanizacionServicio urbanizacionServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("tabla-manzana");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if(inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaLotes",manzanaServicio.obtenerTodos());
+        mav.addObject("listaManzanas",manzanaServicio.obtenerTodos());
         return mav;
     }
 
@@ -45,6 +47,7 @@ public class ManzanaControlador {
             mav.addObject("manzana", new Manzana());
         }
         mav.addObject("action", "create");
+        mav.addObject("listaUrbs", urbanizacionServicio.obtenerTodos());
         return mav;
     }
 
@@ -54,6 +57,7 @@ public class ManzanaControlador {
         ModelAndView mav = new ModelAndView("form-manzana");
         mav.addObject("manzana", manzanaServicio.obtenerPorId(id));
         mav.addObject("action", "update");
+        mav.addObject("listaUrbs", urbanizacionServicio.obtenerTodos());
         return mav;
     }
 
@@ -70,6 +74,7 @@ public class ManzanaControlador {
         }
         return redirect;
     }
+
 
     @PostMapping("update")
     public RedirectView update(Manzana dto, RedirectAttributes attributes){

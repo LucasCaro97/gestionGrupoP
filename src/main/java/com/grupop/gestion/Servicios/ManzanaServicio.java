@@ -20,6 +20,7 @@ public class ManzanaServicio {
     public void crear(Manzana dto){
         Manzana manzana = new Manzana();
         manzana.setDescripcion(dto.getDescripcion());
+        manzana.setUrbanizacion(dto.getUrbanizacion());
         manzanaRepo.save(manzana);
     }
 
@@ -27,6 +28,7 @@ public class ManzanaServicio {
     public void actualizar(Manzana dto){
         Manzana manzana = manzanaRepo.findById(dto.getId()).get();
         manzana.setDescripcion(dto.getDescripcion());
+        manzana.setUrbanizacion(dto.getUrbanizacion());
         manzanaRepo.save(manzana);
     }
 
@@ -38,4 +40,8 @@ public class ManzanaServicio {
 
     @Transactional
     public void eliminarPorId(Long id){ manzanaRepo.deleteById(id);}
+
+
+    public List<Manzana> obtenerPorUrbanizacion(Long id) { return manzanaRepo.obtenerPorUrb(id);
+    }
 }
