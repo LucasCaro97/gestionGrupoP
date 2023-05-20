@@ -68,10 +68,15 @@
                             <li><a class="dropdown-item" th:href="@{/impuestosCta}">Alta Impuestos</a></li>
                             <li><a class="dropdown-item" th:href="@{/clasificacionCta}">Clasificacion Ctas Cont</a></li>
                             <li><a class="dropdown-item" th:href="@{/cuentas}">Cuentas Contables</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/tipoProducto}">Tipo Producto</a></li>
 
 
                         </ul>
                     </li>
+                    <a class="nav-link" th:href="@{/producto}">Productos</a>
+                    <a class="nav-link" th:href="@{/urbanizacion}">Urbanizaciones</a>
+                    <a class="nav-link" th:href="@{/lote}">Lotes</a>
                 </ul>
             </div>
         </div>
@@ -105,13 +110,14 @@
                                     <th>Ubicacion</th>
                                     <th>Impuesto Mun</th>
                                     <th>Impuesto Prov</th>
+                                    <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
                                 <tr th:each="xxx : ${listaLotes}">
                                     <td th:text="${xxx.id}"></td>
                                     <td th:text="${xxx.descripcion}"></td>
-                                    <td th:text="${xxx.urbanizacion}"></td>
+                                    <td th:text="${xxx.urbanizacion.descripcion}"></td>
                                     <td th:text="${xxx.manzana}"></td>
                                     <td th:text="${xxx.superficieM2}"></td>
                                     <td th:text="${xxx.nroPlano}"></td>

@@ -18,5 +18,8 @@ public class Manzana {
     @ManyToOne
     private Urbanizacion urbanizacion;
 
-
+    @Override
+    public String toString() {
+        return descripcion;
+    }
 }

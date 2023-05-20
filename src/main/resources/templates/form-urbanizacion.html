@@ -67,10 +67,15 @@
               <li><a class="dropdown-item" th:href="@{/impuestosCta}">Alta Impuestos</a></li>
               <li><a class="dropdown-item" th:href="@{/clasificacionCta}">Clasificacion Ctas Cont</a></li>
               <li><a class="dropdown-item" th:href="@{/cuentas}">Cuentas Contables</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/tipoProducto}">Tipo Producto</a></li>
 
 
             </ul>
           </li>
+          <a class="nav-link" th:href="@{/producto}">Productos</a>
+          <a class="nav-link" th:href="@{/urbanizacion}">Urbanizaciones</a>
+          <a class="nav-link" th:href="@{/lote}">Lotes</a>
         </ul>
       </div>
     </div>
@@ -137,7 +142,20 @@
           <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
 
-              TABLA MANZANAS
+              <table class="table table-hover table-bordered">
+                <thead>
+                <tr class="table-dark">
+                  <th>Id</th>
+                  <th>Descripcion</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="xxx : ${listaManzanas}">
+                  <td th:text="${xxx.id}"></td>
+                  <td th:text="${xxx.descripcion}"></td>
+                </tr>
+                </tbody>
+              </table>
 
             </div>
           </div>
@@ -151,7 +169,20 @@
           <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
 
-              TABLA LOTES
+              <table class="table table-hover table-bordered">
+                <thead>
+                <tr class="table-dark">
+                  <th>Id</th>
+                  <th>Descripcion</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="xxx : ${listaLotes}">
+                  <td th:text="${xxx.id}"></td>
+                  <td th:text="${xxx.descripcion}"></td>
+                </tr>
+                </tbody>
+              </table>
 
             </div>
           </div>

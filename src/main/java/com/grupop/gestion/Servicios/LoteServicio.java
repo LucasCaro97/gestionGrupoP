@@ -54,4 +54,9 @@ public class LoteServicio {
     @Transactional
     public void eliminarPorId(Long id){ loteRepo.deleteById(id);}
 
+    @Transactional(readOnly = true)
+    public List<Lote> obtenerPorUrbanizacion(Long id) {
+        return loteRepo.obtenerPorUrb(id);
+
+    }
 }

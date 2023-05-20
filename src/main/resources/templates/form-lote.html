@@ -70,10 +70,15 @@
               <li><a class="dropdown-item" th:href="@{/impuestosCta}">Alta Impuestos</a></li>
               <li><a class="dropdown-item" th:href="@{/clasificacionCta}">Clasificacion Ctas Cont</a></li>
               <li><a class="dropdown-item" th:href="@{/cuentas}">Cuentas Contables</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" th:href="@{/tipoProducto}">Tipo Producto</a></li>
 
 
             </ul>
           </li>
+          <a class="nav-link" th:href="@{/producto}">Productos</a>
+          <a class="nav-link" th:href="@{/urbanizacion}">Urbanizaciones</a>
+          <a class="nav-link" th:href="@{/lote}">Lotes</a>
         </ul>
       </div>
     </div>
@@ -162,22 +167,31 @@
 
 $(document).ready(function () {
 
-
 const $select = $("#urbanizacion");
+const endPoint = "/urbanizacion/obtenerManzanasPorId/";
+
+
+
+
 
 $select.css("background-color", "#ff9999");
 $select.change(function() {
         $("#manzana option").remove();
-        $("#manzana").append('<option value="">Manzana 1</option>');
-        $("#manzana").append('<option value="">Manzana 2</option>');
+        //$("#manzana").append('<option value="">Seleccione una manzana</option>');
+        console.log(endPoint + $select.val());
 
-    //  https://social.msdn.microsoft.com/Forums/officeocs/es-ES/d1ad5733-1323-4b03-b425-d2692796d6e5/cargar-html-select-con-registros-de-la-base-de-datos-jsjquery-json?forum=aspnetmvces
 
-    /*
-    $.get("/urbanizacion/obtenerManzanasPorId/1", function(data, status){
-      alert("Data: " + data + "\nStatus: " + status);
+
+    $.get(endPoint + $select.val(), function(datos, status){
+
+       $.each(datos, function (key, value) {
+                //alert(value.descripcion)
+                $("#manzana").append("<option value=" + value.id + ">" + value.descripcion + "</option>");
+            });
+
+      //alert("Data: " + data + "\nStatus: " + status);
     });
-    */
+
 
 
      });
