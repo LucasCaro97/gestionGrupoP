@@ -39,3 +39,11 @@
 #impuestos{
     height: 150px;
 }
+
+#comprobante{
+    display: flex;
+}
+
+#talonario{
+    width: 40%
+}

@@ -36,6 +36,6 @@ public class ProveedorServicio {
         return proveedorRepo.findById(id).get();
     }
 
-    @Transactional(readOnly = true)
-    public List<Proveedor> obtenerTodos() { return proveedorRepo.findSupplier(); }
+    //@Transactional(readOnly = true)
+    //public List<Proveedor> obtenerTodos() { return proveedorRepo.findSupplier(); }
 }

@@ -15,6 +15,8 @@ public interface ProveedorRepo extends JpaRepository<Proveedor,Long> {
     @Query( value= "SELECT MAX(id_proveedor) FROM proveedor", nativeQuery = true)
     Long findLastId();
 
-    @Query( value= "SELECT * FROM proveedor INNER JOIN entidad_base ON proveedor.id = entidad_base.fk_proveedor", nativeQuery = true)
+    /*
+    @Query( value= "SELECT id_proveedor, razon_social FROM proveedor INNER JOIN entidad_base ON proveedor.id_proveedor = entidad_base.fk_proveedor", nativeQuery = true)
     List<Proveedor> findSupplier();
+    */
 }

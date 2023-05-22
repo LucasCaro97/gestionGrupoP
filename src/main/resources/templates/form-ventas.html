@@ -85,120 +85,90 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Urbanizaciones</h1>
-      <form class="row g-3 needs-validation" th:action="@{/urbanizacion/__${action}__}" th:object="${urbanizacion}" method="post" autocomplete="off">
+      <h1>Registro de Ventas</h1>
+      <form class="row g-3 needs-validation" th:action="@{/ventas/__${action}__}" th:object="${venta}"  method="post" autocomplete="off">
         <input type="hidden" th:field="*{id}">
 
-        <div class="col-md-12">
-          <label for="descripcion" class="form-label">Descripcion: </label>
-          <input type="text" class="form-control" th:field="*{descripcion}" id="descripcion"  placeholder="Ingese una descripcion" required>
-          <div class="valid-feedback">
-            Looks good!
-          </div>
+        <div class="col-md-8">
+          <label for="cliente" class="form-label">Cliente: </label>
+          <select  th:field="*{cliente}" id="cliente" class="form-select" aria-label="Seleccionar cliente" required>
+            <option selected value="">Seleccione cliente</option>
+            <option th:each="xxx : ${listaClientes}" th:text="${xxx.razonSocial}" th:value="${xxx.id}"></option>
+          </select>
         </div>
 
         <div class="col-md-4">
-          <label for="superficieM2" class="form-label">Superficie M2: </label>
-          <input type="number" class="form-control" id="superficieM2" step="0.01" th:field="*{superficieM2}">
+          <label for="fechaComprobante" class="form-label">Fecha Comp: </label>
+          <input id="fechaComprobante" type="date" class="form-control" th:field="*{fechaComprobante}">
+        </div>
+
+        <div class="col-md-3">
+          <label for="IVA" class="form-label">IVA: </label>
+          <input id="IVA" type="text" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label for="cuit" class="form-label">CUIT: </label>
+          <input id="cuit" type="text" class="form-control" readonly>
+        </div>
+
+        <div class="col-md-3">
+          <label for="tipoComprobante" class="form-label">Comprobante: </label>
+          <select  th:field="*{tipoComprobante}" id="tipoComprobante" class="form-select" aria-label="Seleccionar comprobante" required>
+            <option selected value="">Seleccione comprobante</option>
+            <option th:each="xxx : ${listaTipoComp}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label for="talonario" class="form-label">Nro. Comp. : </label>
+              <div id="comprobante">
+              <select  th:field="*{talonario}" id="talonario" class="form-select" aria-label="Seleccionar tipo" required>
+                <option selected value="">00000</option>
+                <option th:each="xxx : ${listaTalonario}" th:text="${xxx.nroTalonario}" th:value="${xxx.id}"></option>
+              </select>
+              <input type="number" th:field="*{nroComprobante}" class="form-control"  readonly>
+              </div>
+        </div>
+
+        <div class="col-md-3">
+          <label for="sector" class="form-label">Sector: </label>
+          <select  th:field="*{sector}" id="sector" class="form-select" aria-label="Seleccionar sector" >
+            <option selected value="">Seleccione Sector</option>
+            <option th:each="xxx : ${listaSector}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label for="moneda" class="form-label">Moneda: </label>
+          <select  th:field="*{moneda}" id="moneda" class="form-select" aria-label="Seleccionar moneda" >
+            <option selected value="">Seleccione moneda</option>
+            <option th:each="xxx : ${listaMoneda}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
         </div>
 
 
-        <div class="col-md-4">
-          <label for="nroPlano" class="form-label">Nro Plano: </label>
-          <input type="number" class="form-control" id="nroPlano" th:field="*{nroPlano}">
+        <div class="col-md-6">
+          <label for="observaciones" class="form-label">Observaciones: </label>
+          <textarea type="text" class="form-control" th:field="*{observaciones}" id="observaciones"></textarea>
         </div>
 
-
-
-        <div class="col-md-4">
-          <label for="nroPartida" class="form-label">Nro Partida: </label>
-          <input type="number" class="form-control" id="nroPartida" th:field="*{nroPartida}">
-        </div>
-
-
-        <div class="col-md-4">
-          <label for="ubicacion" class="form-label">Ubicacion: </label>
-          <input type="text" class="form-control" id="ubicacion" th:field="*{ubicacion}">
-        </div>
-
-
-        <div class="col-md-4">
-          <label for="ciudad" class="form-label">Ciudad: </label>
-          <input type="text" class="form-control" id="ciudad" th:field="*{ciudad}">
-        </div>
-
-        <div class="col-12">
+        <div class="col-12 mt-4">
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
         </div>
+
+
+
       </form>
-
-      <div class="accordion mt-4" id="accordionExample">
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-              Manzanas
-            </button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-
-              <table class="table table-hover table-bordered">
-                <thead>
-                <tr class="table-dark">
-                  <th>Id</th>
-                  <th>Descripcion</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="xxx : ${listaManzanas}">
-                  <td th:text="${xxx.id}"></td>
-                  <td th:text="${xxx.descripcion}"></td>
-                </tr>
-                </tbody>
-              </table>
-
-            </div>
-          </div>
-        </div>
-        <div class="accordion-item">
-          <h2 class="accordion-header">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              Lotes
-            </button>
-          </h2>
-          <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-            <div class="accordion-body">
-
-              <table class="table table-hover table-bordered">
-                <thead>
-                <tr class="table-dark">
-                  <th>Id</th>
-                  <th>Descripcion</th>
-                  <th>Manzana</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="xxx : ${listaLotes}">
-                  <td th:text="${xxx.id}"></td>
-                  <td th:text="${xxx.descripcion}"></td>
-                  <td th:text="${xxx.manzana}"></td>
-                </tr>
-                </tbody>
-              </table>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
 
     </div>
   </div>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script>
+document.getElementById("fechaComprobante").innerHTML = Date();
+</script>
 </body>
 </html>
-
-

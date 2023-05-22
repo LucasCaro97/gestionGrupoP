@@ -1,10 +1,7 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.CuentasDeBancoTarjeta;
-import com.grupop.gestion.Servicios.CuentasContablesServicio;
-import com.grupop.gestion.Servicios.CuentasDeBancoTarjetaServicio;
-import com.grupop.gestion.Servicios.ProveedorServicio;
-import com.grupop.gestion.Servicios.TipoCuentaBancoServicio;
+import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -25,7 +22,7 @@ import java.util.Map;
 public class CuentasDeBancoTarjetaControlador {
 
     private final CuentasDeBancoTarjetaServicio cuentasDeBancoTarjetaServicio;
-    private final ProveedorServicio proveedorServicio;
+    private final EntidadBaseServicio entidadBaseServicio;
     private final TipoCuentaBancoServicio tipoCuentaBancoServicio;
     private final CuentasContablesServicio cuentasContablesServicio;
 
@@ -50,7 +47,7 @@ public class CuentasDeBancoTarjetaControlador {
         }else{
             mav.addObject("bancoTarjeta", new CuentasDeBancoTarjeta());
         }
-        mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
+        mav.addObject("listaProveedores", entidadBaseServicio.obtenerTodos());
         mav.addObject("listaTipo", tipoCuentaBancoServicio.obtenerTodos());
         mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("action", "create");
@@ -62,7 +59,7 @@ public class CuentasDeBancoTarjetaControlador {
     public ModelAndView getFormUpd(@PathVariable Long id){
         ModelAndView mav = new ModelAndView("form-BancoTarjeta");
         mav.addObject("bancoTarjeta", cuentasDeBancoTarjetaServicio.obtenerPorId(id));
-        mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
+        mav.addObject("listaProveedores", entidadBaseServicio.obtenerTodos());
         mav.addObject("listaTipo", tipoCuentaBancoServicio.obtenerTodos());
         mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("action", "update");
