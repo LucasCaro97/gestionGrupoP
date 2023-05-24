@@ -23,4 +23,10 @@ public interface EntidadBaseRepo extends JpaRepository<EntidadBase,Long> {
         @Query(value = "SELECT * FROM entidad_base WHERE fk_vendedor > 0", nativeQuery = true)
         List<EntidadBase> findSellers();
 
+        @Query(value = "SELECT cuit FROM entidad_base WHERE id_entidad = ?", nativeQuery = true)
+        String buscarCuitCliente(Long id);
+
+        @Query(value = "SELECT descripcion FROM tipo_iva WHERE id = (SELECT fk_tipo_iva FROM entidad_base WHERE id_entidad = ? )", nativeQuery = true)
+        String buscarIvaCliente(Long id);
+
 }

@@ -169,16 +169,10 @@ $(document).ready(function () {
 
 const $select = $("#urbanizacion");
 const endPoint = "/urbanizacion/obtenerManzanasPorId/";
-
-
-
-
-
-$select.css("background-color", "#ff9999");
 $select.change(function() {
         $("#manzana option").remove();
-        //$("#manzana").append('<option value="">Seleccione una manzana</option>');
-        console.log(endPoint + $select.val());
+        $("#manzana").append('<option value="">Seleccione una manzana</option>');
+        //console.log(endPoint + $select.val());
 
 
 

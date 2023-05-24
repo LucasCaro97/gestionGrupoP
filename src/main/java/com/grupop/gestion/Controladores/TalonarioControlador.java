@@ -5,6 +5,7 @@ import com.grupop.gestion.Servicios.TalonarioServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.Banner;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -94,6 +95,12 @@ public class TalonarioControlador {
         talonarioServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminaro correcamente el talonario");
         return redirect;
+    }
+
+    @GetMapping("/obtenerNroComprobante/{id}")
+    public ResponseEntity<String> obtenerNroComprobante(@PathVariable Long id){
+        System.out.println(talonarioServicio.obtenerNroComprobante(id));
+        return ResponseEntity.ok(talonarioServicio.obtenerNroComprobante(id));
     }
 
 

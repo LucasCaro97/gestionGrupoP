@@ -40,4 +40,18 @@ public class TalonarioServicio {
     @Transactional
     public void eliminarPorId(Long id){ talonarioRepo.deleteById(id);}
 
+    @Transactional(readOnly = true)
+    public String obtenerNroComprobante(Long id){
+        Long ultimoNro = talonarioRepo.obtenerUltimoNroTalonario(id) + 1;
+        String ultimoNroCadena = ultimoNro.toString();
+        String nroComprobante = String.format("%0" + 8 + "d", ultimoNro);
+        return nroComprobante;
+    }
+
+    @Transactional
+    public void aumentarUltimoNro(Talonario talonario){
+        Talonario tal = talonarioRepo.findById(talonario.getId()).get();
+        tal.setUltimoNro(tal.getUltimoNro()+1);
+        talonarioRepo.save(tal);
+    };
 }

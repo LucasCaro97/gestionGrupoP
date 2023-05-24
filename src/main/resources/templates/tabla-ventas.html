@@ -106,15 +106,16 @@
                                     <th>Nro Comp</th>
                                     <th>Sector</th>
                                     <th>Observacion</th>
+                                    <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
-                                <tr th:each="tbt : ${listaVentas}">
+                                <tr th:each="xxx : ${listaVentas}">
                                     <td th:text="${xxx.id}"></td>
                                     <td th:text="${xxx.cliente}"></td>
                                     <td th:text="${xxx.fechaComprobante}"></td>
-                                    <td th:text="${xxx.talonario} + ${xxx.nroComprobante}"></td>
-                                    <td th:text="${xxx.sector}"></td>
+                                    <td th:text="${xxx.talonario.nroTalonario} + ' - ' + ${xxx.nroComprobante}"></td>
+                                    <td th:text="${xxx.sector.descripcion}"></td>
                                     <td th:text="${xxx.observaciones}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

@@ -1,10 +1,12 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.EntidadBase;
+import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import com.grupop.gestion.Servicios.TipoIvaServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -167,6 +170,18 @@ public class EntidadBaseControlador {
         entidadBaseServicio.setVend(id);
         attributes.addFlashAttribute("exito", "Se ha asignado como vendedor a la entidad nro:" + id);
         return redirect;
+    }
+
+    @GetMapping("/obtenerCuit/{id}")
+    public ResponseEntity<String> obtenerCuitCliente(@PathVariable Long id){
+        System.out.println(entidadBaseServicio.obtenerCuitCliente(id));
+        return ResponseEntity.ok(entidadBaseServicio.obtenerCuitCliente(id));
+    }
+
+    @GetMapping("/obtenerIva/{id}")
+    public ResponseEntity<String> obtenerIvaCliente(@PathVariable Long id){
+        System.out.println(entidadBaseServicio.obtenerIvaCliente(id));
+        return ResponseEntity.ok(entidadBaseServicio.obtenerIvaCliente(id));
     }
 
 

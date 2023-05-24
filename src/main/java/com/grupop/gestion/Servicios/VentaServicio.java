@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.Venta;
+import com.grupop.gestion.Repositorios.TalonarioRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class VentaServicio {
 
 
     private final VentaRepo ventaRepo;
+    private final TalonarioServicio talonarioServicio;
 
     @Transactional
     public void crear(Venta dto){
@@ -25,6 +27,9 @@ public class VentaServicio {
         vta.setSector(dto.getSector());
         vta.setMoneda(dto.getMoneda());
         vta.setFormaDePago(dto.getFormaDePago());
+        vta.setObservaciones(dto.getObservaciones());
+        vta.setFechaComprobante(dto.getFechaComprobante());
+        talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         ventaRepo.save(vta);
     }
 
@@ -38,6 +43,8 @@ public class VentaServicio {
         vta.setSector(dto.getSector());
         vta.setMoneda(dto.getMoneda());
         vta.setFormaDePago(dto.getFormaDePago());
+        vta.setObservaciones(dto.getObservaciones());
+        vta.setFechaComprobante(dto.getFechaComprobante());
         ventaRepo.save(vta);
     }
 

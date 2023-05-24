@@ -69,9 +69,7 @@ public class EntidadBaseServicio {
         if (ent.getCliente() == null) {
             clienteServicio.crear();
             Long idCliente = clienteServicio.buscarUltimoId();
-            System.out.println("Ultimo id " + idCliente);
             Cliente cte = clienteServicio.buscarPorId(idCliente);
-            System.out.println("Encontre el cte: " + cte);
 
             ent.setCliente(cte);
             entidadBaseRepo.save(ent);
@@ -88,9 +86,7 @@ public class EntidadBaseServicio {
         if (ent.getProveedor() == null) {
             proveedorServicio.crear();
             Long idProv = proveedorServicio.buscarUltimoId();
-            System.out.println("Ultimo id " + idProv);
             Proveedor prov = proveedorServicio.buscarPorId(idProv);
-            System.out.println("Encontre el prov: " + prov);
 
             ent.setProveedor(prov);
             entidadBaseRepo.save(ent);
@@ -107,9 +103,7 @@ public class EntidadBaseServicio {
         if (ent.getEmpleado() == null) {
             empleadoServicio.crear();
             Long idEmp = empleadoServicio.buscarUltimoId();
-            System.out.println("Ultimo id " + idEmp);
             Empleado emp = empleadoServicio.buscarPorId(idEmp);
-            System.out.println("Encontre el emp: " + emp);
 
             ent.setEmpleado(emp);
             entidadBaseRepo.save(ent);
@@ -125,9 +119,7 @@ public class EntidadBaseServicio {
         if (ent.getVendedor() == null) {
             vendedorServicio.crear();
             Long idEmp = vendedorServicio.buscarUltimoId();
-            System.out.println("Ultimo id " + idEmp);
             Vendedor vendedor = vendedorServicio.buscarPorId(idEmp);
-            System.out.println("Encontre el emp: " + vendedor);
 
             ent.setVendedor(vendedor);
             entidadBaseRepo.save(ent);
@@ -144,4 +136,11 @@ public class EntidadBaseServicio {
     public List<EntidadBase> obtenerEmpleados(){ return entidadBaseRepo.findEmployees(); }
     @Transactional(readOnly = true)
     public List<EntidadBase> obtenerVendedores() { return entidadBaseRepo.findSellers(); }
+
+    @Transactional(readOnly = true)
+    public String obtenerCuitCliente(Long id){ return entidadBaseRepo.buscarCuitCliente(id); }
+
+    @Transactional(readOnly = true)
+    public String obtenerIvaCliente (Long id) { return entidadBaseRepo.buscarIvaCliente(id); }
+
 }

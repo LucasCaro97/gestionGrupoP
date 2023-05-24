@@ -26,7 +26,7 @@ public class Venta {
     @JoinColumn(name = "fk_talonario")
     @ManyToOne
     private Talonario talonario;
-    private Long nroComprobante;
+    private String nroComprobante;
     @JoinColumn(name = "fk_sector")
     @ManyToOne
     private Sector sector;
@@ -45,6 +45,5 @@ public class Venta {
     @JoinColumn(name = "fk_forma_de_pago")
     @ManyToOne
     private FormaDePago formaDePago;
-
 
 }
