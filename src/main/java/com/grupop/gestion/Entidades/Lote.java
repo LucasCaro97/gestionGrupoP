@@ -27,5 +27,8 @@ public class Lote {
     @JoinColumn(name = "fk_urb")
     @ManyToOne
     private Urbanizacion urbanizacion;
+    @JoinColumn(name = "fk_estado")
+    @ManyToOne
+    private EstadoLote estado;
 
 }

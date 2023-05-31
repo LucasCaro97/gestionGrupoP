@@ -27,6 +27,7 @@ public class LoteServicio {
         lote.setImpuestoProv(dto.getImpuestoProv());
         lote.setImpuestoMun(dto.getImpuestoMun());
         lote.setUbicacion(dto.getUbicacion());
+        lote.setEstado(dto.getEstado());
         loteRepo.save(dto);
     }
 
@@ -42,6 +43,7 @@ public class LoteServicio {
         lote.setImpuestoProv(dto.getImpuestoProv());
         lote.setImpuestoMun(dto.getImpuestoMun());
         lote.setUbicacion(dto.getUbicacion());
+        lote.setEstado(dto.getEstado());
         loteRepo.save(dto);
     }
 

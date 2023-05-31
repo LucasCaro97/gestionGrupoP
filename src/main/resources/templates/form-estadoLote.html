@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Grupo Piñhero</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-  <link rel="stylesheet" th:href="@{/css/estiloFormEntidad.css}">
-
-
 </head>
 <body>
 
@@ -88,122 +84,42 @@
 <main>
   <div class="container">
     <div class="row mt-4">
-      <h1>Carga de Lotes</h1>
-      <form class="row g-3 needs-validation" th:action="@{/lote/__${action}__}" th:object="${lote}" method="post" autocomplete="off">
-        <input type="hidden">
+      <h1>Carga de Estados Lote</h1>
+      <div class="col-6">
 
-        <div class="col-md-12">
-          <label for="descripcion" class="form-label">Descripcion: </label>
-          <input type="text" class="form-control" th:field="*{descripcion}" id="descripcion"  placeholder="Ingese una descripcion" required>
-          <div class="valid-feedback">
-            Looks good!
+
+        <form th:action="@{/estadoLote/__${action}__}" th:object="${estadoLote}" method="post" autocomplete="off">
+          <input type="hidden" th:field="*{id}">
+          <div class="form-floating mb-3">
+            <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
+            <label for="descripcion">Descripcion</label>
+            <div class="invalid-feedback">La descripcion es requerida</div>
           </div>
-        </div>
 
-        <div class="col-md-6">
-          <label for="urbanizacion" class="form-label">Urbanizacion: </label>
-          <select  th:field="*{urbanizacion}" id="urbanizacion" class="form-select" aria-label="Seleccionar urbanizacion" required>
-            <option selected value="">Seleccione urbanizacion</option>
-            <option th:each="xxx : ${listaUrbs}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
-          </select>
-          <div class="invalid-feedback">La urbanizacion es requerida!</div>
-        </div>
-
-        <div class="col-md-3">
-          <label for="manzana" class="form-label">Manzana: </label>
-          <select  th:field="*{manzana}" id="manzana" class="form-select" aria-label="Seleccionar manzana" required>
-            <option selected value="">Seleccione manzana</option>
-          </select>
-          <div class="invalid-feedback">La manzana es requerida!</div>
-        </div>
-
-        <div class="col-md-3">
-          <label for="estado" class="form-label">Estado: </label>
-          <select  th:field="*{estado}" id="estado" class="form-select" aria-label="Seleccionar estado" required>
-            <option selected value="">Seleccione estado</option>
-            <option th:each="xxx : ${listaEstadoLote}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
-
-          </select>
-          <div class="invalid-feedback">El estado es requerida!</div>
-        </div>
-
-        <div class="col-md-4">
-          <label for="superficieM2" class="form-label">Superficie M2: </label>
-          <input type="number" class="form-control" id="superficieM2" step="0.01" th:field="*{superficieM2}">
-        </div>
-
-
-        <div class="col-md-4">
-          <label for="nroPlano" class="form-label">Nro Plano: </label>
-          <input type="number" class="form-control" id="nroPlano" th:field="*{nroPlano}">
-        </div>
-
-
-
-        <div class="col-md-4">
-          <label for="nroPartida" class="form-label">Nro Partida: </label>
-          <input type="number" class="form-control" id="nroPartida" th:field="*{nroPartida}">
-        </div>
-
-
-        <div class="col-md-4">
-          <label for="ubicacion" class="form-label">Ubicacion: </label>
-          <input type="text" class="form-control" id="ubicacion" th:field="*{ubicacion}">
-        </div>
-
-
-        <div class="col-md-4">
-          <label for="impuestoMun" class="form-label">Reg. Impuesto Mun: </label>
-          <input type="text" class="form-control" id="impuestoMun" th:field="*{impuestoMun}">
-        </div>
-
-        <div class="col-md-4">
-          <label for="impuestoProv" class="form-label">Reg. Impuesto Prov: </label>
-          <input type="text" class="form-control" id="impuestoProv" th:field="*{impuestoProv}">
-        </div>
-
-        <div class="col-12">
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
-        </div>
-      </form>
+        </form>
 
-
+      </div>
+      <div class="col-6">
+        <table class="table table-hover table-bordered">
+          <thead>
+          <tr class="table-dark">
+            <th>Id</th>
+            <th>Descripcion</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="xxx : ${listaEstadoLote}">
+            <td th:text="${xxx.id}"></td>
+            <td th:text="${xxx.descripcion}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-<script>
-
-$(document).ready(function () {
-
-const $select = $("#urbanizacion");
-const endPoint = "/urbanizacion/obtenerManzanasPorId/";
-$select.change(function() {
-        $("#manzana option").remove();
-        $("#manzana").append('<option value="">Seleccione una manzana</option>');
-        //console.log(endPoint + $select.val());
-
-
-
-    $.get(endPoint + $select.val(), function(datos, status){
-
-       $.each(datos, function (key, value) {
-                //alert(value.descripcion)
-                $("#manzana").append("<option value=" + value.id + ">" + value.descripcion + "</option>");
-            });
-
-      //alert("Data: " + data + "\nStatus: " + status);
-    });
-
-
-
-     });
-
-});
-
-</script>
 </body>
 </html>
-
-

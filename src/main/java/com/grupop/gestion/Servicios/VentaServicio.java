@@ -21,6 +21,8 @@ public class VentaServicio {
     public void crear(Venta dto){
         Venta vta = new Venta();
         vta.setCliente(dto.getCliente());
+        vta.setCuit(dto.getCuit());
+        vta.setTipoIva(dto.getTipoIva());
         vta.setTipoComprobante(dto.getTipoComprobante());
         vta.setTalonario(dto.getTalonario());
         vta.setNroComprobante(dto.getNroComprobante());
@@ -37,6 +39,8 @@ public class VentaServicio {
     public void actualizar(Venta dto){
         Venta vta = ventaRepo.findById(dto.getId()).get();
         vta.setCliente(dto.getCliente());
+        vta.setCuit(dto.getCuit());
+        vta.setTipoIva(dto.getTipoIva());
         vta.setTipoComprobante(dto.getTipoComprobante());
         vta.setTalonario(dto.getTalonario());
         vta.setNroComprobante(dto.getNroComprobante());
@@ -57,4 +61,7 @@ public class VentaServicio {
 
     @Transactional
     public void eliminarPorId(Long id){ ventaRepo.deleteById(id); }
+
+    @Transactional(readOnly = true)
+    public Long buscarUltimoId(){ return ventaRepo.findLastId(); }
 }

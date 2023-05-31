@@ -2,6 +2,7 @@ package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.Manzana;
+import com.grupop.gestion.Entidades.TipoIva;
 import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import com.grupop.gestion.Servicios.TipoIvaServicio;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +33,6 @@ public class EntidadBaseControlador {
 
         if(inputFlashMap != null) mav.addObject("exito", inputFlashMap.get("exito"));
         mav.addObject("listaEntidad", entidadBaseServicio.obtenerTodos());
-        mav.addObject("habilitaEdicion", "Accion");
         return mav;
     }
 
@@ -174,13 +174,13 @@ public class EntidadBaseControlador {
 
     @GetMapping("/obtenerCuit/{id}")
     public ResponseEntity<String> obtenerCuitCliente(@PathVariable Long id){
-        System.out.println(entidadBaseServicio.obtenerCuitCliente(id));
+        //System.out.println(entidadBaseServicio.obtenerCuitCliente(id));
         return ResponseEntity.ok(entidadBaseServicio.obtenerCuitCliente(id));
     }
 
     @GetMapping("/obtenerIva/{id}")
     public ResponseEntity<String> obtenerIvaCliente(@PathVariable Long id){
-        System.out.println(entidadBaseServicio.obtenerIvaCliente(id));
+        //System.out.println(entidadBaseServicio.obtenerIvaCliente(id));
         return ResponseEntity.ok(entidadBaseServicio.obtenerIvaCliente(id));
     }
 

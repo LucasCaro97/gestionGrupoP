@@ -15,7 +15,6 @@ public interface ClienteRepo extends JpaRepository<Cliente,Long> {
     @Query( value= "SELECT MAX(id_cliente) FROM cliente", nativeQuery = true)
     Long findLastId();
 
-
-
-
+    @Query(value = "SELECT razon_social FROM entidad_base WHERE fk_cliente = ?", nativeQuery = true)
+    String obtenerNombre(Long id);
 }

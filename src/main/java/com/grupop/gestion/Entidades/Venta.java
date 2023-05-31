@@ -5,20 +5,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Venta {
+public class Venta implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(name = "fk_cliente")
     @ManyToOne
     private Cliente cliente;
+    @JoinColumn(name = "fk_tipo_iva")
+    @OneToOne
+    private TipoIva tipoIva;
+    private String cuit;
     private LocalDate fechaComprobante;
     @JoinColumn(name = "fk_tipo_comprobante")
     @ManyToOne
@@ -45,5 +51,8 @@ public class Venta {
     @JoinColumn(name = "fk_forma_de_pago")
     @ManyToOne
     private FormaDePago formaDePago;
+
+    @OneToMany(mappedBy = "ventaId")
+    private List<VentaDetalle> ventaDetalle;
 
 }

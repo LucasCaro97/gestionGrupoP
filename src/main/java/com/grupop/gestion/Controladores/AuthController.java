@@ -14,7 +14,7 @@ public class AuthController {
         return new ModelAndView("index");
     }
 
-    @GetMapping("/query")
+    @GetMapping("/xxx")
     public ModelAndView query(){ return new ModelAndView("xxx"); };
 
 }

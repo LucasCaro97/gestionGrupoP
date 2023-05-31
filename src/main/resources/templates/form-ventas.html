@@ -84,6 +84,7 @@
 </header>
 
 <main>
+
   <div class="container">
     <div class="row mt-4">
       <h1>Registro de Ventas</h1>
@@ -105,12 +106,20 @@
 
         <div class="col-md-3">
           <label for="IVA" class="form-label">IVA: </label>
-          <input id="IVA" type="text" class="form-control" readonly>
+          <select   id="IVA" class="form-select" aria-label="Seleccionar iva" disabled>
+            <option selected value="">Seleccione iva</option>
+            <option th:each="xxx : ${listaIva}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+          </select>
+
+          <input type="hidden" th:field="*{tipoIva}" id="idIva">
+
         </div>
+
+
 
         <div class="col-md-3">
           <label for="cuit" class="form-label">CUIT: </label>
-          <input id="cuit" type="text" class="form-control" readonly>
+          <input id="cuit" type="text" class="form-control" th:field="*{cuit}" readonly>
         </div>
 
         <div class="col-md-3">
@@ -154,13 +163,76 @@
           <textarea type="text" class="form-control" th:field="*{observaciones}" id="observaciones"></textarea>
         </div>
 
-        <div class="col-12 mt-4">
-          <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
+        <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" id="btnAlta" class="btn btn-primary"></button>
+      </form>
+    </div>
+  </div>
+
+  <div class="container" id="divDetalle">
+    <div class="d-flex justify-content-center">
+      <form class="d-flex p-2">
+        <div class="detalleProducto col-2">
+          <label for="producto" class="form-label">Producto: </label>
+          <input id="producto" type="text" class="form-control">
+        </div>
+        <div class="detalleCantidad col-2">
+          <label for="cantidad" class="form-label">Cantidad: </label>
+          <input id="cantidad" type="text" class="form-control">
+        </div>
+        <div class="detalleDescuento col-1">
+          <label for="%" class="form-label">%: </label>
+          <input id="%" type="text" class="form-control">
+        </div>
+        <div class="detallePrecioUnitario col-2">
+          <label for="precio u" class="form-label">Precio Unitario: </label>
+          <input id="precio u" type="text" class="form-control">
+        </div>
+        <div class="detallePrecioFinal col-2">
+          <label for="precio f" class="form-label">Precio Final: </label>
+          <input id="precio f" type="text" class="form-control">
+        </div>
+        <div class="detalleTotal col-2">
+          <label for="total" class="form-label">Total: </label>
+          <input id="total" type="text" class="form-control">
+        </div>
+        <div>
+          <button class="btn btn-outline-success" type="submit">Añadir</button>
         </div>
 
       </form>
-
     </div>
+
+    <div id="tablaDetalle">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr class="table-dark">
+          <th>Item</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>%</th>
+          <th>Precio U.</th>
+          <th>Precio F.</th>
+          <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>1</td>
+          <td>LOTE 1 DE LA MANZANA A URB 21</td>
+          <td>1</td>
+          <td>0</td>
+          <td>$1500000</td>
+          <td>$1500000</td>
+          <td>$1500000</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+
   </div>
 </main>
 
@@ -169,6 +241,7 @@
 <script>
 
 $(document).ready(function () {
+var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
 
@@ -184,11 +257,24 @@ const endPoint1= "/entidadBase/obtenerIva/";
 const endPoint2= "/entidadBase/obtenerCuit/";
 const endPoint3= "/talonario/obtenerNroComprobante/";
 
-$("#cliente").change(function(){
-
+if( (url.localeCompare("/ventas/form")) != 0){
       $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
 
       $("#IVA").val(dato);
+      $("#idIva").val(dato);
+    });
+
+    $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){
+
+      $("#cuit").val(dato);
+    });
+}
+
+$("#cliente").change(function(){
+
+      $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
+      $("#IVA").val(dato);
+      $("#idIva").val(dato);
     });
 
     $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){

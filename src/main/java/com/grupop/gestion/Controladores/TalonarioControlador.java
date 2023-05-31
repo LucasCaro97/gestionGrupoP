@@ -99,7 +99,7 @@ public class TalonarioControlador {
 
     @GetMapping("/obtenerNroComprobante/{id}")
     public ResponseEntity<String> obtenerNroComprobante(@PathVariable Long id){
-        System.out.println(talonarioServicio.obtenerNroComprobante(id));
+        //System.out.println(talonarioServicio.obtenerNroComprobante(id));
         return ResponseEntity.ok(talonarioServicio.obtenerNroComprobante(id));
     }
 

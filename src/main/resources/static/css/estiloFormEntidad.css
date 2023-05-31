@@ -47,3 +47,29 @@
 #talonario{
     width: 40%
 }
+
+
+#btnAlta {
+    position: absolute;
+    top: 10%;
+    left: 80%;
+    width: 70px;
+    height: 35px;
+}
+
+#divDetalle {
+    background-color: antiquewhite;
+    margin-top: 15px;
+    height: 300px;
+}
+
+
+.btn-outline-success {
+    position: relative;
+    top: 47%;
+    margin-left: 10px;
+}
+
+.detalleDescuento{
+ width: 10%;
+}

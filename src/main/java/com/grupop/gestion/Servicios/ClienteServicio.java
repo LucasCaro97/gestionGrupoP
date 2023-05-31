@@ -31,4 +31,6 @@ public class ClienteServicio {
         @Transactional(readOnly = true)
         public Cliente buscarPorId(Long id){ return clienteRepo.findById(id).get();}
 
+        @Transactional(readOnly = true)
+        public String obtenerNombre(Long id) { return  clienteRepo.obtenerNombre(id); }
 }
