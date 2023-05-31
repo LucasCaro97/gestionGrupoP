@@ -17,7 +17,6 @@ public class Producto {
     @Column(name = "id_producto")
     private Long id;
     private String descripcion;
-    private Integer rubroFamilia;
     @JoinColumn(name = "fk_cuentasContables")
     @OneToOne
     private CuentasContables cuentasContables;
@@ -26,7 +25,8 @@ public class Producto {
     private TipoProducto tipoProducto;
     @ManyToMany
     private List<Impuestos> impuestos;
-    private Integer DatosTerreno;
-    private Integer DatosLote;
+    @JoinColumn(name = "fk_lote")
+    @OneToOne
+    private Lote lote;
 
 }

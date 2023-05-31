@@ -36,4 +36,6 @@ public class TipoProductoServicio {
 
     @Transactional
     public void eliminarPorId(Long id) { tipoProductoRepo.deleteById(id);}
+
+    public TipoProducto obtenerIdTipoLote(String nombre) { return tipoProductoRepo.obtenerTipoLote(nombre); }
 }

@@ -13,4 +13,9 @@ public interface LoteRepo extends JpaRepository<Lote, Long> {
     List<Lote> obtenerPorUrb(Long id);
 
 
+    @Query(value = "SELECT * FROM lote WHERE fk_urb = ?", nativeQuery = true)
+    List<Lote> searchByUrbanizacion(Long idUrbanizacion);
+
+    @Query(value = "SELECT * FROM lote WHERE fk_urb = ?1 AND fk_manzana = ?2", nativeQuery = true)
+    List<Lote> searchByUrbanizacionAndManzana(Long idUrbanizacion, Long idManzana);
 }

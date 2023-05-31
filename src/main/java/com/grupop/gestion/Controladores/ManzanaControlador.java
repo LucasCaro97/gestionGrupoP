@@ -7,6 +7,7 @@ import com.grupop.gestion.Servicios.ManzanaServicio;
 import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +29,12 @@ public class ManzanaControlador {
     private final UrbanizacionServicio urbanizacionServicio;
 
     @GetMapping
-    public ModelAndView getAll(HttpServletRequest request){
+    public ModelAndView getAll(HttpServletRequest request, @Param("urbanizacion") Long urbanizacion){
         ModelAndView mav = new ModelAndView("tabla-manzana");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if(inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaManzanas",manzanaServicio.obtenerTodos());
+        mav.addObject("listaManzanas",manzanaServicio.obtenerTodos(urbanizacion));
+        mav.addObject("listaUrbs", urbanizacionServicio.obtenerTodos());
         return mav;
     }
 

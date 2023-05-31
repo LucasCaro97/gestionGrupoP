@@ -4,6 +4,7 @@ import com.grupop.gestion.Entidades.Impuestos;
 import com.grupop.gestion.Entidades.Producto;
 import com.grupop.gestion.Servicios.CuentasContablesServicio;
 import com.grupop.gestion.Servicios.ImpuestosServicio;
+import com.grupop.gestion.Servicios.ProductoServicio;
 import com.grupop.gestion.Servicios.TipoProductoServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RequestMapping("/producto")
 public class ProductoControlador {
 
+    private final ProductoServicio productoServicio;
     private final TipoProductoServicio tipoProductoServicio;
     private final CuentasContablesServicio cuentasContablesServicio;
     private final ImpuestosServicio impuestosServicio;
@@ -37,6 +39,7 @@ public class ProductoControlador {
         mav.addObject("listaTipoProd", tipoProductoServicio.obtenerTodos());
         mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("listaImpuestos", impuestosServicio.obtenerTodos());
+        mav.addObject("action", "create");
         return mav;
     }
 
@@ -44,7 +47,7 @@ public class ProductoControlador {
     public RedirectView create(Producto dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/producto");
         try{
-            System.out.println("creando producto");
+            productoServicio.crear(dto);
             attributes.addFlashAttribute("exito", "Se ha creado el producto correctamente");
         }catch (Exception e){
             attributes.addFlashAttribute("producto", dto);
@@ -52,6 +55,7 @@ public class ProductoControlador {
             attributes.addFlashAttribute("etapa", "etapa2");
             System.out.println("Redireccionando al formulario");
         }
+
         return redirect;
     }
 

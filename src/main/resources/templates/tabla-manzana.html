@@ -97,6 +97,24 @@
                 <div th:unless="${listaManzanas.isEmpty()}" class="table-responsive">
                     <a class="btn btn-primary mb-2" th:href="@{/manzana/form}">Crear registro</a>
 
+
+                    <form class=" d-flex form-inline" th:action="@{/manzana}">
+
+                        <div class="form-group mb-2 col-5 me-2">
+                            <select  th:value="${urbanizacion}" id="urbanizacion" name="urbanizacion" class="form-select">
+                                <option selected value="">Urbanizacion</option>
+                                <option th:each="xxx : ${listaUrbs}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+                            </select>
+                        </div>
+
+                        <input type="submit" class="btn btn-info mb-2 " value="Buscar">
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn btn-secondary mb-2 " value="limpiar">
+                        <div class="col-5 d-flex justify-content-end">
+                            <a class="btn btn-primary mb-2" th:href="@{/manzana/form}">Crear registro</a>
+                        </div>
+                    </form>
+                    <br>
                     <table class="table table-hover table-bordered">
                         <thead>
                                 <tr class="table-dark">
@@ -110,7 +128,7 @@
                                 <tr th:each="xxx : ${listaManzanas}">
                                     <td th:text="${xxx.id}"></td>
                                     <td th:text="${xxx.descripcion}"></td>
-                                    <td th:text="${xxx.urbanizacion}"></td>
+                                    <td th:text="${xxx.urbanizacion.descripcion}"></td>
 
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

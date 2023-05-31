@@ -86,7 +86,7 @@
   <div class="container">
     <div class="row mt-4">
       <h1>Carga de Productos</h1>
-      <form class="row g-3 needs-validation" th:action="@{/ctaBcoTja/__${action}__}"  method="post" autocomplete="off">
+      <form class="row g-3 needs-validation" th:action="@{/producto/__${action}__}"  method="post" autocomplete="off">
         <input type="hidden">
 
         <div class="col-md-12">
@@ -110,15 +110,6 @@
           <select  id="cuenta" class="form-select" aria-label="Seleccionar cuenta" required>
             <option selected value="">Seleccione cuenta</option>
             <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
-          </select>
-        </div>
-
-
-        <div class="col-md-6">
-          <label for="rubroFliaEtapa1" class="form-label">Rubro/Familia: </label>
-          <select   id="rubroFliaEtapa1" class="form-select" aria-label="Seleccionar tipo" required>
-            <option selected value="">Seleccione rubro/familia</option>
-            <option >123123</option>
           </select>
         </div>
 

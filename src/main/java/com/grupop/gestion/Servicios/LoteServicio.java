@@ -4,6 +4,7 @@ package com.grupop.gestion.Servicios;
 import com.grupop.gestion.Entidades.Lote;
 import com.grupop.gestion.Repositorios.LoteRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,8 +48,17 @@ public class LoteServicio {
         loteRepo.save(dto);
     }
 
-    @Transactional(readOnly = true)
-    public List<Lote> obtenerTodos(){ return loteRepo.findAll(); }
+      @Transactional(readOnly = true)
+    public List<Lote> obtenerTodos(Long idUrbanizacion, Long idManzana){
+        //Sort sort = Sort.by("id").descending();
+        if (idUrbanizacion!=null && idManzana!=null){
+            return loteRepo.searchByUrbanizacionAndManzana(idUrbanizacion, idManzana);
+        }else if(idUrbanizacion!=null){
+            return loteRepo.searchByUrbanizacion(idUrbanizacion);
+        }else{
+            return loteRepo.findAll();
+        }
+    }
 
     @Transactional(readOnly = true)
     public Lote obtenerPorId(Long id){ return loteRepo.findById(id).get(); }

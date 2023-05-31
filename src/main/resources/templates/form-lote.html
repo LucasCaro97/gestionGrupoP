@@ -88,9 +88,10 @@
 <main>
   <div class="container">
     <div class="row mt-4">
+
       <h1>Carga de Lotes</h1>
       <form class="row g-3 needs-validation" th:action="@{/lote/__${action}__}" th:object="${lote}" method="post" autocomplete="off">
-        <input type="hidden">
+        <input type="hidden" th:field="*{id}">
 
         <div class="col-md-12">
           <label for="descripcion" class="form-label">Descripcion: </label>
@@ -113,6 +114,7 @@
           <label for="manzana" class="form-label">Manzana: </label>
           <select  th:field="*{manzana}" id="manzana" class="form-select" aria-label="Seleccionar manzana" required>
             <option selected value="">Seleccione manzana</option>
+            <option th:each="xxx : ${listaManzana}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
           </select>
           <div class="invalid-feedback">La manzana es requerida!</div>
         </div>
@@ -179,6 +181,7 @@ $(document).ready(function () {
 
 const $select = $("#urbanizacion");
 const endPoint = "/urbanizacion/obtenerManzanasPorId/";
+
 $select.change(function() {
         $("#manzana option").remove();
         $("#manzana").append('<option value="">Seleccione una manzana</option>');

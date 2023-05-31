@@ -12,4 +12,7 @@ import java.util.List;
 public interface ManzanaRepo extends JpaRepository<Manzana,Long> {
     @Query(value = "SELECT * FROM manzana WHERE fk_urb = ?", nativeQuery = true)
     List<Manzana> obtenerPorUrb(Long id);
+
+    @Query(value = "SELECT * FROM manzana WHERE fk_urb = ?", nativeQuery = true)
+    List<Manzana> searchByUrbanizacion(Long manzana);
 }
