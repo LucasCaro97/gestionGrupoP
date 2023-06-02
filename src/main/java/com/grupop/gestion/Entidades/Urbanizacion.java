@@ -21,6 +21,9 @@ public class Urbanizacion {
     private Long nroPartida;
     private String ubicacion;
     private String ciudad;
+    @JoinColumn(name = "fk_cuenta")
+    @OneToOne
+    private CuentasContables cuenta;
 
 
 }

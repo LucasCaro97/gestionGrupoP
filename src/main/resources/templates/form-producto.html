@@ -85,13 +85,15 @@
 <main>
   <div class="container">
     <div class="row mt-4">
+      <div>
       <h1>Carga de Productos</h1>
-      <form class="row g-3 needs-validation" th:action="@{/producto/__${action}__}"  method="post" autocomplete="off">
-        <input type="hidden">
+      </div>
+        <form class="row g-3 needs-validation" th:action="@{/producto/__${action}__}"  th:object="${producto}" method="post" autocomplete="off">
+        <input type="hidden" th:field="*{id}">
 
         <div class="col-md-12">
           <label for="descripcion" class="form-label">Descripcion: </label>
-          <input type="text" class="form-control" id="descripcion"  placeholder="Ingese una descripcion" required>
+          <input type="text" th:field="*{descripcion}" class="form-control" id="descripcion"  placeholder="Ingese una descripcion" required>
           <div class="valid-feedback">
             Looks good!
           </div>
@@ -99,7 +101,7 @@
 
         <div class="col-md-4">
           <label for="tipoProducto" class="form-label">Tipo Producto: </label>
-          <select   id="tipoProducto" class="form-select" aria-label="Seleccionar tipo" required>
+          <select   id="tipoProducto" th:field="*{tipoProducto}" class="form-select" aria-label="Seleccionar tipo" required>
             <option selected value="">Seleccionar tipo</option>
             <option th:each="xxx :${listaTipoProd}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
           </select>
@@ -107,7 +109,7 @@
 
         <div class="col-md-8">
           <label for="cuenta" class="form-label">Cuenta: </label>
-          <select  id="cuenta" class="form-select" aria-label="Seleccionar cuenta" required>
+          <select  id="cuenta" th:field="*{cuentasContables}" class="form-select" aria-label="Seleccionar cuenta" required>
             <option selected value="">Seleccione cuenta</option>
             <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
           </select>
@@ -117,14 +119,14 @@
 
         <div class="col-md-6">
           <label for="impuestos" class="form-label">Impuestos: </label>
-          <select  name="impuestos[]" size="4" multiple id="impuestos" class="form-select" aria-label="Seleccionar impuestos">
+          <select  name="impuestos[]" th:field="*{impuestos}" size="4" multiple id="impuestos" class="form-select" aria-label="Seleccionar impuestos">
             <option selected value="">No aplica</option>
             <option th:each="xxx : ${listaImpuestos}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
           </select>
         </div>
 
         <div class="col-12">
-          <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
+          <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary boton-crear"></button>
         </div>
       </form>
 

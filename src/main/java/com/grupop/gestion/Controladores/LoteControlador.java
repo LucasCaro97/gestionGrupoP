@@ -36,10 +36,15 @@ public class LoteControlador {
     public ModelAndView getAll(HttpServletRequest request,  @Param("urbanizacion") Long urbanizacion, @Param("manzana") Long manzana){
         ModelAndView mav = new ModelAndView("tabla-lote");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
-        if(inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaLotes",loteServicio.obtenerTodos(urbanizacion, manzana));
+        if(inputFlashMap!=null) {
+            if(inputFlashMap.containsKey("exito")){
+                mav.addObject("exito", inputFlashMap.get("exito"));
+            }else{
+                mav.addObject("exception", inputFlashMap.get("exception"));
+            }
+        }
         mav.addObject("listaUrbs", urbanizacionServicio.obtenerTodos());
-        mav.addObject("listaManzana", manzanaServicio.obtenerTodos());
+        mav.addObject("listaLotes",loteServicio.obtenerTodos(urbanizacion, manzana));
         return mav;
     }
 
@@ -108,6 +113,32 @@ public class LoteControlador {
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente la lote");
         return redirect;
     }
+
+    @GetMapping("/altaProducto/{id}")
+    public RedirectView altaProductoLote(@PathVariable Long id, RedirectAttributes attributes){
+        RedirectView redirect = new RedirectView("/lote");
+        try{
+            loteServicio.altaComoProducto(id);
+            attributes.addFlashAttribute("exito", "Se dio de alta el lote correctamente como producto");
+        }catch (Exception e){
+            attributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return redirect;
+    }
+
+    @GetMapping("/altaProductoGrupo/{id}")
+    public RedirectView altaProductoGrupo(@PathVariable Long id, RedirectAttributes attributes) {
+        RedirectView redirect = new RedirectView("/urbanizacion");
+        try{
+            loteServicio.altaGrupoProducto(id);
+            attributes.addFlashAttribute("exito", "Se dio de alta el grupo de lotes como producto correctamente");
+        } catch (Exception e){
+            attributes.addFlashAttribute("exception", e.getMessage());
+        }
+        return redirect;
+    }
+
+
 
 
 }

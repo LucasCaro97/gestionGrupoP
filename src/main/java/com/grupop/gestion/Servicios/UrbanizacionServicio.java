@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.Entidades.CuentasContables;
 import com.grupop.gestion.Entidades.Urbanizacion;
 import com.grupop.gestion.Repositorios.UrbanizacionRepo;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class UrbanizacionServicio {
         urb.setSuperficieM2(dto.getSuperficieM2());
         urb.setUbicacion(dto.getUbicacion());
         urb.setCiudad(dto.getCiudad());
+        urb.setCuenta(dto.getCuenta());
         urbanizacionRepo.save(urb);
     }
 
@@ -35,6 +37,7 @@ public class UrbanizacionServicio {
         urb.setSuperficieM2(dto.getSuperficieM2());
         urb.setUbicacion(dto.getUbicacion());
         urb.setCiudad(dto.getCiudad());
+        urb.setCuenta(dto.getCuenta());
         urbanizacionRepo.save(urb);
     }
 
@@ -49,4 +52,7 @@ public class UrbanizacionServicio {
     public void eliminarPorId(Long id){ urbanizacionRepo.deleteById(id);}
 
 
+    public CuentasContables obtenerCuenta(Urbanizacion urbanizacion) {
+        return urbanizacionRepo.findCuentaContable(urbanizacion.getId());
+    }
 }

@@ -30,5 +30,6 @@ public class Lote {
     @JoinColumn(name = "fk_estado")
     @ManyToOne
     private EstadoLote estado;
+    private boolean esProducto;
 
 }

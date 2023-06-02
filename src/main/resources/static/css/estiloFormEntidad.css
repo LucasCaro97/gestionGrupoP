@@ -73,3 +73,21 @@
 .detalleDescuento{
  width: 10%;
 }
+
+.boton-crear{
+    position: absolute;
+    right: 15%;
+    top: 15%;
+}
+
+.boton-alta-producto {
+    position: absolute;
+        top: 15%;
+        height: 35px;
+        width: 100px;
+        right: calc(15% + 100px);
+        font-size: x-small;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+}

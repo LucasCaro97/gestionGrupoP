@@ -1,9 +1,11 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.DTO.ManzanaDto;
+import com.grupop.gestion.Entidades.CuentasContables;
 import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Urbanizacion;
 import com.grupop.gestion.Repositorios.ManzanaRepo;
+import com.grupop.gestion.Servicios.CuentasContablesServicio;
 import com.grupop.gestion.Servicios.LoteServicio;
 import com.grupop.gestion.Servicios.ManzanaServicio;
 import com.grupop.gestion.Servicios.UrbanizacionServicio;
@@ -31,6 +33,7 @@ public class UrbanizacionControlador {
     private final ManzanaServicio manzanaServicio;
     private final LoteServicio loteServicio;
     private final ManzanaRepo manzanaRepo;
+    private final CuentasContablesServicio cuentasContablesServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -52,6 +55,7 @@ public class UrbanizacionControlador {
             mav.addObject("urbanizacion", new Urbanizacion());
         }
         mav.addObject("action", "create");
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         return mav;
     }
 
@@ -62,7 +66,9 @@ public class UrbanizacionControlador {
         mav.addObject("urbanizacion", urbanizacionServicio.obtenerPorId(id));
         mav.addObject("listaManzanas", manzanaServicio.obtenerPorUrbanizacion(id));
         mav.addObject("listaLotes", loteServicio.obtenerPorUrbanizacion(id));
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos());
         mav.addObject("action", "update");
+        mav.addObject("id", id);
         return mav;
     }
 
@@ -75,6 +81,7 @@ public class UrbanizacionControlador {
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("urbanizacion", dto);
+            attributes.addFlashAttribute("id", dto.getId());
             redirect.setUrl("/urbanizacion/form");
         }
         return redirect;
@@ -89,6 +96,7 @@ public class UrbanizacionControlador {
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("urbanizacion", dto);
+            attributes.addFlashAttribute("id", dto.getId());
             redirect.setUrl("/urbanizacion/form");
         }
         return redirect;
@@ -108,6 +116,7 @@ public class UrbanizacionControlador {
         System.out.println(manzanaRepo.findAll());
         return ResponseEntity.ok(manzanaRepo.obtenerPorUrb(id));
     }
+
 
     /*
     @GetMapping("/obtenerManzanasUrb/{id}")
