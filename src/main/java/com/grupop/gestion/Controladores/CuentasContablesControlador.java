@@ -1,10 +1,15 @@
 package com.grupop.gestion.Controladores;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.grupop.gestion.Entidades.CuentasContables;
+import com.grupop.gestion.Entidades.TipoProducto;
+import com.grupop.gestion.Entidades.Urbanizacion;
 import com.grupop.gestion.Repositorios.CuentasContablesRepo;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -24,6 +30,7 @@ public class CuentasContablesControlador {
     private final MonedaServicio monedaServicio;
     private final ImpuestosServicio impuestosServicio;
     private final CuentasTotalizadorasServicio cuentasTotalizadorasServicio;
+    private final TipoProductoServicio tipoProductoServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request) {
@@ -97,13 +104,18 @@ public class CuentasContablesControlador {
         return redirect;
     }
 
-    @GetMapping("/delete")
-    public RedirectView delete(@PathVariable Long id, RedirectAttributes attributes) {
-        RedirectView redirect = new RedirectView("/cuentas");
-        cuentasContablesServicio.eliminarPorId(id);
-        attributes.addFlashAttribute("exito", "Se ha eliminado correctamente la cuenta");
-        return redirect;
+    @GetMapping("/obtenerTodos")
+    public ResponseEntity<List<CuentasContables>> obtenerTipoProducto(){
+        //System.out.println(tipoProductoServicio.obtenerTodos());
+        return ResponseEntity.ok(cuentasContablesServicio.obtenerCuentasUrbanizacion());
     }
+
+//    @GetMapping("/obtenerCuentasUrb")
+//    public ResponseEntity<List<CuentasContables>> obtenerCuentasUrbanizaciones(){
+//        System.out.println(cuentasContablesServicio.obtenerCuentas1141());
+//        //return null;
+//        return ResponseEntity.ok(cuentasContablesServicio.obtenerCuentas1141());
+//    }
 
 
 }

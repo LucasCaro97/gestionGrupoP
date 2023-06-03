@@ -2,6 +2,7 @@ package com.grupop.gestion.Controladores;
 
 
 import com.grupop.gestion.Entidades.Venta;
+import com.grupop.gestion.Repositorios.ProductoRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class VentaControlador {
     private final SectorServicio sectorServicio;
     private final MonedaServicio monedaServicio;
     private final TipoIvaServicio tipoIvaServicio;
+    private final ProductoServicio productoServicio;
 
 
     @GetMapping
@@ -58,6 +60,7 @@ public class VentaControlador {
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaMoneda", monedaServicio.obtenerTodos());
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
+        mav.addObject("listaProd", productoServicio.obtenerTodos());
         return mav;
     }
 
@@ -74,6 +77,7 @@ public class VentaControlador {
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaMoneda", monedaServicio.obtenerTodos());
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
+        mav.addObject("listaProd", productoServicio.obtenerTodos());
         return mav;
     }
 
@@ -108,7 +112,7 @@ public class VentaControlador {
 
 
     @GetMapping("/delete/{id}")
-    public RedirectView delte(@PathVariable Long id, RedirectAttributes attributes){
+    public RedirectView delete(@PathVariable Long id, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/ventas");
         ventaServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente el registro");

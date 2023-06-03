@@ -45,6 +45,8 @@ public class UrbanizacionServicio {
     @Transactional(readOnly = true)
     public List<Urbanizacion> obtenerTodos(){ return urbanizacionRepo.findAll();}
 
+
+
     @Transactional(readOnly = true)
     public Urbanizacion obtenerPorId(Long id){ return urbanizacionRepo.findById(id).get();}
 

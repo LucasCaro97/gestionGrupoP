@@ -58,7 +58,38 @@ public class ProductoServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Producto> obtenerTodos(){ return productoRepo.findAll(); }
+    public List<Producto> obtenerTodos(){
+        return productoRepo.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Producto> obtenerTodos(String descripcion,Long idTipoProd, Long idCuenta){
+        if(descripcion==null){
+            if(idTipoProd!=null && idCuenta!= null){
+                return productoRepo.searchByTipoProdAndCuenta(idTipoProd, idCuenta);
+            }else if (idTipoProd!=null && idCuenta==null){
+                return productoRepo.searchByTipoProd(idTipoProd);
+            }else if(idTipoProd==null && idCuenta!=null){
+                return productoRepo.searchByCuenta(idCuenta);
+            }else{
+                return productoRepo.findAll();
+            }
+        }else{
+            if(idTipoProd!=null && idCuenta!= null){
+                return productoRepo.searchByTipoProdAndCuenta(idTipoProd, idCuenta, descripcion);
+            }else if (idTipoProd!=null && idCuenta==null){
+                return productoRepo.searchByTipoProd(idTipoProd,descripcion);
+            }else if(idTipoProd==null && idCuenta!=null){
+                return productoRepo.searchByCuenta(idCuenta, descripcion);
+            }else if(idTipoProd==null && idCuenta == null){
+                return productoRepo.searchByDescripcion(descripcion);
+            }
+
+            else{
+                return productoRepo.findAll();
+            }
+        }
+    }
 
     @Transactional(readOnly = true)
     public Producto buscarPorId(Long id){ return productoRepo.findById(id).get();}

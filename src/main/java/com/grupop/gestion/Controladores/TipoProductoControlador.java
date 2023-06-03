@@ -1,10 +1,12 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Moneda;
 import com.grupop.gestion.Entidades.TipoProducto;
 import com.grupop.gestion.Servicios.TipoProductoServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -94,6 +97,12 @@ public class TipoProductoControlador {
         tipoProductoServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado el tipo de producto correctamente");
         return  redirect;
+    }
+
+    @GetMapping("/obtenerTodos")
+    public ResponseEntity<List<TipoProducto>> obtenerTipoProducto(){
+        //System.out.println(tipoProductoServicio.obtenerTodos());
+        return ResponseEntity.ok(tipoProductoServicio.obtenerTodos());
     }
 
 

@@ -1,5 +1,7 @@
 package com.grupop.gestion.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Producto {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +25,13 @@ public class Producto {
     private CuentasContables cuentasContables;
     @JoinColumn(name = "fk_tipo_prod")
     @OneToOne
+    @JsonIgnore
     private TipoProducto tipoProducto;
     @ManyToMany
     private List<Impuestos> impuestos;
     @JoinColumn(name = "fk_lote")
     @OneToOne
+    @JsonIgnore
     private Lote lote;
 
 }

@@ -1,11 +1,14 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.Impuestos;
+import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Producto;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -31,12 +35,20 @@ public class ProductoControlador {
 
 
     @GetMapping
-    public ModelAndView getAll(HttpServletRequest request){
+    public ModelAndView getAll(HttpServletRequest request, @Param("tipoProd") Long tipoProd, @Param("cuenta") Long cuenta, @Param("descripcion") String descripcion){
         ModelAndView mav = new ModelAndView("tabla-producto");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaProd", productoServicio.obtenerTodos());
+        mav.addObject("listaProd", productoServicio.obtenerTodos(descripcion,tipoProd,cuenta));
+        mav.addObject("listaTipoProd", tipoProductoServicio.obtenerTodos());
+        mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos(52l));
         return mav;
+    }
+
+    @GetMapping("/obtenerProductos/{descripcion}/{idTipo}/{idCuenta}")
+    public ResponseEntity<List<Producto>> obtenerManzanasDeLaUrbanizacion(@PathVariable String descripcion, @PathVariable Long idTipo, @PathVariable Long idCuenta){
+        System.out.println(productoServicio.obtenerTodos(descripcion,idTipo,idCuenta));
+        return ResponseEntity.ok(productoServicio.obtenerTodos(descripcion,idTipo,idCuenta));
     }
 
     @GetMapping("/form")

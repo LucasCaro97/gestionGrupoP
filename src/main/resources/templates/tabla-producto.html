@@ -96,7 +96,35 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <div th:unless="${listaProd.isEmpty()}" class="table-responsive">
-                    <a class="btn btn-primary mb-2" th:href="@{/ventas/form}">Crear registro</a>
+                    <h5>Filtro</h5>
+                    <form class=" d-flex form-inline" th:action="@{/producto}" autocomplete="off">
+
+                        <div class="form-group mb-2 col-3">
+                            <input th:value="${descripcion}" type="text" id="descripcion" name="descripcion" class="form-control" placeholder="Descripcion">
+                        </div>
+
+                        <div class="form-group mx-sm-3 mb-2 col-3">
+                            <select  th:value="${tipoProd}" id="tipoProd" name="tipoProd" class="form-select">
+                                <option selected value="">Tipo Producto</option>
+                                <option th:each="xxx : ${listaTipoProd}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mx-sm-3  mb-2 col-2">
+                            <select  th:value="${cuenta}" id="cuenta" name="cuenta" class="form-select">
+                                <option selected value="">Seleccionar cuenta</option>
+                                <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+                            </select>
+                        </div>
+
+                        <input type="submit" class="btn btn-info mb-2 " value="Buscar">
+                        &nbsp;&nbsp;
+                        <input type="submit" class="btn btn-secondary mb-2 " value="limpiar">
+                        <div class="col-2 d-flex justify-content-end">
+                            <a class="btn btn-primary mb-2" th:href="@{/producto/form}" style="margin-right: 5px;">Crear registro</a>
+                        </div>
+                    </form>
+                    <br>
 
                     <table class="table table-hover table-bordered">
                         <thead>

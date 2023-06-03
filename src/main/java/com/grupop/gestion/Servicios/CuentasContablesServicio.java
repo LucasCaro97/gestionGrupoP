@@ -42,6 +42,12 @@ public class CuentasContablesServicio {
 
     @Transactional(readOnly = true)
     public List<CuentasContables> obtenerTodos(){ return cuentasContablesRepo.findAll(); }
+
+    @Transactional(readOnly = true)
+    public List<CuentasContables> obtenerTodos(Long id){ return cuentasContablesRepo.searchByTotalizadora(id); }
+
+    @Transactional(readOnly = true)
+    public List<CuentasContables> obtenerCuentasUrbanizacion(){ return cuentasContablesRepo.obtenerCuentasUrbanizacion(); }
     @Transactional(readOnly = true)
     public CuentasContables obtenerPorid(Long id) { return cuentasContablesRepo.findById(id).get(); }
 
