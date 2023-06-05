@@ -45,10 +45,25 @@ public class ProductoControlador {
         return mav;
     }
 
-    @GetMapping("/obtenerProductos/{descripcion}/{idTipo}/{idCuenta}")
-    public ResponseEntity<List<Producto>> obtenerManzanasDeLaUrbanizacion(@PathVariable String descripcion, @PathVariable Long idTipo, @PathVariable Long idCuenta){
-        System.out.println(productoServicio.obtenerTodos(descripcion,idTipo,idCuenta));
-        return ResponseEntity.ok(productoServicio.obtenerTodos(descripcion,idTipo,idCuenta));
+    @GetMapping("/obtenerPorDescripcionAndCuenta/{descripcion}/{idCuenta}")
+    public ResponseEntity<List<Producto>> obtenerProductoPorDescAndCuenta(@PathVariable String descripcion, @PathVariable Long idCuenta){
+        return ResponseEntity.ok(productoServicio.obtenerPorDescripcionAndCuenta(descripcion,idCuenta));
+    }
+
+    @GetMapping("/obtenerPorDescripcion/{descripcion}")
+    public ResponseEntity<List<Producto>> obtenerProductoPorDesc(@PathVariable String descripcion){
+        return ResponseEntity.ok(productoServicio.obtenerPorDescripcion(descripcion));
+    }
+
+    @GetMapping("/obtenerPorCuenta/{idCuenta}")
+    public ResponseEntity<List<Producto>> obtenerProductoPorCuenta(@PathVariable Long idCuenta){
+        return ResponseEntity.ok(productoServicio.obtenerPorCuenta(idCuenta));
+    }
+
+
+    @GetMapping("/obtenerProductosTodos")
+    public ResponseEntity<List<Producto>> obtenerProductosTodos(){
+        return ResponseEntity.ok(productoServicio.obtenerTodos());
     }
 
     @GetMapping("/form")

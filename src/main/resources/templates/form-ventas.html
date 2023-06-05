@@ -209,27 +209,23 @@
                         <div class="modal-header">
                             <div class=" d-flex" autocomplete="off">
 
-                                <div class="form-group mb-2 col-4">
+                                <div class="form-group mb-2 col-6">
                                     <input th:value="${descripcion}" type="text" id="descripcion" name="descripcion"
                                            class="form-control" placeholder="Descripcion">
                                 </div>
 
-                                <div class="form-group mx-sm-3 mb-2 col-4">
-                                    <select th:value="${tipoProd}" id="tipoProd" name="tipoProd" class="form-select">
-                                        <option selected value="">Tipo Producto</option>
-                                        <!---<option th:each="xxx : ${listaTipoProd}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>-->
-                                    </select>
-                                </div>
-
-                                <div class="form-group mx-sm-3  mb-2 col-4">
+                                <div class="form-group mx-sm-3  mb-2 col-6">
                                     <select th:value="${cuenta}" id="cuenta" name="cuenta" class="form-select">
                                         <option selected value="">Seleccionar cuenta</option>
                                         <!---<option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>-->
                                     </select>
                                 </div>
 
-                                <div class="form-group mx-sm-3  mb-2 col-4">
+                                <div class="form-group mx-sm-3  mb-2 col-1">
                                     <button class="btn btn-primary filtro" id="filtro"> Buscar </button>
+                                </div>
+                                <div class="form-group mx-sm-1  mb-2 col-1">
+                                    <button class="btn btn-primary filtro" id="limpiar"> Limpiar </button>
                                 </div>
 
 
@@ -237,25 +233,21 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-hover table-bordered">
+                            <table id="tablaProducto" class="table table-hover table-bordered">
                                 <thead>
                                 <tr class="table-dark">
                                     <th>Id</th>
                                     <th>Descripcion</th>
-                                    <th>Tipo Prod</th>
                                     <th>Cuenta</th>
-                                    <th>Impuesto</th>
                                     <th>Accion</th>
 
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr class="tableRow" th:each="xxx : ${listaProd}">
+                                <tr th:each="xxx : ${listaProd}">
                                     <th th:text="${xxx.id}"></th>
                                     <th th:text="${xxx.descripcion}"></th>
-                                    <th th:text="${xxx.tipoProducto.descripcion}"></th>
                                     <th th:text="${xxx.cuentasContables.descripcion}"></th>
-                                    <th th:text="${xxx.impuestos}"></th>
                                     <td>
                                         <button type="button" class="btn btn-primary">+</button>
                                     </td>
@@ -342,93 +334,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
-<script>
-
-$(document).ready(function () {
-var url = $(location).attr('pathname');
-
-var fechaActual = document.getElementById("fechaAlta").value;
-
-if (fechaActual.length){
-    console.log("Hay contenido");
-}
-else{
-    var fecha = new Date();
-    document.getElementById("fechaAlta").value = fecha.toJSON().slice(0,10);
-}
-
-const endPoint1= "/entidadBase/obtenerIva/";
-const endPoint2= "/entidadBase/obtenerCuit/";
-const endPoint3= "/talonario/obtenerNroComprobante/";
-
-if( (url.localeCompare("/ventas/form")) != 0){
-      $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
-
-      $("#IVA").val(dato);
-      $("#idIva").val(dato);
-    });
-
-    $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){
-
-      $("#cuit").val(dato);
-    });
-}
-
-$("#cliente").change(function(){
-
-      $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
-        $("#IVA").val(dato);
-        $("#idIva").val(dato);
-      });
-
-    $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){
-      $("#cuit").val(dato);
-    });
-
-});
-
-
-$("#talonario").change(function(){
-  var valorTalon = $("#talonario").val();
-
-  if( $("#talonario").val() != "" ){
-        $.get(endPoint3 + $("#talonario").val(), function(dato){
-          $("#nroComprobante").val(dato);
-        });
-  }else{
-        alert("Debe elegir un talonario valido");
-         $("#nroComprobante").val("");
-  }
-
-});
-
-//CARGO TIPO PRODUCTO
-$.get("/tipoProducto/obtenerTodos", function(datos,status){
-    $.each(datos, function(key,value){
-        $("#tipoProd").append("<option value=" + value.id + ">" + value.descripcion + "</option>");
-    });
-});
-
-//CARGO CUENTA
-$.get("/cuentas/obtenerTodos", function(datos,status){
-    $.each(datos, function(key,value){
-        $("#cuenta").append("<option value=" + value.id + ">" + value.descripcion + "</option>");
-    });
-});
-
-$("#filtro").click(function(){
-    $(".tableRow").remove();
-
-
-
-});
-
-
-
-});
-
-
-
-</script>
+<script th:src="@{/js/form-ventas.js}"></script>
 </body>
 </html>

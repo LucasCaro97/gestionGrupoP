@@ -76,11 +76,11 @@ public class ProductoServicio {
             }
         }else{
             if(idTipoProd!=null && idCuenta!= null){
-                return productoRepo.searchByTipoProdAndCuenta(idTipoProd, idCuenta, descripcion);
+                return productoRepo.searchByTipoProdAndCuentaAndDesc(idTipoProd, idCuenta, descripcion);
             }else if (idTipoProd!=null && idCuenta==null){
                 return productoRepo.searchByTipoProd(idTipoProd,descripcion);
             }else if(idTipoProd==null && idCuenta!=null){
-                return productoRepo.searchByCuenta(idCuenta, descripcion);
+                return productoRepo.searchByCuentaAndDesc(idCuenta, descripcion);
             }else if(idTipoProd==null && idCuenta == null){
                 return productoRepo.searchByDescripcion(descripcion);
             }
@@ -100,6 +100,18 @@ public class ProductoServicio {
         productoRepo.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<Producto> obtenerPorDescripcionAndCuenta(String descripcion, Long idCuenta) {
+        return productoRepo.searchByCuentaAndDesc(idCuenta,descripcion);
+    }
 
+    @Transactional(readOnly = true)
+    public List<Producto> obtenerPorDescripcion (String descripcion) {
+        return productoRepo.searchByDescripcion(descripcion);
+    }
 
+    @Transactional(readOnly = true)
+    public List<Producto> obtenerPorCuenta(Long idCuenta) {
+        return productoRepo.searchByCuenta(idCuenta);
+    }
 }

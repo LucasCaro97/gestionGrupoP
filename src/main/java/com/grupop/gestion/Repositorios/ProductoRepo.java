@@ -20,7 +20,7 @@ public interface ProductoRepo extends JpaRepository<Producto, Long> {
     List<Producto> searchByTipoProdAndCuenta(Long idTipoProd, Long idCuenta);
 
     @Query(value ="SELECT * FROM producto WHERE fk_tipo_prod = ?1 AND fk_cuentas_contables = ?2 AND descripcion LIKE %?3%", nativeQuery = true)
-    List<Producto> searchByTipoProdAndCuenta(Long idTipoProd, Long idCuenta, String descripcion);
+    List<Producto> searchByTipoProdAndCuentaAndDesc(Long idTipoProd, Long idCuenta, String descripcion);
 
 
     @Query(value = "SELECT * FROM producto WHERE fk_tipo_prod = ?", nativeQuery = true)
@@ -33,7 +33,7 @@ public interface ProductoRepo extends JpaRepository<Producto, Long> {
     @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ?", nativeQuery = true)
     List<Producto> searchByCuenta(Long idCuenta);
     @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ?1 AND descripcion LIKE %?2%", nativeQuery = true)
-    List<Producto> searchByCuenta(Long idCuenta, String descripcion);
+    List<Producto> searchByCuentaAndDesc(Long idCuenta, String descripcion);
 
     @Query(value = "SELECT * FROM producto WHERE descripcion LIKE %?% ", nativeQuery = true)
     List<Producto> searchByDescripcion(String descripcion);

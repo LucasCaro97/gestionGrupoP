@@ -4,201 +4,111 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <title>Agregue y Elimine Dinámicamente Filas</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 
-    <title>Añadir y quitar clases cuando se producen eventos de usuario</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.min.js" integrity="sha384-ODmDIVzN+pFdexxHEHFBQH3/9/vQ9uori45z4JjnFsRydbmQbmL5t1tQ0culUzyK" crossorigin="anonymous"></script>
 </head>
+
 <body>
-
-<meta charset="UTF-8"/>
-<script src="views/modules/facta/factura.js"></script>
-
-<div class="row">
-
-    <div class="col-sm-12">
-        <div class="card bg-secondary">
-            <div class="card-header">
-                <h5 class="card-title" style="text-align: center;height: 10px;">NUEVA VENTA</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-
-                    <div class="col-sm-6">
-                        <ul class="list-group">
-
-                            <li class="list-group-item">
-
-
-                                <label class="titulo" style="width:100px;"> Fecha/Hora:</label>
-
-                                <label style="width:200px;">20/05/2023
-                                </label>
-                                <label class="titulo">Pto Venta.:</label>
-
-
-                                <div class="input-group-prepend">
-
-                                    <label class="titulo" >Condicion Venta</label>
-                                    <select id="opventa" class="form-control" style="width:405px;">
-                                        <option value="0">SELECCIONE</option>
-                                        <option value="1">CONTADO</option>
-
-                                        <option value="2">CUENTA CORRIENTE</option>
-
-                                    </select>
-                                </div>
-
-                                <div class="input-group"> <label class="titulo" >Nombre Cliente</label>
-                                    <span class="input-group-text amber lighten-3" type="button" id="buscarcliente" data-toggle="modal" data-target="#myModalAC"><i class="fas fa-search text-grey" aria-hidden="true"></i>
-      </span><input class="form-control my-0 py-1 amber-border" type="text" id="nomcli" placeholder="Ingrese Nombre" aria-label="Search" />
-
-                                </div>
-
-
-
-
-
-                            </li>         </ul>
-                    </div>
-
-
-
-                    <div class="col-sm-6">
-                        <ul class="list-group">
-                            <li class="list-group-item" >
-
-
-
-
-                                <label class="titulo">Nombre/Razon Social:</label>
-
-                                <label class="titulo" id="nombre"></label>
-
-                                <label class="titulo">Deuda</label>
-
-                                <label class="titulo" id="deuda"></label>
-
-                                <label class="titulo">CUIT.:</label>
-
-                                <label class="titulo" id="CUIT"></label>
-
-                            </li>  </ul>
-
-
-                    </div></div>
-
-
-            </div></div>
-
-
-
-    </div>
-
-
+<div class="container">
+    <h1 class="text-center">Agregue y Elimine Dinámicamente Filas</h1>
+    <hr>
+    <table class="table table-bordered" id="mytable">
+        <colgroup>
+            <col width="10%">
+            <col width="45%">
+            <col width="45%">
+        </colgroup>
+        <thead>
+        <tr>
+            <th class="text-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="SelectAll">
+                    <label class="form-check-label" for="SelectAll">
+                        SELECCIONAR TODO
+                    </label>
+                </div>
+            </th>
+            <th class="text-center">Columna 1</th>
+            <th class="text-center">Columna 2</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td class="">
+                <div class="form-check text-center">
+                    <input class="form-check-input row-item" type="checkbox">
+                </div>
+            </td>
+            <td>12345678</td>
+            <td>12345678</td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="btn btn-primary btn-sm rounded-0" id="add_row" type="button">Agregar Fila</button>
+    <button class="btn btn-danger btn-sm rounded-0" id="delete_selected" type="button">Eliminar Fila Seleccionada</button>
 </div>
 
-
-<div class="row">
-
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title" style="text-align: center;height: 10px;">DETALLE DEL MOVIMIENTO</h5>
-            </div>
-            <div class="card-body">
-                <!-- /.panel-heading -->
-                <div class="panel-body"><div class="table-responsive">
-                    <table id="factura">
-
-                        <thead>
-
-                        </thead>
-                        <tbody></tbody>
-                    </table></div>
-
-                    <div class="row">
-                        <div class="col-lg-12"><div class="table-responsive">
-                            <table id="totales">
-
-                                <thead>
-
-                                </thead>
-                                <tbody></tbody>
-                            </table></div>
-                        </div>
-                    </div>
-                </div>
-            </div></div></div></div>
-<div class="row">
-
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title" style="text-align: center;height: 10px;">CONDICION DE LA OPERACION Y FORMA DE PAGO</h5>
-            </div>
-            <div class="card-body">
-                <div class="row"><div class="col-sm-12">
-
-                    <label>CONDICION:</label>
-                    <select id="opcondicion">
-                        <option value="0">SELECCIONE</option>
-                        <option value="1">SIMPLE</option>
-                        <option value="2">FACTURA A</option>
-                        <option value="3">FACTURA B</option>
-                        <option value="4">FACTURA B A CF</option>
-
-                    </select></div>
-
-                </div></div>
-            <div class="row" >
-
-                <div class="col-sm-3">
-
-                    <i class="fas fa-hand-holding-usd"></i>
-                    <label class="titulo">Contado/Efectivo</label></div>
-                <div class="col-sm-2">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" >$</span>
-                        </div><input type="text" class="form-control" id="efectivo" placeholder="Dinero en efectivo"/>
-                    </div>
-                </div></div>
-            <div class="row"  >
-                <div class="col-sm-3">
-                    <i class="far fa-credit-card"></i>
-                    <label class="titulo">Efectivo Banco</label></div>
-                <div class="col-sm-2">
-
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" >$</span>
-                        </div><input type="text" class="form-control" id="Tarjeta" placeholder="Tarjeta"/>
-                    </div>
-                </div></div>
-            <div class="row">
-                <div class="col-sm-3">
-                    <i class="fas fa-exchange-alt"></i>
-                    <label class="titulo">Vuelto</label></div>
-                <div class="col-sm-2">
-
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" >$</span>
-                        </div> <input type="text" class="form-control" id="Vuelto" placeholder="Vuelto" readonly="true"/>
-                    </div>
-
-                </div>
-            </div></div>  </div></div></div>
-<div class="row">
-    <div class="col-sm-12">
-        <a id="registrar" class="btn btn-primary">
-            <span class="glyphicon glyphicon-ok"></span> Registrar
-        </a>
-        <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span>Cancelar</button>
-    </div></div>
+<script>
+    $(document).ready(function() {
 
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+        // Add Table Row
 
+        $('#add_row').click(function() {
+            // Sample Data
+            var rand = Math.floor((Math.random() * 10) + 1);
+
+            var tr = $("<tr>")
+            tr.append("<td><div class='form-check text-center'><input class='form-check-input row-item' type='checkbox'></div></td>")
+            tr.append(`<td>${rand}</td>`)
+            tr.append(`<td>${rand}</td>`)
+            $('#mytable tbody').append(tr)
+
+            // Row Item Change Event Listener
+
+            $('tr').find('.row-item').change(function() {
+                if ($(".row-item").length == $(".row-item:checked").length) {
+                    $('#SelectAll').prop('checked', true)
+                } else {
+                    $('#SelectAll').prop('checked', false)
+                }
+            })
+        })
+
+        // Remove Selected Table Row(s)
+        $('#delete_selected').click(function() {
+            var count = $('.row-item:checked').length
+            if (count <= 0) {
+                alert("Please select atleast 1 table row to remove first.")
+            } else {
+                $('.row-item:checked').closest('tr').remove()
+            }
+        })
+
+        // Select All
+
+        $('#SelectAll').change(function() {
+            if ($(this).is(':checked') == true) {
+                $('.row-item').prop("checked", true)
+            } else {
+                $('.row-item').prop("checked", false)
+
+            }
+        })
+
+        // Row Item Change Event Listener
+
+        $('.row-item').change(function() {
+            if ($(".row-item").length == $(".row-item:checked").length) {
+                $('#SelectAll').prop('checked', true)
+            } else {
+                $('#SelectAll').prop('checked', false)
+            }
+        })
+    })
+</script>
 </body>
 </html>
