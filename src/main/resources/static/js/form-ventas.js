@@ -16,6 +16,13 @@ const endPoint1= "/entidadBase/obtenerIva/";
 const endPoint2= "/entidadBase/obtenerCuit/";
 const endPoint3= "/talonario/obtenerNroComprobante/";
 
+
+if($(btnAlta).text() == "Crear"){
+    $("#divDetalle").hide();
+}else{
+    $("#divDetalle").show();
+}
+
 if( (url.localeCompare("/ventas/form")) != 0){
       $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
 
@@ -94,7 +101,7 @@ $("#filtro").click(function(){
 
     $.get(url, function(datos,status){
         $.each(datos, function(key,value){
-            $("#tablaProducto tbody").append("<tr> + <td> "+ value.id +" </td> + <td>  "+ value.descripcion +"  </td>+ <td>  "+ value.cuentasContables.descripcion +"  </td>+ <td>  <button + class='btn btn-primary' + > Agregar </button> </td> + </tr>");
+            $("#tablaProducto tbody").append("<tr> + <td> "+ value.id +" </td> + <td>  "+ value.descripcion +"  </td>+ <td>  "+ value.cuentasContables.descripcion +"  </td> + <td>  <div + class='form-check text-center' + >   <input class='form-check-input row-item check' type='checkbox'>   </div> </td> + </tr>");
         });
     });
 });
@@ -104,10 +111,50 @@ $("#limpiar").click(function(){
     $("#tablaProducto").append("<tbody></tbody>");
     $.get("/producto/obtenerProductosTodos", function(datos,status){
         $.each(datos, function(key,value){
-            $("#tablaProducto tbody").append("<tr> + <td> "+ value.id +" </td> + <td>  "+ value.descripcion +"  </td>+ <td>  "+ value.cuentasContables.descripcion +"  </td>+ <td>  <button + class='btn btn-primary' + > Agregar </button> </td> + </tr>");
+            $("#tablaProducto tbody").append("<tr> + <td> "+ value.id +" </td> + <td>  "+ value.descripcion +"  </td>+ <td>  "+ value.cuentasContables.descripcion +"  </td> + <td>  <div + class='form-check text-center' + >   <input class='form-check-input row-item check' type='checkbox'>   </div> </td> + </tr>");
         });
     });
 });
+
+$("#addItem").click(function(){
+    $("#tablaProducto tr").each(function(index, element){
+        var checkbox = $(element).find(".check");
+        if (checkbox.is(":checked")) {
+            var filaEditable = $("<tr></tr>");
+            var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
+            var celda2 = "<td contenteditable='true'>0</td>"
+            var celda3 = "<td contenteditable='true'>0</td>"
+            var celda4 = "<td contenteditable='true'>0</td>"
+            var celda5 = "<td contenteditable='true'>0</td>"
+            var celda6 = "<td contenteditable='true'>0</td>"
+            var celda7 = "<td> <buton class='btn btn-danger'> Eliminar </button> </td>"
+            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7);
+             $("#tablaDetalle tbody").append(filaEditable);
+        }
+    });
+
+});
+
+
+/*
+$("#addItem").click(function(){
+var checkboxes = document.getElementsByClassName("check");
+
+  for (var i = 0; i < checkboxes.length; i++) {
+    var checkbox = checkboxes[i];
+
+    if (checkbox.checked) {
+      console.log("El checkbox " + (i + 1) + " está marcado.");
+    }
+  }
+
+});
+
+*/
+
+
+
+
 
 });
 

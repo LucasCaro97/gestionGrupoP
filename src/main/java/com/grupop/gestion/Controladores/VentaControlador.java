@@ -83,7 +83,7 @@ public class VentaControlador {
 
     @PostMapping("/create")
     public RedirectView create(Venta dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/ventas/form/" + ventaServicio.buscarUltimoId());
+        RedirectView redirect = new RedirectView("/ventas/form/" + ( ventaServicio.buscarUltimoId() + 1 ));
         try{
             ventaServicio.crear(dto);
             attributes.addFlashAttribute("exito", "Se ha generado el registro correctamente");

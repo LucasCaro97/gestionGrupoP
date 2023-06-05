@@ -51,6 +51,45 @@
     <button class="btn btn-danger btn-sm rounded-0" id="delete_selected" type="button">Eliminar Fila Seleccionada</button>
 </div>
 
+
+
+<table id="miTabla">
+    <thead>
+    <tr>
+        <th>Columna 1</th>
+        <th>Columna 2</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td contenteditable="true">Celda 1</td>
+        <td contenteditable="true">Celda 2</td>
+    </tr>
+    <tr>
+        <td contenteditable="true">Celda 3</td>
+        <td contenteditable="true">Celda 4</td>
+    </tr>
+    </tbody>
+</table>
+
+<button onclick="guardarCambios()">Guardar cambios</button>
+
+<script>
+  function guardarCambios() {
+    var tabla = document.getElementById("miTabla");
+    var filas = tabla.getElementsByTagName("tr");
+
+    for (var i = 0; i < filas.length; i++) {
+      var celdas = filas[i].getElementsByTagName("td");
+
+      for (var j = 0; j < celdas.length; j++) {
+        var valor = celdas[j].innerText;
+        console.log("Fila " + (i + 1) + ", Columna " + (j + 1) + ": " + valor);
+      }
+    }
+  }
+</script>
+
 <script>
     $(document).ready(function() {
 
@@ -79,6 +118,7 @@
         })
 
         // Remove Selected Table Row(s)
+        //En mi caso add_selected
         $('#delete_selected').click(function() {
             var count = $('.row-item:checked').length
             if (count <= 0) {

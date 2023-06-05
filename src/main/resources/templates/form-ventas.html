@@ -201,6 +201,10 @@
                 Añadir
             </button>
 
+            <button class="btn btn-outline-success" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Guardar
+            </button>
+
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
@@ -239,18 +243,21 @@
                                     <th>Id</th>
                                     <th>Descripcion</th>
                                     <th>Cuenta</th>
-                                    <th>Accion</th>
+                                    <th>Seleccionar</th>
 
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:each="xxx : ${listaProd}">
-                                    <th th:text="${xxx.id}"></th>
-                                    <th th:text="${xxx.descripcion}"></th>
-                                    <th th:text="${xxx.cuentasContables.descripcion}"></th>
+                                    <td th:text="${xxx.id}"></td>
+                                    <td th:text="${xxx.descripcion}"></td>
+                                    <td th:text="${xxx.cuentasContables.descripcion}"></td>
                                     <td>
-                                        <button type="button" class="btn btn-primary">+</button>
+                                        <div class="form-check text-center">
+                                            <input class="form-check-input row-item check" type="checkbox">
+                                        </div>
                                     </td>
+
                                 </tr>
 
                                 </tbody>
@@ -258,8 +265,8 @@
                             </table>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-primary" id="addItem">Añadir items</button>
                         </div>
                     </div>
                 </div>
@@ -303,24 +310,24 @@
             <table class="table table-hover table-bordered">
                 <thead>
                 <tr class="table-dark">
-                    <th>Item</th>
                     <th>Producto</th>
                     <th>Cantidad</th>
                     <th>%</th>
                     <th>Precio U.</th>
                     <th>Precio F.</th>
                     <th>Total</th>
+                    <th>Accion</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td>1</td>
                     <td>LOTE 1 DE LA MANZANA A URB 21</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>$1500000</td>
-                    <td>$1500000</td>
-                    <td>$1500000</td>
+                    <td contenteditable="true">1</td>
+                    <td contenteditable="true">0</td>
+                    <td contenteditable="true">$1500000</td>
+                    <td contenteditable="true">$1500000</td>
+                    <td contenteditable="true">$1500000</td>
+                    <td><div><button class="btn btn-danger">Eliminar</button></div></td>
                 </tr>
                 </tbody>
             </table>
