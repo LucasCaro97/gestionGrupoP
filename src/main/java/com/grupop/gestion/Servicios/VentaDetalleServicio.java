@@ -19,38 +19,48 @@ public class VentaDetalleServicio {
     private final VentaServicio ventaServicio;
     private final ProductoServicio productoServicio;
 
-    public void crear(Long idVenta, Long idProd, Double cantidad, BigDecimal precioU) throws Exception {
+    @Transactional
+    public void crear(Long idVenta, Long idProd, Double cantidad, BigDecimal precioU) {
 
         Producto prod = productoServicio.buscarPorId(idProd);
         Venta venta = ventaServicio.obtenerPorId(idVenta);
 
         if (existByProductoAndVentaId(venta.getId(), prod.getId()) != 0) {
-            throw new Exception("Se omitio la creacion del producto ya existente en la venta");
+            VentaDetalle vtaDetalle = ventaDetalleRepo.searchByProductoAndVenta(venta.getId(), prod.getId());
+            vtaDetalle.setCantidad(cantidad);
+            vtaDetalle.setPrecioUnitario(precioU);
+            BigDecimal cantidadBigDecimal = BigDecimal.valueOf(cantidad);
+            vtaDetalle.setTotal(cantidadBigDecimal.multiply(precioU));
+            ventaDetalleRepo.save(vtaDetalle);
+
+            System.out.println("Producto ya existente, se actualizo con los ultimos valores");
         }
-
-        VentaDetalle vtaDetalle = new VentaDetalle();
-        vtaDetalle.setVentaId(venta);
-        vtaDetalle.setProducto(prod);
-        vtaDetalle.setCantidad(cantidad);
-        vtaDetalle.setPrecioUnitario(precioU);
-        BigDecimal cantidadBigDecimal = BigDecimal.valueOf(cantidad);
-        vtaDetalle.setTotal(cantidadBigDecimal.multiply(precioU));
-        ventaDetalleRepo.save(vtaDetalle);
+        else {
+            VentaDetalle vtaDetalle = new VentaDetalle();
+            vtaDetalle.setVentaId(venta);
+            vtaDetalle.setProducto(prod);
+            vtaDetalle.setCantidad(cantidad);
+            vtaDetalle.setPrecioUnitario(precioU);
+            BigDecimal cantidadBigDecimal = BigDecimal.valueOf(cantidad);
+            vtaDetalle.setTotal(cantidadBigDecimal.multiply(precioU));
+            ventaDetalleRepo.save(vtaDetalle);
         }
+    }
 
 
-
-        public void eliminar (Long idVenta, String descProd){
-            VentaDetalle vtaDetalle = ventaDetalleRepo.buscarPorVentayProducto(idVenta, descProd);
+        @Transactional
+        public void eliminar (Long idVenta, Long idProd){
+             VentaDetalle vtaDetalle = ventaDetalleRepo.searchByProductoAndVenta(idVenta,idProd);
             ventaDetalleRepo.deleteById(vtaDetalle.getId());
         }
 
+        @Transactional(readOnly = true)
         public Integer existByProductoAndVentaId (Long ventaId, Long productoId){
             return ventaDetalleRepo.existByProductoAndVenta(ventaId, productoId);
         }
 
-    @Transactional(readOnly = true)
-    public List<VentaDetalle> obtenerPorVenta(Long id) {
-       return ventaDetalleRepo.buscarPorVenta(id);
-    }
+        @Transactional(readOnly = true)
+        public List<VentaDetalle> obtenerPorVenta(Long id) {
+           return ventaDetalleRepo.buscarPorVenta(id);
+        }
 }

@@ -22,12 +22,24 @@ public class VentaDetalleControlador {
                                             @PathVariable BigDecimal precioU, RedirectAttributes attributes){
         try{
             ventaDetalleServicio.crear(idVenta,idProd,cantidad,precioU);
-            System.out.println("Se creo el detalle con exito");
+            attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
+    }
+
+    @PostMapping("/bajaDetalle/{idVenta}/{idProd}")
+    public ResponseEntity<String> bajaDetalle(@PathVariable Long idVenta, @PathVariable Long idProd, RedirectAttributes attributes){
+        try{
+            ventaDetalleServicio.eliminar(idVenta,idProd);
+            System.out.println("Se eliminaron los items del detalle correctamente");
+        }catch(Exception e){
+            attributes.addFlashAttribute("exception", e.getMessage());
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registro eliminado correctamente");
     }
 
 

@@ -96,3 +96,22 @@
     left: 86%;
     bottom: 2%;
 }
+
+.celdaOculta{
+    display: none;
+}
+
+#cajaTotal{
+    position: fixed;
+    width: 400px;
+    right: 16%;
+    bottom: 2%;
+    display: flex;
+    align-items: baseline;
+    background-color: darkgray;
+}
+
+.inputTotal{
+    background-color: darkgray;
+    border: none;
+}

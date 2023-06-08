@@ -116,22 +116,16 @@ $("#limpiar").click(function(){
     });
 });
 
-function eliminarFila(){
-    console.log("Eliminando fila");
-  //var fila = $(boton).closest("tr"); // Obtener la fila más cercana al botón
-  //fila.remove(); // Eliminar la fila
-};
-
 $("#addItem").click(function(){
     $("#tablaProducto tr").each(function(index, element){
         var checkbox = $(element).find(".check");
         if (checkbox.is(":checked")) {
             var filaEditable = $("<tr></tr>");
             var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
-            var celda2 = "<td>" + $(element).children().eq(0).text() + "</td>"
-            var celda3 = "<td contenteditable='true'>1.0</td>"
-            var celda4 = "<td contenteditable='true' class='celdaMoneda'>0.00</td>"
-            var celda5 = "<td contenteditable='true' class='celdaMoneda'>0.00</td>"
+            var celda2 = "<td  class='celdaOculta' >" + $(element).children().eq(0).text() + "</td>"
+            var celda3 = "<td contenteditable='true' class='editable'>1.0</td>"
+            var celda4 = "<td contenteditable='true' class='celdaMoneda editable'>0.00</td>"
+            var celda5 = "<td class='celdaMoneda'>0.00</td>"
             var celda6 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
             filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6);
              $("#tablaDetalle tbody").append(filaEditable);
@@ -140,15 +134,50 @@ $("#addItem").click(function(){
 
 });
 
-$("#deleteRow").click(function(){
-    console.log("Eliminando");
-    var count = $(".row-item:checked").length;
-    if(count <= 0){
-        alert("Por favor seleccionar 1 o mas items para eliminar del detalle");
-    }else{
-        $(".row-item:checked").closest("tr").remove();
-    }
+$("#confirmDelete").click(function(){
+        var filasMarcadas=[];
+
+        //RECORRER TODAS LAS FILAS DE LA TABLA
+        $("#tablaDetalle tbody tr").each(function(){
+            var checkbox = $(this).find(".row-item");
+
+            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
+            if(checkbox.prop("checked")){
+                var filaMarcada = $(this).index();
+                filasMarcadas.push(filaMarcada);
+            }
+
+        });
+
+        for(var i = 0; i < filasMarcadas.length; i++){
+        var indiceFila = filasMarcadas[i];
+        var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
+
+        var idProducto = filaMarcada.find("td:eq(1)").text();
+        var idVenta = $("#id").val();
+
+        var url = window.location.href;
+        var urlObj = new URL(url);
+        urlObj.pathname = "/ventaDetalle/bajaDetalle/";
+        var nuevaUrl = urlObj.href;
+        //console.log(nuevaUrl+ idVenta + "/" + idProducto);
+        fetch(nuevaUrl+ idVenta + "/" + idProducto, {
+                method : "POST",
+                headers:{
+                "Content-Type" : "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+            ///console.log("Se registro la linea con exito" + data);
+            })
+            .catch(error => {
+            //MENSAJE DE ERROR
+            })
+        }
+        window.location.href= "/ventas/form/"+ $("#id").val();
 });
+
 
 $("#moneda").change(function(){
     console.log("Cambiando formato - " + $("#moneda").val());
@@ -166,7 +195,7 @@ $("#moneda").change(function(){
     }
 });
 
-$("#guardarItems").click(function(){
+$("#confirmSave").click(function(){
 alert("Se van a marcar los lotes de esta venta con ESTADO: VENDIDO  --> FALTA IMPLEMENTAR <--")
 var url = window.location.href;
 var urlObj = new URL(url);
@@ -192,13 +221,34 @@ $("#tablaDetalle tbody tr").each(function(){
     })
     .then(response => response.json())
     .then(data => {
-    console.log("Se registro la linea con exito" + data);
+    ///console.log("Se registro la linea con exito" + data);
     })
     .catch(error => {
     //MENSAJE DE ERROR
     })
+    window.location.href= "/ventas/form/"+ $("#id").val();
 
 });
+});
+
+
+$('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
+var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
+
+let cantidad = $(fila).children().eq(2).text(); // CANTIDAD
+let precioUnitario = $(fila).children().eq(3).text(); // PRECIO U
+$(fila).children().eq(4).text(cantidad*precioUnitario);
+console.log("nuevo precio: " + cantidad * precioUnitario);
+
+//var valores = fila.find('td').map(function() { //meto todos los valores en un array llamado valores
+//      return $(this).text();
+//    }).get();
+//console.log(valores); // imprimo mi array
+
+
+//var celdaEspecifica = fila.find('td:nth-child(2)'); // Altera la segunda celda de la fila
+//celdaEspecifica.text('Nuevo valor');
+
 
 });
 
