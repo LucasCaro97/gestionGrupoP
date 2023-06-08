@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.FormaDePago;
+import com.grupop.gestion.Entidades.TipoPago;
 import com.grupop.gestion.Repositorios.FormaDePagoRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,4 +46,5 @@ public class FormaDePagoServicio {
 
     public void eliminarPorId(Long id){ formaDePagoRepo.deleteById(id);}
 
+    public List<FormaDePago> obtenerTodosPorOperacion(Long idOperacion) { return formaDePagoRepo.obtenerTodosPorOperacion(idOperacion);    }
 }

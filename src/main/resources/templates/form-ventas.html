@@ -182,27 +182,39 @@
                     </select>
                 </div>
 
-
                 <div class="col-md-6">
                     <label for="observaciones" class="form-label">Observaciones: </label>
                     <textarea type="text" class="form-control" th:field="*{observaciones}"
                               id="observaciones"></textarea>
                 </div>
 
-                <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" id="btnAlta"
+                <div class="col-md-3 formaPago">
+                    <select th:field="*{formaDePago}" id="formaDePago" class="form-select" aria-label="Seleccionar formaDePago" disabled>
+                        <option selected value="">Forma de Pago</option>
+                        <option th:each="xxx : ${listaFormasPago}" th:text="${xxx.descripcion}"
+                                th:value="${xxx.id}"></option>
+                    </select>
+                </div>
+
+
+                <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
                         class="btn btn-primary"></button>
             </form>
         </div>
     </div>
 
     <div class="container" id="divDetalle">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center p-2">
             <button class="btn btn-outline-success" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Añadir
             </button>
 
-            <button class="btn btn-outline-success" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Guardar
+            <button class="btn btn-outline-danger" id="deleteRow">
+                Eliminar
+            </button>
+
+            <button class="btn btn-outline-primary" id="guardarItems">
+                Guardar Items
             </button>
 
             <!-- Modal -->
@@ -311,24 +323,23 @@
                 <thead>
                 <tr class="table-dark">
                     <th>Producto</th>
+                    <th class="celdaOculta">IdProd</th>
                     <th>Cantidad</th>
-                    <th>%</th>
                     <th>Precio U.</th>
-                    <th>Precio F.</th>
                     <th>Total</th>
                     <th>Accion</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>LOTE 1 DE LA MANZANA A URB 21</td>
-                    <td contenteditable="true">1</td>
-                    <td contenteditable="true">0</td>
-                    <td contenteditable="true">$1500000</td>
-                    <td contenteditable="true">$1500000</td>
-                    <td contenteditable="true">$1500000</td>
-                    <td><div><button class="btn btn-danger">Eliminar</button></div></td>
+                <tr th:each="xxx : ${listaDetalle}" >
+                    <td th:text="${xxx.producto.descripcion}"></td>
+                    <td th:text="${xxx.producto.id}" class="celdaOculta"></td>
+                    <td th:text="${xxx.cantidad}" contenteditable='true' class='celdaMoneda'></td>
+                    <td th:text="${xxx.precioUnitario}" contenteditable='true' class='celdaMoneda'></td>
+                    <td th:text="${xxx.total}" class='celdaMoneda'></td>
+                    <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
                 </tr>
+
                 </tbody>
             </table>
         </div>

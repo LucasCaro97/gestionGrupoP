@@ -8,6 +8,7 @@ import com.grupop.gestion.Repositorios.ProductoRepo;
 import com.grupop.gestion.Repositorios.TipoProductoRepo;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,4 +115,8 @@ public class ProductoServicio {
     public List<Producto> obtenerPorCuenta(Long idCuenta) {
         return productoRepo.searchByCuenta(idCuenta);
     }
+
+    @Transactional(readOnly = true)
+    public Producto buscarPorDesc(String descProd) {    return productoRepo.searchProductoByDescripcion(descProd); }
+
 }

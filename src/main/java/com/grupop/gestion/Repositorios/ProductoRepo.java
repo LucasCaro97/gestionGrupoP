@@ -38,4 +38,9 @@ public interface ProductoRepo extends JpaRepository<Producto, Long> {
     @Query(value = "SELECT * FROM producto WHERE descripcion LIKE %?% ", nativeQuery = true)
     List<Producto> searchByDescripcion(String descripcion);
 
+    @Query(value = "SELECT * FROM producto WHERE descripcion = ? ", nativeQuery = true)
+    Producto searchProductoByDescripcion(String descripcion);
+
+
+
 }

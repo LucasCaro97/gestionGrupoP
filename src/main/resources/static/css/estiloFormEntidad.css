@@ -57,10 +57,8 @@
     height: 35px;
 }
 
-#divDetalle {
-    background-color: antiquewhite;
-    margin-top: 15px;
-    height: 300px;
+#tablaDetalle tbody {
+    background-color: darkgray;
 }
 
 
@@ -90,4 +88,11 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
+}
+
+.formaPago{
+    position: fixed;
+    width: 200px;
+    left: 86%;
+    bottom: 2%;
 }

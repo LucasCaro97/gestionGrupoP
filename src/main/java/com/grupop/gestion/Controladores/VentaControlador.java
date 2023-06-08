@@ -32,6 +32,8 @@ public class VentaControlador {
     private final MonedaServicio monedaServicio;
     private final TipoIvaServicio tipoIvaServicio;
     private final ProductoServicio productoServicio;
+    private final VentaDetalleServicio ventaDetalleServicio;
+    private final FormaDePagoServicio formaDePagoServicio;
 
 
     @GetMapping
@@ -61,6 +63,7 @@ public class VentaControlador {
         mav.addObject("listaMoneda", monedaServicio.obtenerTodos());
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
         mav.addObject("listaProd", productoServicio.obtenerTodos());
+        mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
         return mav;
     }
 
@@ -78,14 +81,17 @@ public class VentaControlador {
         mav.addObject("listaMoneda", monedaServicio.obtenerTodos());
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
         mav.addObject("listaProd", productoServicio.obtenerTodos());
+        mav.addObject("listaDetalle", ventaDetalleServicio.obtenerPorVenta(id));
+        mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
         return mav;
     }
 
     @PostMapping("/create")
     public RedirectView create(Venta dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/ventas/form/" + ( ventaServicio.buscarUltimoId() + 1 ));
+        RedirectView redirect = new RedirectView("/ventas");
         try{
             ventaServicio.crear(dto);
+            redirect.setUrl("/ventas/form/" + ( ventaServicio.buscarUltimoId()));
             attributes.addFlashAttribute("exito", "Se ha generado el registro correctamente");
             attributes.addFlashAttribute("venta", dto);
         }catch (Exception e){

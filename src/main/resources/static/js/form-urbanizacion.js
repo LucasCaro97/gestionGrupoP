@@ -1,5 +1,4 @@
 $(".boton-alta-producto").click(function(){
-     alert("Sera redirigido a : /lote/altaProductoGrupo/" + $("#id").val());
      window.location.href = "/lote/altaProductoGrupo/"+$("#id").val();
 });
 
