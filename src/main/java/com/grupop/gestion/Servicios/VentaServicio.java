@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -64,4 +65,15 @@ public class VentaServicio {
 
     @Transactional(readOnly = true)
     public Long buscarUltimoId(){ return ventaRepo.findLastId(); }
+
+    @Transactional
+    public void actualizarTotal(Long idVenta, Double total) {
+        Venta vta = ventaRepo.findById(idVenta).get();
+        vta.setTotal(total);
+        ventaRepo.save(vta);
+    }
+    @Transactional(readOnly = true)
+    public Double obtenerTotalPorId(Long id){
+        return ventaRepo.obtenerTotalPorId(id);
+    }
 }

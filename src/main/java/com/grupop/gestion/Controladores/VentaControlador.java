@@ -1,12 +1,14 @@
 package com.grupop.gestion.Controladores;
 
 
+import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Repositorios.ProductoRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -123,6 +126,12 @@ public class VentaControlador {
         ventaServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente el registro");
         return redirect;
+    }
+
+
+    @GetMapping("/obtenerTotalPorId/{id}")
+    public ResponseEntity<Double> obtenerTotalPorId(@PathVariable Long id){
+        return ResponseEntity.ok(ventaServicio.obtenerTotalPorId(id));
     }
 
 }

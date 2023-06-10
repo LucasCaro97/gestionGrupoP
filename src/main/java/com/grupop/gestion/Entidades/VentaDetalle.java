@@ -24,8 +24,8 @@ public class VentaDetalle implements Serializable {
     @OneToOne
     private Producto producto;
     private Double cantidad;
-    private BigDecimal precioUnitario;
-    private BigDecimal total;
+    private Double precioUnitario;
+    private Double total;
 
 
 }

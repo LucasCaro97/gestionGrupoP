@@ -189,7 +189,7 @@
                 </div>
 
                 <div class="col-md-3 formaPago">
-                    <select th:field="*{formaDePago}" id="formaDePago" class="form-select" aria-label="Seleccionar formaDePago" disabled>
+                    <select th:field="*{formaDePago}" id="formaDePago" class="form-select" aria-label="Seleccionar formaDePago">
                         <option selected value="">Forma de Pago</option>
                         <option th:each="xxx : ${listaFormasPago}" th:text="${xxx.descripcion}"
                                 th:value="${xxx.id}"></option>
@@ -198,19 +198,23 @@
 
                 <div id="cajaTotal">
                     <label class="form-label">Total: </label>
-                    <input type="number" step="0.01" class="form-control inputTotal" th:field="*{total}" readonly>
+                    <input type="number" step="0.01" class="form-control inputTotal" id="totalVenta" readonly>
                 </div>
 
 
-                <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
-                        class="btn btn-primary"></button>
+                <div id="comandos" class="d-flex">
+                    <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
+                            class="btn btn-primary"></button>
+
+                    <a class="btn btn-secondary" id="volverAtras" th:href="@{/ventas}">Volver</a>
+                </div>
             </form>
         </div>
     </div>
 
     <div class="container" id="divDetalle">
         <div class="d-flex justify-content-center p-2">
-            <button class="btn btn-outline-success" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button class="btn btn-outline-success" id="add" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Añadir
             </button>
 

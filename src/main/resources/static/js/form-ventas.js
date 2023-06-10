@@ -137,7 +137,7 @@ $("#addItem").click(function(){
 $("#confirmDelete").click(function(){
         var filasMarcadas=[];
 
-        //RECORRER TODAS LAS FILAS DE LA TABLA
+        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
         $("#tablaDetalle tbody tr").each(function(){
             var checkbox = $(this).find(".row-item");
 
@@ -149,6 +149,7 @@ $("#confirmDelete").click(function(){
 
         });
 
+        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
         for(var i = 0; i < filasMarcadas.length; i++){
         var indiceFila = filasMarcadas[i];
         var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
@@ -175,10 +176,26 @@ $("#confirmDelete").click(function(){
             //MENSAJE DE ERROR
             })
         }
+
+        //RECUENTO DE TOTALES PARA ACTUALIZAR EL TOTAL DE LA VENTA
+            $("#tablaDetalle tbody tr").each(function(){
+                var valorCelda = $(this).find("td:eq(4)").text();
+                totalVenta += parseFloat(valorCelda);
+            });
+
+        $("#totalVenta").val(totalVenta);
+        fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + $("#totalVenta").val(), {
+                method : "POST",
+                headers:{
+                "Content-Type" : "application/json"
+                }
+            })
+
+        //REFRESCO LA PAGINA PARA QUE SE ACTUALIZEEN LOS CAMBIOS
         window.location.href= "/ventas/form/"+ $("#id").val();
 });
 
-
+/* GENERA CONFLICTO AL GUARDAR LOS IMPORTES, POR EL TIPO DE DATO
 $("#moneda").change(function(){
     console.log("Cambiando formato - " + $("#moneda").val());
     var celdasMoneda = document.getElementsByClassName("celdaMoneda");
@@ -194,6 +211,7 @@ $("#moneda").change(function(){
         celda.textContent = formatoMoneda;
     }
 });
+*/
 
 $("#confirmSave").click(function(){
 alert("Se van a marcar los lotes de esta venta con ESTADO: VENDIDO  --> FALTA IMPLEMENTAR <--")
@@ -201,18 +219,21 @@ var url = window.location.href;
 var urlObj = new URL(url);
 urlObj.pathname = "/ventaDetalle/altaDetalle/";
 var nuevaUrl = urlObj.href;
-console.log(nuevaUrl);
+
+let totalVenta = 0;
 
 $("#tablaDetalle tbody tr").each(function(){
     let idVenta = $("#id").val();
     let descProd = $(this).children().eq(0).text();
     let idProd = $(this).children().eq(1).text();
-    let cantidad = $(this).children().eq(2).text();
-    let precioU = $(this).children().eq(3).text();
+    let cantidad = parseFloat($(this).children().eq(2).text());
+    let precioU =  parseFloat($(this).children().eq(3).text());
 
-    console.log(nuevaUrl + idVenta + "/" + idProd + "/" + cantidad + "/" + precioU);
-    //window.location.href = nuevaUrl + idVenta + "/" + idProd + "/" + cantidad + "/" + precioU;
 
+    let totalLinea = (cantidad * precioU);
+    totalVenta += totalLinea;
+
+    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
     fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
         method : "POST",
         headers:{
@@ -224,36 +245,62 @@ $("#tablaDetalle tbody tr").each(function(){
     ///console.log("Se registro la linea con exito" + data);
     })
     .catch(error => {
-    //MENSAJE DE ERROR
+    //console.log("Guarde items")
     })
-    window.location.href= "/ventas/form/"+ $("#id").val();
 
 });
+
+//GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
+        method : "POST",
+        headers:{
+        "Content-Type" : "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+    ///console.log("Se registro la linea con exito" + data);
+    })
+    .catch(error => {
+    //console.log("guarde total = " + totalVenta);
+    })
+
+window.location.href= "/ventas/form/"+ $("#id").val();
 });
 
 
 $('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
 var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
 
+let totalVenta = 0;
 let cantidad = $(fila).children().eq(2).text(); // CANTIDAD
 let precioUnitario = $(fila).children().eq(3).text(); // PRECIO U
 $(fila).children().eq(4).text(cantidad*precioUnitario);
-console.log("nuevo precio: " + cantidad * precioUnitario);
 
-//var valores = fila.find('td').map(function() { //meto todos los valores en un array llamado valores
-//      return $(this).text();
-//    }).get();
-//console.log(valores); // imprimo mi array
+    $("#tablaDetalle tbody tr").each(function(){
+        var valorCelda = $(this).find("td:eq(4)").text();
+        totalVenta += parseFloat(valorCelda);
+    });
 
-
-//var celdaEspecifica = fila.find('td:nth-child(2)'); // Altera la segunda celda de la fila
-//celdaEspecifica.text('Nuevo valor');
-
+$("#totalVenta").val(totalVenta);
 
 });
 
-
-
-
+$.get("/ventas/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
+           $("#totalVenta").val(datos);
+           console.log(datos);
 });
+
+
+/* NO PERMITIR CAMBIOS CUANDO LA VENTA POSEA UN PAGO GENERADO
+$('input').prop('readonly', true);
+$('select').prop('disabled', true);
+$('textarea').prop('readonly', true);
+$('#add').hide();
+$('#deleteRow').hide();
+$('#guardarItems').hide();
+$('#volverAtras ').hide();
+*/
+});
+
 

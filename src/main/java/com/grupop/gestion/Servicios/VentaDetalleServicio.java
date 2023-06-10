@@ -20,7 +20,7 @@ public class VentaDetalleServicio {
     private final ProductoServicio productoServicio;
 
     @Transactional
-    public void crear(Long idVenta, Long idProd, Double cantidad, BigDecimal precioU) {
+    public void crear(Long idVenta, Long idProd, Double cantidad, Double precioU) {
 
         Producto prod = productoServicio.buscarPorId(idProd);
         Venta venta = ventaServicio.obtenerPorId(idVenta);
@@ -29,8 +29,7 @@ public class VentaDetalleServicio {
             VentaDetalle vtaDetalle = ventaDetalleRepo.searchByProductoAndVenta(venta.getId(), prod.getId());
             vtaDetalle.setCantidad(cantidad);
             vtaDetalle.setPrecioUnitario(precioU);
-            BigDecimal cantidadBigDecimal = BigDecimal.valueOf(cantidad);
-            vtaDetalle.setTotal(cantidadBigDecimal.multiply(precioU));
+            vtaDetalle.setTotal(cantidad*precioU);
             ventaDetalleRepo.save(vtaDetalle);
 
             System.out.println("Producto ya existente, se actualizo con los ultimos valores");
@@ -41,8 +40,7 @@ public class VentaDetalleServicio {
             vtaDetalle.setProducto(prod);
             vtaDetalle.setCantidad(cantidad);
             vtaDetalle.setPrecioUnitario(precioU);
-            BigDecimal cantidadBigDecimal = BigDecimal.valueOf(cantidad);
-            vtaDetalle.setTotal(cantidadBigDecimal.multiply(precioU));
+            vtaDetalle.setTotal(cantidad*precioU);
             ventaDetalleRepo.save(vtaDetalle);
         }
     }

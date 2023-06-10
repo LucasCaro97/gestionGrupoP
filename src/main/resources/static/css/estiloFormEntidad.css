@@ -13,7 +13,7 @@
 }
 
 .btn{
-    margin-right: 3%;
+    margin-right: 10px;
     height: 35px;
 }
 
@@ -49,12 +49,10 @@
 }
 
 
-#btnAlta {
+#comandos {
     position: absolute;
     top: 10%;
-    left: 80%;
-    width: 100px;
-    height: 35px;
+    left: 74%;
 }
 
 #tablaDetalle tbody {

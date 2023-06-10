@@ -41,12 +41,7 @@ public class Venta implements Serializable {
     private Moneda moneda;
     private String observaciones;
 
-    private BigDecimal subTotal;
-    private BigDecimal descuento;
-    private BigDecimal importeConImpuesto;
-    private BigDecimal importeSinImpuesto;
-    private BigDecimal totalImpuesto;
-    private BigDecimal total;
+    private Double total;
     // private Usuario usuario;
     @JoinColumn(name = "fk_forma_de_pago")
     @ManyToOne

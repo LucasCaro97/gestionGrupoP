@@ -12,4 +12,6 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
     Long findLastId();
 
 
+    @Query(value = "SELECT total FROM venta WHERE id = ?", nativeQuery = true)
+    Double obtenerTotalPorId(Long id);
 }
