@@ -37,6 +37,7 @@ public class VentaControlador {
     private final ProductoServicio productoServicio;
     private final VentaDetalleServicio ventaDetalleServicio;
     private final FormaDePagoServicio formaDePagoServicio;
+    private final CuentasContablesServicio cuentasContablesServicio;
 
 
     @GetMapping
@@ -86,6 +87,7 @@ public class VentaControlador {
         mav.addObject("listaProd", productoServicio.obtenerTodos());
         mav.addObject("listaDetalle", ventaDetalleServicio.obtenerPorVenta(id));
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
+        mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
         return mav;
     }
 

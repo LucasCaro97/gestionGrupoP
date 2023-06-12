@@ -110,6 +110,11 @@ public class CuentasContablesControlador {
         return ResponseEntity.ok(cuentasContablesServicio.obtenerCuentasUrbanizacion());
     }
 
+    @GetMapping("/obtenerPorDescripcion/{descripcion}")
+    public ResponseEntity<List<CuentasContables>> obtenerPorDescripcion(@PathVariable String descripcion){
+        return ResponseEntity.ok(cuentasContablesServicio.obtenerPorDescripcion(descripcion));
+    }
+
 //    @GetMapping("/obtenerCuentasUrb")
 //    public ResponseEntity<List<CuentasContables>> obtenerCuentasUrbanizaciones(){
 //        System.out.println(cuentasContablesServicio.obtenerCuentas1141());

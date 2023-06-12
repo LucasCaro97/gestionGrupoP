@@ -111,4 +111,7 @@ public interface CuentasContablesRepo extends JpaRepository<CuentasContables, Lo
 
     @Query(value = "SELECT * FROM cuentas_contables WHERE fk_cta_totalizadora = 52", nativeQuery = true)
     List<CuentasContables> obtenerCuentasUrbanizacion();
+
+    @Query(value = "SELECT * FROM cuentas_contables WHERE descripcion LIKE %?%", nativeQuery = true)
+    List<CuentasContables> obtenerPorDescripcion(String descripcion);
 }

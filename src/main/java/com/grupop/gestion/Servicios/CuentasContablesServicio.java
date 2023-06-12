@@ -229,18 +229,8 @@ public class CuentasContablesServicio {
         return cuentasContablesRepo.obtenerCuentas43();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Transactional(readOnly = true)
+    public List<CuentasContables> obtenerPorDescripcion(String descripcion) {
+        return cuentasContablesRepo.obtenerPorDescripcion(descripcion);
+    }
 }

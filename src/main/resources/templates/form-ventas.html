@@ -213,171 +213,335 @@
     </div>
 
     <div class="container" id="divDetalle">
-        <div class="d-flex justify-content-center p-2">
-            <button class="btn btn-outline-success" id="add" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                Añadir
-            </button>
+        <div class="tabs">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Imputaciones</a>
+                </li>
+            </ul>
 
-            <button class="btn btn-outline-danger" id="deleteRow" data-bs-toggle="modal" data-bs-target="#exampleModalDelete">
-                Eliminar
-            </button>
+            <div class="tab-content mt-2">
+                <div id="tab1" class="tab-pane fade show active" role="tabpanel" aria-labelledby="tab1-tab">
+                    <div class="d-flex justify-content-center p-2">
+                        <button class="btn btn-outline-success" id="add" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Añadir
+                        </button>
 
-            <button class="btn btn-outline-primary" id="guardarItems" data-bs-toggle="modal" data-bs-target="#exampleModalSave">
-                Guardar Items
-            </button>
+                        <button class="btn btn-outline-danger" id="deleteRow" data-bs-toggle="modal" data-bs-target="#exampleModalDelete">
+                            Eliminar
+                        </button>
 
-            <!-- Modal Añadir -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <div class=" d-flex" autocomplete="off">
+                        <button class="btn btn-outline-primary" id="guardarItems" data-bs-toggle="modal" data-bs-target="#exampleModalSave">
+                            Guardar Items
+                        </button>
 
-                                <div class="form-group mb-2 col-6">
-                                    <input th:value="${descripcion}" type="text" id="descripcion" name="descripcion"
-                                           class="form-control" placeholder="Descripcion">
-                                </div>
+                        <!-- Modal Añadir -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class=" d-flex" autocomplete="off">
 
-                                <div class="form-group mx-sm-3  mb-2 col-6">
-                                    <select th:value="${cuenta}" id="cuenta" name="cuenta" class="form-select">
-                                        <option selected value="">Seleccionar cuenta</option>
-                                        <!---<option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>-->
-                                    </select>
-                                </div>
+                                            <div class="form-group mb-2 col-6">
+                                                <input th:value="${descripcion}" type="text" id="descripcion" name="descripcion"
+                                                       class="form-control" placeholder="Descripcion">
+                                            </div>
 
-                                <div class="form-group mx-sm-3  mb-2 col-1">
-                                    <button class="btn btn-primary filtro" id="filtro"> Buscar </button>
-                                </div>
-                                <div class="form-group mx-sm-1  mb-2 col-1">
-                                    <button class="btn btn-primary filtro" id="limpiar"> Limpiar </button>
-                                </div>
+                                            <div class="form-group mx-sm-3  mb-2 col-6">
+                                                <select th:value="${cuenta}" id="cuenta" name="cuenta" class="form-select">
+                                                    <option selected value="">Seleccionar cuenta</option>
+                                                    <!---<option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>-->
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mx-sm-3  mb-2 col-1">
+                                                <button class="btn btn-primary filtro" id="filtro"> Buscar </button>
+                                            </div>
+                                            <div class="form-group mx-sm-1  mb-2 col-1">
+                                                <button class="btn btn-primary filtro" id="limpiar"> Limpiar </button>
+                                            </div>
 
 
-                            </div>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <table id="tablaProducto" class="table table-hover table-bordered">
-                                <thead>
-                                <tr class="table-dark">
-                                    <th>Id</th>
-                                    <th>Descripcion</th>
-                                    <th>Cuenta</th>
-                                    <th>Seleccionar</th>
-
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr th:each="xxx : ${listaProd}">
-                                    <td th:text="${xxx.id}"></td>
-                                    <td th:text="${xxx.descripcion}"></td>
-                                    <td th:text="${xxx.cuentasContables.descripcion}"></td>
-                                    <td>
-                                        <div class="form-check text-center">
-                                            <input class="form-check-input row-item check" type="checkbox">
                                         </div>
-                                    </td>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table id="tablaProducto" class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                                <th>Cuenta</th>
+                                                <th>Seleccionar</th>
 
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaProd}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                                <td th:text="${xxx.cuentasContables.descripcion}"></td>
+                                                <td>
+                                                    <div class="form-check text-center">
+                                                        <input class="form-check-input row-item check" type="checkbox">
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary" id="addItem">Añadir items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Eliminar -->
+                        <div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header d-flex justify-content-center">
+                                        <div autocomplete="off">
+                                            <h5>Confimar cambios</h5>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body d-flex justify-content-center">
+                                        <div>
+                                            <div class="mb-3">Esta seguro que desea eliminar estos registros?</div>
+                                            <div class="d-flex justify-content-center">
+                                                <button id="confirmDelete" class="btn btn-danger">Eliminar</button>
+                                                <button id="cancelDelete" class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <p>GRUPO PIÑHERO PROPIEDADES</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Guardar -->
+                        <div class="modal fade" id="exampleModalSave" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header d-flex justify-content-center">
+                                        <div autocomplete="off">
+                                            <h5>Confimar cambios</h5>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body d-flex justify-content-center">
+                                        <div>
+                                            <div class="mb-3">Esta seguro que desea guardar estos registros?</div>
+                                            <div class="d-flex justify-content-center">
+                                                <button id="confirmSave" class="btn btn-primary">Guardar</button>
+                                                <button id="cancelSave" class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <p>GRUPO PIÑHERO PROPIEDADES</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="tablaDetalle">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr class="table-dark">
+                                <th>Producto</th>
+                                <th class="celdaOculta">IdProd</th>
+                                <th>Cantidad</th>
+                                <th>Precio U.</th>
+                                <th>Total</th>
+                                <th>Accion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="xxx : ${listaDetalle}" >
+                                <td th:text="${xxx.producto.descripcion}"></td>
+                                <td th:text="${xxx.producto.id}" class="celdaOculta"></td>
+                                <td th:text="${xxx.cantidad}" contenteditable='true' class='editable'></td>
+                                <td th:text="${xxx.precioUnitario}" contenteditable='true' class='celdaMoneda editable'></td>
+                                <td th:text="${xxx.total}" class='celdaMoneda'></td>
+                                <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab2" class="tab-pane fade" role="tabpanel" aria-labelledby="tab2-tab">
+                    <div class="d-flex justify-content-center p-2">
+                        <button class="btn btn-outline-success" id="addImp" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModalImp">
+                            Añadir
+                        </button>
+
+                        <button class="btn btn-outline-danger" id="deleteRowImp" data-bs-toggle="modal" data-bs-target="#exampleModalDeleteImp">
+                            Eliminar
+                        </button>
+
+                        <button class="btn btn-outline-primary" id="guardarItemsImp" data-bs-toggle="modal" data-bs-target="#exampleModalSaveImp">
+                            Guardar Items
+                        </button>
+
+                        <!-- Modal Añadir -->
+                        <div class="modal fade" id="exampleModalImp" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class=" d-flex" autocomplete="off">
+
+                                            <div class="form-group mb-2 col-6">
+                                                <input th:value="${descripcionImp}" type="text" id="descripcionImp" name="descripcion"
+                                                       class="form-control" placeholder="Descripcion">
+                                            </div>
+
+                                            <div class="form-group mx-sm-3  mb-2 col-6">
+                                                <select th:value="${cuentaImp}" id="cuentaImp" name="cuenta" class="form-select">
+                                                    <option selected value="">Seleccionar cuenta</option>
+                                                    <!---<option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>-->
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group mx-sm-3  mb-2 col-2">
+                                                <button class="btn btn-primary filtro" id="filtroImp"> Buscar </button>
+                                            </div>
+                                            <div class="form-group mx-sm-1  mb-2 col-2">
+                                                <button class="btn btn-primary filtro" id="limpiarImp"> Limpiar </button>
+                                            </div>
+
+
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table id="tablaProductoImp" class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Cuenta</th>
+                                                <th>Totalizadora</th>
+                                                <th>Seleccionar</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentasImp}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                                <td th:text="${xxx.ctaTotalizadora.descripcion}"></td>
+                                                <td>
+                                                    <div class="form-check text-center">
+                                                        <input class="form-check-input row-item checkImp" type="checkbox">
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-primary" id="addItemImp">Añadir items</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Eliminar -->
+                        <div class="modal fade" id="exampleModalDeleteImp" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header d-flex justify-content-center">
+                                        <div autocomplete="off">
+                                            <h5>Confimar cambios</h5>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body d-flex justify-content-center">
+                                        <div>
+                                            <div class="mb-3">Esta seguro que desea eliminar estos registros?</div>
+                                            <div class="d-flex justify-content-center">
+                                                <button id="confirmDeleteImp" class="btn btn-danger">Eliminar</button>
+                                                <button id="cancelDeleteImp" class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <p>GRUPO PIÑHERO PROPIEDADES</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Guardar -->
+                        <div class="modal fade" id="exampleModalSaveImp" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header d-flex justify-content-center">
+                                        <div autocomplete="off">
+                                            <h5>Confimar cambios</h5>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body d-flex justify-content-center">
+                                        <div>
+                                            <div class="mb-3">Esta seguro que desea guardar estos registros?</div>
+                                            <div class="d-flex justify-content-center">
+                                                <button id="confirmSaveImp" class="btn btn-primary">Guardar</button>
+                                                <button id="cancelSaveImp" class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <p>GRUPO PIÑHERO PROPIEDADES</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div id="tablaDetalleImp">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr class="table-dark">
+                                <th>Cuenta</th>
+                                <th class="celdaOculta">IdCuenta</th>
+                                <th>Importe</th>
+                                <th>Total</th>
+                                <th>Accion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="xxx : ${listaDetalleImp}">
+                                    <td th:text="${xxx.producto.descripcion}"></td>
+                                    <td th:text="${xxx.producto.id}" class="celdaOculta"></td>
+                                    <td th:text="${xxx.cantidad}" contenteditable='true' class='editable'></td>
+                                    <td th:text="${xxx.precioUnitario}" contenteditable='true' class='celdaMoneda editable'></td>
+                                    <td th:text="${xxx.total}" class='celdaMoneda'></td>
+                                    <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
                                 </tr>
-
-                                </tbody>
-
-                            </table>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary" id="addItem">Añadir items</button>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-            <!-- Modal Eliminar -->
-            <div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header d-flex justify-content-center">
-                            <div autocomplete="off">
-                            <h5>Confimar cambios</h5>
-                            </div>
-                        </div>
-                        <div class="modal-body d-flex justify-content-center">
-                            <div>
-                                <div class="mb-3">Esta seguro que desea eliminar estos registros?</div>
-                                <div class="d-flex justify-content-center">
-                                    <button id="confirmDelete" class="btn btn-danger">Eliminar</button>
-                                    <button id="cancelDelete" class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                                </div>
-                                </div>
-                        </div>
-                        <div class="modal-footer">
-                            <p>GRUPO PIÑHERO PROPIEDADES</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal Guardar -->
-            <div class="modal fade" id="exampleModalSave" tabindex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header d-flex justify-content-center">
-                            <div autocomplete="off">
-                                <h5>Confimar cambios</h5>
-                            </div>
-                        </div>
-                        <div class="modal-body d-flex justify-content-center">
-                            <div>
-                                <div class="mb-3">Esta seguro que desea guardar estos registros?</div>
-                                <div class="d-flex justify-content-center">
-                                    <button id="confirmSave" class="btn btn-primary">Guardar</button>
-                                    <button id="cancelSave" class="btn btn-secondary" type="button" data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <p>GRUPO PIÑHERO PROPIEDADES</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
         </div>
-
-        <div id="tablaDetalle">
-            <table class="table table-hover table-bordered">
-                <thead>
-                <tr class="table-dark">
-                    <th>Producto</th>
-                    <th class="celdaOculta">IdProd</th>
-                    <th>Cantidad</th>
-                    <th>Precio U.</th>
-                    <th>Total</th>
-                    <th>Accion</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="xxx : ${listaDetalle}" >
-                    <td th:text="${xxx.producto.descripcion}"></td>
-                    <td th:text="${xxx.producto.id}" class="celdaOculta"></td>
-                    <td th:text="${xxx.cantidad}" contenteditable='true' class='editable'></td>
-                    <td th:text="${xxx.precioUnitario}" contenteditable='true' class='celdaMoneda editable'></td>
-                    <td th:text="${xxx.total}" class='celdaMoneda'></td>
-                    <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
-                </tr>
-
-                </tbody>
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <td colspan="3" class="text-right"><strong>Total general:</strong></td>-->
-<!--                    <td>$65.00</td>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
-            </table>
-        </div>
-
 
     </div>
 </main>
