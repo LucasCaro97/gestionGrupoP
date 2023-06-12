@@ -136,6 +136,7 @@ $("#addItem").click(function(){
 
 $("#confirmDelete").click(function(){
         var filasMarcadas=[];
+        var totalVenta = $("#totalVenta").val();
 
         //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
         $("#tablaDetalle tbody tr").each(function(){
@@ -154,14 +155,18 @@ $("#confirmDelete").click(function(){
         var indiceFila = filasMarcadas[i];
         var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
 
+
+        var totalLinea = filaMarcada.find("td:eq(4)").text();
+        totalVenta -= totalLinea;
         var idProducto = filaMarcada.find("td:eq(1)").text();
         var idVenta = $("#id").val();
+
 
         var url = window.location.href;
         var urlObj = new URL(url);
         urlObj.pathname = "/ventaDetalle/bajaDetalle/";
         var nuevaUrl = urlObj.href;
-        //console.log(nuevaUrl+ idVenta + "/" + idProducto);
+        //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
         fetch(nuevaUrl+ idVenta + "/" + idProducto, {
                 method : "POST",
                 headers:{
@@ -177,41 +182,30 @@ $("#confirmDelete").click(function(){
             })
         }
 
-        //RECUENTO DE TOTALES PARA ACTUALIZAR EL TOTAL DE LA VENTA
-            $("#tablaDetalle tbody tr").each(function(){
-                var valorCelda = $(this).find("td:eq(4)").text();
-                totalVenta += parseFloat(valorCelda);
-            });
 
-        $("#totalVenta").val(totalVenta);
-        fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + $("#totalVenta").val(), {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
+            //console.log("Total luego de eliminar lineas: " + totalVenta)
+            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+            fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
+                    method : "POST",
+                    headers:{
+                    "Content-Type" : "application/json"
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                //console.log("Se registro la linea con exito" + data);
+                })
+                .catch(error => {
+                //console.log("guarde total = " + totalVenta);
+                })
 
-        //REFRESCO LA PAGINA PARA QUE SE ACTUALIZEEN LOS CAMBIOS
-        window.location.href= "/ventas/form/"+ $("#id").val();
+
+var tiempoEspera = 500;
+function redireccionar() {
+  window.location.href= "/ventas/form/"+ $("#id").val();
+}
+setTimeout(redireccionar, tiempoEspera);
 });
-
-/* GENERA CONFLICTO AL GUARDAR LOS IMPORTES, POR EL TIPO DE DATO
-$("#moneda").change(function(){
-    console.log("Cambiando formato - " + $("#moneda").val());
-    var celdasMoneda = document.getElementsByClassName("celdaMoneda");
-    for(var i=0; i < celdasMoneda.length; i++){
-        var celda = celdasMoneda[i];
-        var valor = parseFloat(celda.textContent);
-        if($("#moneda").val() == 1){
-            var formatoMoneda = valor.toLocaleString("es-ES", { style: "currency", currency: "ARS"});
-            }else{
-            var formatoMoneda = valor.toLocaleString("es-ES", { style: "currency", currency: "USD"});
-            }
-
-        celda.textContent = formatoMoneda;
-    }
-});
-*/
 
 $("#confirmSave").click(function(){
 alert("Se van a marcar los lotes de esta venta con ESTADO: VENDIDO  --> FALTA IMPLEMENTAR <--")
@@ -259,13 +253,19 @@ fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta,
     })
     .then(response => response.json())
     .then(data => {
-    ///console.log("Se registro la linea con exito" + data);
+    //console.log("Se registro la linea con exito" + data);
     })
     .catch(error => {
     //console.log("guarde total = " + totalVenta);
     })
 
-window.location.href= "/ventas/form/"+ $("#id").val();
+var tiempoEspera = 500;
+function redireccionar() {
+  window.location.href= "/ventas/form/"+ $("#id").val();
+}
+setTimeout(redireccionar, tiempoEspera);
+
+
 });
 
 
@@ -288,7 +288,7 @@ $("#totalVenta").val(totalVenta);
 
 $.get("/ventas/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
            $("#totalVenta").val(datos);
-           console.log(datos);
+           //console.log(datos);
 });
 
 

@@ -76,4 +76,6 @@ public class VentaServicio {
     public Double obtenerTotalPorId(Long id){
         return ventaRepo.obtenerTotalPorId(id);
     }
+
 }
+

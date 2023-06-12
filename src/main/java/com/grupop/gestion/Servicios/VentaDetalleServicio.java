@@ -5,6 +5,7 @@ import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Entidades.VentaDetalle;
 import com.grupop.gestion.Repositorios.VentaDetalleRepo;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +32,6 @@ public class VentaDetalleServicio {
             vtaDetalle.setPrecioUnitario(precioU);
             vtaDetalle.setTotal(cantidad*precioU);
             ventaDetalleRepo.save(vtaDetalle);
-
-            System.out.println("Producto ya existente, se actualizo con los ultimos valores");
         }
         else {
             VentaDetalle vtaDetalle = new VentaDetalle();
@@ -48,7 +47,7 @@ public class VentaDetalleServicio {
 
         @Transactional
         public void eliminar (Long idVenta, Long idProd){
-             VentaDetalle vtaDetalle = ventaDetalleRepo.searchByProductoAndVenta(idVenta,idProd);
+            VentaDetalle vtaDetalle = ventaDetalleRepo.searchByProductoAndVenta(idVenta,idProd);
             ventaDetalleRepo.deleteById(vtaDetalle.getId());
         }
 
@@ -61,4 +60,9 @@ public class VentaDetalleServicio {
         public List<VentaDetalle> obtenerPorVenta(Long id) {
            return ventaDetalleRepo.buscarPorVenta(id);
         }
+
+        @Transactional(readOnly = true)
+        public Double obtenerTotalPorVenta(Long id) { return ventaDetalleRepo.obtenerTotalPorVenta(id);}
+
+
 }

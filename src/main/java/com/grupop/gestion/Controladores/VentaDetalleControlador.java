@@ -35,8 +35,8 @@ public class VentaDetalleControlador {
     @PostMapping("/bajaDetalle/{idVenta}/{idProd}")
     public ResponseEntity<String> bajaDetalle(@PathVariable Long idVenta, @PathVariable Long idProd, RedirectAttributes attributes){
         try{
-            ventaDetalleServicio.eliminar(idVenta,idProd);
-            System.out.println("Se eliminaron los items del detalle correctamente");
+            ventaDetalleServicio.eliminar(idVenta, idProd);
+            System.out.println("Eliminar - OK");
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
