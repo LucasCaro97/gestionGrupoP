@@ -28,6 +28,7 @@ public class ProductoServicio {
         prod.setTipoProducto(dto.getTipoProducto());
         prod.setCuentasContables(dto.getCuentasContables());
         prod.setImpuestos(dto.getImpuestos());
+        prod.setEstado(true);
         productoRepo.save(prod);
     }
 
@@ -52,6 +53,7 @@ public class ProductoServicio {
             prod.setTipoProducto(tipoProductoServicio.obtenerIdTipoLote("Lote"));
             prod.setLote(dto);
             prod.setCuentasContables(dto.getUrbanizacion().getCuenta());
+            prod.setEstado(true);
             productoRepo.save(prod);
         }else{
             throw new Exception("El lote ya cuenta con un producto vinculado");
@@ -92,6 +94,8 @@ public class ProductoServicio {
         }
     }
 
+    public List<Producto> obtenerActivos(Boolean estado){ return productoRepo.searchByEstado(estado); }
+
     @Transactional(readOnly = true)
     public Producto buscarPorId(Long id){ return productoRepo.findById(id).get();}
 
@@ -119,4 +123,14 @@ public class ProductoServicio {
     @Transactional(readOnly = true)
     public Producto buscarPorDesc(String descProd) {    return productoRepo.searchProductoByDescripcion(descProd); }
 
+    @Transactional
+    public void actualizarEstadoPorId(Long idProd, Integer estado) {
+        Producto prod = productoRepo.findById(idProd).get();
+        if(estado == 1){
+            prod.setEstado(true);
+        }else{
+            prod.setEstado(false);
+        }
+        productoRepo.save(prod);
+    }
 }

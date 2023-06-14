@@ -128,7 +128,10 @@ public class ProductoControlador {
     RedirectView delete(@PathVariable Long id, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/producto");
         Producto p = productoServicio.buscarPorId(id);
-        loteServicio.bajaProducto(p);
+
+        if(p.getTipoProducto().getId()==2){
+            loteServicio.bajaProducto(p);
+        }
         productoServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente el producto");
         return redirect;

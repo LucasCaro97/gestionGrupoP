@@ -10,6 +10,8 @@ import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -136,6 +138,28 @@ public class LoteControlador {
             attributes.addFlashAttribute("exception", e.getMessage());
         }
         return redirect;
+    }
+
+    @PostMapping("/setEstadoVendido/{id}")
+    public ResponseEntity<String> setEstadoVendido(@PathVariable Long id){
+        try{
+            loteServicio.alterarEstado(id, 3l);
+        }catch(Exception e){
+            System.out.println("Excepcion al marcar lote como vendido");
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Se altero el estado del lote correctamente");
+    }
+
+    @PostMapping("/setEstadoDisponible/{id}")
+    public ResponseEntity<String> setEstadoDisponible(@PathVariable Long id){
+        try{
+            loteServicio.alterarEstado(id, 1l);
+        }catch(Exception e){
+            System.out.println("Excepcion al marcar lote como disponible");
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Se altero el estado del lote correctamente");
     }
 
 

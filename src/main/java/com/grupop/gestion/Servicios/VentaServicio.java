@@ -32,6 +32,7 @@ public class VentaServicio {
         vta.setFormaDePago(dto.getFormaDePago());
         vta.setObservaciones(dto.getObservaciones());
         vta.setFechaComprobante(dto.getFechaComprobante());
+        vta.setTotal(0D);
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         ventaRepo.save(vta);
     }

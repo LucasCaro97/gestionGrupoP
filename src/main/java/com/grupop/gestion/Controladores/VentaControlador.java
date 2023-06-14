@@ -8,6 +8,7 @@ import com.grupop.gestion.Repositorios.VentaRepo;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class VentaControlador {
     private final VentaDetalleServicio ventaDetalleServicio;
     private final FormaDePagoServicio formaDePagoServicio;
     private final CuentasContablesServicio cuentasContablesServicio;
+    private final VentaDetalleImputacionServicio ventaDetalleImputacionServicio;
 
 
     @GetMapping
@@ -84,10 +86,12 @@ public class VentaControlador {
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaMoneda", monedaServicio.obtenerTodos());
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
-        mav.addObject("listaProd", productoServicio.obtenerTodos());
+        mav.addObject("listaProd", productoServicio.obtenerActivos(true));
         mav.addObject("listaDetalle", ventaDetalleServicio.obtenerPorVenta(id));
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
+        mav.addObject("tablaDetalleImputacion", ventaDetalleImputacionServicio.obtenerPorVenta(id));
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
+
         return mav;
     }
 
@@ -112,6 +116,7 @@ public class VentaControlador {
         RedirectView redirect = new RedirectView("/ventas");
         try{
             ventaServicio.actualizar(dto);
+            redirect.setUrl("/ventas/form/" + dto.getId());
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
@@ -134,6 +139,19 @@ public class VentaControlador {
     @GetMapping("/obtenerTotalPorId/{id}")
     public ResponseEntity<Double> obtenerTotalPorId(@PathVariable Long id){
         return ResponseEntity.ok(ventaServicio.obtenerTotalPorId(id));
+    }
+
+    @PostMapping("/actualizarTotalVenta/{idVenta}/{total}")
+    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta, @PathVariable String total,RedirectAttributes attributes){
+        try{
+            Double totalDouble = Double.valueOf(total);
+            ventaServicio.actualizarTotal(idVenta, totalDouble);
+            attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
+        }catch(Exception e){
+            attributes.addFlashAttribute("exception", e.getMessage());
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
     }
 
 }

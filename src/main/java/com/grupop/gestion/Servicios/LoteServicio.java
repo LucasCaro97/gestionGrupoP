@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 
+import com.grupop.gestion.Entidades.EstadoLote;
 import com.grupop.gestion.Entidades.Lote;
 import com.grupop.gestion.Entidades.Producto;
 import com.grupop.gestion.Repositorios.LoteRepo;
@@ -18,6 +19,7 @@ public class LoteServicio {
 
     private final LoteRepo loteRepo;
     private final ProductoServicio productoServicio;
+    private final EstadoLoteServicio estadoLoteServicio;
 
     @Transactional
     public void crear(Lote dto) {
@@ -64,6 +66,7 @@ public class LoteServicio {
         }
     }
 
+
     @Transactional(readOnly = true)
     public Lote obtenerPorId(Long id) {
         return loteRepo.findById(id).get();
@@ -108,6 +111,29 @@ public class LoteServicio {
                 System.out.println("Se omitio el lote " + lote.getId() + " - Es producto: (" + lote.isEsProducto() + ")");
             }
             //System.out.println("Dando de alta al grupo de lotes");
+        }
+    }
+
+    @Transactional
+    public void alterarEstado(Long idProd, Long idEstado){
+
+        Producto prod = productoServicio.buscarPorId(idProd);
+        //ALTERO EL ESTADO DEL PRODUCTO UNICAMENTE SI ES DEL TIPO LOTE - LOS DEMAS PERMANECEN SIEMPRE ACTIVOS, SALVO QUE SE ELIMINEN
+        if(prod.getTipoProducto().getId() == 2){
+            Lote lote = loteRepo.findById(prod.getLote().getId()).get();
+            EstadoLote estado = estadoLoteServicio.buscarPorId(idEstado);
+            lote.setEstado(estado);
+            loteRepo.save(lote);
+                if(idEstado==3){
+                    System.out.println("Alterando estado de producto: false/vendido");
+                    productoServicio.actualizarEstadoPorId(idProd, 0);
+                }else if(idEstado==1){
+                    System.out.println("Alterando estado de producto: true/disponible");
+                    productoServicio.actualizarEstadoPorId(idProd, 1);
+                }
+
+        }else{
+            System.out.println("El producto no es un lote - No se modifica estado");
         }
     }
 }

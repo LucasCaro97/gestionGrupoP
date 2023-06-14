@@ -30,17 +30,17 @@ public interface ProductoRepo extends JpaRepository<Producto, Long> {
     List<Producto> searchByTipoProd(Long idTipoProd, String descripcion);
 
 
-    @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ?", nativeQuery = true)
+    @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ? AND estado = 1", nativeQuery = true)
     List<Producto> searchByCuenta(Long idCuenta);
-    @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ?1 AND descripcion LIKE %?2%", nativeQuery = true)
+    @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ?1 AND descripcion LIKE %?2% AND estado = 1", nativeQuery = true)
     List<Producto> searchByCuentaAndDesc(Long idCuenta, String descripcion);
 
-    @Query(value = "SELECT * FROM producto WHERE descripcion LIKE %?% ", nativeQuery = true)
+    @Query(value = "SELECT * FROM producto WHERE descripcion LIKE %?% AND estado = 1", nativeQuery = true)
     List<Producto> searchByDescripcion(String descripcion);
 
-    @Query(value = "SELECT * FROM producto WHERE descripcion = ? ", nativeQuery = true)
+    @Query(value = "SELECT * FROM producto WHERE descripcion = ?", nativeQuery = true)
     Producto searchProductoByDescripcion(String descripcion);
 
-
-
+    @Query(value = "SELECT * FROM producto WHERE estado = ?", nativeQuery = true)
+    List<Producto> searchByEstado(Boolean estado);
 }

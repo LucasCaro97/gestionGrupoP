@@ -29,11 +29,13 @@ public class VentaDetalleImputacionServicio {
             VentaDetalleImputacion vdimp = ventaDetalleImputacionRepo.searchByCuentaAndVenta(venta.getId(), cuenta.getId());
             vdimp.setCuentasContables(cuentasContablesServicio.obtenerPorid(idCuenta));
             vdimp.setImporte(importe);
+            vdimp.setVentaId(venta);
             ventaDetalleImputacionRepo.save(vdimp);
         }else{
             VentaDetalleImputacion vdimp = new VentaDetalleImputacion();
             vdimp.setCuentasContables(cuentasContablesServicio.obtenerPorid(idCuenta));
             vdimp.setImporte(importe);
+            vdimp.setVentaId(venta);
             ventaDetalleImputacionRepo.save(vdimp);
         }
     }
@@ -41,7 +43,7 @@ public class VentaDetalleImputacionServicio {
     @Transactional
     public void eliminar(Long idVenta, Long idCuenta){
         VentaDetalleImputacion vdimp = ventaDetalleImputacionRepo.searchByCuentaAndVenta(idVenta,idCuenta);
-        ventaDetalleImputacionRepo.save(vdimp);
+        ventaDetalleImputacionRepo.deleteById(vdimp.getId());
     }
 
     private Integer existByCuentaAndVentaId(Long idVenta, Long idCuenta) {

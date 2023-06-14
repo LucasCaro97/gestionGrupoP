@@ -44,17 +44,4 @@ public class VentaDetalleImputacionControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
     }
 
-    @PostMapping("/bajaDetalle/{idVenta}/{total}")
-    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta, @PathVariable String total,RedirectAttributes attributes){
-        try{
-            Double totalDouble = Double.valueOf(total);
-            ventaServicio.actualizarTotal(idVenta, totalDouble);
-            attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
-        }catch(Exception e){
-            attributes.addFlashAttribute("exception", e.getMessage());
-            System.out.println(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
-    }
-
 }

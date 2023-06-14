@@ -13,7 +13,7 @@ public interface VentaDetalleImputacionRepo extends JpaRepository<VentaDetalleIm
     @Query(value = "SELECT COUNT(*) FROM venta_detalle_imputacion WHERE fk_venta = ?1 AND fk_cuenta = ?2", nativeQuery = true)
     Integer existByCuentaAndVenta(Long idVenta, Long idCuenta);
 
-    @Query(value = "SELECT * FROM venta_detalle_imputacion WHERE fk_venta = ?1 AND fk_producto = ?2", nativeQuery = true)
+    @Query(value = "SELECT * FROM venta_detalle_imputacion WHERE fk_venta = ?1 AND fk_cuenta = ?2", nativeQuery = true)
     VentaDetalleImputacion searchByCuentaAndVenta(Long idVenta, Long idCuenta);
 
     @Query(value = "SELECT * FROM venta_detalle_imputacion WHERE fk_venta = ?", nativeQuery = true)

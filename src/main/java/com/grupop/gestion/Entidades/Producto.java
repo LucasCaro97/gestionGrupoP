@@ -35,6 +35,8 @@ public class Producto {
     @OneToOne
     @JsonIgnore
     private Lote lote;
+    //SI SE MUESTRA ES 1 - DE OTRO MODO, SI ES UN LOTE QUE ESTA VENDIDO ES 0
+    private Boolean estado;
 
 
 }

@@ -174,16 +174,14 @@ $("#confirmDelete").click(function(){
                 "Content-Type" : "application/json"
                 }
             })
-
-
-        fetch("/lote/setEstadoDisponible"+ "/" + idProducto, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                 }
-        })
-
-}
+            .then(response => response.json())
+            .then(data => {
+            ///console.log("Se registro la linea con exito" + data);
+            })
+            .catch(error => {
+            //MENSAJE DE ERROR
+            })
+        }
 
 
             //console.log("Total luego de eliminar lineas: " + totalVenta)
@@ -194,6 +192,14 @@ $("#confirmDelete").click(function(){
                     "Content-Type" : "application/json"
                     }
                 })
+                .then(response => response.json())
+                .then(data => {
+                //console.log("Se registro la linea con exito" + data);
+                })
+                .catch(error => {
+                //console.log("guarde total = " + totalVenta);
+                })
+
 
 var tiempoEspera = 500;
 function redireccionar() {
@@ -201,6 +207,99 @@ function redireccionar() {
 }
 setTimeout(redireccionar, tiempoEspera);
 });
+
+$("#confirmSave").click(function(){
+alert("Se van a marcar los lotes de esta venta con ESTADO: VENDIDO  --> FALTA IMPLEMENTAR <--")
+var url = window.location.href;
+var urlObj = new URL(url);
+urlObj.pathname = "/ventaDetalle/altaDetalle/";
+var nuevaUrl = urlObj.href;
+
+let totalVenta = 0;
+
+//RECORRO TABLA DETALLE PRODUCTO
+$("#tablaDetalle tbody tr").each(function(){
+    let idVenta = $("#id").val();
+    let descProd = $(this).children().eq(0).text();
+    let idProd = $(this).children().eq(1).text();
+    let cantidad = parseFloat($(this).children().eq(2).text());
+    let precioU =  parseFloat($(this).children().eq(3).text());
+
+
+    let totalLinea = (cantidad * precioU);
+    totalVenta += totalLinea;
+
+    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+    fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
+        method : "POST",
+        headers:{
+        "Content-Type" : "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+    ///console.log("Se registro la linea con exito" + data);
+    })
+    .catch(error => {
+    //console.log("Guarde items")
+    })
+
+});
+
+
+////RECORRO TABLA DETALLE IMPUTACION
+//$("#tablaDetalleImp tbody tr").each(function(){
+//    let idVenta = $("#id").val();
+//    let descProd = $(this).children().eq(0).text();
+//    let idProd = $(this).children().eq(1).text();
+//    let importe = parseFloat($(this).children().eq(2).text());
+//    let total =  parseFloat($(this).children().eq(3).text());
+//
+//
+//    let totalLinea = (total);
+//    totalVenta += totalLinea;
+//
+//    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+//    fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + total, {
+//        method : "POST",
+//        headers:{
+//        "Content-Type" : "application/json"
+//        }
+//    })
+//    .then(response => response.json())
+//    .then(data => {
+//    ///console.log("Se registro la linea con exito" + data);
+//    })
+//    .catch(error => {
+//    //console.log("Guarde items")
+//    })
+//
+//});
+
+//GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
+        method : "POST",
+        headers:{
+        "Content-Type" : "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+    //console.log("Se registro la linea con exito" + data);
+    })
+    .catch(error => {
+    //console.log("guarde total = " + totalVenta);
+    })
+
+var tiempoEspera = 500;
+function redireccionar() {
+  window.location.href= "/ventas/form/"+ $("#id").val();
+}
+setTimeout(redireccionar, tiempoEspera);
+
+
+});
+
 
 $('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
 var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
@@ -282,27 +381,34 @@ $("#confirmDeleteImp").click(function(){
 
         //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
         for(var i = 0; i < filasMarcadas.length; i++){
-            var indiceFila = filasMarcadas[i];
-            var filaMarcada = $("#tablaDetalleImp tbody tr").eq(indiceFila);
+        var indiceFila = filasMarcadas[i];
+        var filaMarcada = $("#tablaDetalleImp tbody tr").eq(indiceFila);
 
 
-            var totalLinea = filaMarcada.find("td:eq(2)").text();
-            totalVenta -= totalLinea;
-            var idProducto = filaMarcada.find("td:eq(1)").text();
-            var idVenta = $("#id").val();
+        var totalLinea = filaMarcada.find("td:eq(4)").text();
+        totalVenta -= totalLinea;
+        var idProducto = filaMarcada.find("td:eq(1)").text();
+        var idVenta = $("#id").val();
 
 
-            var url = window.location.href;
-            var urlObj = new URL(url);
-            urlObj.pathname = "/ventaDetalleImputacion/bajaDetalle/";
-            var nuevaUrl = urlObj.href;
-            //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-            fetch(nuevaUrl+ idVenta + "/" + idProducto, {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-                })
+        var url = window.location.href;
+        var urlObj = new URL(url);
+        urlObj.pathname = "/ventaDetalleImputacion/bajaDetalle/";
+        var nuevaUrl = urlObj.href;
+        //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
+        fetch(nuevaUrl+ idVenta + "/" + idProducto, {
+                method : "POST",
+                headers:{
+                "Content-Type" : "application/json"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+            ///console.log("Se registro la linea con exito" + data);
+            })
+            .catch(error => {
+            //MENSAJE DE ERROR
+            })
         }
 
 
@@ -314,7 +420,13 @@ $("#confirmDeleteImp").click(function(){
                     "Content-Type" : "application/json"
                     }
                 })
-
+                .then(response => response.json())
+                .then(data => {
+                //console.log("Se registro la linea con exito" + data);
+                })
+                .catch(error => {
+                //console.log("guarde total = " + totalVenta);
+                })
 
 
 var tiempoEspera = 500;
@@ -324,117 +436,112 @@ function redireccionar() {
 setTimeout(redireccionar, tiempoEspera);
 });
 
+//TRABAJAR EN ESTO 13/06/23
+$("#confirmSaveImp").click(function(){
+var url = window.location.href;
+var urlObj = new URL(url);
+urlObj.pathname = "/ventaDetalleImputacion/altaDetalle/";
+var nuevaUrl = urlObj.href;
+
+let totalVenta = 0;
+
+//RECORRO TABLA DETALLE IMPUTACION
+$("#tablaDetalleImp tbody tr").each(function(){
+    let idVenta = $("#id").val();
+    let descCta = $(this).children().eq(0).text();
+    let idCta = $(this).children().eq(1).text();
+    let importe = parseFloat($(this).children().eq(2).text());
+
+
+    let totalLinea = (importe);
+    totalVenta += totalLinea;
+
+    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+    fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
+        method : "POST",
+        headers:{
+        "Content-Type" : "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+    ///console.log("Se registro la linea con exito" + data);
+    })
+    .catch(error => {
+    //console.log("Guarde items")
+    })
+
+});
+
+////RECORRO TABLA DETALLE PRODUCTOS
+//$("#tablaDetalle tbody tr").each(function(){
+//    let idVenta = $("#id").val();
+//    let descProd = $(this).children().eq(0).text();
+//    let idProd = $(this).children().eq(1).text();
+//    let cantidad = parseFloat($(this).children().eq(2).text());
+//    let precioU =  parseFloat($(this).children().eq(3).text());
+//
+//
+//    let totalLinea = (cantidad * precioU);
+//    totalVenta += totalLinea;
+//
+//    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+//    fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
+//        method : "POST",
+//        headers:{
+//        "Content-Type" : "application/json"
+//        }
+//    })
+//    .then(response => response.json())
+//    .then(data => {
+//    ///console.log("Se registro la linea con exito" + data);
+//    })
+//    .catch(error => {
+//    //console.log("Guarde items")
+//    })
+//
+//});
+
+
+
+//GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+fetch("/ventaDetalleImputacion/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
+        method : "POST",
+        headers:{
+        "Content-Type" : "application/json"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+    //console.log("Se registro la linea con exito" + data);
+    })
+    .catch(error => {
+    //console.log("guarde total = " + totalVenta);
+    })
+
+var tiempoEspera = 500;
+function redireccionar() {
+  window.location.href= "/ventas/form/"+ $("#id").val();
+}
+setTimeout(redireccionar, tiempoEspera);
+
+
+});
+
 /*
     BOTON GUARDAR QUE GUARDA / INSERTA LINEAS DE DETALLE DE PRODUCTOS E IMPUTACIONES
     EN 1 SOLO PASO Y ACTUALIZA EL TOTAL HACIENDO RECUENTO DE LAS 2 TABLAS
 */
 $(".guardarDetalle").click(function(){
-crearItemsDetalle();
+
+
+
 });
 
 
 $.get("/ventas/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
            $("#totalVenta").val(datos);
            //console.log(datos);
-});
-
-
-
-function crearItemsDetalle(){
-    let total = 0;
-
-    function confirmSave(){
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalle/altaDetalle/";
-        var nuevaUrl = urlObj.href;
-
-
-        //RECORRO TABLA DETALLE PRODUCTO
-        $("#tablaDetalle tbody tr").each(function(){
-            let idVenta = $("#id").val();
-            let descProd = $(this).children().eq(0).text();
-            let idProd = $(this).children().eq(1).text();
-            let cantidad = parseFloat($(this).children().eq(2).text());
-            let precioU =  parseFloat($(this).children().eq(3).text());
-
-            let totalLinea = (cantidad*precioU);
-            total += totalLinea;
-
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-
-            fetch("/lote/setEstadoVendido"+ "/" + idProd, {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-            })
-
-        });
-    };
-
-    function confirmSaveImp(){
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalleImputacion/altaDetalle/";
-        var nuevaUrl = urlObj.href;
-
-        //RECORRO TABLA DETALLE IMPUTACION
-        $("#tablaDetalleImp tbody tr").each(function(){
-            let idVenta = $("#id").val();
-            let descCta = $(this).children().eq(0).text();
-            let idCta = $(this).children().eq(1).text();
-            let importe = parseFloat($(this).children().eq(2).text());
-
-
-            total = total + importe;
-
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-        });
-    };
-
-    confirmSave();
-    confirmSaveImp();
-
-
-
-    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-    fetch("/ventas/actualizarTotalVenta/" + $("#id").val() + "/" + total, {
-            method : "POST",
-            headers:{
-            "Content-Type" : "application/json"
-            }
-    })
-
-    var tiempoEspera = 500;
-    function redireccionar() {
-      window.location.href= "/ventas/form/"+ $("#id").val();
-    }
-    setTimeout(redireccionar, tiempoEspera);
-}
-
-
-$("#btnAlta").click(function(){
-    let texto = $("#btnAlta").text();
-    let contenidoFP = $("#formaDePago").val();
-    if(texto == "Guardar"){
-        if(contenidoFP == 3){
-        alert("Quiere generar el plan de pago ahora? ( VALIDAR ) <-- IMPLEMNTAR LUEGO DE TENER LA VISTA DE PLAN DE PAGO")
-        }
-    }
-
 });
 
 
