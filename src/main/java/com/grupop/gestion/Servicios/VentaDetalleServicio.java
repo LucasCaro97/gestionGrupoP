@@ -5,7 +5,6 @@ import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Entidades.VentaDetalle;
 import com.grupop.gestion.Repositorios.VentaDetalleRepo;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

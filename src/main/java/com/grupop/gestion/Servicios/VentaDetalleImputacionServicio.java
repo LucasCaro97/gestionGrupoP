@@ -46,6 +46,7 @@ public class VentaDetalleImputacionServicio {
         ventaDetalleImputacionRepo.deleteById(vdimp.getId());
     }
 
+    @Transactional(readOnly = true)
     private Integer existByCuentaAndVentaId(Long idVenta, Long idCuenta) {
         return ventaDetalleImputacionRepo.existByCuentaAndVenta(idVenta, idCuenta);
     }

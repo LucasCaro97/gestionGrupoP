@@ -1,7 +1,7 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Servicios.VentaDetalleImputacionServicio;
-import com.grupop.gestion.Servicios.VentaServicio;
+import com.grupop.gestion.Servicios.CompraDetalleImputacionServicio;
+import com.grupop.gestion.Servicios.CompraServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,35 +13,34 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("ventaDetalleImputacion")
-public class VentaDetalleImputacionControlador {
+@RequestMapping("compraDetalleImputacion")
+public class CompraDetalleImputacionControlador {
 
-    private final VentaDetalleImputacionServicio ventaDetalleImputacionServicio;
-    private final VentaServicio ventaServicio;
+    private final CompraDetalleImputacionServicio compraDetalleImputacionServicio;
+    private final CompraServicio compraServicio;
 
-    @PostMapping("/altaDetalle/{idVenta}/{idCuenta}/{importe}")
-    public ResponseEntity<String> altaDetalle(@PathVariable Long idVenta, @PathVariable Long idCuenta,
+    @PostMapping("altaDetalle/{idCompra}/{idCuenta}/{importe}")
+    public ResponseEntity<String> altaDetalle(@PathVariable Long idCompra, @PathVariable Long idCuenta,
                                               @PathVariable Double importe, RedirectAttributes attributes){
         try{
-            ventaDetalleImputacionServicio.crear(idVenta, idCuenta, importe);
+            compraDetalleImputacionServicio.crear(idCompra,idCuenta, importe);
             attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado correctamente");
     }
 
-    @PostMapping("/bajaDetalle/{idVenta}/{idCuenta}")
-    public ResponseEntity<String> bajaDetalle(@PathVariable Long idVenta, @PathVariable Long idCuenta,RedirectAttributes attributes){
+    @PostMapping("/bajaDetalle/{idCompra}/{idCuenta}")
+    public ResponseEntity<String> bajaDetalle(@PathVariable Long idCompra, @PathVariable Long idCuenta, RedirectAttributes attributes){
         try{
-            ventaDetalleImputacionServicio.eliminar(idVenta, idCuenta);
-            attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
-        }catch(Exception e){
+            compraDetalleImputacionServicio.eliminar(idCompra, idCuenta);
+            attributes.addFlashAttribute("exito", "Se guardaron los cambios correctamente");
+        } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro eliminado correctamente");
     }
-
 }

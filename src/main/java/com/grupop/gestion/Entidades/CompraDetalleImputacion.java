@@ -9,16 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TipoComprobante {
+public class CompraDetalleImputacion {
+
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String descripcion;
-
-    @JoinColumn(name = "fk_tipo_operacion")
+    @JoinColumn(name = "fk_compra")
     @ManyToOne
-    private TipoOperacion tipoOperacion;
-
+    private Compra compraId;
+    @JoinColumn(name = "fk_cuenta")
+    @OneToOne
+    private CuentasContables cuentasContables;
+    private Double importe;
 
 }
-

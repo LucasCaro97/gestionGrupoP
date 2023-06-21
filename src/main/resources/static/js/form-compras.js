@@ -12,8 +12,6 @@ else{
     document.getElementById("fechaAlta").value = fecha.toJSON().slice(0,10);
 }
 
-const endPoint1= "/entidadBase/obtenerIva/";
-const endPoint2= "/entidadBase/obtenerCuit/";
 const endPoint3= "/talonario/obtenerNroComprobante/";
 
 
@@ -22,33 +20,6 @@ if($(btnAlta).text() == "Crear"){
 }else{
     $("#divDetalle").show();
 }
-
-if( (url.localeCompare("/ventas/form")) != 0){
-      $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
-
-      $("#IVA").val(dato);
-      $("#idIva").val(dato);
-    });
-
-    $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){
-
-      $("#cuit").val(dato);
-    });
-}
-
-$("#cliente").change(function(){
-
-      $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
-        $("#IVA").val(dato);
-        $("#idIva").val(dato);
-      });
-
-    $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){
-      $("#cuit").val(dato);
-    });
-
-});
-
 
 $("#talonario").change(function(){
   var valorTalon = $("#talonario").val();
@@ -125,10 +96,13 @@ $("#addItem").click(function(){
             var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
             var celda2 = "<td  class='celdaOculta' >" + $(element).children().eq(0).text() + "</td>"
             var celda3 = "<td contenteditable='true' class='editable'>1.0</td>"
-            var celda4 = "<td contenteditable='true' class='celdaMoneda editable'>0.00</td>"
-            var celda5 = "<td class='celdaMoneda'>0.00</td>"
-            var celda6 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
-            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6);
+            var celda4 = "<td contenteditable='true' class='editable'>0.00</td>"
+            var celda5 = "<td contenteditable='true' class='editable'>0.00</td>"
+            var celda6 = "<td contenteditable='true' class='editable'>0.00</td>"
+            var celda7 = "<td contenteditable='true' class='editable'>0.00</td>"
+            var celda8 = "<td class='celdaMoneda'>0.00</td>"
+            var celda9 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9);
              $("#tablaDetalle tbody").append(filaEditable);
         }
     });
@@ -157,7 +131,7 @@ $("#confirmDelete").click(function(){
         var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
 
 
-        var totalLinea = filaMarcada.find("td:eq(4)").text();
+        var totalLinea = filaMarcada.find("td:eq(7)").text();
         totalVenta -= totalLinea;
         var idProducto = filaMarcada.find("td:eq(1)").text();
         var idVenta = $("#id").val();
@@ -165,7 +139,7 @@ $("#confirmDelete").click(function(){
 
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalle/bajaDetalle/";
+        urlObj.pathname = "/comprasDetalle/bajaDetalle/";
         var nuevaUrl = urlObj.href;
         //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
         fetch(nuevaUrl+ idVenta + "/" + idProducto, {
@@ -174,21 +148,12 @@ $("#confirmDelete").click(function(){
                 "Content-Type" : "application/json"
                 }
             })
-
-
-        fetch("/lote/setEstadoDisponible"+ "/" + idProducto, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                 }
-        })
-
 }
 
 
             //console.log("Total luego de eliminar lineas: " + totalVenta)
-            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
+            //GUARDO EL TOTAL DE LA COMPRA EN LA TABLA COMPRA
+            fetch("/comprasDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
                     method : "POST",
                     headers:{
                     "Content-Type" : "application/json"
@@ -197,28 +162,10 @@ $("#confirmDelete").click(function(){
 
 var tiempoEspera = 500;
 function redireccionar() {
-  window.location.href= "/ventas/form/"+ $("#id").val();
+  window.location.href= "/compras/form/"+ $("#id").val();
 }
-setTimeout(redireccionar, tiempoEspera);
+//setTimeout(redireccionar, tiempoEspera);
 });
-
-$('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
-var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
-
-let totalVenta = 0;
-let cantidad = $(fila).children().eq(2).text(); // CANTIDAD
-let precioUnitario = $(fila).children().eq(3).text(); // PRECIO U
-$(fila).children().eq(4).text(cantidad*precioUnitario);
-
-    $("#tablaDetalle tbody tr").each(function(){
-        var valorCelda = $(this).find("td:eq(4)").text();
-        totalVenta += parseFloat(valorCelda);
-    });
-
-$("#totalVenta").val(totalVenta);
-
-});
-
 
 //FUNCIONES TAB IMPUTACION
 $("#filtroImp").click(function(){
@@ -263,7 +210,6 @@ $("#addItemImp").click(function(){
 
 });
 
-//TRABAJAR EN ESTO 13/06/23
 $("#confirmDeleteImp").click(function(){
         var filasMarcadas=[];
         var totalVenta = $("#totalVenta").val();
@@ -294,7 +240,7 @@ $("#confirmDeleteImp").click(function(){
 
             var url = window.location.href;
             var urlObj = new URL(url);
-            urlObj.pathname = "/ventaDetalleImputacion/bajaDetalle/";
+            urlObj.pathname = "/comprasDetalleImputacion/bajaDetalle/";
             var nuevaUrl = urlObj.href;
             //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
             fetch(nuevaUrl+ idVenta + "/" + idProducto, {
@@ -308,7 +254,7 @@ $("#confirmDeleteImp").click(function(){
 
             //console.log("Total luego de eliminar lineas: " + totalVenta)
             //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
+            fetch("/comprasDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
                     method : "POST",
                     headers:{
                     "Content-Type" : "application/json"
@@ -319,7 +265,7 @@ $("#confirmDeleteImp").click(function(){
 
 var tiempoEspera = 500;
 function redireccionar() {
-  window.location.href= "/ventas/form/"+ $("#id").val();
+  window.location.href= "/compras/form/"+ $("#id").val();
 }
 setTimeout(redireccionar, tiempoEspera);
 });
@@ -333,8 +279,9 @@ crearItemsDetalle();
 });
 
 
-$.get("/ventas/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
-           $("#totalVenta").val(datos);
+$.get("/compras/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
+           $("#totalCompra").val(datos);
+           console.log("Total compra: " + datos);
 });
 
 
@@ -345,43 +292,36 @@ function crearItemsDetalle(){
     function confirmSave(){
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalle/altaDetalle/";
+        urlObj.pathname = "/comprasDetalle/altaDetalle/";
         var nuevaUrl = urlObj.href;
 
 
         //RECORRO TABLA DETALLE PRODUCTO
         $("#tablaDetalle tbody tr").each(function(){
-            let idVenta = $("#id").val();
+            let idCompra = $("#id").val();
             let descProd = $(this).children().eq(0).text();
             let idProd = $(this).children().eq(1).text();
             let cantidad = parseFloat($(this).children().eq(2).text());
             let precioU =  parseFloat($(this).children().eq(3).text());
-
-            let totalLinea = (cantidad*precioU);
+            let precioF = parseFloat($(this).children().eq(4).text());
+            let totalLinea = (cantidad*precioF);
             total += totalLinea;
 
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
+            //GENERO LOS DETALLES DE LA COMPRA EN LA BASE DE DATOS
+            fetch(nuevaUrl+ idCompra + "/" + idProd + "/" + cantidad + "/" + precioU + "/" + precioF, {
                 method : "POST",
                 headers:{
                 "Content-Type" : "application/json"
                 }
-            })
-
-            fetch("/lote/setEstadoVendido"+ "/" + idProd, {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-            })
-
+            });
         });
     };
+
 
     function confirmSaveImp(){
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalleImputacion/altaDetalle/";
+        urlObj.pathname = "/compraDetalleImputacion/altaDetalle/";
         var nuevaUrl = urlObj.href;
 
         //RECORRO TABLA DETALLE IMPUTACION
@@ -404,13 +344,14 @@ function crearItemsDetalle(){
         });
     };
 
+
     confirmSave();
     confirmSaveImp();
 
 
 
     //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-    fetch("/ventas/actualizarTotalVenta/" + $("#id").val() + "/" + total, {
+    fetch("/compras/actualizarTotalCompra/" + $("#id").val() + "/" + total, {
             method : "POST",
             headers:{
             "Content-Type" : "application/json"
@@ -419,22 +360,10 @@ function crearItemsDetalle(){
 
     var tiempoEspera = 500;
     function redireccionar() {
-      window.location.href= "/ventas/form/"+ $("#id").val();
+      window.location.href= "/compras/form/"+ $("#id").val();
     }
     setTimeout(redireccionar, tiempoEspera);
 }
-
-
-$("#btnAlta").click(function(){
-    let texto = $("#btnAlta").text();
-    let contenidoFP = $("#formaDePago").val();
-    if(texto == "Guardar"){
-        if(contenidoFP == 3){
-        alert("Quiere generar el plan de pago ahora? ( VALIDAR ) <-- IMPLEMNTAR LUEGO DE TENER LA VISTA DE PLAN DE PAGO")
-        }
-    }
-
-});
 
 
 /* NO PERMITIR CAMBIOS CUANDO LA VENTA POSEA UN PAGO GENERADO

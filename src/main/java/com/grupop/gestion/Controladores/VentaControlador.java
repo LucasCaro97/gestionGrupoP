@@ -77,9 +77,8 @@ public class VentaControlador {
     public ModelAndView getFormUpd(@PathVariable Long id){
         ModelAndView mav = new ModelAndView("form-ventas");
         // agregar validacion para no modificar en caso de que posea algun cobro
-        mav.addObject(ventaServicio.obtenerPorId(id));
+        mav.addObject("venta",ventaServicio.obtenerPorId(id));
         mav.addObject("action", "update");
-        mav.addObject("listaClientes", entidadBaseServicio.obtenerClientes());
         mav.addObject("listaClientes", entidadBaseServicio.obtenerClientes());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos() );
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
@@ -151,7 +150,7 @@ public class VentaControlador {
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registro actualizado exitosamente");
     }
 
 }

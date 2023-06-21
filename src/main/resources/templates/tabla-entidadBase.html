@@ -112,7 +112,7 @@
                                     <th>Domicilio</th>
                                     <th>Telefono</th>
                                     <th>Correo</th>
-                                    <th th:if="${habilitaEdicion}" th:text="${habilitaEdicion}"></th>
+                                    <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody>
@@ -130,7 +130,7 @@
                                     <td th:text="${ent.telefono}"></td>
                                     <td th:text="${ent.correo}"></td>
 
-                                    <td th:if="${habilitaEdicion}">
+                                    <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion
                                         </button>

@@ -19,6 +19,7 @@ public class TipoComprobanteServicio {
     public void crear(TipoComprobante dto){
         TipoComprobante tc = new TipoComprobante();
         tc.setDescripcion(dto.getDescripcion());
+        tc.setTipoOperacion(dto.getTipoOperacion());
         tipoComprobanteRepo.save(tc);
     }
 
@@ -26,6 +27,7 @@ public class TipoComprobanteServicio {
     public void actualizar(TipoComprobante dto){
         TipoComprobante tc = tipoComprobanteRepo.findById(dto.getId()).get();
         tc.setDescripcion(dto.getDescripcion());
+        tc.setTipoOperacion(dto.getTipoOperacion());
         tipoComprobanteRepo.save(tc);
     }
 
@@ -37,4 +39,9 @@ public class TipoComprobanteServicio {
 
     @Transactional
     public void eliminarPorId(Long id){ tipoComprobanteRepo.deleteById(id);}
+
+    @Transactional(readOnly = true)
+    public List<TipoComprobante> obtenerPorTipoDeOperacion(Long id){
+        return tipoComprobanteRepo.searchByTipoComprobante(id);
+    }
 }

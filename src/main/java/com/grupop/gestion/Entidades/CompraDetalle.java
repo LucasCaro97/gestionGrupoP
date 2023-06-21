@@ -4,28 +4,31 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.context.annotation.EnableMBeanExport;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class VentaDetalle implements Serializable {
+public class CompraDetalle {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @JoinColumn(name = "fk_venta")
+    @JoinColumn(name = "fk_compra")
     @ManyToOne
-    private Venta ventaId;
+    private Compra compraId;
     @JoinColumn(name = "fk_producto")
     @OneToOne
     private Producto producto;
-    private Double cantidad;
-    private Double precioUnitario;
-    private Double total;
+    private BigDecimal cantidad;
+    private BigDecimal precioUnitario;
+    private BigDecimal precioFinal;
+    private BigDecimal totalsinImpuesto;
+    private BigDecimal impuesto;
+    private BigDecimal total;
+
+
 
 
 }

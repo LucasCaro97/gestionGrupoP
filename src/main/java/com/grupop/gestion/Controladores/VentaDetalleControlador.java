@@ -36,7 +36,7 @@ public class VentaDetalleControlador {
     public ResponseEntity<String> bajaDetalle(@PathVariable Long idVenta, @PathVariable Long idProd, RedirectAttributes attributes){
         try{
             ventaDetalleServicio.eliminar(idVenta, idProd);
-            System.out.println("Eliminar - OK");
+            System.out.println("Eliminar VENTA - OK");
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
