@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -33,11 +34,15 @@ public class Compra {
     @ManyToOne
     private Sector sector;
     private String observaciones;
-    private Double subTotalSinImpuestos;
-    private Double importesConImp;
-    private Double importesSinImp;
-    private Double totalImpuestos;
-    private Double total;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal subTotalSinImpuestos;
+    private BigDecimal importesConImp;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal importesSinImp;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalImpuestos;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal total;
     //private Usuario usuario;
     @JoinColumn(name = "fk_forma_de_pago")
     @ManyToOne

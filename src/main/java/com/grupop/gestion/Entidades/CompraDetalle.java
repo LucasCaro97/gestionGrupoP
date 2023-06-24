@@ -21,11 +21,17 @@ public class CompraDetalle {
     @JoinColumn(name = "fk_producto")
     @OneToOne
     private Producto producto;
+    @Column(precision = 10, scale = 2)
     private BigDecimal cantidad;
+    @Column(precision = 10, scale = 2)
     private BigDecimal precioUnitario;
+    @Column(precision = 10, scale = 2)
     private BigDecimal precioFinal;
+    @Column(precision = 10, scale = 2)
     private BigDecimal totalsinImpuesto;
+    @Column(precision = 10, scale = 2)
     private BigDecimal impuesto;
+    @Column(precision = 10, scale = 2)
     private BigDecimal total;
 
 

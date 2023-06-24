@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -26,7 +27,7 @@ public class CompraServicio {
         compra.setSector(dto.getSector());
         compra.setFormaDePago(dto.getFormaDePago());
         compra.setObservaciones(dto.getObservaciones());
-        compra.setTotal(0D);
+        compra.setTotal(new BigDecimal(0));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         compraRepo.save(compra);
     }
@@ -58,10 +59,30 @@ public class CompraServicio {
     public Long buscarUltimoId(){ return compraRepo.findLastId(); }
 
     @Transactional
-    public void actualizarTotal(Long idCompra, Double total){
+    public void actualizarTotal(Long idCompra, BigDecimal total){
         Compra cpa = compraRepo.findById(idCompra).get();
         cpa.setTotal(total);
         compraRepo.save(cpa);
+    }
+
+    @Transactional
+    public void actualizarTotal(Long idCompra){
+        BigDecimal resultado = new BigDecimal(0);
+        Compra compra = compraRepo.findById(idCompra).get();
+        BigDecimal totalProd = compraRepo.obtenerTotalProductos(compra.getId());
+        BigDecimal totalImp = compraRepo.obtenerTotalImputacion(compra.getId());
+
+
+        if(totalProd!=null && totalImp !=null){
+            resultado = totalProd.add(totalImp);
+        }else if(totalProd!=null){
+            resultado = totalProd;
+        }else if(totalImp!=null){
+            resultado = totalImp;
+        }
+
+        compra.setTotal(resultado);
+        compraRepo.save(compra);
     }
 
     @Transactional(readOnly = true)

@@ -22,68 +22,92 @@ public class CompraDetalleServicio {
 
 
     @Transactional
-    public void crear(Long idCompra, Long idProd, BigDecimal cantidad, BigDecimal precioU, BigDecimal precioF){
+    public void crear(Long idCompra, Long idProd, BigDecimal cantidad, BigDecimal precioU, BigDecimal precioF) {
 
         Producto prod = productoServicio.buscarPorId(idProd);
         Compra compra = compraServicio.obtenerPorId(idCompra);
+        CompraDetalle cd = compraDetalleRepo.searchByProductoAndCompra(compra.getId(), prod.getId());
+        System.out.println("Detalle: " + cd);
 
-        if(existByProductoAndCompraId(compra.getId(), prod.getId()) != 0){
-            CompraDetalle cd = compraDetalleRepo.searchByProductoAndCompra(compra.getId(), prod.getId());
-            cd.setCantidad(cantidad);
-                if( precioF.compareTo(cd.getPrecioFinal()) != 0){
-                    cd.setPrecioUnitario(precioF.divide(new BigDecimal(1.21),2,RoundingMode.UP));
+        //VERIFICO QUE HAYA ALGUN CAMBIO RELEVANTE EN LA TABLA PARA RECALCULAR ( CAMBIO DE CANT / $INI / $FIN )
+        if (existByProductoAndCompraId(compra.getId(), prod.getId()) != 0) {
+            System.out.println("Detalle en if exist: " + cd);
+            if (cd.getCantidad().compareTo(cantidad) != 0 || cd.getPrecioUnitario().compareTo(precioU) != 0 || cd.getPrecioFinal().compareTo(precioF) != 0) {
+                cd.setCantidad(cantidad);
+                if (precioF.compareTo(cd.getPrecioFinal()) != 0) {
+                    BigDecimal precioUnitario = precioF.divide(new BigDecimal(1.21), 4, RoundingMode.UP);
+                    cd.setPrecioUnitario(precioUnitario);
                     cd.setPrecioFinal(precioF);
-                }else{
+                } else {
                     cd.setPrecioUnitario(precioU);
-                    cd.setPrecioFinal(precioU.multiply(new BigDecimal(1.21).setScale(2,RoundingMode.UP)));
+                    BigDecimal precioFinal = precioU.multiply(new BigDecimal(1.21)).setScale(4, RoundingMode.UP);
+                    cd.setPrecioFinal(precioFinal);
                 }
-            cd.setTotalsinImpuesto(cd.getPrecioUnitario().multiply(cantidad));
-            cd.setImpuesto(cd.getTotalsinImpuesto().multiply(new BigDecimal(21)).divide(new BigDecimal(100),2,RoundingMode.UP));
-            cd.setTotal(cd.getTotalsinImpuesto().add(cd.getImpuesto()));
-            compraDetalleRepo.save(cd);
-        }else{
-            CompraDetalle cd = new CompraDetalle();
-            cd.setCompraId(compra);
-            cd.setProducto(prod);
-            cd.setCantidad(cantidad);
-            if(precioF.compareTo(BigDecimal.ZERO) != 0){
-                cd.setPrecioUnitario(precioF.divide(new BigDecimal(1.21d),2,RoundingMode.UP));
-                cd.setPrecioFinal(precioF);
-                cd.setTotalsinImpuesto(cantidad.multiply(cd.getPrecioUnitario()).setScale(2,RoundingMode.UP));
-                cd.setImpuesto((cd.getTotalsinImpuesto().multiply(new BigDecimal(21))).divide(new BigDecimal(100),2,RoundingMode.UP));
-                cd.setTotal(cd.getTotalsinImpuesto().add(cd.getImpuesto()));
 
+                BigDecimal totalSinImpuesto = cd.getCantidad().multiply(cd.getPrecioUnitario());
+                cd.setTotalsinImpuesto(totalSinImpuesto);
+                cd.setImpuesto(cd.getTotalsinImpuesto().multiply(new BigDecimal(21)).divide(new BigDecimal(100)));
+                cd.setTotal(cd.getPrecioFinal().multiply(cd.getCantidad()));
+
+                compraDetalleRepo.save(cd);
             }else{
-                cd.setPrecioUnitario(precioU);
-                cd.setPrecioFinal(precioU.multiply(new BigDecimal(1.21d)).setScale(2,RoundingMode.UP));
-                cd.setTotalsinImpuesto(precioU.multiply(cantidad).setScale(2,RoundingMode.UP));
-                cd.setImpuesto(cd.getTotalsinImpuesto().multiply(new BigDecimal(21)).divide(new BigDecimal(100),2,RoundingMode.UP));
-                cd.setTotal(cd.getTotalsinImpuesto().add(cd.getImpuesto()));
+                System.out.println("No se registraron cambios");
             }
+        }else {
+                System.out.println("Creando item");
+                CompraDetalle compradet = new CompraDetalle();
+                compradet.setCompraId(compra);
+                compradet.setProducto(prod);
+                compradet.setCantidad(cantidad);
+                if (precioF.compareTo(BigDecimal.ZERO) != 0) {
+                    BigDecimal precioUnitario = precioF.divide(new BigDecimal(1.21), 4, RoundingMode.UP);
+                    BigDecimal totalSinImpuesto = cantidad.multiply(precioUnitario).setScale(4, RoundingMode.UP);
+                    BigDecimal impuesto = totalSinImpuesto.multiply(new BigDecimal(21)).divide(new BigDecimal(100), 4, RoundingMode.UP);
+                    BigDecimal total = precioF.multiply(compradet.getCantidad()).setScale(4);
 
-            compraDetalleRepo.save(cd);
+                    compradet.setPrecioUnitario(precioUnitario.setScale(2, RoundingMode.UP));
+                    compradet.setPrecioFinal(precioF);
+                    compradet.setTotalsinImpuesto(totalSinImpuesto.setScale(2, RoundingMode.UP));
+                    compradet.setImpuesto(impuesto.setScale(2, RoundingMode.UP));
+                    compradet.setTotal(total.setScale(2, RoundingMode.UP));
+
+                } else {
+                    BigDecimal precioFinal = precioU.multiply(new BigDecimal(1.21).setScale(4, RoundingMode.UP));
+                    BigDecimal totalSinImpuesto = cantidad.multiply(precioU).setScale(4, RoundingMode.UP);
+                    BigDecimal impuesto = totalSinImpuesto.multiply(new BigDecimal(21)).divide(new BigDecimal(100), 4, RoundingMode.UP);
+                    BigDecimal total = precioFinal.multiply(compradet.getCantidad()).setScale(4, RoundingMode.UP);
+
+                    compradet.setPrecioUnitario(precioU);
+                    compradet.setPrecioFinal(precioFinal);
+                    compradet.setTotalsinImpuesto(totalSinImpuesto.setScale(2, RoundingMode.UP));
+                    compradet.setImpuesto(impuesto.setScale(2, RoundingMode.UP));
+                    compradet.setTotal(total.setScale(2, RoundingMode.UP));
+                }
+
+                compraDetalleRepo.save(compradet);
+            }
         }
 
-    }
-
     @Transactional
-    public void eliminar(Long idCompra, Long idProd){
+    public void eliminar(Long idCompra, Long idProd) {
         CompraDetalle cd = compraDetalleRepo.searchByProductoAndCompra(idCompra, idProd);
         compraDetalleRepo.deleteById(cd.getId());
     }
 
     @Transactional(readOnly = true)
-    public Integer existByProductoAndCompraId(Long compraId, Long productoId){
-        return compraDetalleRepo.existByProductoAndCompra(compraId,productoId);
+    public Integer existByProductoAndCompraId(Long compraId, Long productoId) {
+        return compraDetalleRepo.existByProductoAndCompra(compraId, productoId);
     }
 
     @Transactional(readOnly = true)
-    public List<CompraDetalle> obtenerPorCompra(Long id){ return compraDetalleRepo.buscarPorCompra(id); }
+    public List<CompraDetalle> obtenerPorCompra(Long id) {
+        return compraDetalleRepo.buscarPorCompra(id);
+    }
 
-    @Transactional Double obtenerTotalPorCompra(Long id) { return compraDetalleRepo.obtenerTotalPorCompra(id); }
-
-
-
+    @Transactional
+    Double obtenerTotalPorCompra(Long id) {
+        return compraDetalleRepo.obtenerTotalPorCompra(id);
+    }
 
 
 }

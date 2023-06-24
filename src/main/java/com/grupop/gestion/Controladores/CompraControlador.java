@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -133,10 +134,8 @@ public class CompraControlador {
     @PostMapping("/actualizarTotalCompra/{idCompra}/{total}")
     public ResponseEntity<String> actualizarTotal(@PathVariable Long idCompra, @PathVariable String total, RedirectAttributes attributes){
         try {
-            System.out.println("Id CPA: " + idCompra + " Total: " + total);
-
             Double totalDouble = Double.valueOf(total);
-            compraServicio.actualizarTotal(idCompra, totalDouble);
+            compraServicio.actualizarTotal(idCompra, new BigDecimal(totalDouble));
             attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
@@ -144,6 +143,18 @@ public class CompraControlador {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro actualizado correctamente");
 
+    }
+
+    @PostMapping("/actualizarTotalCompra/{idCompra}")
+    public ResponseEntity<String> actualizarTotal(@PathVariable Long idCompra, RedirectAttributes attributes){
+        try{
+            compraServicio.actualizarTotal(idCompra);
+        } catch (Exception e){
+            System.out.println("Excepcion");
+            attributes.addFlashAttribute("exception", e.getMessage());
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Se actualizo el total correctamente");
     }
 
 

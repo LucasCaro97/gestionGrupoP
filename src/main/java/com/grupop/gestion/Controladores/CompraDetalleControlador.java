@@ -43,7 +43,6 @@ public class CompraDetalleControlador {
     public ResponseEntity<String> bajaDetalle(@PathVariable Long idCompra, @PathVariable Long idProd, RedirectAttributes attributes){
         try{
             compraDetalleServicio.eliminar(idCompra, idProd);
-            System.out.println("Eliminar COMPRA - OK");
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
@@ -55,8 +54,7 @@ public class CompraDetalleControlador {
     public ResponseEntity<String> actualizarTotal(@PathVariable Long idCompra, @PathVariable String total, RedirectAttributes attributes){
         try{
             Double totalDouble = Double.valueOf(total);
-            compraServicio.actualizarTotal(idCompra,totalDouble);
-            System.out.println("Se actualizo el total correctamente");
+            compraServicio.actualizarTotal(idCompra,new BigDecimal(totalDouble));
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
