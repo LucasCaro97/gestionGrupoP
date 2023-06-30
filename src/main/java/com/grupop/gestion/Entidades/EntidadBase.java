@@ -1,14 +1,19 @@
 package com.grupop.gestion.Entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
+@ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class EntidadBase {
 
     @Id
@@ -26,18 +31,23 @@ public class EntidadBase {
     private String nombreFantasia;
     @JoinColumn(name = "fk_tipo_iva")
     @OneToOne
+    @JsonIgnore
     private TipoIva tipoIva;
     @JoinColumn(name = "fk_cliente")
     @OneToOne
+    @JsonIgnore
     private Cliente cliente;
     @JoinColumn(name = "fk_proveedor")
     @OneToOne
+    @JsonIgnore
     private Proveedor proveedor;
     @JoinColumn(name = "fk_empleado")
     @OneToOne
+    @JsonIgnore
     private Empleado empleado;
     @JoinColumn(name = "fk_vendedor")
     @OneToOne
+    @JsonIgnore
     private Vendedor vendedor;
     private String domicilio;
     private Long telefono;

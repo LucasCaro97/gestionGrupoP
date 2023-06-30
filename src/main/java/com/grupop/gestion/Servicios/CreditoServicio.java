@@ -14,6 +14,7 @@ import java.util.List;
 public class CreditoServicio {
 
     private final CreditoRepo creditoRepo;
+    private final VentaServicio ventaServicio;
 
 
     @Transactional
@@ -33,7 +34,14 @@ public class CreditoServicio {
         c.setGastosAdministrativos(dto.getGastosAdministrativos());
         c.setCapital(dto.getCapital());
         c.setTotalCredito(dto.getTotalCredito());
+        c.setObservaciones(dto.getObservaciones());
+        System.out.println(dto);
         creditoRepo.save(c);
+
+        //CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
+        System.out.println("cerrando venta: " + dto.getVenta().getId());
+        ventaServicio.cerrarVenta(dto.getVenta().getId());
+
     }
 
     @Transactional
@@ -53,6 +61,7 @@ public class CreditoServicio {
         c.setGastosAdministrativos(dto.getGastosAdministrativos());
         c.setCapital(dto.getCapital());
         c.setTotalCredito(dto.getTotalCredito());
+        c.setObservaciones(dto.getObservaciones());
         creditoRepo.save(c);
     }
 
@@ -64,5 +73,12 @@ public class CreditoServicio {
 
     @Transactional
     public void eliminarPorId(Long id){ creditoRepo.deleteById(id);}
+
+    //AGREGAR VALIDACION - EXISTE UN CREDITO VINCULADO A ESTA VENTA ?
+    @Transactional(readOnly = true)
+    public Integer validarExistenciaPorVenta(Long idVenta){
+        return creditoRepo.existByIdVenta(idVenta);
+    }
+
 
 }

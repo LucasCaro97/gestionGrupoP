@@ -49,5 +49,6 @@ public class Venta implements Serializable {
 
     @OneToMany(mappedBy = "ventaId")
     private List<VentaDetalle> ventaDetalle;
+    private boolean ventaCerrada;
 
 }

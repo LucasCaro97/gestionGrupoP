@@ -1,5 +1,7 @@
 
 $(document).ready(function () {
+validarEstado($("#id").val());
+
 var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
@@ -63,6 +65,9 @@ $("#talonario").change(function(){
   }
 
 });
+
+//TRADUCIR CLIENTESID A NOMBRE
+traducirCliente($("#cliente"));
 
 //CARGO TIPO PRODUCTO
 $.get("/tipoProducto/obtenerTodos", function(datos,status){
@@ -332,10 +337,14 @@ $(".guardarDetalle").click(function(){
 crearItemsDetalle();
 });
 
-
-$.get("/ventas/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
+//agregar condicion para que solamente traiga el total cuando la venta exista en la bd
+$.get("/ventas/obtenerTotalPorId/" + $("#id").val())
+    .done(function(datos, status){
            $("#totalVenta").val(datos);
-});
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+    console.log("No se puede traer el total porque la aun no esta en la base de datos");
+    })
 
 
 
@@ -424,13 +433,14 @@ function crearItemsDetalle(){
     setTimeout(redireccionar, tiempoEspera);
 }
 
-
+//Redirije a la vista de credio cuando la forma de pago es credito
 $("#btnAlta").click(function(){
     let texto = $("#btnAlta").text();
     let contenidoFP = $("#formaDePago").val();
     if(texto == "Guardar"){
         if(contenidoFP == 3){
-        alert("Quiere generar el plan de pago ahora? ( VALIDAR ) <-- IMPLEMNTAR LUEGO DE TENER LA VISTA DE PLAN DE PAGO")
+        alert("Sera redirigido a la vista para generar el credito de la venta")
+            window.location.href= "credito/form/new/" + $("#id").val();
         }
     }
 
@@ -448,4 +458,41 @@ $('#volverAtras ').hide();
 */
 });
 
+function traducirCliente(selectCliente){
+    let opciones = selectCliente.find('option:not(:first)')
 
+    opciones.each(function(index, option){
+        let razonSocial;
+        let valor = $(option).val();
+
+        $.get("/entidadBase/obtenerNombrePorFkCliente/" + valor, function(dato,status){
+            razonSocial = dato.razonSocial;
+            $(option).text(razonSocial);
+        })
+    })
+}
+
+function validarEstado(idVenta){
+
+fetch('/ventas/validarEstado/'+idVenta)
+  .then(response => response.text())
+  .then(data => {
+    const ventaCerrada = (data === "true");
+    if(ventaCerrada===true){
+        console.log("la venta esta cerrada");
+        comandosEncabezado = $("#comandos #btnAlta");
+        comandosDetalle = $(".comandosDet");
+        comandosEncabezado.css('display', 'none')
+        comandosDetalle.css('visibility', 'hidden')
+        $('input').prop('readonly', true);
+        $('input').css('background-color', 'var(--bs-secondary-bg)');
+        $('select').prop('disabled', true);
+        $('textarea').prop('readonly', true);
+        $('textarea').css('background-color', 'var(--bs-secondary-bg)');
+    }
+    })
+  .catch(error => {
+    console.error('Error al obtener el valor booleano:', error);
+  });
+
+}

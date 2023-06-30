@@ -4,6 +4,7 @@ import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Repositorios.TalonarioRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class VentaServicio {
         vta.setObservaciones(dto.getObservaciones());
         vta.setFechaComprobante(dto.getFechaComprobante());
         vta.setTotal(0D);
+        vta.setVentaCerrada(false);
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         ventaRepo.save(vta);
     }
@@ -78,5 +80,19 @@ public class VentaServicio {
         return ventaRepo.obtenerTotalPorId(id);
     }
 
+//    public List<Venta> obtenerVentasActivasParaCredito(Long idCliente) {
+//        return ventaRepo.obtenerVentasActivasParaCredito(idCliente);
+//    }
+    @Transactional
+    public void cerrarVenta(Long idVenta){
+        Venta vta = ventaRepo.findById(idVenta).get();
+        vta.setVentaCerrada(true);
+        ventaRepo.save(vta);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean validarEstado(Long idVenta) {
+        return ventaRepo.validarEstado(idVenta);
+    }
 }
 

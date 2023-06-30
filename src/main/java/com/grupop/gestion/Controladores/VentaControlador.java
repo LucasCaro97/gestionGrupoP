@@ -1,6 +1,7 @@
 package com.grupop.gestion.Controladores;
 
 
+import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Repositorios.ProductoRepo;
@@ -40,6 +41,8 @@ public class VentaControlador {
     private final FormaDePagoServicio formaDePagoServicio;
     private final CuentasContablesServicio cuentasContablesServicio;
     private final VentaDetalleImputacionServicio ventaDetalleImputacionServicio;
+    private final CreditoServicio creditoServicio;
+    private final ClienteServicio clienteServicio;
 
 
     @GetMapping
@@ -62,7 +65,7 @@ public class VentaControlador {
             mav.addObject("venta", new Venta());
         }
         mav.addObject("action", "create");
-        mav.addObject("listaClientes", entidadBaseServicio.obtenerClientes());
+        mav.addObject("listaClientes", clienteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos() );
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
@@ -76,8 +79,8 @@ public class VentaControlador {
     @GetMapping("/form/{id}")
     public ModelAndView getFormUpd(@PathVariable Long id){
         ModelAndView mav = new ModelAndView("form-ventas");
-        // agregar validacion para no modificar en caso de que posea algun cobro
-        mav.addObject("venta",ventaServicio.obtenerPorId(id));
+        Venta vta = ventaServicio.obtenerPorId(id);
+        mav.addObject("venta",vta);
         mav.addObject("action", "update");
         mav.addObject("listaClientes", entidadBaseServicio.obtenerClientes());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos() );
@@ -112,11 +115,15 @@ public class VentaControlador {
 
     @PostMapping("/update")
     public RedirectView update(Venta dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/ventas");
+        RedirectView redirect = new RedirectView("/ventas/form/" + dto.getId());
         try{
             ventaServicio.actualizar(dto);
-            redirect.setUrl("/ventas/form/" + dto.getId());
-            attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
+            //validar - SI NO EXISTE UN CREDITO VINCULADO A LA VENTA Y FORMA DE PAGO ES CREDITO, ENONCES REDIRIJE A FORMULARIO CREDITO
+            if(dto.getFormaDePago().getId()==3 && creditoServicio.validarExistenciaPorVenta(dto.getId()) == 0){
+                redirect.setUrl("/credito/form/new/"+dto.getId());
+            }else{
+                attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
+            }
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("venta", dto);
@@ -151,6 +158,12 @@ public class VentaControlador {
             System.out.println(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro actualizado exitosamente");
+    }
+
+
+    @GetMapping("/validarEstado/{idVenta}")
+    public ResponseEntity<Boolean> validarEstado(@PathVariable Long idVenta){
+        return  ResponseEntity.ok(ventaServicio.validarEstado(idVenta));
     }
 
 }

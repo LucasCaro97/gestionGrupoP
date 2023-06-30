@@ -8,4 +8,7 @@ public record ManzanaDto(Long id, String descripcion) {
         this(manzana.getId(), manzana.getDescripcion());
     }
 
+
+
+
 }

@@ -184,5 +184,11 @@ public class EntidadBaseControlador {
         return ResponseEntity.ok(entidadBaseServicio.obtenerIvaCliente(id));
     }
 
+    @GetMapping("/obtenerNombrePorFkCliente/{id}")
+    public ResponseEntity<EntidadBase> obtenerNombreCliente(@PathVariable Long id){
+        //System.out.println(entidadBaseServicio.obtenerNombrePorFkCliente(id));
+        return ResponseEntity.ok(entidadBaseServicio.obtenerNombrePorFkCliente(id));
+    }
+
 
 }

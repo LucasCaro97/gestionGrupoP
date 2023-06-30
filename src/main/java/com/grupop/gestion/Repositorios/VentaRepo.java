@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface VentaRepo extends JpaRepository<Venta, Long> {
 
@@ -15,5 +17,8 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
     @Query(value = "SELECT total FROM venta WHERE id = ?", nativeQuery = true)
     Double obtenerTotalPorId(Long id);
+
+    @Query(value = "SELECT venta_cerrada FROM venta WHERE id = ?", nativeQuery = true)
+    Boolean validarEstado(Long idVenta);
 
 }

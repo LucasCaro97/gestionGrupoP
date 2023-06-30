@@ -143,4 +143,7 @@ public class EntidadBaseServicio {
     @Transactional(readOnly = true)
     public String obtenerIvaCliente (Long id) { return entidadBaseRepo.buscarIvaCliente(id); }
 
+    @Transactional(readOnly = true)
+    public EntidadBase obtenerNombrePorFkCliente(Long id){ return entidadBaseRepo.obtenerNombreFkClienteId(id); }
+
 }

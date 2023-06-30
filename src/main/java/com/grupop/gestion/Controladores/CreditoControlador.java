@@ -28,7 +28,7 @@ public class CreditoControlador {
     private final SectorServicio sectorServicio;
     private final TipoComprobanteServicio tipoComprobanteServicio;
     private final TalonarioServicio talonarioServicio;
-
+    private final VentaServicio ventaServicio;
 
 
     @GetMapping
@@ -51,6 +51,7 @@ public class CreditoControlador {
                 mav.addObject("credito", new Credito());
             }
         mav.addObject("action", "create");
+        mav.addObject("procedencia", "nuevo");
         mav.addObject("listaPlanPago", planPagoServicio.obtenerTodos());
         mav.addObject("listaCliente", entidadBaseServicio.obtenerClientes());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
@@ -59,17 +60,35 @@ public class CreditoControlador {
         return mav;
     }
 
-
-    @GetMapping("/form/{id}")
-    public ModelAndView getFormUpd(@PathVariable Long id){
+    @GetMapping("/form/{idCredito}")
+    public ModelAndView getFormVisual(HttpServletRequest request, @PathVariable Long idCredito){
         ModelAndView mav = new ModelAndView("form-credito");
-        mav.addObject("credito", creditoServicio.obtenerPorId(id));
+        mav.addObject("credito", creditoServicio.obtenerPorId(idCredito));
         mav.addObject("listaPlanPago", planPagoServicio.obtenerTodos());
-        mav.addObject("listaCliente", entidadBaseServicio.obtenerClientes());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
-        mav.addObject("action", "update");
+        return mav;
+    }
+
+
+    @GetMapping("/form/new/{idVenta}")
+    public ModelAndView getFormCharged(HttpServletRequest request, @PathVariable Long idVenta){
+        ModelAndView mav = new ModelAndView("form-credito");
+        Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(inputFlashMap!=null){
+            mav.addObject("exception", inputFlashMap.get("exception"));
+            mav.addObject("credito", inputFlashMap.get("credito"));
+        }else{
+            mav.addObject("credito", new Credito());
+        }
+        mav.addObject("action", "create");
+        mav.addObject("listaPlanPago", planPagoServicio.obtenerTodos());
+        mav.addObject("venta", ventaServicio.obtenerPorId(idVenta));
+        mav.addObject("listaSector", sectorServicio.obtenerTodos());
+        mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
+        mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         return mav;
     }
 
@@ -83,6 +102,7 @@ public class CreditoControlador {
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("credito", dto);
             r.setUrl("/credito/form");
+            System.out.println(e.getMessage());
         }
         return r;
     }

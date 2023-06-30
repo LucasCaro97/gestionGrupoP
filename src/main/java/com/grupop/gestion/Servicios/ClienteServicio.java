@@ -33,4 +33,7 @@ public class ClienteServicio {
 
         @Transactional(readOnly = true)
         public String obtenerNombre(Long id) { return  clienteRepo.obtenerNombre(id); }
+
+        @Transactional(readOnly = true)
+        public List<Cliente> obtenerTodos(){ return clienteRepo.findAll(); }
 }
