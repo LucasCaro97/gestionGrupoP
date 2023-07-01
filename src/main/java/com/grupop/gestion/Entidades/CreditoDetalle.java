@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreditoDetalle {
 
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @JoinColumn(name = "fk_credito")
@@ -22,7 +23,5 @@ public class CreditoDetalle {
     private Integer nroCuota;
     private BigDecimal monto;
     private LocalDate vencimiento;
-
-
 
 }

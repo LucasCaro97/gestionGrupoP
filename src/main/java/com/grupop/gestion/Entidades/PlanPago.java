@@ -18,7 +18,7 @@ public class PlanPago {
     private String descripcion;
     //CARACTERISTICAS DEL PLAN DE PAGO
     private BigDecimal tasaInteresTotal;
-    private BigDecimal cantCuota;
+    private Integer cantCuota;
     //GASTOS ADMINISTRATIVOS
     private BigDecimal gastosAdministrativos;
     private BigDecimal porcentajeGastos;

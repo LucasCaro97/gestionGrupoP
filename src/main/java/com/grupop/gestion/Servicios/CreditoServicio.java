@@ -1,12 +1,15 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.Credito;
+import com.grupop.gestion.Entidades.CreditoDetalle;
+import com.grupop.gestion.Entidades.PlanPago;
 import com.grupop.gestion.Repositorios.CreditoRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -15,10 +18,12 @@ public class CreditoServicio {
 
     private final CreditoRepo creditoRepo;
     private final VentaServicio ventaServicio;
-
+    private final PlanPagoServicio planPagoServicio;
+    private final CreditoDetalleServicio creditoDetalleServicio;
 
     @Transactional
     public void crear(Credito dto){
+        PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
         Credito c = new Credito();
         c.setCliente(dto.getCliente());
         c.setFecha(dto.getFecha());
@@ -30,13 +35,20 @@ public class CreditoServicio {
         c.setPlanPago(dto.getPlanPago());
         c.setCantCuotas(dto.getCantCuotas());
         c.setPorcentajeInteres(dto.getPorcentajeInteres());
-        c.setInteresesTotales(dto.getInteresesTotales());
-        c.setGastosAdministrativos(dto.getGastosAdministrativos());
+        c.setInteresesTotales(dto.getCapital().multiply(dto.getPorcentajeInteres()).divide(new BigDecimal(100)));
+        c.setGastosAdministrativos(dto.getCapital().multiply(plan.getGastosAdministrativos()).divide(new BigDecimal(100)));
         c.setCapital(dto.getCapital());
-        c.setTotalCredito(dto.getTotalCredito());
+        c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
         c.setObservaciones(dto.getObservaciones());
-        System.out.println(dto);
         creditoRepo.save(c);
+
+        Credito credito = creditoRepo.findFirstByOrderByIdDesc();
+        System.out.println(credito);
+
+//        for(int i = 1; i <= plan.getCantCuota() ; i++){
+//            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().multiply(new BigDecimal(credito.getCantCuotas())));
+//        }
+
 
         //CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
         System.out.println("cerrando venta: " + dto.getVenta().getId());
@@ -46,6 +58,8 @@ public class CreditoServicio {
 
     @Transactional
     public void actualizar(Credito dto){
+        PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
+
         Credito c = creditoRepo.findById(dto.getId()).get();
         c.setCliente(dto.getCliente());
         c.setFecha(dto.getFecha());
@@ -54,13 +68,13 @@ public class CreditoServicio {
         c.setTalonario(dto.getTalonario());
         c.setNroComprobante(dto.getNroComprobante());
         c.setVenta(dto.getVenta());
-        c.setPlanPago(dto.getPlanPago());
-        c.setCantCuotas(dto.getCantCuotas());
-        c.setPorcentajeInteres(dto.getPorcentajeInteres());
-        c.setInteresesTotales(dto.getInteresesTotales());
-        c.setGastosAdministrativos(dto.getGastosAdministrativos());
         c.setCapital(dto.getCapital());
-        c.setTotalCredito(dto.getTotalCredito());
+        c.setPlanPago(dto.getPlanPago());
+        c.setCantCuotas(plan.getCantCuota());
+        c.setPorcentajeInteres(plan.getTasaInteresTotal());
+        c.setInteresesTotales(c.getCapital().multiply(c.getPorcentajeInteres()).divide(new BigDecimal(100)));
+        c.setGastosAdministrativos(dto.getCapital().multiply(plan.getPorcentajeGastos()).divide(new BigDecimal(100)));
+        c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
         c.setObservaciones(dto.getObservaciones());
         creditoRepo.save(c);
     }

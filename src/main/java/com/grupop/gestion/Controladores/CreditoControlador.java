@@ -63,8 +63,12 @@ public class CreditoControlador {
     @GetMapping("/form/{idCredito}")
     public ModelAndView getFormVisual(HttpServletRequest request, @PathVariable Long idCredito){
         ModelAndView mav = new ModelAndView("form-credito");
-        mav.addObject("credito", creditoServicio.obtenerPorId(idCredito));
+        Credito cred = creditoServicio.obtenerPorId(idCredito);
+        mav.addObject("credito", cred);
+        mav.addObject("action", "update");
+        mav.addObject("venta", ventaServicio.obtenerPorId(cred.getVenta().getId()));
         mav.addObject("listaPlanPago", planPagoServicio.obtenerTodos());
+        mav.addObject("listaCliente", entidadBaseServicio.obtenerClientes());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
@@ -114,9 +118,10 @@ public class CreditoControlador {
             creditoServicio.actualizar(dto);
             attributes.addFlashAttribute("exito", "Se ha actualizado el credito correctamente");
         } catch (Exception e){
+            System.out.println(e.getMessage());
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("credito", dto);
-            r.setUrl("/credito/form");
+            r.setUrl("/credito/form/" + dto.getId());
         }
         return r;
     }
