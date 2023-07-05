@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<header th:replace="Fragments/header :: header"></header>
+<header th:replace="~{Fragments/header :: header}"></header>
 
 
 <main class="container mt-2">
@@ -31,13 +31,12 @@
                                     <th>Venta</th>
                                     <th>Base Imponible</th>
                                     <th>Comision</th>
-                                    <th>Accion</th>
                                 </tr>
                         </thead>
                         <tbody class="tablebody">
                                 <tr th:each="xxx : ${listaComisiones}">
                                     <td th:text="${xxx.vendedor.id}"></td>
-                                    <td th:text="${xxx.venta}"></td>
+                                    <td th:text="|${xxx.venta.id} - ${xxx.venta.fechaComprobante} - ${xxx.venta.talonario.nroTalonario}-${xxx.venta.nroComprobante}|"></td>
                                     <td th:text="${xxx.baseImponible}"></td>
                                     <td th:text="${xxx.comisionGeneral}"></td>
                                 </tr>

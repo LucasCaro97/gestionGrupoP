@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<header th:replace="Fragments/header :: header"></header>
+<header th:replace="~{Fragments/header :: header}"></header>
 
 
 <main class="container mt-2">
@@ -49,6 +49,7 @@
                         <input type="submit" class="btn btn-info mb-2 " value="Buscar">
                         &nbsp;&nbsp;
                         <input type="submit" class="btn btn-secondary mb-2 " value="limpiar">
+
                         <div class="col-2 d-flex justify-content-end">
                             <a class="btn btn-primary mb-2" th:href="@{/producto/form}" style="margin-right: 5px;">Crear registro</a>
                         </div>
