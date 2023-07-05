@@ -80,9 +80,6 @@ public class VentaServicio {
         return ventaRepo.obtenerTotalPorId(id);
     }
 
-//    public List<Venta> obtenerVentasActivasParaCredito(Long idCliente) {
-//        return ventaRepo.obtenerVentasActivasParaCredito(idCliente);
-//    }
     @Transactional
     public void cerrarVenta(Long idVenta){
         Venta vta = ventaRepo.findById(idVenta).get();
@@ -93,6 +90,11 @@ public class VentaServicio {
     @Transactional(readOnly = true)
     public Boolean validarEstado(Long idVenta) {
         return ventaRepo.validarEstado(idVenta);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Venta> obtenerVentasSinCreditoPorCliente(Long id){
+        return ventaRepo.obtenerVentasSinCreditoPorCliente(id);
     }
 }
 

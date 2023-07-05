@@ -29,6 +29,7 @@ public class CreditoControlador {
     private final TipoComprobanteServicio tipoComprobanteServicio;
     private final TalonarioServicio talonarioServicio;
     private final VentaServicio ventaServicio;
+    private final CreditoDetalleServicio creditoDetalleServicio;
 
 
     @GetMapping
@@ -72,6 +73,7 @@ public class CreditoControlador {
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
+        mav.addObject("listaCreditoDetalle", creditoDetalleServicio.obtenerLineasDetalle(cred.getId()));
         return mav;
     }
 

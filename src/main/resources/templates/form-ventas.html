@@ -11,95 +11,11 @@
 </head>
 <body>
 
-<header>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Grupo Piñhero</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Entidades
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" th:href="@{/entidadBase}">Todos</a></li>
-                            <li><a class="dropdown-item" th:href="@{/entidadBase/clientes}">Clientes</a></li>
-                            <li><a class="dropdown-item" th:href="@{/entidadBase/proveedores}">Proveedores</a></li>
-                            <li><a class="dropdown-item" th:href="@{/entidadBase/empleados}">Empleados</a></li>
-                            <li><a class="dropdown-item" th:href="@{/entidadBase/vendedores}">Vendedores</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Operaciones
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Compras</a></li>
-                            <li><a class="dropdown-item" href="#">Ventas</a></li>
-                            <li><a class="dropdown-item" href="#">Pagos</a></li>
-                            <li><a class="dropdown-item" href="#">Cobros</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">
-                            Parametros Generales
-                        </a>
-                        <ul class="dropdown-menu multi-level" role="menu">
-                            <li><a class="dropdown-item" th:href="@{/tipoIva}">IVA</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/tipoEmpleado}">Tipo Empleado</a></li>
-                            <li><a class="dropdown-item" th:href="@{/puesto}">Puesto Empleado</a></li>
-                            <li><a class="dropdown-item" th:href="@{/sector}">Sector</a></li>
-                            <li><a class="dropdown-item" th:href="@{/turno}">Turno</a></li>
-                            <li><a class="dropdown-item" th:href="@{/departamento}">Departamento</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/moneda}">Moneda</a></li>
-                            <li><a class="dropdown-item" th:href="@{/tipoDePago}">Tipo de Pago</a></li>
-                            <li><a class="dropdown-item" th:href="@{/formaDePago}">Forma de Pago</a></li>
-                            <li><a class="dropdown-item" th:href="@{/tipoOperacion}">Tipo Operacion</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/tipoCuentaBanco}">Tipo Cuenta/Banco</a></li>
-                            <li><a class="dropdown-item" th:href="@{/ctaBcoTja}">Cuentas Banco/Tarjeta</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/tipoTot}">Tipo Totalizadora</a></li>
-                            <li><a class="dropdown-item" th:href="@{/ctaTot}">Cuentas Totalizadoras</a></li>
-                            <li><a class="dropdown-item" th:href="@{/impuestosCta}">Alta Impuestos</a></li>
-                            <li><a class="dropdown-item" th:href="@{/clasificacionCta}">Clasificacion Ctas Cont</a></li>
-                            <li><a class="dropdown-item" th:href="@{/cuentas}">Cuentas Contables</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" th:href="@{/tipoProducto}">Tipo Producto</a></li>
-
-
-                        </ul>
-                    </li>
-                    <a class="nav-link" th:href="@{/producto}">Productos</a>
-                    <a class="nav-link" th:href="@{/urbanizacion}">Urbanizaciones</a>
-                    <a class="nav-link" th:href="@{/lote}">Lotes</a>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</header>
+<header th:replace="Fragments/header :: header"></header>
 
 <main>
+
+    <div th:if="${exception}" th:text="${exception}" class="alert alert-danger" role="alert"></div>
 
     <div class="container">
         <div class="row mt-4">
@@ -206,6 +122,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Imputaciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab3-tab" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Comisiones</a>
                 </li>
             </ul>
 
@@ -512,6 +431,63 @@
                                 <td  th:text="${xxx.importe}" contenteditable='true' class='editable'></td>
                                 <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
                             </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="tab3" class="tab-pane fade" role="tabpanel" aria-labelledby="tab3-tab">
+
+
+                    <div class="p-2 comandosDet">
+                        <form class="row g-3 needs-validation d-flex justify-content-between" method="post" autocomplete="off">
+                            <div class="col-3">
+                                <label for="selectVendedor" class="form-label">Vendedor: </label>
+                                <select type="text" class="form-select" name="vendedor" id="selectVendedor">
+                                    <option selected value="">Seleccione vendedor</option>
+                                    <option th:each="xxx : ${listaVendedores}" th:value="${xxx.id}"></option>
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <label for="baseImponible" class="form-label">Base Imponible: </label>
+                                <input type="number" step="0.01" class="form-control" name="baseImponible" id="baseImponible">
+                            </div>
+                            <div class="col-2">
+                                <label for="porcentajeComisionGeneral" class="form-label">% Com Gral: </label>
+                                <input type="number" step="0.01" class="form-control" name="porcentajeComisionGeneral" id="porcentajeComisionGeneral">
+                            </div>
+                            <div class="col-2">
+                                <label for="comisionGeneral" class="form-label">$ Com Gral: </label>
+                                <input type="number" step="0.01" class="form-control" name="comisionGeneral" id="comisionGeneral">
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-outline-success" id="addCom" type="button" data-bs-toggle="modal">
+                                    Añadir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="tablaDetalleCom">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr class="table-dark">
+                                <th>Vendedor</th>
+                                <th>Base Imponible</th>
+                                <th>% Comision Gral</th>
+                                <th>$ Comision Gral</th>
+                                <th>Accion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="xxx : ${listaComisiones}">
+                                    <td class="vendedor" th:text="${xxx.vendedor}"></td>
+                                    <td th:text="${xxx.baseImponible}"></td>
+                                    <td th:text="${xxx.porcentajeComisionGeneral}"></td>
+                                    <td th:text="${xxx.comisionGeneral}"></td>
+                                    <td>
+                                        <a class="btn btn-danger" th:href="@{/comision/bajaComision/__${xxx.id}__}">Eliminar</a>
+                                    </td>
+
+                                </tr>
                             </tbody>
                         </table>
                     </div>

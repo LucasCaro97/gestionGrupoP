@@ -4,12 +4,15 @@ import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.CreditoDetalle;
 import com.grupop.gestion.Entidades.PlanPago;
 import com.grupop.gestion.Repositorios.CreditoRepo;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 @Service
@@ -24,6 +27,7 @@ public class CreditoServicio {
     @Transactional
     public void crear(Credito dto){
         PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
+
         Credito c = new Credito();
         c.setCliente(dto.getCliente());
         c.setFecha(dto.getFecha());
@@ -36,19 +40,35 @@ public class CreditoServicio {
         c.setCantCuotas(dto.getCantCuotas());
         c.setPorcentajeInteres(dto.getPorcentajeInteres());
         c.setInteresesTotales(dto.getCapital().multiply(dto.getPorcentajeInteres()).divide(new BigDecimal(100)));
-        c.setGastosAdministrativos(dto.getCapital().multiply(plan.getGastosAdministrativos()).divide(new BigDecimal(100)));
+        c.setGastosAdministrativos(dto.getCapital().multiply(plan.getPorcentajeGastos()).divide(new BigDecimal(100)));
         c.setCapital(dto.getCapital());
         c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
         c.setObservaciones(dto.getObservaciones());
+
         creditoRepo.save(c);
 
+        LocalDate fechaActual = LocalDate.now();
+        int anioActual = fechaActual.getYear();
+        Month mesActual = fechaActual.getMonth();
+        int diaVencimiento = plan.getVenceLosDias();
+
+
+
         Credito credito = creditoRepo.findFirstByOrderByIdDesc();
-        System.out.println(credito);
+        for(int i = 1; i <= plan.getCantCuota() ; i++){
 
-//        for(int i = 1; i <= plan.getCantCuota() ; i++){
-//            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().multiply(new BigDecimal(credito.getCantCuotas())));
-//        }
+            LocalDate fechaVencimiento = LocalDate.of(anioActual,mesActual,diaVencimiento);
+            System.out.println("Generando credito: " + i + " con fecha " + fechaVencimiento);
+            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento);
 
+            if(mesActual == Month.DECEMBER){
+                System.out.println("FIN DEL AÑO " + Month.DECEMBER);
+                mesActual = mesActual.plus(1);
+                anioActual++;
+            }else{
+                mesActual = mesActual.plus(1);
+            }
+        }
 
         //CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
         System.out.println("cerrando venta: " + dto.getVenta().getId());

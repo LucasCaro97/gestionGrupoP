@@ -21,4 +21,6 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
     @Query(value = "SELECT venta_cerrada FROM venta WHERE id = ?", nativeQuery = true)
     Boolean validarEstado(Long idVenta);
 
+    @Query(value = "SELECT * FROM venta WHERE venta_cerrada = 0 AND fk_cliente = ?", nativeQuery = true)
+    List<Venta> obtenerVentasSinCreditoPorCliente(Long id);
 }

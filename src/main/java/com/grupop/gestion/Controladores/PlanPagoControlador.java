@@ -5,6 +5,7 @@ import com.grupop.gestion.Servicios.IndiceCacServicio;
 import com.grupop.gestion.Servicios.PlanPagoServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -94,6 +95,11 @@ public class PlanPagoControlador {
         planPagoServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado el plan de pago correctamente");
         return r;
+    }
+
+    @GetMapping("/obtenerPlanPago/{id}")
+    public ResponseEntity<PlanPago> obtenerPlanPagoJSON(@PathVariable Long id){
+        return ResponseEntity.ok(planPagoServicio.obtenerPorId(id));
     }
 
 }

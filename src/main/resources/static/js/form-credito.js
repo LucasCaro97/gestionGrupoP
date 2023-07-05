@@ -36,8 +36,36 @@ $("#clienteNew").change(function(){
 console.log("Actualizar lista operaciones");
 });
 
+$("#planPago").change(function(){
+
+$.get("/planPago/obtenerPlanPago/" + $("#planPago").val(), function(datos,status){
+    $("#cantCuotas").val(datos.cantCuota);
+    $("#porcentajeInteres").val(datos.tasaInteresTotal);
+})
+
 
 });
+
+$("#clienteNew").change(function(){
+
+$.get("/ventas/obtenerVentasSinCreditoPorCliente/" + $("#clienteNew").val(), function(datos,status){
+        $("#idOperacionNew").empty();
+        $("#idOperacionNew").append($("<option value=''> Seleccione operacion </option>"));
+        $.each(datos, function (key, value) {
+            $("#idOperacionNew").append($("<option value='"+value.id+"'> "+ value.nroComprobante + " - " + value.fechaComprobante + " - $" +  value.total +" </option>"));
+        })
+    })
+})
+
+$("#idOperacionNew").change(function(){
+    console.log($("#idOperacionNew").val())
+    $.get("/ventas/obtenerTotalPorId/"+ $("#idOperacionNew").val(), function(dato,status){
+        $("#capitalNew").val(dato)
+    })
+})
+
+});
+
 
 function traducirCliente(selectCliente){
 
@@ -47,6 +75,5 @@ $.get("/entidadBase/obtenerNombrePorFkCliente/" + selectCliente.val(), function(
     selectCliente.append($("<option value='"+datos.id+"'> "+ datos.razonSocial +" </option>"));
          })
 }
-
 
 

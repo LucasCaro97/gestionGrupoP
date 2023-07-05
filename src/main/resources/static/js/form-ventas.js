@@ -69,6 +69,9 @@ $("#talonario").change(function(){
 //TRADUCIR CLIENTESID A NOMBRE
 traducirCliente($("#cliente"));
 
+//TRADUCIR VENDEDORID A NOMBRE
+traducirVendedor($("#selectVendedor"));
+
 //CARGO TIPO PRODUCTO
 $.get("/tipoProducto/obtenerTodos", function(datos,status){
     $.each(datos, function(key,value){
@@ -447,15 +450,25 @@ $("#btnAlta").click(function(){
 });
 
 
-/* NO PERMITIR CAMBIOS CUANDO LA VENTA POSEA UN PAGO GENERADO
-$('input').prop('readonly', true);
-$('select').prop('disabled', true);
-$('textarea').prop('readonly', true);
-$('#add').hide();
-$('#deleteRow').hide();
-$('#guardarItems').hide();
-$('#volverAtras ').hide();
-*/
+$("#porcentajeComisionGeneral").change(function(){
+let result = ($("#baseImponible").val() * $("#porcentajeComisionGeneral").val()) / 100;
+$("#comisionGeneral").val(result);
+})
+
+$("#baseImponible").change(function(){
+let result = ($("#baseImponible").val() * $("#porcentajeComisionGeneral").val()) / 100;
+$("#comisionGeneral").val(result);
+})
+
+
+$("#addCom").click(function(){
+generarComision();
+})
+
+traducirVendedorTabla();
+
+
+//FIN DOCUMENT READY
 });
 
 function traducirCliente(selectCliente){
@@ -482,8 +495,10 @@ fetch('/ventas/validarEstado/'+idVenta)
         console.log("la venta esta cerrada");
         comandosEncabezado = $("#comandos #btnAlta");
         comandosDetalle = $(".comandosDet");
-        comandosEncabezado.css('display', 'none')
-        comandosDetalle.css('visibility', 'hidden')
+        botonDeleteComision = $("#delComision");
+        comandosEncabezado.css('display', 'none');
+        comandosDetalle.css('visibility', 'hidden');
+        botonDeleteComision.css('display', 'none');
         $('input').prop('readonly', true);
         $('input').css('background-color', 'var(--bs-secondary-bg)');
         $('select').prop('disabled', true);
@@ -496,3 +511,46 @@ fetch('/ventas/validarEstado/'+idVenta)
   });
 
 }
+
+function traducirVendedor(selectVendedor){
+    let opciones = selectVendedor.find('option:not(:first)')
+
+    opciones.each(function(index, option){
+        let razonSocial;
+        let valor = $(option).val();
+
+        $.get("/entidadBase/obtenerNombrePorFkVendedor/" + valor, function(dato,status){
+            razonSocial = dato.razonSocial;
+            $(option).text(razonSocial);
+        })
+    })
+}
+
+function generarComision(){
+    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+    fetch("/comision/generarComision/"+ $("#selectVendedor").val() + "/" + $("#id").val() + "/" + $("#baseImponible").val() + "/" + $("#porcentajeComisionGeneral").val(), {
+        method : "POST",
+        headers:{
+            "Content-Type" : "application/json"
+        }
+    })
+    var tiempoEspera = 500;
+    function redireccionar() {
+        window.location.href= "/ventas/form/"+ $("#id").val();
+    }
+    setTimeout(redireccionar, tiempoEspera);
+
+}
+
+function traducirVendedorTabla(){
+
+     $("#tablaDetalleCom tbody tr").each(function(){
+            var idVendedor = $(this).find('td:eq(0)');
+            console.log("/entidadBase/obtenerNombrePorFkVendedor/"+idVendedor.text())
+
+            $.get("/entidadBase/obtenerNombrePorFkVendedor/" + idVendedor.text(), function(dato,status){
+                idVendedor.text(dato.razonSocial);
+            })
+        });
+}
+

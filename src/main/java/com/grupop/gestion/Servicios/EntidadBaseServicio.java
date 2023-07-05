@@ -146,4 +146,7 @@ public class EntidadBaseServicio {
     @Transactional(readOnly = true)
     public EntidadBase obtenerNombrePorFkCliente(Long id){ return entidadBaseRepo.obtenerNombreFkClienteId(id); }
 
+    @Transactional(readOnly = true)
+    public EntidadBase obtenerNombrePorFkVendedor(Long id) { return entidadBaseRepo.obtenerNombreFkVendedorId(id);    }
+
 }

@@ -43,6 +43,7 @@ public class VentaControlador {
     private final VentaDetalleImputacionServicio ventaDetalleImputacionServicio;
     private final CreditoServicio creditoServicio;
     private final ClienteServicio clienteServicio;
+    private final ComisionServicio comisionServicio;
 
 
     @GetMapping
@@ -73,6 +74,7 @@ public class VentaControlador {
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
         mav.addObject("listaProd", productoServicio.obtenerTodos());
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
+        mav.addObject("listaVendedores", entidadBaseServicio.obtenerVendedores());
         return mav;
     }
 
@@ -93,7 +95,8 @@ public class VentaControlador {
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
         mav.addObject("tablaDetalleImputacion", ventaDetalleImputacionServicio.obtenerPorVenta(id));
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
-
+        mav.addObject("listaVendedores", entidadBaseServicio.obtenerVendedores());
+        mav.addObject("listaComisiones", comisionServicio.obtenerComisionVenta(id));
         return mav;
     }
 
@@ -165,5 +168,12 @@ public class VentaControlador {
     public ResponseEntity<Boolean> validarEstado(@PathVariable Long idVenta){
         return  ResponseEntity.ok(ventaServicio.validarEstado(idVenta));
     }
+
+    @GetMapping("/obtenerVentasSinCreditoPorCliente/{id}")
+    public ResponseEntity<List<Venta>> obtenerVentasSinCreditoPorCliente(@PathVariable Long id){
+        return ResponseEntity.ok(ventaServicio.obtenerVentasSinCreditoPorCliente(id));
+    }
+
+
 
 }

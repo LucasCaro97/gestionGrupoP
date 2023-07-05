@@ -34,4 +34,6 @@ public interface EntidadBaseRepo extends JpaRepository<EntidadBase,Long> {
         EntidadBase obtenerNombreFkClienteId(Long id);
 
 
+        @Query(value = "SELECT * FROM entidad_base WHERE fk_vendedor = ?", nativeQuery = true)
+        EntidadBase obtenerNombreFkVendedorId(Long id);
 }

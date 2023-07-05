@@ -13,7 +13,6 @@ public interface VendedorRepo extends JpaRepository<Vendedor, Long> {
     @Query( value= "SELECT MAX(id_vendedor) FROM vendedor", nativeQuery = true)
     Long findLastId();
 
-    @Query( value= "SELECT * FROM vendedor INNER JOIN entidad_base ON vendedor.id = entidad_base.fk_vendedor", nativeQuery = true)
-    List<Vendedor> findSeller();
+
 
 }

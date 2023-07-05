@@ -31,6 +31,4 @@ public class VendedorServicio {
     @Transactional(readOnly = true)
     public Long buscarUltimoId(){ return vendedorRepo.findLastId(); }
 
-    @Transactional(readOnly = true)
-    public List<Vendedor> obtenerTodos(){ return vendedorRepo.findSeller(); }
 }
