@@ -25,9 +25,10 @@ if($(btnAlta).text() == "Crear"){
     $("#divDetalle").show();
 }
 
-if( (url.localeCompare("/ventas/form")) != 0){
+if( (url.localeCompare("/cobros/form")) != 0){
       $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
 
+        console.log(dato);
       $("#IVA").val(dato);
       $("#idIva").val(dato);
     });
@@ -41,6 +42,7 @@ if( (url.localeCompare("/ventas/form")) != 0){
 $("#cliente").change(function(){
 
       $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
+          console.log(dato);
         $("#IVA").val(dato);
         $("#idIva").val(dato);
       });
@@ -495,11 +497,10 @@ fetch('/ventas/validarEstado/'+idVenta)
         console.log("la venta esta cerrada");
         comandosEncabezado = $("#comandos #btnAlta");
         comandosDetalle = $(".comandosDet");
-        botonEliminarCom = $(".eliminarCom");
+        botonDeleteComision = $("#delComision");
         comandosEncabezado.css('display', 'none');
         comandosDetalle.css('visibility', 'hidden');
-        botonEliminarCom.css('display', 'none');
-
+        botonDeleteComision.css('display', 'none');
         $('input').prop('readonly', true);
         $('input').css('background-color', 'var(--bs-secondary-bg)');
         $('select').prop('disabled', true);

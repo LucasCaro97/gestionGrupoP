@@ -63,7 +63,7 @@ public class CompraControlador {
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaProd", productoServicio.obtenerTodos());
-        mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodos());
+        mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(2l));
         return mav;
     }
 

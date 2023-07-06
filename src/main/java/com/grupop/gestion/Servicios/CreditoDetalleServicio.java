@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.CreditoDetalle;
 import com.grupop.gestion.Repositorios.CreditoDetalleRepo;
@@ -19,18 +20,33 @@ public class CreditoDetalleServicio {
     private final CreditoDetalleRepo creditoDetalleRepo;
 
     @Transactional
-    public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento) {
+    public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento, Cliente idCliente) {
 
         CreditoDetalle creditoDetalle = new CreditoDetalle();
         creditoDetalle.setCreditoId(credito);
         creditoDetalle.setNroCuota(nroCuota);
         creditoDetalle.setMonto(valorCuota);
         creditoDetalle.setVencimiento(fechaVencimiento);
+        creditoDetalle.setCliente(idCliente);
+        creditoDetalle.setCobrado(false);
         creditoDetalleRepo.save(creditoDetalle);
     }
 
     @Transactional(readOnly = true)
     public List<CreditoDetalle> obtenerLineasDetalle(Long idCredito){
         return creditoDetalleRepo.obtenerPorCreditoId(idCredito);
+    }
+
+    @Transactional
+    public void marcarComoCancelada(Long creditoId, Integer nroCuota){
+        CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
+        c.setCobrado(true);
+        creditoDetalleRepo.save(c);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CreditoDetalle> obtenerCreditosPendientesPorFkCliente(Long id){
+        return creditoDetalleRepo.obtenerPorFkClienteAndEstado(id);
+        
     }
 }

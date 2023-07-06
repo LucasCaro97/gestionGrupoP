@@ -32,4 +32,5 @@ public class CobroDetalleCuotas {
     private BigDecimal importeAjuste;
     private BigDecimal porcIndice;
 
+
 }

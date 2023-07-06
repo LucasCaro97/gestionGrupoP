@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 public class CreditoDetalle {
 
 
@@ -20,8 +22,13 @@ public class CreditoDetalle {
     @JoinColumn(name = "fk_credito")
     @ManyToOne
     private Credito creditoId;
+    @JoinColumn(name = "fk_cliente")
+    @ManyToOne
+    private Cliente cliente;
     private Integer nroCuota;
     private BigDecimal monto;
     private LocalDate vencimiento;
+    private Boolean cobrado;
+
 
 }

@@ -59,7 +59,7 @@ public class CreditoServicio {
 
             LocalDate fechaVencimiento = LocalDate.of(anioActual,mesActual,diaVencimiento);
             System.out.println("Generando credito: " + i + " con fecha " + fechaVencimiento);
-            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento);
+            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento, credito.getCliente());
 
             if(mesActual == Month.DECEMBER){
                 System.out.println("FIN DEL AÑO " + Month.DECEMBER);
