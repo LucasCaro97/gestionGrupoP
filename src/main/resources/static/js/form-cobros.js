@@ -1,7 +1,5 @@
 
 $(document).ready(function () {
-validarEstado($("#id").val());
-
 var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
@@ -27,8 +25,6 @@ if($(btnAlta).text() == "Crear"){
 
 if( (url.localeCompare("/cobros/form")) != 0){
       $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
-
-        console.log(dato);
       $("#IVA").val(dato);
       $("#idIva").val(dato);
     });
@@ -42,7 +38,6 @@ if( (url.localeCompare("/cobros/form")) != 0){
 $("#cliente").change(function(){
 
       $.get(endPoint1 + $('select[id=cliente]').val(), function(dato){
-          console.log(dato);
         $("#IVA").val(dato);
         $("#idIva").val(dato);
       });
@@ -71,74 +66,24 @@ $("#talonario").change(function(){
 //TRADUCIR CLIENTESID A NOMBRE
 traducirCliente($("#cliente"));
 
-//TRADUCIR VENDEDORID A NOMBRE
-traducirVendedor($("#selectVendedor"));
-
-//CARGO TIPO PRODUCTO
-$.get("/tipoProducto/obtenerTodos", function(datos,status){
-    $.each(datos, function(key,value){
-        $("#tipoProd").append("<option value=" + value.id + ">" + value.descripcion + "</option>");
-    });
-});
-
-//CARGO CUENTA
-$.get("/cuentas/obtenerTodos", function(datos,status){
-    $.each(datos, function(key,value){
-        $("#cuenta").append("<option value=" + value.id + ">" + value.descripcion + "</option>");
-    });
-});
 
 //FUNCIONES TAB PRODUCTOS
-
-$("#filtro").click(function(){
-    var url;
-    $("#tablaProducto tbody").remove();
-    $("#tablaProducto").append("<tbody></tbody>");
-    var descripcion = $("#descripcion").val();
-    var cuenta = $("#cuenta").val();
-
-    if(descripcion!="" && cuenta != ""){
-        url = "/producto/obtenerPorDescripcionAndCuenta/"+ descripcion + "/" + cuenta;
-    }
-    if(descripcion=="" && cuenta != ""){
-        url = "/producto/obtenerPorCuenta/"+ cuenta;
-    }
-    if(descripcion!="" && cuenta == ""){
-        url = "/producto/obtenerPorDescripcion/"+ descripcion;
-    }
-    if(descripcion=="" && cuenta == ""){
-        alert("Para filtrar debe ingresar una descripcion o seleccionar una cuenta");
-    }
-
-    $.get(url, function(datos,status){
-        $.each(datos, function(key,value){
-            $("#tablaProducto tbody").append("<tr> + <td> "+ value.id +" </td> + <td>  "+ value.descripcion +"  </td>+ <td>  "+ value.cuentasContables.descripcion +"  </td> + <td>  <div + class='form-check text-center' + >   <input class='form-check-input row-item check' type='checkbox'>   </div> </td> + </tr>");
-        });
-    });
-});
-
-$("#limpiar").click(function(){
-    $("#tablaProducto tbody").remove();
-    $("#tablaProducto").append("<tbody></tbody>");
-    $.get("/producto/obtenerProductosTodos", function(datos,status){
-        $.each(datos, function(key,value){
-            $("#tablaProducto tbody").append("<tr> + <td> "+ value.id +" </td> + <td>  "+ value.descripcion +"  </td>+ <td>  "+ value.cuentasContables.descripcion +"  </td> + <td>  <div + class='form-check text-center' + >   <input class='form-check-input row-item check' type='checkbox'>   </div> </td> + </tr>");
-        });
-    });
-});
-
+//AGREGO ITEMS AL DETALLE DE COBROS ( CUOTAS ) - CAMBIAR ITEMS QUE SE BAJAN
 $("#addItem").click(function(){
     $("#tablaProducto tr").each(function(index, element){
         var checkbox = $(element).find(".check");
         if (checkbox.is(":checked")) {
             var filaEditable = $("<tr></tr>");
             var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
-            var celda2 = "<td  class='celdaOculta' >" + $(element).children().eq(0).text() + "</td>"
-            var celda3 = "<td contenteditable='true' class='editable'>1.0</td>"
-            var celda4 = "<td contenteditable='true' class='celdaMoneda editable'>0.00</td>"
-            var celda5 = "<td class='celdaMoneda'>0.00</td>"
-            var celda6 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
-            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6);
+            var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
+            var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
+            var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
+            var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
+            var celda6 = "<td contenteditable='true' class='editable'>" + $(element).children().eq(10).text() + "</td>"
+            var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
+            var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
+            var celda9 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9);
              $("#tablaDetalle tbody").append(filaEditable);
         }
     });
@@ -185,26 +130,7 @@ $("#confirmDelete").click(function(){
                 }
             })
 
-
-        fetch("/lote/setEstadoDisponible"+ "/" + idProducto, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                 }
-        })
-
-}
-
-
-            //console.log("Total luego de eliminar lineas: " + totalVenta)
-            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-                })
-
+    }
 var tiempoEspera = 500;
 function redireccionar() {
   window.location.href= "/ventas/form/"+ $("#id").val();
@@ -212,22 +138,11 @@ function redireccionar() {
 setTimeout(redireccionar, tiempoEspera);
 });
 
-$('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
-var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
-
-let totalVenta = 0;
-let cantidad = $(fila).children().eq(2).text(); // CANTIDAD
-let precioUnitario = $(fila).children().eq(3).text(); // PRECIO U
-$(fila).children().eq(4).text(cantidad*precioUnitario);
-
-    $("#tablaDetalle tbody tr").each(function(){
-        var valorCelda = $(this).find("td:eq(4)").text();
-        totalVenta += parseFloat(valorCelda);
-    });
-
-$("#totalVenta").val(totalVenta);
-
-});
+//$('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
+//var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
+//
+//
+//});
 
 
 //FUNCIONES TAB IMPUTACION
@@ -342,132 +257,123 @@ $(".guardarDetalle").click(function(){
 crearItemsDetalle();
 });
 
+//Calcula los dias vencidos que lleva cada cuota
+//Calcula el ajusteCac en casi de corresponder
+$("#tablaProducto tbody tr").each(function(){
+    let textoPrimerVencimiento = $('#tablaProducto tbody tr:first td:eq(11)').text();
+    let fechaPrimerVencimiento = new Date(textoPrimerVencimiento);
+    let mesPrimerVenc = fechaPrimerVencimiento.getMonth() + 1;
+    let anioPrimerVenc = fechaPrimerVencimiento.getFullYear();
+
+//calcularAjusteIndiceCac($(this).children().eq(2), $(this).children().eq(4) , new Date($('#tablaProducto tbody tr:first td:eq(11)').text())).then(resultado => {
+// $(this).children().eq(8).text(resultado);
+//})
+//
+//calcularDiasVencidos($(this).children().eq(11).text(), $(this).children().eq(12), $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6) );
+
+calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new Date(textoPrimerVencimiento), $(this).children().eq(8), $(this).children().eq(11).text() , $(this).children().eq(12),
+                $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6), $(this).children().eq(10) )
+
+
+})
+
+
+
 //agregar condicion para que solamente traiga el total cuando la venta exista en la bd
-$.get("/ventas/obtenerTotalPorId/" + $("#id").val())
-    .done(function(datos, status){
-           $("#totalVenta").val(datos);
-    })
-    .fail(function(jqXHR, textStatus, errorThrown){
-    console.log("No se puede traer el total porque la aun no esta en la base de datos");
-    })
+//$.get("/ventas/obtenerTotalPorId/" + $("#id").val())
+//    .done(function(datos, status){
+//           $("#totalVenta").val(datos);
+//    })
+//    .fail(function(jqXHR, textStatus, errorThrown){
+//    console.log("No se puede traer el total porque la aun no esta en la base de datos");
+//    })
 
 
-
-function crearItemsDetalle(){
-    let total = 0;
-
-    function confirmSave(){
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalle/altaDetalle/";
-        var nuevaUrl = urlObj.href;
-
-
-        //RECORRO TABLA DETALLE PRODUCTO
-        $("#tablaDetalle tbody tr").each(function(){
-            let idVenta = $("#id").val();
-            let descProd = $(this).children().eq(0).text();
-            let idProd = $(this).children().eq(1).text();
-            let cantidad = parseFloat($(this).children().eq(2).text());
-            let precioU =  parseFloat($(this).children().eq(3).text());
-
-            let totalLinea = (cantidad*precioU);
-            total += totalLinea;
-
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-
-            fetch("/lote/setEstadoVendido"+ "/" + idProd, {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-            })
-
-        });
-    };
-
-    function confirmSaveImp(){
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalleImputacion/altaDetalle/";
-        var nuevaUrl = urlObj.href;
-
-        //RECORRO TABLA DETALLE IMPUTACION
-        $("#tablaDetalleImp tbody tr").each(function(){
-            let idVenta = $("#id").val();
-            let descCta = $(this).children().eq(0).text();
-            let idCta = $(this).children().eq(1).text();
-            let importe = parseFloat($(this).children().eq(2).text());
-
-
-            total = total + importe;
-
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-        });
-    };
-
-    confirmSave();
-    confirmSaveImp();
-
-
-
-    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-    fetch("/ventas/actualizarTotalVenta/" + $("#id").val() + "/" + total, {
-            method : "POST",
-            headers:{
-            "Content-Type" : "application/json"
-            }
-    })
-
-    var tiempoEspera = 500;
-    function redireccionar() {
-      window.location.href= "/ventas/form/"+ $("#id").val();
-    }
-    setTimeout(redireccionar, tiempoEspera);
-}
-
-//Redirije a la vista de credio cuando la forma de pago es credito
-$("#btnAlta").click(function(){
-    let texto = $("#btnAlta").text();
-    let contenidoFP = $("#formaDePago").val();
-    if(texto == "Guardar"){
-        if(contenidoFP == 3){
-        alert("Sera redirigido a la vista para generar el credito de la venta")
-            window.location.href= "credito/form/new/" + $("#id").val();
-        }
-    }
-
-});
-
-
-$("#porcentajeComisionGeneral").change(function(){
-let result = ($("#baseImponible").val() * $("#porcentajeComisionGeneral").val()) / 100;
-$("#comisionGeneral").val(result);
-})
-
-$("#baseImponible").change(function(){
-let result = ($("#baseImponible").val() * $("#porcentajeComisionGeneral").val()) / 100;
-$("#comisionGeneral").val(result);
-})
-
-
-$("#addCom").click(function(){
-generarComision();
-})
-
-traducirVendedorTabla();
+//ALTA DE ITEMS DETALLE A LA BD
+//function crearItemsDetalle(){
+//    let total = 0;
+//
+//    function confirmSave(){
+//        var url = window.location.href;
+//        var urlObj = new URL(url);
+//        urlObj.pathname = "/ventaDetalle/altaDetalle/";
+//        var nuevaUrl = urlObj.href;
+//
+//
+//        //RECORRO TABLA DETALLE PRODUCTO
+//        $("#tablaDetalle tbody tr").each(function(){
+//            let idVenta = $("#id").val();
+//            let descProd = $(this).children().eq(0).text();
+//            let idProd = $(this).children().eq(1).text();
+//            let cantidad = parseFloat($(this).children().eq(2).text());
+//            let precioU =  parseFloat($(this).children().eq(3).text());
+//
+//            let totalLinea = (cantidad*precioU);
+//            total += totalLinea;
+//
+//            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+//            fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
+//                method : "POST",
+//                headers:{
+//                "Content-Type" : "application/json"
+//                }
+//            })
+//
+//            fetch("/lote/setEstadoVendido"+ "/" + idProd, {
+//                            method : "POST",
+//                            headers:{
+//                            "Content-Type" : "application/json"
+//                            }
+//            })
+//
+//        });
+//    };
+//
+//    function confirmSaveImp(){
+//        var url = window.location.href;
+//        var urlObj = new URL(url);
+//        urlObj.pathname = "/ventaDetalleImputacion/altaDetalle/";
+//        var nuevaUrl = urlObj.href;
+//
+//        //RECORRO TABLA DETALLE IMPUTACION
+//        $("#tablaDetalleImp tbody tr").each(function(){
+//            let idVenta = $("#id").val();
+//            let descCta = $(this).children().eq(0).text();
+//            let idCta = $(this).children().eq(1).text();
+//            let importe = parseFloat($(this).children().eq(2).text());
+//
+//
+//            total = total + importe;
+//
+//            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+//            fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
+//                method : "POST",
+//                headers:{
+//                "Content-Type" : "application/json"
+//                }
+//            })
+//        });
+//    };
+//
+//    confirmSave();
+//    confirmSaveImp();
+//
+//
+//
+//    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//    fetch("/ventas/actualizarTotalVenta/" + $("#id").val() + "/" + total, {
+//            method : "POST",
+//            headers:{
+//            "Content-Type" : "application/json"
+//            }
+//    })
+//
+//    var tiempoEspera = 500;
+//    function redireccionar() {
+//      window.location.href= "/ventas/form/"+ $("#id").val();
+//    }
+//    setTimeout(redireccionar, tiempoEspera);
+//}
 
 
 //FIN DOCUMENT READY
@@ -487,72 +393,124 @@ function traducirCliente(selectCliente){
     })
 }
 
-function validarEstado(idVenta){
+function calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun){
+let fechaActual = new Date();
+var fechaPago = new Date (fechaVenc);
+var diferenciaMs = fechaActual - fechaPago;
+var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+    if(diasAtraso > 0){
+        celdaDiasVenc.text(diasAtraso);
+        let cuotaBase = parseFloat(celdaCuotaBase.text());
+        let ajuste = 82612.10;
+        let porcPun = parseFloat(celdaPorcIntPun.text());
 
-fetch('/ventas/validarEstado/'+idVenta)
-  .then(response => response.text())
-  .then(data => {
-    const ventaCerrada = (data === "true");
-    if(ventaCerrada===true){
-        console.log("la venta esta cerrada");
-        comandosEncabezado = $("#comandos #btnAlta");
-        comandosDetalle = $(".comandosDet");
-        botonDeleteComision = $("#delComision");
-        comandosEncabezado.css('display', 'none');
-        comandosDetalle.css('visibility', 'hidden');
-        botonDeleteComision.css('display', 'none');
-        $('input').prop('readonly', true);
-        $('input').css('background-color', 'var(--bs-secondary-bg)');
-        $('select').prop('disabled', true);
-        $('textarea').prop('readonly', true);
-        $('textarea').css('background-color', 'var(--bs-secondary-bg)');
+        let interesPun = (cuotaBase + ajuste) * porcPun * diasAtraso / 100
+        let interesPunRound = interesPun.toFixed(2);
+        celdaInteresPun.text(interesPunRound)
     }
-    })
-  .catch(error => {
-    console.error('Error al obtener el valor booleano:', error);
-  });
-
 }
 
-function traducirVendedor(selectVendedor){
-    let opciones = selectVendedor.find('option:not(:first)')
+async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste){
+    let idCredito = celdaCredito.text();
+    let cuotaBase = celdaCuotaBase.text()
 
-    opciones.each(function(index, option){
-        let razonSocial;
-        let valor = $(option).val();
+    mesPrimerVenc = fechaPrimerVencimiento.getMonth()
+    anioPrimerVenc= fechaPrimerVencimiento.getFullYear()
+    diaPrimerVenc = fechaPrimerVencimiento.getDate()
 
-        $.get("/entidadBase/obtenerNombrePorFkVendedor/" + valor, function(dato,status){
-            razonSocial = dato.razonSocial;
-            $(option).text(razonSocial);
-        })
-    })
-}
+    let indiceBase = 0;
+    let indiceActual = 0
 
-function generarComision(){
-    //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-    fetch("/comision/generarComision/"+ $("#selectVendedor").val() + "/" + $("#id").val() + "/" + $("#baseImponible").val() + "/" + $("#porcentajeComisionGeneral").val(), {
-        method : "POST",
-        headers:{
-            "Content-Type" : "application/json"
-        }
-    })
-    var tiempoEspera = 500;
-    function redireccionar() {
-        window.location.href= "/ventas/form/"+ $("#id").val();
+
+    let fechaIndiceBase = obtenerMesIndiceBase(anioPrimerVenc, mesPrimerVenc, diaPrimerVenc)
+    let fechaIndiceActual = obtenerMesIndiceActual()
+
+    try{
+    const dato = await $.get("/credito/obtenerPorId/" + idCredito);
+    if(dato.planPago.tablaCac){
+
+        const indiceBaseResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() + 1 ) + "/" + fechaIndiceBase.getFullYear());
+        indiceBase = indiceBaseResponse;
+
+        const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
+        indiceActual = indiceActualResponse;
+
+        let resultado =   cuotaBase * ( indiceActual / indiceBase );
+        let importeAjuste = resultado - cuotaBase;
+        let importeAjusteRound = importeAjuste.toFixed(2);
+        celdaImporteAjuste.text(importeAjusteRound)
     }
-    setTimeout(redireccionar, tiempoEspera);
+
+    } catch(error){
+        console.log("Error al obtener los datos: ", error)
+    }
 
 }
 
-function traducirVendedorTabla(){
-
-     $("#tablaDetalleCom tbody tr").each(function(){
-            var idVendedor = $(this).find('td:eq(0)');
-            console.log("/entidadBase/obtenerNombrePorFkVendedor/"+idVendedor.text())
-
-            $.get("/entidadBase/obtenerNombrePorFkVendedor/" + idVendedor.text(), function(dato,status){
-                idVendedor.text(dato.razonSocial);
-            })
-        });
+function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celdaTotal){
+    let cuotaBase = parseFloat(celdaCuotaBase.text())
+    let interesPunitorio = parseFloat(celdaInteresPun.text())
+    let ajuste = parseFloat(celdaImporteAjuste.text())
+    let resultado = cuotaBase + interesPunitorio + ajuste
+    let resultadoRound = resultado.toFixed(2)
+    celdaTotal.text(resultadoRound)
 }
 
+function obtenerMesIndiceBase(year, mes, dia){
+        var ultimoDia = new Date(year, mes, 0);
+
+        for(let i = 0; i < 2 ; i++){
+
+            if (mes === 0) {
+                mes = 11;
+                year = year - 1;
+            } else {
+                mes = mes - 1;
+            }
+            if (dia > ultimoDia.getDate()) {
+                dia = ultimoDia.getDate();
+            }
+                var fechaRet = new Date(year, mes, dia);
+            }
+
+        return fechaRet;
+}
+
+
+function obtenerMesIndiceActual(){
+
+        let fechaIndiceActual = new Date()
+        let year = fechaIndiceActual.getFullYear()
+        let mes = fechaIndiceActual.getMonth()
+        let dia = fechaIndiceActual.getDate()
+
+
+        var ultimoDia = new Date(year, mes, 0);
+
+        for(let i = 0; i < 2 ; i++){
+
+            if (mes === 0) {
+                mes = 11;
+                year = year - 1;
+            } else {
+                mes = mes - 1;
+            }
+            if (dia > ultimoDia.getDate()) {
+                dia = ultimoDia.getDate();
+            }
+                var fechaRet = new Date(year, mes, dia);
+            }
+
+        return fechaRet;
+
+
+}
+
+
+
+
+async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste , fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun, celdaTotal){
+    await calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste)
+    await calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun)
+    calcularTotal(celdaCuotaBase, celdaInteresPun , celdaAjuste, celdaTotal )
+}

@@ -86,8 +86,9 @@
                     <div class="col-md-6">
                         <label for="tablaCac"  class="form-label">Indice Cac: </label>
                         <select class="form-select" id="tablaCac" th:field="*{tablaCac}">
-                            <option selected value="">Seleccionar indice</option>
-                            <option th:each="xxx : ${listaIndice}" th:text="|${xxx.mes}/${xxx.anio} - ${xxx.indice}|" th:value="${xxx.id}"></option>
+                            <option selected value="">Ajusta indice</option>
+                            <option th:value="1">Si</option>
+                            <option th:value="0">No</option>
                         </select>
                     </div>
                 </div>

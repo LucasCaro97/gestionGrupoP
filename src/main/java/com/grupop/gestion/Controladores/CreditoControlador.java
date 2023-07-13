@@ -5,6 +5,7 @@ import com.grupop.gestion.Entidades.TipoComprobante;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -134,6 +135,11 @@ public class CreditoControlador {
         creditoServicio.eliminarPorId(id);
         attributes.addFlashAttribute("Se ha eliminado el registro correctamente");
         return r;
+    }
+
+    @GetMapping("/obtenerPorId/{id}")
+    public ResponseEntity<Credito> obtenerPorId(@PathVariable Long id){
+        return ResponseEntity.ok(creditoServicio.obtenerPorId(id));
     }
 
 

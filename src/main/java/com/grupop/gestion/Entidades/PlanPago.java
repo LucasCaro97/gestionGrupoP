@@ -32,10 +32,7 @@ public class PlanPago {
     private BigDecimal importeMaximo;
     //VENCIMIENTO
     private Integer venceLosDias;
-
-    @JoinColumn(name = "fk_indiceCac")
-    @ManyToOne
-    private IndiceCAC tablaCac;
+    private Boolean tablaCac;
 
 
 }

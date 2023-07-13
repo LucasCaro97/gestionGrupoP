@@ -1,12 +1,15 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.IndiceCAC;
+import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Repositorios.IndiceCacRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -14,6 +17,7 @@ import java.util.List;
 public class IndiceCacServicio {
 
     private final IndiceCacRepo indiceCacRepo;
+    private final VentaServicio ventaServicio;
 
     @Transactional
     public void crear(IndiceCAC dto){
@@ -47,4 +51,12 @@ public class IndiceCacServicio {
     @Transactional
     public void eliminarPorId(Long id){ indiceCacRepo.deleteById(id);}
 
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerIndiceBase(Integer mes, Integer anio) {
+
+        System.out.println("Mes: " + mes + " Año: " + anio);
+
+        System.out.println( indiceCacRepo.obtenerIndiceBase(mes,anio));
+        return indiceCacRepo.obtenerIndiceBase(mes,anio);
+    }
 }

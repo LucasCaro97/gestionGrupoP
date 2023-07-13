@@ -47,6 +47,7 @@ public class CreditoServicio {
 
         creditoRepo.save(c);
 
+
         LocalDate fechaActual = LocalDate.now();
         int anioActual = fechaActual.getYear();
         Month mesActual = fechaActual.getMonth();

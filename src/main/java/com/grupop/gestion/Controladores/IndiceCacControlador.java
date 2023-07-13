@@ -4,6 +4,7 @@ import com.grupop.gestion.Entidades.IndiceCAC;
 import com.grupop.gestion.Servicios.IndiceCacServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -90,6 +92,12 @@ public class IndiceCacControlador {
         indiceCacServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado el registro correctamente");
         return r;
+    }
+
+
+    @GetMapping("/obtenerIndice/{mes}/{anio}")
+    public ResponseEntity<BigDecimal> obtenerIndiceBase(@PathVariable Integer mes, @PathVariable Integer anio){
+       return ResponseEntity.ok(indiceCacServicio.obtenerIndiceBase(mes, anio));
     }
 
 
