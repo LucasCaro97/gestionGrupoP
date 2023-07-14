@@ -49,4 +49,11 @@ public class CreditoDetalleServicio {
         return creditoDetalleRepo.obtenerPorFkClienteAndEstado(id);
         
     }
+
+    @Transactional
+    public void marcarComoNoCancelada(Long idCred, Integer nroCuota) {
+        CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(idCred, nroCuota);
+        c.setCobrado(false);
+        creditoDetalleRepo.save(c);
+    }
 }

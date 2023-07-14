@@ -79,11 +79,13 @@ $("#addItem").click(function(){
             var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
             var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
             var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
-            var celda6 = "<td contenteditable='true' class='editable'>" + $(element).children().eq(10).text() + "</td>"
+            var celda6 = "<td>" + $(element).children().eq(10).text() + "</td>"
             var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
             var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
-            var celda9 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
-            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9);
+            var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+            var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+            var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
              $("#tablaDetalle tbody").append(filaEditable);
         }
     });
@@ -92,7 +94,7 @@ $("#addItem").click(function(){
 
 $("#confirmDelete").click(function(){
         var filasMarcadas=[];
-        var totalVenta = $("#totalVenta").val();
+//        var totalVenta = $("#totalVenta").val();
 
         //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
         $("#tablaDetalle tbody tr").each(function(){
@@ -113,17 +115,18 @@ $("#confirmDelete").click(function(){
 
 
         var totalLinea = filaMarcada.find("td:eq(4)").text();
-        totalVenta -= totalLinea;
-        var idProducto = filaMarcada.find("td:eq(1)").text();
-        var idVenta = $("#id").val();
+//        totalVenta -= totalLinea;
+        var idCred = filaMarcada.find("td:eq(1)").text();
+        var nroCuota = filaMarcada.find("td:eq(2)").text();
+        var idCobro = $("#id").val();
 
 
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalle/bajaDetalle/";
+        urlObj.pathname = "/cobroDetalleCuotas/delete/";
         var nuevaUrl = urlObj.href;
         //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-        fetch(nuevaUrl+ idVenta + "/" + idProducto, {
+        fetch(nuevaUrl+ idCred + "/" + nroCuota + "/" + idCobro, {
                 method : "POST",
                 headers:{
                 "Content-Type" : "application/json"
@@ -133,17 +136,10 @@ $("#confirmDelete").click(function(){
     }
 var tiempoEspera = 500;
 function redireccionar() {
-  window.location.href= "/ventas/form/"+ $("#id").val();
+  window.location.href= "/cobros/form/"+ $("#id").val();
 }
 setTimeout(redireccionar, tiempoEspera);
 });
-
-//$('.editable').on('input', function() { //DETECTO QUE SE ALTERO UNA CELDA
-//var fila = $(this).closest('tr'); //obtengo la fila donde se realizo la alteracion
-//
-//
-//});
-
 
 //FUNCIONES TAB IMPUTACION
 $("#filtroImp").click(function(){
@@ -258,18 +254,13 @@ crearItemsDetalle();
 });
 
 //Calcula los dias vencidos que lleva cada cuota
-//Calcula el ajusteCac en casi de corresponder
+//Calcula el ajusteCac en caso de corresponder
 $("#tablaProducto tbody tr").each(function(){
     let textoPrimerVencimiento = $('#tablaProducto tbody tr:first td:eq(11)').text();
     let fechaPrimerVencimiento = new Date(textoPrimerVencimiento);
     let mesPrimerVenc = fechaPrimerVencimiento.getMonth() + 1;
     let anioPrimerVenc = fechaPrimerVencimiento.getFullYear();
 
-//calcularAjusteIndiceCac($(this).children().eq(2), $(this).children().eq(4) , new Date($('#tablaProducto tbody tr:first td:eq(11)').text())).then(resultado => {
-// $(this).children().eq(8).text(resultado);
-//})
-//
-//calcularDiasVencidos($(this).children().eq(11).text(), $(this).children().eq(12), $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6) );
 
 calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new Date(textoPrimerVencimiento), $(this).children().eq(8), $(this).children().eq(11).text() , $(this).children().eq(12),
                 $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6), $(this).children().eq(10) )
@@ -290,45 +281,46 @@ calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new
 
 
 //ALTA DE ITEMS DETALLE A LA BD
-//function crearItemsDetalle(){
-//    let total = 0;
-//
-//    function confirmSave(){
-//        var url = window.location.href;
-//        var urlObj = new URL(url);
-//        urlObj.pathname = "/ventaDetalle/altaDetalle/";
-//        var nuevaUrl = urlObj.href;
-//
-//
+function crearItemsDetalle(){
+    let total = 0;
+
+    function confirmSave(){
+        var url = window.location.href;
+        var urlObj = new URL(url);
+        urlObj.pathname = "/cobroDetalleCuotas/alta/";
+        var nuevaUrl = urlObj.href;
+
+        console.log("URL: " + url)
+        console.log("URL OBJ: " + urlObj)
+        console.log(nuevaUrl)
+
 //        //RECORRO TABLA DETALLE PRODUCTO
-//        $("#tablaDetalle tbody tr").each(function(){
-//            let idVenta = $("#id").val();
-//            let descProd = $(this).children().eq(0).text();
-//            let idProd = $(this).children().eq(1).text();
-//            let cantidad = parseFloat($(this).children().eq(2).text());
-//            let precioU =  parseFloat($(this).children().eq(3).text());
-//
+        $("#tablaDetalle tbody tr").each(function(){
+            let idVenta = $(this).children().eq(0).text();
+            let idCred = $(this).children().eq(1).text();
+            let nroCuota = $(this).children().eq(2).text();
+            let fechaVenc = $(this).children().eq(3).text();
+            let cuotaBase = $(this).children().eq(4).text();
+            let ajuste = $(this).children().eq(6).text();
+            let punitorio = $(this).children().eq(7).text();
+            let importeBonif = $(this).children().eq(8).text();
+            let importeFinal = $(this).children().eq(9).text();
+
+
 //            let totalLinea = (cantidad*precioU);
 //            total += totalLinea;
-//
-//            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-//            fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
-//                method : "POST",
-//                headers:{
-//                "Content-Type" : "application/json"
-//                }
-//            })
-//
-//            fetch("/lote/setEstadoVendido"+ "/" + idProd, {
-//                            method : "POST",
-//                            headers:{
-//                            "Content-Type" : "application/json"
-//                            }
-//            })
-//
-//        });
-//    };
-//
+
+            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+//          fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc+ "/" + cuotaBase + "/" + ajuste + "/" + punitorio+ "/" + importeBonif + "/" + importeFinal, {
+            fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() , {
+                            method : "POST",
+                            headers:{
+                            "Content-Type" : "application/json"
+                            }
+            })
+        });
+    };
+
 //    function confirmSaveImp(){
 //        var url = window.location.href;
 //        var urlObj = new URL(url);
@@ -355,7 +347,7 @@ calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new
 //        });
 //    };
 //
-//    confirmSave();
+    confirmSave();
 //    confirmSaveImp();
 //
 //
@@ -368,12 +360,12 @@ calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new
 //            }
 //    })
 //
-//    var tiempoEspera = 500;
-//    function redireccionar() {
-//      window.location.href= "/ventas/form/"+ $("#id").val();
-//    }
-//    setTimeout(redireccionar, tiempoEspera);
-//}
+    var tiempoEspera = 500;
+    function redireccionar() {
+      window.location.href= "/cobros/form/"+ $("#id").val();
+    }
+    setTimeout(redireccionar, tiempoEspera);
+}
 
 
 //FIN DOCUMENT READY
@@ -476,7 +468,6 @@ function obtenerMesIndiceBase(year, mes, dia){
         return fechaRet;
 }
 
-
 function obtenerMesIndiceActual(){
 
         let fechaIndiceActual = new Date()
@@ -505,9 +496,6 @@ function obtenerMesIndiceActual(){
 
 
 }
-
-
-
 
 async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste , fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun, celdaTotal){
     await calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste)

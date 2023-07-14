@@ -120,10 +120,10 @@
         <div class="tabs">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Ventas Cta. Cte.</a>
+                    <a class="nav-link active" id="tab1-tab" data-bs-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="true">Cuotas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Cuotas</a>
+                    <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Ventas Cta. Cte.</a>
                 </li>
             </ul>
 
@@ -269,11 +269,29 @@
                                 <th>Importe a Cobrar</th>
                                 <th>Interes Intereses</th>
                                 <th>Importe Ajuste</th>
+                                <th>$ Bonif</th>
+                                <th>Final</th>
                                 <th>Accion</th>
                             </tr>
                             </thead>
                             <tbody>
-<!--                            <tr th:each="xxx : ${listaDetalle}" ></tr>-->
+                            <tr th:each="xxx : ${tablaDetalleCuotas}">
+                                <td th:text="${xxx.ventaId.id}"></td>
+                                <td th:text="${xxx.creditoId.id}"></td>
+                                <td th:text="${xxx.nroCuota}"></td>
+                                <td th:text="${xxx.fechaVencimiento}"></td>
+                                <td th:text="${xxx.importeCuota}"></td>
+                                <td th:text="${xxx.importeACobrar}"></td>
+                                <td th:text="${xxx.importeIntereses}"></td>
+                                <td th:text="${xxx.importeAjuste}"></td>
+                                <td contenteditable="true" th:text="${xxx.importeBonificacion}"></td>
+                                <td th:text="${xxx.importeFinal}"></td>
+                                <td>
+                                    <div class="form-check text-center">
+                                        <input class="form-check-input row-item check" type="checkbox">
+                                    </div>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

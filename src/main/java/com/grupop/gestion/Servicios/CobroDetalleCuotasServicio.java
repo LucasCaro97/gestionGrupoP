@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.CobroDetalleCuotas;
+import com.grupop.gestion.Entidades.CreditoDetalle;
 import com.grupop.gestion.Repositorios.CobroDetalleCuotasRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,21 +23,34 @@ public class CobroDetalleCuotasServicio {
     private final CreditoDetalleServicio creditoDetalleServicio;
 
     @Transactional
-    public void crear(Long cobroId, Long ventaId, Long creditoId, Integer nroCuota, LocalDate fechaVencimiento,
-                      BigDecimal importeCuota, BigDecimal importeACobrar, BigDecimal importeIntereses, BigDecimal importeAjuste, BigDecimal porcIndice){
+    public void crear(Long idVenta, Long idCred, Integer nroCuota, LocalDate fechaVenc, BigDecimal cuotaBase, BigDecimal ajuste, BigDecimal importePuni, BigDecimal importeBonif, BigDecimal importeFinal, Long idCobro) {
         CobroDetalleCuotas c = new CobroDetalleCuotas();
-        c.setCobroId(cobroServicio.obtenerPorId(cobroId));
-        c.setVentaId(ventaServicio.obtenerPorId(ventaId));
-        c.setCreditoId(creditoServicio.obtenerPorId(creditoId));
+        c.setVentaId((ventaServicio.obtenerPorId(idVenta)));
+        c.setCobroId(cobroServicio.obtenerPorId(idCobro));
+        c.setCreditoId(creditoServicio.obtenerPorId(idCred));
         c.setNroCuota(nroCuota);
-        c.setFechaVencimiento(fechaVencimiento);
-        c.setImporteCuota(importeCuota);
-        c.setImporteACobrar(importeACobrar);
-        c.setImporteIntereses(importeIntereses);
-        c.setImporteAjuste(importeAjuste);
-        c.setPorcIndice(porcIndice);
+        c.setFechaVencimiento(fechaVenc);
+        c.setImporteCuota(cuotaBase);
+        c.setImporteAjuste(ajuste);
+        c.setImporteIntereses(importePuni);
+        c.setImporteACobrar(c.getImporteCuota().add(c.getImporteAjuste()).add(c.getImporteIntereses()));
+        c.setImporteBonificacion(importeBonif);
+        c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
         cobroDetalleCuotasRepo.save(c);
-        creditoDetalleServicio.marcarComoCancelada(creditoId, nroCuota);
+        creditoDetalleServicio.marcarComoCancelada(idCred,nroCuota);
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<CobroDetalleCuotas> obtenerPorCobro(Long id) {
+        return cobroDetalleCuotasRepo.obtenerPorCobro(id);
+    }
+
+    @Transactional
+    public void eliminarLineaDetalle(Long idCred, Integer nroCuota, Long idCobro){
+        cobroDetalleCuotasRepo.eliminarDetalle(idCred, nroCuota, idCobro);
+        creditoDetalleServicio.marcarComoNoCancelada(idCred, nroCuota);
+
     }
 
 

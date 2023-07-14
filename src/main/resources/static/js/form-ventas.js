@@ -366,8 +366,9 @@ function crearItemsDetalle(){
             let idVenta = $("#id").val();
             let descProd = $(this).children().eq(0).text();
             let idProd = $(this).children().eq(1).text();
-            let cantidad = parseFloat($(this).children().eq(2).text());
-            let precioU =  parseFloat($(this).children().eq(3).text());
+            let cantidad = parseFloat( $(this).children().eq(2).text() );
+            let precioU =  parseFloat( $(this).children().eq(3).text().replace(/\./g, '').replace(',', '.') );
+
 
             let totalLinea = (cantidad*precioU);
             total += totalLinea;
@@ -401,7 +402,7 @@ function crearItemsDetalle(){
             let idVenta = $("#id").val();
             let descCta = $(this).children().eq(0).text();
             let idCta = $(this).children().eq(1).text();
-            let importe = parseFloat($(this).children().eq(2).text());
+            let importe = parseFloat($(this).children().eq(2).text().replace(/\./g, '').replace(',', '.'));
 
 
             total = total + importe;

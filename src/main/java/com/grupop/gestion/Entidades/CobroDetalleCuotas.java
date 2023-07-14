@@ -31,6 +31,9 @@ public class CobroDetalleCuotas {
     private BigDecimal importeIntereses;
     private BigDecimal importeAjuste;
     private BigDecimal porcIndice;
+    private BigDecimal importeBonificacion;
+    private Double porcBonificacion;
+    private BigDecimal importeFinal;
 
 
 }

@@ -33,6 +33,7 @@ public class CobroControlador {
     private final FormaDePagoServicio formaDePagoServicio;
     private final TipoIvaServicio tipoIvaServicio;
     private final CreditoDetalleServicio creditoDetalleServicio;
+    private final CobroDetalleCuotasServicio cobroDetalleCuotasServicio;
 
 
     @GetMapping
@@ -80,6 +81,7 @@ public class CobroControlador {
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(3l));
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
         mav.addObject("listaCuotasCliente", creditoDetalleServicio.obtenerCreditosPendientesPorFkCliente(cobro.getCliente().getId()));
+        mav.addObject("tablaDetalleCuotas", cobroDetalleCuotasServicio.obtenerPorCobro(id));
         return mav;
     }
 

@@ -53,10 +53,6 @@ public class IndiceCacServicio {
 
     @Transactional(readOnly = true)
     public BigDecimal obtenerIndiceBase(Integer mes, Integer anio) {
-
-        System.out.println("Mes: " + mes + " Año: " + anio);
-
-        System.out.println( indiceCacRepo.obtenerIndiceBase(mes,anio));
         return indiceCacRepo.obtenerIndiceBase(mes,anio);
     }
 }
