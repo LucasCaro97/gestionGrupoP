@@ -296,15 +296,21 @@ function crearItemsDetalle(){
 
 //        //RECORRO TABLA DETALLE PRODUCTO
         $("#tablaDetalle tbody tr").each(function(){
-            let idVenta = $(this).children().eq(0).text();
-            let idCred = $(this).children().eq(1).text();
-            let nroCuota = $(this).children().eq(2).text();
-            let fechaVenc = $(this).children().eq(3).text();
-            let cuotaBase = $(this).children().eq(4).text();
-            let ajuste = $(this).children().eq(6).text();
-            let punitorio = $(this).children().eq(7).text();
-            let importeBonif = $(this).children().eq(8).text();
-            let importeFinal = $(this).children().eq(9).text();
+            let idVenta = $(this).children().eq(0).text().replace(/\./g, '').replace(',', '.');
+            let idCred = $(this).children().eq(1).text().replace(/\./g, '').replace(',', '.');
+            let nroCuota = $(this).children().eq(2).text().replace(/\./g, '').replace(',', '.');
+            let fechaVenc = $(this).children().eq(3).text().replace(/\./g, '').replace(',', '.');
+            let cuotaBase = $(this).children().eq(4).text().replace(/\./g, '').replace(',', '.');
+            let ajuste = $(this).children().eq(6).text().replace(/\./g, '').replace(',', '.');
+            let punitorio = $(this).children().eq(7).text().replace(/\./g, '').replace(',', '.');
+            let importeBonif = $(this).children().eq(8).text().replace(/\./g, '').replace(',', '.');
+            let importeFinal = $(this).children().eq(9).text().replace(/\./g, '').replace(',', '.');
+
+            console.log(cuotaBase)
+            console.log(ajuste)
+            console.log(punitorio)
+            console.log(importeBonif)
+            console.log(importeFinal)
 
 
 //            let totalLinea = (cantidad*precioU);
@@ -360,11 +366,11 @@ function crearItemsDetalle(){
 //            }
 //    })
 //
-    var tiempoEspera = 500;
-    function redireccionar() {
-      window.location.href= "/cobros/form/"+ $("#id").val();
-    }
-    setTimeout(redireccionar, tiempoEspera);
+//    var tiempoEspera = 500;
+//    function redireccionar() {
+//      window.location.href= "/cobros/form/"+ $("#id").val();
+//    }
+//    setTimeout(redireccionar, tiempoEspera);
 }
 
 
@@ -386,25 +392,32 @@ function traducirCliente(selectCliente){
 }
 
 function calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun){
+const opciones = { style: 'decimal', useGrouping: true, maximumFractionDigits: 2 };
 let fechaActual = new Date();
 var fechaPago = new Date (fechaVenc);
 var diferenciaMs = fechaActual - fechaPago;
 var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
     if(diasAtraso > 0){
+
         celdaDiasVenc.text(diasAtraso);
-        let cuotaBase = parseFloat(celdaCuotaBase.text());
+        let textoCuotaBase = celdaCuotaBase.text().replace(/\./g, '').replace(',', '.')
+        let textoCeldaPorcIntPun = celdaPorcIntPun.text().replace(/\./g, '').replace(',', '.')
+
+        let cuotaBase = parseFloat(textoCuotaBase);
         let ajuste = 82612.10;
-        let porcPun = parseFloat(celdaPorcIntPun.text());
+        let porcPun = parseFloat(textoCeldaPorcIntPun);
+
+
 
         let interesPun = (cuotaBase + ajuste) * porcPun * diasAtraso / 100
-        let interesPunRound = interesPun.toFixed(2);
-        celdaInteresPun.text(interesPunRound)
+        celdaInteresPun.text(interesPun.toLocaleString('es-ES', opciones))
     }
 }
 
 async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste){
+    const opciones = { style: 'decimal', useGrouping: true, maximumFractionDigits: 2 };
     let idCredito = celdaCredito.text();
-    let cuotaBase = celdaCuotaBase.text()
+    let cuotaBase = celdaCuotaBase.text().replace(/\./g, '').replace(',', '.')
 
     mesPrimerVenc = fechaPrimerVencimiento.getMonth()
     anioPrimerVenc= fechaPrimerVencimiento.getFullYear()
@@ -429,8 +442,7 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
 
         let resultado =   cuotaBase * ( indiceActual / indiceBase );
         let importeAjuste = resultado - cuotaBase;
-        let importeAjusteRound = importeAjuste.toFixed(2);
-        celdaImporteAjuste.text(importeAjusteRound)
+        celdaImporteAjuste.text(importeAjuste.toLocaleString('es-ES', opciones))
     }
 
     } catch(error){
@@ -440,12 +452,12 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
 }
 
 function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celdaTotal){
-    let cuotaBase = parseFloat(celdaCuotaBase.text())
-    let interesPunitorio = parseFloat(celdaInteresPun.text())
-    let ajuste = parseFloat(celdaImporteAjuste.text())
+    const opciones = { style: 'decimal', useGrouping: true, maximumFractionDigits: 2 };
+    let cuotaBase = parseFloat(celdaCuotaBase.text().replace(/\./g, '').replace(',', '.'))
+    let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\./g, '').replace(',', '.'))
+    let ajuste = parseFloat(celdaImporteAjuste.text().replace(/\./g, '').replace(',', '.'))
     let resultado = cuotaBase + interesPunitorio + ajuste
-    let resultadoRound = resultado.toFixed(2)
-    celdaTotal.text(resultadoRound)
+    celdaTotal.text(resultado.toLocaleString('es-ES', opciones))
 }
 
 function obtenerMesIndiceBase(year, mes, dia){

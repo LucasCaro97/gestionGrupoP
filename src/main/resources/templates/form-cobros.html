@@ -178,9 +178,9 @@
                                                 <td th:text="${xxx.creditoId.venta.id}"></td>
                                                 <td th:text="${xxx.creditoId.id}"></td>
                                                 <td th:text="${xxx.nroCuota}"></td>
-                                                <td th:text="${xxx.monto}"></td>
+                                                <td th:text="${#numbers.formatDecimal(xxx.monto,1,'POINT',2,'COMMA')}"></td>
                                                 <td>0</td>
-                                                <td th:text="${xxx.creditoId.planPago.interesPunitorio}">% Pun</td>
+                                                <td th:text="${#numbers.formatDecimal(xxx.creditoId.planPago.interesPunitorio,1,'POINT',2,'COMMA')}">% Pun</td>
                                                 <td>0</td>
                                                 <td>0</td>
                                                 <td class="celdaOculta">0</td>
@@ -280,12 +280,12 @@
                                 <td th:text="${xxx.creditoId.id}"></td>
                                 <td th:text="${xxx.nroCuota}"></td>
                                 <td th:text="${xxx.fechaVencimiento}"></td>
-                                <td th:text="${xxx.importeCuota}"></td>
-                                <td th:text="${xxx.importeACobrar}"></td>
-                                <td th:text="${xxx.importeIntereses}"></td>
-                                <td th:text="${xxx.importeAjuste}"></td>
-                                <td contenteditable="true" th:text="${xxx.importeBonificacion}"></td>
-                                <td th:text="${xxx.importeFinal}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeCuota,1,'POINT',2,'COMMA')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeACobrar,1,'POINT',2,'COMMA')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeIntereses,1,'POINT',2,'COMMA')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeAjuste,1,'POINT',2,'COMMA')}"></td>
+                                <td contenteditable="true" th:text="${#numbers.formatDecimal(xxx.importeBonificacion,1,'POINT',2,'COMMA')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeFinal,1,'POINT',2,'COMMA')}"></td>
                                 <td>
                                     <div class="form-check text-center">
                                         <input class="form-check-input row-item check" type="checkbox">

@@ -277,8 +277,8 @@
                                 <td th:text="${xxx.producto.id}" class="celdaOculta"></td>
                                 <td th:text="${xxx.cantidad}" contenteditable='true' class='editable'></td>
 <!--                                <td th:text="${xxx.precioUnitario}" contenteditable='true' class='celdaMoneda editable'></td>-->
-                                <td th:text="${#numbers.formatDecimal(xxx.precioUnitario,1,'POINT',2,'COMMA')}" contenteditable="true" class="celdaMoneda editable"></td>
-                                <td th:text="${#numbers.formatDecimal(xxx.total,1,'POINT',2,'COMMA')}" class='celdaMoneda'></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.precioUnitario,1,'COMMA',2,'POINT')}" contenteditable="true" class="celdaMoneda editable"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.total,1,'COMMA',2,'POINT')}" class='celdaMoneda'></td>
                                 <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
                             </tr>
 
@@ -429,7 +429,7 @@
                             <tr th:each="xxx : ${tablaDetalleImputacion}">
                                 <td th:text="${xxx.cuentasContables.descripcion}"></td>
                                 <td th:text="${xxx.cuentasContables.id}" class="celdaOculta"></td>
-                                <td  th:text="${#numbers.formatDecimal(xxx.importe,1,'POINT',2,'COMMA')}" contenteditable='true' class='editable'></td>
+                                <td  th:text="${#numbers.formatDecimal(xxx.importe,1,'COMMA',2,'POINT')}" contenteditable='true' class='editable'></td>
                                 <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
                             </tr>
                             </tbody>

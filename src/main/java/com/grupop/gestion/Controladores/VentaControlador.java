@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -150,11 +151,11 @@ public class VentaControlador {
         return ResponseEntity.ok(ventaServicio.obtenerTotalPorId(id));
     }
 
-    @PostMapping("/actualizarTotalVenta/{idVenta}/{total}")
-    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta, @PathVariable String total,RedirectAttributes attributes){
+    @PostMapping("/actualizarTotalVenta/{idVenta}")
+    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta,RedirectAttributes attributes){
         try{
-            Double totalDouble = Double.valueOf(total);
-            ventaServicio.actualizarTotal(idVenta, totalDouble);
+            System.out.println("Actualizando Total Venta");
+            ventaServicio.actualizarTotalNuevo(idVenta);
             attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());

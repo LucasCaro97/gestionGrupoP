@@ -50,7 +50,7 @@ public class Venta implements Serializable {
     private Moneda moneda;
     private String observaciones;
 
-    private Double total;
+    private BigDecimal total;
     // private Usuario usuario;
     @JoinColumn(name = "fk_forma_de_pago")
     @ManyToOne

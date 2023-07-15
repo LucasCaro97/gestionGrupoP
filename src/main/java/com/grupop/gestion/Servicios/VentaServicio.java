@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.Entidades.Compra;
 import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Repositorios.TalonarioRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
@@ -33,7 +34,7 @@ public class VentaServicio {
         vta.setFormaDePago(dto.getFormaDePago());
         vta.setObservaciones(dto.getObservaciones());
         vta.setFechaComprobante(dto.getFechaComprobante());
-        vta.setTotal(0D);
+        vta.setTotal(new BigDecimal(0));
         vta.setVentaCerrada(false);
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         ventaRepo.save(vta);
@@ -69,12 +70,7 @@ public class VentaServicio {
     @Transactional(readOnly = true)
     public Long buscarUltimoId(){ return ventaRepo.findLastId(); }
 
-    @Transactional
-    public void actualizarTotal(Long idVenta, Double total) {
-        Venta vta = ventaRepo.findById(idVenta).get();
-        vta.setTotal(total);
-        ventaRepo.save(vta);
-    }
+
     @Transactional(readOnly = true)
     public Double obtenerTotalPorId(Long id){
         return ventaRepo.obtenerTotalPorId(id);
@@ -95,6 +91,29 @@ public class VentaServicio {
     @Transactional(readOnly = true)
     public List<Venta> obtenerVentasSinCreditoPorCliente(Long id){
         return ventaRepo.obtenerVentasSinCreditoPorCliente(id);
+    }
+
+    @Transactional
+    public void actualizarTotalNuevo(Long idVenta){
+        BigDecimal resultado = new BigDecimal(0);
+        Venta v = ventaRepo.findById(idVenta).get();
+        System.out.println(v);
+        BigDecimal totalProd = ventaRepo.obtenerTotalProductos(v.getId());
+        BigDecimal totalImp = ventaRepo.obtenerTotalImputacion(v.getId());
+
+        System.out.println("Total prod: " + totalProd);
+        System.out.println("Total Imp: " + totalImp);
+
+        if(totalProd!=null && totalImp !=null){
+            resultado = totalProd.add(totalImp);
+        }else if(totalProd!=null){
+            resultado = totalProd;
+        }else if(totalImp!=null){
+            resultado = totalImp;
+        }
+
+        v.setTotal(resultado);
+        ventaRepo.save(v);
     }
 }
 

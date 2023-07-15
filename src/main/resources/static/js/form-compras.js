@@ -110,62 +110,7 @@ $("#addItem").click(function(){
 });
 
 $("#confirmDelete").click(function(){
-        var filasMarcadas=[];
-        var totalVenta = $("#totalCompra").val();
-
-        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
-        $("#tablaDetalle tbody tr").each(function(){
-            var checkbox = $(this).find(".row-item");
-
-            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
-            if(checkbox.prop("checked")){
-                var filaMarcada = $(this).index();
-                filasMarcadas.push(filaMarcada);
-            }
-
-        });
-
-        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
-        for(var i = 0; i < filasMarcadas.length; i++){
-        var indiceFila = filasMarcadas[i];
-        var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
-
-
-        var totalLinea = filaMarcada.find("td:eq(7)").text();
-
-        totalVenta -= totalLinea;
-
-        var idProducto = filaMarcada.find("td:eq(1)").text();
-        var idVenta = $("#id").val();
-
-
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/comprasDetalle/bajaDetalle/";
-        var nuevaUrl = urlObj.href;
-        //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-        fetch(nuevaUrl+ idVenta + "/" + idProducto, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-}
-
-
-var tiempoEspera = 500;
-function redireccionar() {
-    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
-                        method : "POST",
-                        headers:{
-                        "Content-Type" : "application/json"
-                        }
-                })
-
-  window.location.href= "/compras/form/"+ $("#id").val();
-}
-setTimeout(redireccionar, tiempoEspera);
+eliminarItemsDetalleProd()
 });
 
 //FUNCIONES TAB IMPUTACION
@@ -212,61 +157,7 @@ $("#addItemImp").click(function(){
 });
 
 $("#confirmDeleteImp").click(function(){
-        var filasMarcadas=[];
-        var totalVenta = $("#totalVenta").val();
-
-        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
-        $("#tablaDetalleImp tbody tr").each(function(){
-            var checkbox = $(this).find(".row-item");
-
-            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
-            if(checkbox.prop("checked")){
-                var filaMarcada = $(this).index();
-                filasMarcadas.push(filaMarcada);
-            }
-
-        });
-
-        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
-        for(var i = 0; i < filasMarcadas.length; i++){
-            var indiceFila = filasMarcadas[i];
-            var filaMarcada = $("#tablaDetalleImp tbody tr").eq(indiceFila);
-
-
-            var totalLinea = filaMarcada.find("td:eq(2)").text();
-            totalVenta -= totalLinea;
-            var idProducto = filaMarcada.find("td:eq(1)").text();
-            var idVenta = $("#id").val();
-
-
-            var url = window.location.href;
-            var urlObj = new URL(url);
-            urlObj.pathname = "/compraDetalleImputacion/bajaDetalle/";
-            var nuevaUrl = urlObj.href;
-            //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-            fetch(nuevaUrl+ idVenta + "/" + idProducto, {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-                })
-        }
-
-var tiempoEspera = 500;
-function redireccionar() {
-
-    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
-                        method : "POST",
-                        headers:{
-                        "Content-Type" : "application/json"
-                        }
-                })
-                console.log("/compras/actualizarTotalCompra/" + $("#id").val());
-
-  window.location.href= "/compras/form/"+ $("#id").val();
-}
-setTimeout(redireccionar, tiempoEspera);
+eliminarItemsDetalleImp()
 });
 
 /*
@@ -285,10 +176,22 @@ $.get("/compras/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
 
 
 
-function crearItemsDetalle(){
+async function crearItemsDetalle(){
     let total = 0;
     let totalLinea = 0;
 
+    var tiempoEspera = 500;
+    function redireccionar() {
+                //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
+                        method : "POST",
+                        headers:{
+                        "Content-Type" : "application/json"
+                        }
+                })
+
+          window.location.href= "/compras/form/"+ $("#id").val();
+        }
     function confirmSave(){
         var url = window.location.href;
         var urlObj = new URL(url);
@@ -301,21 +204,10 @@ function crearItemsDetalle(){
             let idCompra = $("#id").val();
             let descProd = $(this).children().eq(0).text();
             let idProd = $(this).children().eq(1).text();
-            let cantidad = parseFloat($(this).children().eq(2).text());
-            let precioU =  parseFloat($(this).children().eq(3).text());
-            let precioF = parseFloat($(this).children().eq(4).text());
+            let cantidad = parseFloat($(this).children().eq(2).text().replace(/\,/g, ''));
+            let precioU =  parseFloat($(this).children().eq(3).text().replace(/\,/g, ''));
+            let precioF = parseFloat($(this).children().eq(4).text().replace(/\,/g, ''));
 
-            console.log("PrecioU: " + precioU);
-            console.log("PrecioF: " + precioF);
-
-
-            if(precioF!=0){
-                let totalLinea = (cantidad*precioF);
-                total += totalLinea;
-            }else{
-                let totalLinea = (cantidad*precioU);
-                total += totalLinea;
-            }
 
             //GENERO LOS DETALLES DE LA COMPRA EN LA BASE DE DATOS
             fetch(nuevaUrl+ idCompra + "/" + idProd + "/" + cantidad + "/" + precioU + "/" + precioF, {
@@ -326,8 +218,6 @@ function crearItemsDetalle(){
             });
         });
     };
-
-
     function confirmSaveImp(){
         var url = window.location.href;
         var urlObj = new URL(url);
@@ -339,10 +229,8 @@ function crearItemsDetalle(){
             let idVenta = $("#id").val();
             let descCta = $(this).children().eq(0).text();
             let idCta = $(this).children().eq(1).text();
-            let importe = parseFloat($(this).children().eq(2).text());
+            let importe = parseFloat($(this).children().eq(2).text().replace(/\,/g, ''));
 
-
-            total = total + importe;
 
             //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
             fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
@@ -354,35 +242,122 @@ function crearItemsDetalle(){
         });
     };
 
-
-    confirmSave();
-    confirmSaveImp();
-
-    var tiempoEspera = 500;
-    function redireccionar() {
-            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-            })
-
-      window.location.href= "/compras/form/"+ $("#id").val();
-    }
+    await confirmSave();
+    await confirmSaveImp();
     setTimeout(redireccionar, tiempoEspera);
 }
 
+async function eliminarItemsDetalleProd(){
 
-/* NO PERMITIR CAMBIOS CUANDO LA VENTA POSEA UN PAGO GENERADO
-$('input').prop('readonly', true);
-$('select').prop('disabled', true);
-$('textarea').prop('readonly', true);
-$('#add').hide();
-$('#deleteRow').hide();
-$('#guardarItems').hide();
-$('#volverAtras ').hide();
-*/
+    function eliminarFilas(){
+        var filasMarcadas=[];
+        var totalVenta = $("#totalCompra").val();
+
+        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
+        $("#tablaDetalle tbody tr").each(function(){
+            var checkbox = $(this).find(".row-item");
+            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
+            if(checkbox.prop("checked")){
+                var filaMarcada = $(this).index();
+                filasMarcadas.push(filaMarcada);
+            }
+        });
+
+        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
+        for(var i = 0; i < filasMarcadas.length; i++){
+            var indiceFila = filasMarcadas[i];
+            var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
+
+            var idProducto = filaMarcada.find("td:eq(1)").text();
+            var idVenta = $("#id").val();
+
+            var url = window.location.href;
+            var urlObj = new URL(url);
+            urlObj.pathname = "/comprasDetalle/bajaDetalle/";
+            var nuevaUrl = urlObj.href;
+            //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
+            fetch(nuevaUrl+ idVenta + "/" + idProducto, {
+                method : "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                }
+            })
+        }
+    }
+    var tiempoEspera = 500;
+    function redireccionar() {
+                    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+                    fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
+                            method : "POST",
+                            headers:{
+                            "Content-Type" : "application/json"
+                            }
+                    })
+
+      window.location.href= "/compras/form/"+ $("#id").val();
+    }
+
+    await eliminarFilas()
+    setTimeout(redireccionar, tiempoEspera);
+
+}
+
+
+async function eliminarItemsDetalleImp(){
+
+    function eliminarFilas(){
+        var filasMarcadas=[];
+        var totalVenta = $("#totalVenta").val();
+        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
+        $("#tablaDetalleImp tbody tr").each(function(){
+            var checkbox = $(this).find(".row-item");
+            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
+            if(checkbox.prop("checked")){
+                var filaMarcada = $(this).index();
+                filasMarcadas.push(filaMarcada);
+            }
+        });
+
+        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
+            for(var i = 0; i < filasMarcadas.length; i++){
+                var indiceFila = filasMarcadas[i];
+                var filaMarcada = $("#tablaDetalleImp tbody tr").eq(indiceFila);
+
+                var idProducto = filaMarcada.find("td:eq(1)").text();
+                var idVenta = $("#id").val();
+
+                var url = window.location.href;
+                var urlObj = new URL(url);
+                urlObj.pathname = "/compraDetalleImputacion/bajaDetalle/";
+                var nuevaUrl = urlObj.href;
+                //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
+                fetch(nuevaUrl+ idVenta + "/" + idProducto, {
+                    method : "POST",
+                    headers:{
+                        "Content-Type" : "application/json"
+                    }
+                })
+            }
+    }
+    var tiempoEspera = 500;
+    function redireccionar() {
+
+    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
+                        method : "POST",
+                        headers:{
+                        "Content-Type" : "application/json"
+                        }
+                })
+
+window.location.href= "/compras/form/"+ $("#id").val();
+}
+
+    await eliminarFilas()
+    setTimeout(redireccionar, tiempoEspera);
+
+}
+
 });
 
 

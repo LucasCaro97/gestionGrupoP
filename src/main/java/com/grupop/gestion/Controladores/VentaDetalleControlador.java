@@ -44,18 +44,18 @@ public class VentaDetalleControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro eliminado correctamente");
     }
 
-    @PostMapping("/actualizarTotalVenta/{idVenta}/{total}")
-    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta, @PathVariable String total, RedirectAttributes attributes){
-        try{
-            Double totalDouble = Double.valueOf(total);
-            ventaServicio.actualizarTotal(idVenta, totalDouble);
-            System.out.println("Se actualizo el total correctamente");
-        }catch(Exception e){
-            attributes.addFlashAttribute("exception", e.getMessage());
-            System.out.println(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Se actualizo el total correctamente");
-    }
+//    @PostMapping("/actualizarTotalVenta/{idVenta}/{total}")
+//    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta, @PathVariable String total, RedirectAttributes attributes){
+//        try{
+//            BigDecimal totalBD = new BigDecimal(total);
+//            ventaServicio.actualizarTotal(idVenta, totalBD);
+//            System.out.println("Se actualizo el total correctamente");
+//        }catch(Exception e){
+//            attributes.addFlashAttribute("exception", e.getMessage());
+//            System.out.println(e.getMessage());
+//        }
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Se actualizo el total correctamente");
+//    }
 
 
 }
