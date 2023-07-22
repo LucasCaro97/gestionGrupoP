@@ -224,7 +224,8 @@ crearItemsDetalle();
 //agregar condicion para que solamente traiga el total cuando la venta exista en la bd
 $.get("/ventas/obtenerTotalPorId/" + $("#id").val())
     .done(function(datos, status){
-           $("#totalVenta").val(datos);
+           let datosFormatted = parseFloat(datos).toLocaleString("en-US");
+           $("#totalVenta").val(datosFormatted);
     })
     .fail(function(jqXHR, textStatus, errorThrown){
     console.log("No se puede traer el total porque la aun no esta en la base de datos");
@@ -318,8 +319,7 @@ $("#btnAlta").click(function(){
     let contenidoFP = $("#formaDePago").val();
     if(texto == "Guardar"){
         if(contenidoFP == 3){
-        alert("Sera redirigido a la vista para generar el credito de la venta")
-            window.location.href= "credito/form/new/" + $("#id").val();
+        window.location.href= "credito/form/new/" + $("#id").val();
         }
     }
 
@@ -371,16 +371,16 @@ fetch('/ventas/validarEstado/'+idVenta)
         console.log("la venta esta cerrada");
         comandosEncabezado = $("#comandos #btnAlta");
         comandosDetalle = $(".comandosDet");
-        botonEliminarCom = $(".eliminarCom");
-        comandosEncabezado.css('display', 'none');
+//        botonEliminarCom = $(".eliminarCom");
+//        comandosEncabezado.css('display', 'none');
         comandosDetalle.css('visibility', 'hidden');
-        botonEliminarCom.css('display', 'none');
+//        botonEliminarCom.css('display', 'none');
 
         $('input').prop('readonly', true);
         $('input').css('background-color', 'var(--bs-secondary-bg)');
         $('select').prop('disabled', true);
-        $('textarea').prop('readonly', true);
-        $('textarea').css('background-color', 'var(--bs-secondary-bg)');
+//        $('textarea').prop('readonly', true);
+//        $('textarea').css('background-color', 'var(--bs-secondary-bg)');
     }
     })
   .catch(error => {

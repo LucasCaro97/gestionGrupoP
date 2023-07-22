@@ -6,6 +6,8 @@ import com.grupop.gestion.Entidades.TipoIva;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -34,6 +37,8 @@ public class CobroControlador {
     private final TipoIvaServicio tipoIvaServicio;
     private final CreditoDetalleServicio creditoDetalleServicio;
     private final CobroDetalleCuotasServicio cobroDetalleCuotasServicio;
+    private final VentaServicio ventaServicio;
+    private final CobroDetalleCtaCteServicio cobroDetalleCtaCteServicio;
 
 
     @GetMapping
@@ -82,6 +87,8 @@ public class CobroControlador {
         mav.addObject("listaIva", tipoIvaServicio.obtenerTodos());
         mav.addObject("listaCuotasCliente", creditoDetalleServicio.obtenerCreditosPendientesPorFkCliente(cobro.getCliente().getId()));
         mav.addObject("tablaDetalleCuotas", cobroDetalleCuotasServicio.obtenerPorCobro(id));
+        mav.addObject("listaVentasCtaCte", ventaServicio.obtenerVtasCtaCtePorCliente(cobro.getCliente().getId()));
+        mav.addObject("tablaDetalleCtaCte", cobroDetalleCtaCteServicio.obtenerTodosPorCobro(id));
         return mav;
     }
 
@@ -118,11 +125,29 @@ public class CobroControlador {
 
 
     @GetMapping("delete/{id}")
-    public RedirectView delete(Long id, RedirectAttributes attributes){
+    public RedirectView delete(@PathVariable Long id, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/cobros");
         cobroServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado el cobro correctamente");
         return  r;
     }
+
+    @PostMapping("/actualizarTotal/{idCobro}")
+    public ResponseEntity<String> actualizarTotal(@PathVariable Long idCobro){
+        try{
+            cobroServicio.actualizarTotal(idCobro);
+        }catch (Exception e){
+            System.out.println("Exception");
+            System.out.println(e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Se actualizo el total correctamente");
+    }
+
+    @GetMapping("/obtenerTotalPorId/{id}")
+    public ResponseEntity<BigDecimal> obtenerTotalPorId(@PathVariable Long id){
+        return ResponseEntity.ok(cobroServicio.obtenerTotalPorId(id));
+    }
+
 
 }

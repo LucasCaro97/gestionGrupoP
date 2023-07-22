@@ -1,21 +1,22 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.DTO.CreditoDetalleDto;
 import com.grupop.gestion.Entidades.Credito;
+import com.grupop.gestion.Entidades.CreditoDetalle;
 import com.grupop.gestion.Entidades.TipoComprobante;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -100,10 +101,13 @@ public class CreditoControlador {
     }
 
     @PostMapping("/create")
-    public RedirectView create(Credito dto, RedirectAttributes attributes){
+    public RedirectView create(Credito dto, RedirectAttributes attributes, HttpServletRequest request){
+
         RedirectView r = new RedirectView("/credito");
+        String venceLosDias = request.getParameter("vencimiento");
         try{
-            creditoServicio.crear(dto);
+            creditoServicio.crear(dto, venceLosDias);
+            r.setUrl("/credito/form/" + creditoServicio.buscarUltimoId());
             attributes.addFlashAttribute("exito", "Se ha creado el credito correctamente");
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
@@ -119,6 +123,7 @@ public class CreditoControlador {
         RedirectView r = new RedirectView("/credito");
         try{
             creditoServicio.actualizar(dto);
+            r.setUrl("/credito/form/" + dto.getId());
             attributes.addFlashAttribute("exito", "Se ha actualizado el credito correctamente");
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -141,6 +146,14 @@ public class CreditoControlador {
     public ResponseEntity<Credito> obtenerPorId(@PathVariable Long id){
         return ResponseEntity.ok(creditoServicio.obtenerPorId(id));
     }
+
+    @PostMapping("/regenerarCuotas/{idCredito}")
+    public ResponseEntity<String> regenerarCuotas(@PathVariable Long idCredito, @RequestBody List<CreditoDetalleDto> arrayListCuotas){
+
+        creditoServicio.regenerarCuotas(idCredito, arrayListCuotas);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Se ha regenerado el credito correctamente");
+    }
+
 
 
 

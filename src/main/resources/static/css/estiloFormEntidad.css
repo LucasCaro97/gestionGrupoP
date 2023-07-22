@@ -72,20 +72,28 @@
 
 .boton-crear{
     position: absolute;
-    right: 15%;
+    right: 20%;
     top: 15%;
 }
 
 .boton-alta-producto {
-    position: absolute;
+        position: absolute;
         top: 15%;
         height: 35px;
         width: 100px;
-        right: calc(15% + 100px);
+        right: calc(20% + 100px);
         font-size: x-small;
         display: flex;
         justify-content: center;
         flex-direction: column;
+}
+
+.btnVerMapa {
+    position: absolute;
+    top: 15%;
+    height: 35px;
+    width: 100px;
+    right: calc(20% + 205px);
 }
 
 .formaPago{
@@ -137,5 +145,9 @@
     position: sticky;
     top: 0;
     z-index: 1;
+}
+
+#divLinkMapa{
+    display: none;
 }
 

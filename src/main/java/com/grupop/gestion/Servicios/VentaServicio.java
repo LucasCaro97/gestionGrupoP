@@ -1,6 +1,8 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Entidades.Compra;
+import com.grupop.gestion.Entidades.IndiceCAC;
 import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Repositorios.TalonarioRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
@@ -19,6 +21,7 @@ public class VentaServicio {
 
     private final VentaRepo ventaRepo;
     private final TalonarioServicio talonarioServicio;
+    private final IndiceCacServicio indiceCacServicio;
 
     @Transactional
     public void crear(Venta dto){
@@ -35,7 +38,8 @@ public class VentaServicio {
         vta.setObservaciones(dto.getObservaciones());
         vta.setFechaComprobante(dto.getFechaComprobante());
         vta.setTotal(new BigDecimal(0));
-        vta.setVentaCerrada(false);
+        vta.setBloqueada(false);
+        vta.setIndiceBase(dto.getIndiceBase());
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         ventaRepo.save(vta);
     }
@@ -43,18 +47,28 @@ public class VentaServicio {
     @Transactional //AGREGAR VALIDACIONES PARA QUE NO SE PUEDA MODIFICAR CUANDO YA CONTIENE UN COBRO
     public void actualizar(Venta dto){
         Venta vta = ventaRepo.findById(dto.getId()).get();
-        vta.setCliente(dto.getCliente());
-        vta.setCuit(dto.getCuit());
-        vta.setTipoIva(dto.getTipoIva());
-        vta.setTipoComprobante(dto.getTipoComprobante());
-        vta.setTalonario(dto.getTalonario());
-        vta.setNroComprobante(dto.getNroComprobante());
-        vta.setSector(dto.getSector());
-        vta.setMoneda(dto.getMoneda());
-        vta.setFormaDePago(dto.getFormaDePago());
-        vta.setObservaciones(dto.getObservaciones());
-        vta.setFechaComprobante(dto.getFechaComprobante());
-        ventaRepo.save(vta);
+        if(vta.isBloqueada()){
+
+            vta.setObservaciones(dto.getObservaciones());
+            ventaRepo.save(vta);
+        }else{
+            vta.setCliente(dto.getCliente());
+            vta.setCuit(dto.getCuit());
+            vta.setTipoIva(dto.getTipoIva());
+            vta.setTipoComprobante(dto.getTipoComprobante());
+            if(vta.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
+                talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+                vta.setTalonario(dto.getTalonario());
+            }
+            vta.setNroComprobante(dto.getNroComprobante());
+            vta.setSector(dto.getSector());
+            vta.setMoneda(dto.getMoneda());
+            vta.setFormaDePago(dto.getFormaDePago());
+            vta.setObservaciones(dto.getObservaciones());
+            vta.setFechaComprobante(dto.getFechaComprobante());
+            vta.setIndiceBase(dto.getIndiceBase());
+            ventaRepo.save(vta);
+        }
     }
 
 
@@ -79,7 +93,7 @@ public class VentaServicio {
     @Transactional
     public void cerrarVenta(Long idVenta){
         Venta vta = ventaRepo.findById(idVenta).get();
-        vta.setVentaCerrada(true);
+        vta.setBloqueada(true);
         ventaRepo.save(vta);
     }
 
@@ -114,6 +128,23 @@ public class VentaServicio {
 
         v.setTotal(resultado);
         ventaRepo.save(v);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Venta> obtenerVtasCtaCtePorCliente(Long id) {
+        return ventaRepo.obtenerVentasCtaCtePorCliente(id);
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerIndiceBase(Long idVenta) {
+
+        Long idIndiceCac = ventaRepo.obtenerIndiceBase(idVenta);
+        if(idIndiceCac == null){
+            return BigDecimal.ZERO;
+        }else{
+            IndiceCAC indiceBase = indiceCacServicio.obtenerPorId(idIndiceCac);
+            return indiceBase.getIndice();
+        }
     }
 }
 

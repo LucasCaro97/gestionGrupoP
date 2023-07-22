@@ -104,7 +104,7 @@
                 </div>
                 <div id="cajaTotal">
                     <label class="form-label">Total: </label>
-                    <input type="number" step="0.01" class="form-control inputTotal" id="totalVenta" readonly>
+                    <input type="text" class="form-control inputTotal" id="totalCobro" readonly>
                 </div>
                 <div id="comandos" class="d-flex">
                     <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
@@ -128,7 +128,9 @@
             </ul>
 
             <div class="tab-content mt-2">
+<!--                TAB1-->
                 <div id="tab1" class="tab-pane fade show active" role="tabpanel" aria-labelledby="tab1-tab">
+
                     <div class="d-flex justify-content-center p-2 comandosDet">
                         <button class="btn btn-outline-success" id="add" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Añadir
@@ -178,9 +180,9 @@
                                                 <td th:text="${xxx.creditoId.venta.id}"></td>
                                                 <td th:text="${xxx.creditoId.id}"></td>
                                                 <td th:text="${xxx.nroCuota}"></td>
-                                                <td th:text="${#numbers.formatDecimal(xxx.monto,1,'POINT',2,'COMMA')}"></td>
+                                                <td th:text="${#numbers.formatDecimal(xxx.monto,1,'COMMA',2,'POINT')}"></td>
                                                 <td>0</td>
-                                                <td th:text="${#numbers.formatDecimal(xxx.creditoId.planPago.interesPunitorio,1,'POINT',2,'COMMA')}">% Pun</td>
+                                                <td th:text="${#numbers.formatDecimal(xxx.creditoId.planPago.interesPunitorio,1,'COMMA',2,'POINT')}">% Pun</td>
                                                 <td>0</td>
                                                 <td>0</td>
                                                 <td class="celdaOculta">0</td>
@@ -257,6 +259,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div id="tablaDetalle">
                         <table class="table table-hover table-bordered">
                             <thead>
@@ -280,12 +283,12 @@
                                 <td th:text="${xxx.creditoId.id}"></td>
                                 <td th:text="${xxx.nroCuota}"></td>
                                 <td th:text="${xxx.fechaVencimiento}"></td>
-                                <td th:text="${#numbers.formatDecimal(xxx.importeCuota,1,'POINT',2,'COMMA')}"></td>
-                                <td th:text="${#numbers.formatDecimal(xxx.importeACobrar,1,'POINT',2,'COMMA')}"></td>
-                                <td th:text="${#numbers.formatDecimal(xxx.importeIntereses,1,'POINT',2,'COMMA')}"></td>
-                                <td th:text="${#numbers.formatDecimal(xxx.importeAjuste,1,'POINT',2,'COMMA')}"></td>
-                                <td contenteditable="true" th:text="${#numbers.formatDecimal(xxx.importeBonificacion,1,'POINT',2,'COMMA')}"></td>
-                                <td th:text="${#numbers.formatDecimal(xxx.importeFinal,1,'POINT',2,'COMMA')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeCuota,1,'COMMA',2,'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeACobrar,1,'COMMA',2,'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeIntereses,1,'COMMA',2,'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeAjuste,1,'COMMA',2,'POINT')}"></td>
+                                <td contenteditable="true" th:text="${#numbers.formatDecimal(xxx.importeBonificacion,1,'COMMA',2,'POINT')}"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeFinal,1,'COMMA',2,'POINT')}"></td>
                                 <td>
                                     <div class="form-check text-center">
                                         <input class="form-check-input row-item check" type="checkbox">
@@ -296,6 +299,7 @@
                         </table>
                     </div>
                 </div>
+<!--                TAB2-->
                 <div id="tab2" class="tab-pane fade" role="tabpanel" aria-labelledby="tab2-tab">
                     <div class="d-flex justify-content-center p-2 comandosDet">
                         <button class="btn btn-outline-success" id="addImp" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModalImp">
@@ -320,13 +324,6 @@
                                                        class="form-control" placeholder="Descripcion">
                                             </div>
 
-                                            <div class="form-group mx-sm-3  mb-2 col-6">
-                                                <select th:value="${cuentaImp}" id="cuentaImp" name="cuenta" class="form-select">
-                                                    <option selected value="">Seleccionar cuenta</option>
-                                                    <!---<option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>-->
-                                                </select>
-                                            </div>
-
                                             <div class="form-group mx-sm-3  mb-2 col-2">
                                                 <button class="btn btn-primary filtro" id="filtroImp"> Buscar </button>
                                             </div>
@@ -334,35 +331,28 @@
                                                 <button class="btn btn-primary filtro" id="limpiarImp"> Limpiar </button>
                                             </div>
 
-
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <h3>Cuentas</h3>
+                                        <h3>Ventas Cta. Cte</h3>
                                         <table id="tablaProductoImp" class="table table-hover table-bordered">
                                             <thead>
                                             <tr class="table-dark">
-                                                <th>Id</th>
-                                                <th>Cuenta</th>
-                                                <th>Totalizadora</th>
+                                                <th>N° VTA</th>
+                                                <th>Detalle</th>
+                                                <th>Importe</th>
                                                 <th>Seleccionar</th>
 
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr th:each="xxx : ${listaCuentasImp}">
+                                            <tr th:each="xxx : ${listaVentasCtaCte}">
                                                 <td th:text="${xxx.id}"></td>
-                                                <td th:text="${xxx.descripcion}"></td>
-                                                <td th:text="${xxx.ctaTotalizadora.descripcion}"></td>
-                                                <td>
-                                                    <div class="form-check text-center">
-                                                        <input class="form-check-input row-item checkImp" type="checkbox">
-                                                    </div>
-                                                </td>
-
+                                                <td th:text="|VTA/${xxx.id}/ ${xxx.tipoComprobante.descripcion} ${xxx.talonario.nroTalonario}-${xxx.nroComprobante} - FEC/${xxx.fechaComprobante}|"></td>
+                                                <td th:text="${#numbers.formatDecimal(xxx.total,1,'COMMA',2,'POINT')}"></td>
+                                                <td><div class="form-check text-center">    <input class="form-check-input row-item checkImp" type="checkbox">  </div>  </td>
                                             </tr>
-
                                             </tbody>
 
                                         </table>
@@ -429,17 +419,19 @@
                         <table class="table table-hover table-bordered">
                             <thead>
                             <tr class="table-dark">
-                                <th>Cuenta</th>
-                                <th class="celdaOculta">IdCuenta</th>
+                                <th>N° Venta</th>
+                                <th>Detalle</th>
                                 <th>Importe</th>
+                                <th class="celdaOculta">Id</th>
                                 <th>Accion</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="xxx : ${tablaDetalleImputacion}">
-                                <td th:text="${xxx.cuentasContables.descripcion}"></td>
-                                <td th:text="${xxx.cuentasContables.id}" class="celdaOculta"></td>
-                                <td  th:text="${xxx.importe}" contenteditable='true' class='editable'></td>
+                            <tr th:each="xxx : ${tablaDetalleCtaCte}">
+                                <td th:text="${xxx.ventaId.id}"></td>
+                                <td th:text="|VTA/${xxx.ventaId.id}/ ${xxx.ventaId.tipoComprobante.descripcion} ${xxx.ventaId.talonario.nroTalonario}-${xxx.ventaId.nroComprobante} - FEC/${xxx.ventaId.fechaComprobante}|"></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.totalDetalle,1,'COMMA',2,'POINT')}"></td>
+                                <td class="celdaOculta" th:text="${xxx.id}"></td>
                                 <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
                             </tr>
                             </tbody>

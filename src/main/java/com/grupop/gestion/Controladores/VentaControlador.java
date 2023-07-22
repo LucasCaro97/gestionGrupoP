@@ -45,6 +45,7 @@ public class VentaControlador {
     private final CreditoServicio creditoServicio;
     private final ClienteServicio clienteServicio;
     private final ComisionServicio comisionServicio;
+    private final IndiceCacServicio indiceCacServicio;
 
 
     @GetMapping
@@ -76,6 +77,7 @@ public class VentaControlador {
         mav.addObject("listaProd", productoServicio.obtenerTodos());
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(1l));
         mav.addObject("listaVendedores", entidadBaseServicio.obtenerVendedores());
+        mav.addObject("indiceBase", indiceCacServicio.obtenerTodos());
         return mav;
     }
 
@@ -98,6 +100,7 @@ public class VentaControlador {
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
         mav.addObject("listaVendedores", entidadBaseServicio.obtenerVendedores());
         mav.addObject("listaComisiones", comisionServicio.obtenerComisionVenta(id));
+        mav.addObject("listaIndice", indiceCacServicio.obtenerTodos());
         return mav;
     }
 
@@ -120,13 +123,20 @@ public class VentaControlador {
     @PostMapping("/update")
     public RedirectView update(Venta dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/ventas/form/" + dto.getId());
+
         try{
             ventaServicio.actualizar(dto);
-            //validar - SI NO EXISTE UN CREDITO VINCULADO A LA VENTA Y FORMA DE PAGO ES CREDITO, ENONCES REDIRIJE A FORMULARIO CREDITO
-            if(dto.getFormaDePago().getId()==3 && creditoServicio.validarExistenciaPorVenta(dto.getId()) == 0){
-                redirect.setUrl("/credito/form/new/"+dto.getId());
+            Venta v = ventaServicio.obtenerPorId(dto.getId());
+
+            if(!v.isBloqueada()){
+                System.out.println("Verificando si es credito ");
+                if(dto.getFormaDePago() != null || v.getFormaDePago() != null ){
+                   if( (dto.getFormaDePago().getId() == 3 || v.getFormaDePago().getId() == 3 ) && creditoServicio.validarExistenciaPorVenta(dto.getId()) == 0){
+                       redirect.setUrl("/credito/form/new/"+dto.getId());
+                   }
+                }
             }else{
-                attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
+                System.out.println("La venta esta bloqueada, no es necesario redirigir a credito");
             }
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
@@ -173,6 +183,11 @@ public class VentaControlador {
     @GetMapping("/obtenerVentasSinCreditoPorCliente/{id}")
     public ResponseEntity<List<Venta>> obtenerVentasSinCreditoPorCliente(@PathVariable Long id){
         return ResponseEntity.ok(ventaServicio.obtenerVentasSinCreditoPorCliente(id));
+    }
+
+    @GetMapping("/obtenerIndiceBase/{idVenta}")
+    public ResponseEntity<BigDecimal> obtenerIndiceBase(@PathVariable Long idVenta){
+        return ResponseEntity.ok(ventaServicio.obtenerIndiceBase(idVenta));
     }
 
 

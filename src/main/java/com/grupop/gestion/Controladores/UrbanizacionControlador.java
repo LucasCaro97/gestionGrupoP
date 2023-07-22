@@ -117,39 +117,10 @@ public class UrbanizacionControlador {
         return ResponseEntity.ok(manzanaRepo.obtenerPorUrb(id));
     }
 
-
-    /*
-    @GetMapping("/obtenerManzanasUrb/{id}")
-    public ResponseEntity<Stream<ManzanaDto>> obtenerManzanasUrb(@PathVariable Long id){
-        System.out.println(manzanaRepo.obtenerPorUrb(id));
-        return ResponseEntity.ok(manzanaRepo.obtenerPorUrb(id).stream().map(ManzanaDto::new));
+    @GetMapping("obtenerLinkMapa/{idUrb}")
+    public ResponseEntity<String> obtenerLinkMapa(@PathVariable Long idUrb){
+        return ResponseEntity.ok(urbanizacionServicio.obtenerLinkMapa(idUrb));
     }
-    /*
-     */
-    /*
-    public ResponseEntity<Page<DatosListadoMedico>>  listadoMedicos(@PageableDefault() Pageable paginacion){
-//        return medicoRepository.findAll(paginacion).map(DatosListadoMedico::new);
-        return ResponseEntity.ok(medicoRepository.findAByActivoTrue(paginacion).map(DatosListadoMedico::new));
-    }
-
-    */
-    /*
-    @GetMapping(path="/existe")
-    public @ResponseBody ResponseEntity validarExistencia(@RequestParam(value="id")long codigo) {
-        System.out.println("Backend. codigo consultado es: "+codigo);
-        ResponseEntity respuesta=null;
-        if(servicio.consultarExistenciaProductoServicio(codigo)) {
-            System.out.println("encontrado codigo");
-            respuesta= new ResponseEntity(HttpStatus.OK);
-        }
-        else {
-            System.out.println("no existe codigo");
-            respuesta= new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        return respuesta;
-    }
-
-     */
 
 
 }

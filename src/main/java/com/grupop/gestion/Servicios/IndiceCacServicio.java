@@ -17,7 +17,6 @@ import java.util.List;
 public class IndiceCacServicio {
 
     private final IndiceCacRepo indiceCacRepo;
-    private final VentaServicio ventaServicio;
 
     @Transactional
     public void crear(IndiceCAC dto){
@@ -55,4 +54,5 @@ public class IndiceCacServicio {
     public BigDecimal obtenerIndiceBase(Integer mes, Integer anio) {
         return indiceCacRepo.obtenerIndiceBase(mes,anio);
     }
+
 }

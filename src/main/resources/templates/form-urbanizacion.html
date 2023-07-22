@@ -16,6 +16,7 @@
   <div class="container">
     <div class="row mt-4">
       <h1>Carga de Urbanizaciones</h1>
+      <button class="btn btn-primary btnVerMapa">Ver Mapa</button>
       <button class="btn btn-primary boton-alta-producto">Alta Lotes Producto</button>
       <form class="row g-3 needs-validation" th:action="@{/urbanizacion/__${action}__}" th:object="${urbanizacion}" method="post" autocomplete="off">
         <input type="hidden" th:field="*{id}" id="id">
@@ -66,9 +67,13 @@
           </select>
         </div>
 
+        <div class="col-12" id="divLinkMapa">
+          <label for="linkMapa" class="form-label">Link Mapa</label>
+          <input type="text" class="form-control" name="linkMapa" id="linkMapa" th:field="*{linkMapa}">
+        </div>
+
         <div class="col-12">
           <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary boton-crear"></button>
-
         </div>
       </form>
 

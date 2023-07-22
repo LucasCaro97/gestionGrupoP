@@ -38,7 +38,10 @@ public class CompraServicio {
         compra.setProveedor(dto.getProveedor());
         compra.setFechaComprobante(dto.getFechaComprobante());
         compra.setTipoComprobante(dto.getTipoComprobante());
-        compra.setTalonario(dto.getTalonario());
+        if(compra.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
+            talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+            compra.setTalonario(dto.getTalonario());
+        }
         compra.setNroComprobante(dto.getNroComprobante());
         compra.setSector(dto.getSector());
         compra.setFormaDePago(dto.getFormaDePago());

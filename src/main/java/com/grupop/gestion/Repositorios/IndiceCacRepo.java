@@ -13,4 +13,5 @@ public interface IndiceCacRepo extends JpaRepository<IndiceCAC, Long> {
 
     @Query(value = "SELECT indice FROM indicecac WHERE mes = ?1 AND anio = ?2", nativeQuery = true)
     BigDecimal obtenerIndiceBase(Integer mes, Integer anio);
+
 }

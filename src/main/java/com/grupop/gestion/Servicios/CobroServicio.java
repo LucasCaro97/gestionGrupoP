@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -27,7 +28,10 @@ public class CobroServicio {
         c.setTalonario(dto.getTalonario());
         c.setNroComprobante(dto.getNroComprobante());
         c.setSector(dto.getSector());
+        c.setMoneda(dto.getMoneda());
+        c.setFormaDePago(dto.getFormaDePago());
         c.setObservaciones(dto.getObservaciones());
+        c.setTotal(new BigDecimal(0));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         cobroRepo.save(c);
     }
@@ -40,11 +44,15 @@ public class CobroServicio {
         c.setTipoIva(dto.getTipoIva());
         c.setFechaComprobante(dto.getFechaComprobante());
         c.setTipoComprobante(dto.getTipoComprobante());
-        c.setTalonario(dto.getTalonario());
+        if(c.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
+            talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+            c.setTalonario(dto.getTalonario());
+        }
         c.setNroComprobante(dto.getNroComprobante());
         c.setSector(dto.getSector());
+        c.setMoneda(dto.getMoneda());
+        c.setFormaDePago(dto.getFormaDePago());
         c.setObservaciones(dto.getObservaciones());
-        talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         cobroRepo.save(c);
     }
 
@@ -59,4 +67,27 @@ public class CobroServicio {
 
     @Transactional(readOnly = true)
     public Long buscarUltimoId() { return cobroRepo.buscarUltimoId();    }
+
+    @Transactional
+    public void actualizarTotal(Long idCobro) {
+        BigDecimal resultado = new BigDecimal(0);
+        Cobro c = cobroRepo.findById(idCobro).get();
+        BigDecimal totalCuota = cobroRepo.obtenerTotalCuotas(idCobro);
+        BigDecimal totalCtaCte = cobroRepo.obtenerTotalCtaCte(idCobro);
+
+        if(totalCuota!=null && totalCtaCte !=null){
+            resultado = totalCuota.add(totalCtaCte);
+        }else if(totalCuota!=null){
+            resultado = totalCuota;
+        }else if(totalCtaCte!=null){
+            resultado = totalCtaCte;
+        }
+        c.setTotal(resultado);
+        cobroRepo.save(c);
+    }
+
+    @Transactional
+    public BigDecimal obtenerTotalPorId(Long id) {
+        return cobroRepo.obtenerTotalPorId(id);
+    }
 }

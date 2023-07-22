@@ -88,7 +88,15 @@
                                 th:value="${xxx.id}"></option>
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
+                <label for="moneda" class="form-label">Indice Base: </label>
+                <select th:field="*{indiceBase}" id="indiceBase" class="form-select" aria-label="Seleccionar indice">
+                    <option selected value="">Seleccione indice</option>
+                    <option th:each="xxx : ${listaIndice}" th:text="|${xxx.mes}/${xxx.anio} - ${xxx.indice}|"
+                            th:value="${xxx.id}"></option>
+                </select>
+            </div>
+                <div class="col-md-12">
                     <label for="observaciones" class="form-label">Observaciones: </label>
                     <textarea type="text" class="form-control" th:field="*{observaciones}"
                               id="observaciones"></textarea>
@@ -102,7 +110,7 @@
                 </div>
                 <div id="cajaTotal">
                     <label class="form-label">Total: </label>
-                    <input type="number" step="0.01" class="form-control inputTotal" id="totalVenta" readonly>
+                    <input type="text" class="form-control inputTotal" id="totalVenta" readonly>
                 </div>
                 <div id="comandos" class="d-flex">
                     <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"

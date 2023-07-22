@@ -53,7 +53,9 @@ public class PlanPagoServicio {
     public List<PlanPago> obtenerTodos(){ return planPagoRepo.findAll(); }
 
     @Transactional(readOnly = true)
-    public PlanPago obtenerPorId(Long id){return planPagoRepo.findById(id).get(); }
+    public PlanPago obtenerPorId(Long id){
+        System.out.println(planPagoRepo.findById(id).get());
+        return planPagoRepo.findById(id).get(); }
 
     @Transactional
     public void eliminarPorId(Long id){ planPagoRepo.deleteById(id);}

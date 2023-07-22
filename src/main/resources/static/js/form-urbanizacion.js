@@ -10,3 +10,14 @@ $(".tbody tr").each(function(){
       }
       //console.log("Iteracion" + $(this).children().eq(11).text());
 });
+
+
+
+$(".btnVerMapa").click(async function(){
+    let idUrb = $("#id").val();
+    let urlDato;
+    await $.get("/urbanizacion/obtenerLinkMapa/" + idUrb, function(dato,status){
+        urlMapa = dato;
+    })
+ window.open(urlMapa, '_blank')
+})

@@ -24,6 +24,7 @@ public class Urbanizacion {
     @JoinColumn(name = "fk_cuenta")
     @OneToOne
     private CuentasContables cuenta;
+    private String linkMapa;
 
 
 }

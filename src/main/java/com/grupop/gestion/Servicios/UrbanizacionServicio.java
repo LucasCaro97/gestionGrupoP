@@ -25,6 +25,7 @@ public class UrbanizacionServicio {
         urb.setUbicacion(dto.getUbicacion());
         urb.setCiudad(dto.getCiudad());
         urb.setCuenta(dto.getCuenta());
+        urb.setLinkMapa(dto.getLinkMapa());
         urbanizacionRepo.save(urb);
     }
 
@@ -38,6 +39,7 @@ public class UrbanizacionServicio {
         urb.setUbicacion(dto.getUbicacion());
         urb.setCiudad(dto.getCiudad());
         urb.setCuenta(dto.getCuenta());
+        urb.setLinkMapa(dto.getLinkMapa());
         urbanizacionRepo.save(urb);
     }
 
@@ -56,5 +58,9 @@ public class UrbanizacionServicio {
 
     public CuentasContables obtenerCuenta(Urbanizacion urbanizacion) {
         return urbanizacionRepo.findCuentaContable(urbanizacion.getId());
+    }
+    @Transactional(readOnly = true)
+    public String obtenerLinkMapa(Long idUrb) {
+        return urbanizacionRepo.obtenerLinkMapa(idUrb);
     }
 }

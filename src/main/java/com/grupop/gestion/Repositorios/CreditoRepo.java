@@ -13,5 +13,6 @@ public interface CreditoRepo extends JpaRepository<Credito, Long> {
 
     Credito findFirstByOrderByIdDesc();
 
-
+    @Query(value = "SELECT MAX(id) FROM credito", nativeQuery = true)
+    Long buscarUltimoId();
 }

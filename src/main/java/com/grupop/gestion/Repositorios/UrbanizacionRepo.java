@@ -12,4 +12,7 @@ public interface UrbanizacionRepo extends JpaRepository<Urbanizacion, Long> {
 
     @Query(value = "SELECT fk_cuenta FROM urbanizacion WHERE id = ?", nativeQuery = true)
     CuentasContables findCuentaContable(Long id);
+
+    @Query(value = "SELECT link_mapa FROM urbanizacion WHERE id = ?", nativeQuery = true)
+    String obtenerLinkMapa(Long idUrb);
 }

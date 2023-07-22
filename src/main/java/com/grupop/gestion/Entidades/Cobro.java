@@ -47,6 +47,8 @@ public class Cobro {
     private FormaDePago formaDePago;
     @OneToMany(mappedBy = "cobroId")
     private List<CobroDetalleCuotas> cobroDetalleCuotas;
+    @OneToMany(mappedBy = "cobroId")
+    private List<CobroDetalleCtaCte> cobroDetalleCtaCte;
     private BigDecimal total;
 
 

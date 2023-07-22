@@ -40,6 +40,7 @@ public class Credito {
     private PlanPago planPago;
     private Integer cantCuotas;
     private BigDecimal porcentajeInteres;
+    private Integer vencimiento;
     private BigDecimal interesesTotales;
     private BigDecimal gastosAdministrativos;
     private BigDecimal capital;

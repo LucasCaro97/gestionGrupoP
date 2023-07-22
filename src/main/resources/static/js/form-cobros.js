@@ -93,52 +93,7 @@ $("#addItem").click(function(){
 });
 
 $("#confirmDelete").click(function(){
-        var filasMarcadas=[];
-//        var totalVenta = $("#totalVenta").val();
-
-        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
-        $("#tablaDetalle tbody tr").each(function(){
-            var checkbox = $(this).find(".row-item");
-
-            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
-            if(checkbox.prop("checked")){
-                var filaMarcada = $(this).index();
-                filasMarcadas.push(filaMarcada);
-            }
-
-        });
-
-        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
-        for(var i = 0; i < filasMarcadas.length; i++){
-        var indiceFila = filasMarcadas[i];
-        var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
-
-
-        var totalLinea = filaMarcada.find("td:eq(4)").text();
-//        totalVenta -= totalLinea;
-        var idCred = filaMarcada.find("td:eq(1)").text();
-        var nroCuota = filaMarcada.find("td:eq(2)").text();
-        var idCobro = $("#id").val();
-
-
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/cobroDetalleCuotas/delete/";
-        var nuevaUrl = urlObj.href;
-        //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-        fetch(nuevaUrl+ idCred + "/" + nroCuota + "/" + idCobro, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-
-    }
-var tiempoEspera = 500;
-function redireccionar() {
-  window.location.href= "/cobros/form/"+ $("#id").val();
-}
-setTimeout(redireccionar, tiempoEspera);
+    eliminarItemsDetalleCuotas()
 });
 
 //FUNCIONES TAB IMPUTACION
@@ -172,9 +127,9 @@ $("#addItemImp").click(function(){
         var checkbox = $(element).find(".checkImp");
         if (checkbox.is(":checked")) {
             var filaEditable = $("<tr></tr>");
-            var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
-            var celda2 = "<td  class='celdaOculta' >" + $(element).children().eq(0).text() + "</td>"
-            var celda3 = "<td contenteditable='true' class='editable'>0.0</td>"
+            var celda1 = "<td>" + $(element).children().eq(0).text() + "</td>"
+            var celda2 = "<td>" + $(element).children().eq(1).text() + "</td>"
+            var celda3 = "<td>" + $(element).children().eq(2).text() + "</td>"
             var celda4 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
             filaEditable.append(celda1,celda2,celda3,celda4);
              $("#tablaDetalleImp tbody").append(filaEditable);
@@ -184,65 +139,8 @@ $("#addItemImp").click(function(){
 
 });
 
-//TRABAJAR EN ESTO 13/06/23
 $("#confirmDeleteImp").click(function(){
-        var filasMarcadas=[];
-        var totalVenta = $("#totalVenta").val();
-
-        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
-        $("#tablaDetalleImp tbody tr").each(function(){
-            var checkbox = $(this).find(".row-item");
-
-            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
-            if(checkbox.prop("checked")){
-                var filaMarcada = $(this).index();
-                filasMarcadas.push(filaMarcada);
-            }
-
-        });
-
-        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
-        for(var i = 0; i < filasMarcadas.length; i++){
-            var indiceFila = filasMarcadas[i];
-            var filaMarcada = $("#tablaDetalleImp tbody tr").eq(indiceFila);
-
-
-            var totalLinea = filaMarcada.find("td:eq(2)").text();
-            totalVenta -= totalLinea;
-            var idProducto = filaMarcada.find("td:eq(1)").text();
-            var idVenta = $("#id").val();
-
-
-            var url = window.location.href;
-            var urlObj = new URL(url);
-            urlObj.pathname = "/ventaDetalleImputacion/bajaDetalle/";
-            var nuevaUrl = urlObj.href;
-            //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-            fetch(nuevaUrl+ idVenta + "/" + idProducto, {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-                })
-        }
-
-
-            //console.log("Total luego de eliminar lineas: " + totalVenta)
-            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/ventaDetalle/actualizarTotalVenta/" + $("#id").val() + "/" + totalVenta, {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-                })
-
-
-
-var tiempoEspera = 500;
-function redireccionar() {
-  window.location.href= "/ventas/form/"+ $("#id").val();
-}
-setTimeout(redireccionar, tiempoEspera);
+eliminarItemsDetalleCtaCte()
 });
 
 /*
@@ -263,7 +161,7 @@ $("#tablaProducto tbody tr").each(function(){
 
 
 calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new Date(textoPrimerVencimiento), $(this).children().eq(8), $(this).children().eq(11).text() , $(this).children().eq(12),
-                $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6), $(this).children().eq(10) )
+                $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6), $(this).children().eq(10), $(this).children().eq(1) )
 
 
 })
@@ -271,107 +169,15 @@ calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new
 
 
 //agregar condicion para que solamente traiga el total cuando la venta exista en la bd
-//$.get("/ventas/obtenerTotalPorId/" + $("#id").val())
-//    .done(function(datos, status){
-//           $("#totalVenta").val(datos);
-//    })
-//    .fail(function(jqXHR, textStatus, errorThrown){
-//    console.log("No se puede traer el total porque la aun no esta en la base de datos");
-//    })
+$.get("/cobros/obtenerTotalPorId/" + $("#id").val())
+    .done(function(datos, status){
+            let datosFormatted = parseFloat(datos).toLocaleString("en-US");
+            $("#totalCobro").val(datosFormatted);
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+    console.log("No se puede traer el total porque la aun no esta en la base de datos");
+    })
 
-
-//ALTA DE ITEMS DETALLE A LA BD
-function crearItemsDetalle(){
-    let total = 0;
-
-    function confirmSave(){
-        var url = window.location.href;
-        var urlObj = new URL(url);
-        urlObj.pathname = "/cobroDetalleCuotas/alta/";
-        var nuevaUrl = urlObj.href;
-
-        console.log("URL: " + url)
-        console.log("URL OBJ: " + urlObj)
-        console.log(nuevaUrl)
-
-//        //RECORRO TABLA DETALLE PRODUCTO
-        $("#tablaDetalle tbody tr").each(function(){
-            let idVenta = $(this).children().eq(0).text().replace(/\./g, '').replace(',', '.');
-            let idCred = $(this).children().eq(1).text().replace(/\./g, '').replace(',', '.');
-            let nroCuota = $(this).children().eq(2).text().replace(/\./g, '').replace(',', '.');
-            let fechaVenc = $(this).children().eq(3).text().replace(/\./g, '').replace(',', '.');
-            let cuotaBase = $(this).children().eq(4).text().replace(/\./g, '').replace(',', '.');
-            let ajuste = $(this).children().eq(6).text().replace(/\./g, '').replace(',', '.');
-            let punitorio = $(this).children().eq(7).text().replace(/\./g, '').replace(',', '.');
-            let importeBonif = $(this).children().eq(8).text().replace(/\./g, '').replace(',', '.');
-            let importeFinal = $(this).children().eq(9).text().replace(/\./g, '').replace(',', '.');
-
-            console.log(cuotaBase)
-            console.log(ajuste)
-            console.log(punitorio)
-            console.log(importeBonif)
-            console.log(importeFinal)
-
-
-//            let totalLinea = (cantidad*precioU);
-//            total += totalLinea;
-
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-//          fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc+ "/" + cuotaBase + "/" + ajuste + "/" + punitorio+ "/" + importeBonif + "/" + importeFinal, {
-            fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() , {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-            })
-        });
-    };
-
-//    function confirmSaveImp(){
-//        var url = window.location.href;
-//        var urlObj = new URL(url);
-//        urlObj.pathname = "/ventaDetalleImputacion/altaDetalle/";
-//        var nuevaUrl = urlObj.href;
-//
-//        //RECORRO TABLA DETALLE IMPUTACION
-//        $("#tablaDetalleImp tbody tr").each(function(){
-//            let idVenta = $("#id").val();
-//            let descCta = $(this).children().eq(0).text();
-//            let idCta = $(this).children().eq(1).text();
-//            let importe = parseFloat($(this).children().eq(2).text());
-//
-//
-//            total = total + importe;
-//
-//            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-//            fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
-//                method : "POST",
-//                headers:{
-//                "Content-Type" : "application/json"
-//                }
-//            })
-//        });
-//    };
-//
-    confirmSave();
-//    confirmSaveImp();
-//
-//
-//
-//    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-//    fetch("/ventas/actualizarTotalVenta/" + $("#id").val() + "/" + total, {
-//            method : "POST",
-//            headers:{
-//            "Content-Type" : "application/json"
-//            }
-//    })
-//
-//    var tiempoEspera = 500;
-//    function redireccionar() {
-//      window.location.href= "/cobros/form/"+ $("#id").val();
-//    }
-//    setTimeout(redireccionar, tiempoEspera);
-}
 
 
 //FIN DOCUMENT READY
@@ -402,9 +208,10 @@ var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
         celdaDiasVenc.text(diasAtraso);
         let textoCuotaBase = celdaCuotaBase.text().replace(/\./g, '').replace(',', '.')
         let textoCeldaPorcIntPun = celdaPorcIntPun.text().replace(/\./g, '').replace(',', '.')
+        let textoceldaAjuste = celdaAjuste.text().replace(/\./g, '').replace(',', '.')
 
         let cuotaBase = parseFloat(textoCuotaBase);
-        let ajuste = 82612.10;
+        let ajuste = parseFloat(textoceldaAjuste);
         let porcPun = parseFloat(textoCeldaPorcIntPun);
 
 
@@ -414,10 +221,10 @@ var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
     }
 }
 
-async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste){
-    const opciones = { style: 'decimal', useGrouping: true, maximumFractionDigits: 2 };
+async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste, celdaVenta){
     let idCredito = celdaCredito.text();
-    let cuotaBase = celdaCuotaBase.text().replace(/\./g, '').replace(',', '.')
+    let cuotaBase = celdaCuotaBase.text().replace(/\,/g, '')
+    let idVenta = celdaVenta.text()
 
     mesPrimerVenc = fechaPrimerVencimiento.getMonth()
     anioPrimerVenc= fechaPrimerVencimiento.getFullYear()
@@ -426,7 +233,6 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
     let indiceBase = 0;
     let indiceActual = 0
 
-
     let fechaIndiceBase = obtenerMesIndiceBase(anioPrimerVenc, mesPrimerVenc, diaPrimerVenc)
     let fechaIndiceActual = obtenerMesIndiceActual()
 
@@ -434,15 +240,32 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
     const dato = await $.get("/credito/obtenerPorId/" + idCredito);
     if(dato.planPago.tablaCac){
 
-        const indiceBaseResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() + 1 ) + "/" + fechaIndiceBase.getFullYear());
-        indiceBase = indiceBaseResponse;
+        async function obtenerIndiceVenta(){
+            indiceBase = await $.get("/ventas/obtenerIndiceBase/" + idVenta);
 
-        const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
-        indiceActual = indiceActualResponse;
+        }
+        async function obtenerIndiceBaseDefault(){
+            if(indiceBase === 0 ){
+                const indiceBaseResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() + 1 ) + "/" + fechaIndiceBase.getFullYear());
+                indiceBase = indiceBaseResponse;
+            }
+        }
+        async function obtenerIndiceActual(){
+            const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
+            indiceActual = indiceActualResponse;
+        }
 
-        let resultado =   cuotaBase * ( indiceActual / indiceBase );
-        let importeAjuste = resultado - cuotaBase;
-        celdaImporteAjuste.text(importeAjuste.toLocaleString('es-ES', opciones))
+        await obtenerIndiceVenta();
+        await obtenerIndiceBaseDefault()
+        await obtenerIndiceActual()
+
+        if (indiceBase!=0){
+            let resultado =   cuotaBase * ( indiceActual / indiceBase );
+            let importeAjuste = resultado - cuotaBase;
+            celdaImporteAjuste.text(importeAjuste.toLocaleString("en-US"))
+        }else{
+        console.log("Falta cargar indice base para calcular")
+        }
     }
 
     } catch(error){
@@ -452,12 +275,11 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
 }
 
 function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celdaTotal){
-    const opciones = { style: 'decimal', useGrouping: true, maximumFractionDigits: 2 };
-    let cuotaBase = parseFloat(celdaCuotaBase.text().replace(/\./g, '').replace(',', '.'))
-    let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\./g, '').replace(',', '.'))
-    let ajuste = parseFloat(celdaImporteAjuste.text().replace(/\./g, '').replace(',', '.'))
+    let cuotaBase = parseFloat(celdaCuotaBase.text().replace(/\,/g, ''))
+    let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\,/g, ''))
+    let ajuste = parseFloat(celdaImporteAjuste.text().replace(/\,/g, ''))
     let resultado = cuotaBase + interesPunitorio + ajuste
-    celdaTotal.text(resultado.toLocaleString('es-ES', opciones))
+    celdaTotal.text(resultado.toLocaleString("en-US"))
 }
 
 function obtenerMesIndiceBase(year, mes, dia){
@@ -509,8 +331,192 @@ function obtenerMesIndiceActual(){
 
 }
 
-async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste , fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun, celdaTotal){
-    await calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste)
+async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste , fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun, celdaTotal, celdaVenta){
+    await calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste, celdaVenta)
     await calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun)
     calcularTotal(celdaCuotaBase, celdaInteresPun , celdaAjuste, celdaTotal )
 }
+
+async function eliminarItemsDetalleCuotas(){
+    function eliminarFilas(){
+        var filasMarcadas=[];
+        //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
+        $("#tablaDetalle tbody tr").each(function(){
+            var checkbox = $(this).find(".row-item");
+            //VERIFICAR SI EL CHECKBOX ESTA MARCADO
+            if(checkbox.prop("checked")){
+                var filaMarcada = $(this).index();
+                filasMarcadas.push(filaMarcada);
+            }
+        });
+
+        //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
+        for(var i = 0; i < filasMarcadas.length; i++){
+            var indiceFila = filasMarcadas[i];
+            var filaMarcada = $("#tablaDetalle tbody tr").eq(indiceFila);
+
+            var idCred = filaMarcada.find("td:eq(1)").text();
+            var nroCuota = filaMarcada.find("td:eq(2)").text();
+            var idCobro = $("#id").val();
+
+            var url = window.location.href;
+            var urlObj = new URL(url);
+            urlObj.pathname = "/cobroDetalleCuotas/delete/";
+            var nuevaUrl = urlObj.href;
+            //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
+            fetch(nuevaUrl+ idCred + "/" + nroCuota + "/" + idCobro, {
+                method : "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                }
+            })
+        }
+
+    }
+    var tiempoEspera = 500;
+    function redireccionar() {
+                //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
+                fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+                    method : "POST",
+                    headers:{
+                        "Content-Type" : "application/json"
+                    }
+                })
+                window.location.href= "/cobros/form/"+ $("#id").val();
+            }
+
+    await eliminarFilas()
+    setTimeout(redireccionar, tiempoEspera);
+}
+
+async function crearItemsDetalle(){
+    var tiempoEspera = 500;
+    function redireccionar() {
+            //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
+            fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+                method : "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                }
+            })
+            window.location.href= "/cobros/form/"+ $("#id").val();
+        }
+    function confirmSave(){
+        var url = window.location.href;
+        var urlObj = new URL(url);
+        urlObj.pathname = "/cobroDetalleCuotas/alta/";
+        var nuevaUrl = urlObj.href;
+
+        console.log("URL: " + url)
+        console.log("URL OBJ: " + urlObj)
+        console.log(nuevaUrl)
+
+//        //RECORRO TABLA DETALLE PRODUCTO
+        $("#tablaDetalle tbody tr").each(function(){
+            let idVenta = $(this).children().eq(0).text().replace(/\,/g, '');
+            let idCred = $(this).children().eq(1).text().replace(/\,/g, '');
+            let nroCuota = $(this).children().eq(2).text().replace(/\,/g, '');
+            let fechaVenc = $(this).children().eq(3).text().replace(/\,/g, '');
+            let cuotaBase = $(this).children().eq(4).text().replace(/\,/g, '');
+            let ajuste = $(this).children().eq(6).text().replace(/\,/g, '');
+            let punitorio = $(this).children().eq(7).text().replace(/\,/g, '');
+            let importeBonif = $(this).children().eq(8).text().replace(/\,/g, '');
+            let importeFinal = $(this).children().eq(9).text().replace(/\,/g, '');
+
+            console.log(cuotaBase)
+            console.log(ajuste)
+            console.log(punitorio)
+            console.log(importeBonif)
+            console.log(importeFinal)
+
+            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+//          fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc+ "/" + cuotaBase + "/" + ajuste + "/" + punitorio+ "/" + importeBonif + "/" + importeFinal, {
+            fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() , {
+                            method : "POST",
+                            headers:{
+                            "Content-Type" : "application/json"
+                            }
+            })
+        });
+    };
+    function confirmSaveImp(){
+        var url = window.location.href;
+        var urlObj = new URL(url);
+        urlObj.pathname = "/cobroDetalleCtaCte/alta/";
+        var nuevaUrl = urlObj.href;
+
+        //RECORRO TABLA DETALLE IMPUTACION
+        $("#tablaDetalleImp tbody tr").each(function(){
+            let idCobro = $("#id").val();
+            let idVenta = $(this).children().eq(0).text();
+            let detalle = $(this).children().eq(1).text();
+            let importe = parseFloat($(this).children().eq(2).text().replace(/\,/g, ''));
+
+            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+            fetch(nuevaUrl+ idCobro + "/" + idVenta + "/" + importe, {
+                method : "POST",
+                headers:{
+                "Content-Type" : "application/json"
+                }
+            })
+        });
+    };
+
+    await confirmSave();
+    await  confirmSaveImp();
+    setTimeout(redireccionar, tiempoEspera);
+}
+
+
+async function eliminarItemsDetalleCtaCte(){
+    function eliminarFilas(){
+            var filasMarcadas=[];
+                //RECORRER TODAS LAS FILAS DE LA TABLA Y CREO UN ARRAY DE LAS FILAS MARCADAS PARA LUEGO ELIMINARLAS DE LA TABLA
+                $("#tablaDetalleImp tbody tr").each(function(){
+                    var checkbox = $(this).find(".row-item");
+                    //VERIFICAR SI EL CHECKBOX ESTA MARCADO
+                    if(checkbox.prop("checked")){
+                        var filaMarcada = $(this).index();
+                        filasMarcadas.push(filaMarcada);
+                    }
+                });
+
+                //ELIMINO LAS FILAS MARCADAS DE LA TABLA Y DE LA BASE DE DATOS
+                for(var i = 0; i < filasMarcadas.length; i++){
+                    var indiceFila = filasMarcadas[i];
+                    var filaMarcada = $("#tablaDetalleImp tbody tr").eq(indiceFila);
+
+
+                    var idDetalle = filaMarcada.find("td:eq(3)").text();
+                    var url = window.location.href;
+                    var urlObj = new URL(url);
+                    urlObj.pathname = "/cobroDetalleCtaCte/bajaDetalle/";
+                    var nuevaUrl = urlObj.href;
+                    //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
+                    console.log(nuevaUrl + idDetalle);
+                    fetch(nuevaUrl + idDetalle,  {
+                            method : "POST",
+                            headers:{
+                            "Content-Type" : "application/json"
+                            }
+                        })
+                }
+
+        }
+    var tiempoEspera = 500;
+    function redireccionar() {
+    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+    fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+        method : "POST",
+        headers:{
+            "Content-Type" : "application/json"
+        }
+    })
+window.location.href= "/cobros/form/"+ $("#id").val();
+}
+
+    await eliminarFilas();
+    setTimeout(redireccionar, tiempoEspera);
+
+}
+

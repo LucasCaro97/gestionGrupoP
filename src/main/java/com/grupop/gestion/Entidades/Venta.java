@@ -60,6 +60,9 @@ public class Venta implements Serializable {
     @OneToMany(mappedBy = "ventaId")
     @JsonIgnore
     private List<VentaDetalle> ventaDetalle;
-    private boolean ventaCerrada;
+    private boolean bloqueada;
+    @JoinColumn(name = "fk_indice_base")
+    @ManyToOne
+    private IndiceCAC indiceBase;
 
 }

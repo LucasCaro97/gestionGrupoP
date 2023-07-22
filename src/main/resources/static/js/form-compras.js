@@ -170,8 +170,8 @@ crearItemsDetalle();
 
 
 $.get("/compras/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
-           $("#totalCompra").val(datos);
-           //console.log("Total compra: " + datos);
+           let datosFormatted = parseFloat(datos).toLocaleString("en-US");
+           $("#totalCompra").val(datosFormatted);
 });
 
 

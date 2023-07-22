@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +56,19 @@ public class CreditoDetalleServicio {
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(idCred, nroCuota);
         c.setCobrado(false);
         creditoDetalleRepo.save(c);
+    }
+
+    @Transactional(readOnly = true)
+    public CreditoDetalle obtenerPorId(Long id){
+        return creditoDetalleRepo.findById(id).get();
+    }
+
+    @Transactional
+    public void actualizarCuotas(List<CreditoDetalle> arrayListA) {
+        for (CreditoDetalle creditoDet : arrayListA) {
+            Optional<CreditoDetalle> lineaCredito = creditoDetalleRepo.findById(creditoDet.getId());
+            lineaCredito.get().setMonto(creditoDet.getMonto());
+            creditoDetalleRepo.save(lineaCredito.get());
+        }
     }
 }

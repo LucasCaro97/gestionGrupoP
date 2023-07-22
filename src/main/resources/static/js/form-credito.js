@@ -41,6 +41,7 @@ $("#planPago").change(function(){
 $.get("/planPago/obtenerPlanPago/" + $("#planPago").val(), function(datos,status){
     $("#cantCuotas").val(datos.cantCuota);
     $("#porcentajeInteres").val(datos.tasaInteresTotal);
+    $("#vencimiento").val(datos.venceLosDias);
 })
 
 
@@ -64,6 +65,10 @@ $("#idOperacionNew").change(function(){
     })
 })
 
+$(".btnRegenerarCuotas").click(function() {
+    crearArrayListCuotas()
+})
+
 });
 
 
@@ -74,6 +79,40 @@ $.get("/entidadBase/obtenerNombrePorFkCliente/" + selectCliente.val(), function(
     selectCliente.empty();
     selectCliente.append($("<option value='"+datos.id+"'> "+ datos.razonSocial +" </option>"));
          })
+}
+
+async function crearArrayListCuotas(){
+    function crearArrayList(){
+        const arrayList = []
+
+        const tableRows = document.querySelectorAll(".tablaCreditoDetalle tbody tr");
+        tableRows.forEach( (row) => {
+            const nroCuota = parseInt(row.querySelector("td:nth-child(1)").textContent);
+            const monto = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace(",", "")).toFixed(2);
+            const vencimiento = row.querySelector("td:nth-child(3)").textContent;
+            arrayList.push({ nroCuota, monto, vencimiento });
+        } )
+        return arrayList;
+    }
+    function enviarDatosAlServidor(arrayList){
+        const url = '/credito/regenerarCuotas/' + $("#id").val();
+        fetch(url, {
+            method : "POST",
+            headers:{
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify(arrayList)
+        })
+
+    }
+    var tiempoEspera = 800;
+    function redireccionar() {
+        window.location.href= "/credito/form/"+ $("#id").val();
+    }
+
+    const dynamicArrayList = await crearArrayList();
+    await enviarDatosAlServidor(dynamicArrayList);
+    setTimeout(redireccionar, tiempoEspera);
 }
 
 
