@@ -162,6 +162,19 @@ public class LoteControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body("Se altero el estado del lote correctamente");
     }
 
+    @GetMapping("/obtenerStockPorUrb/{id}")
+    public ResponseEntity<Integer> obtenerStockPorUrb(@PathVariable Long id){
+        return ResponseEntity.ok(loteServicio.obtenerStockPorUrb(id));
+    }
+    @GetMapping("/obtenerDisponiblesPorUrb/{id}")
+    public ResponseEntity<Integer> obtenerDisponiblesPorUrb(@PathVariable Long id){
+        return ResponseEntity.ok(loteServicio.obtenerDisponiblesPorUrb(id));
+    }
+    @GetMapping("/obtenerVendidosPorUrb/{id}")
+    public ResponseEntity<Integer> obtenerVendidosPorUrb(@PathVariable Long id){
+        return ResponseEntity.ok(loteServicio.obtenerVendidosPorUrb(id));
+    }
+
 
 
 

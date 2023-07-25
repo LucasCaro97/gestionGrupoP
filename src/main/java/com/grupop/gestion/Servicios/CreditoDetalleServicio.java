@@ -71,4 +71,13 @@ public class CreditoDetalleServicio {
             creditoDetalleRepo.save(lineaCredito.get());
         }
     }
+
+    @Transactional
+    public void actualizarCuotasFechas(List<CreditoDetalle> arrayListA) {
+        for (CreditoDetalle creditoDet : arrayListA){
+            Optional<CreditoDetalle> lineaCredito = creditoDetalleRepo.findById(creditoDet.getId());
+            lineaCredito.get().setVencimiento(creditoDet.getVencimiento());
+            creditoDetalleRepo.save(lineaCredito.get());
+        }
+    }
 }

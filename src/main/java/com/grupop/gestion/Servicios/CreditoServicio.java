@@ -204,6 +204,10 @@ public class CreditoServicio {
                 nuevaFecha = nuevaFecha.plusMonths(1);
             }
 
+            creditoDetalleServicio.actualizarCuotasFechas(arrayListA);
+
+        }else{
+            System.out.println("No es necesario recalcular fechas ya que ninguna ha cambiado");
         }
 
 

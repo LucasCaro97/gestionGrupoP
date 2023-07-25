@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 public interface CompraRepo extends JpaRepository<Compra,Long> {
@@ -20,4 +21,7 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
     BigDecimal obtenerTotalProductos(Long idCompra);
     @Query(value = "SELECT SUM(importe) FROM compra_detalle_imputacion WHERE fk_compra = ?", nativeQuery = true)
     BigDecimal obtenerTotalImputacion(Long idCompra);
+
+    @Query(value = "SELECT * FROM compra WHERE fk_proveedor = ? AND bloqueado = 0", nativeQuery = true)
+    List<Compra> obtenerComprasPendientesPagoPorProveedor(Long id);
 }

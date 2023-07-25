@@ -136,4 +136,20 @@ public class LoteServicio {
             System.out.println("El producto no es un lote - No se modifica estado");
         }
     }
+
+    @Transactional
+    public Integer obtenerStockPorUrb(Long idUrb){
+        return loteRepo.obtenerStockPorUrb(idUrb);
+    }
+    @Transactional
+    public Integer obtenerDisponiblesPorUrb(Long idUrb){
+        return loteRepo.obtenerDisponiblesPorUrb(idUrb);
+    }
+
+    @Transactional
+    public Integer obtenerVendidosPorUrb(Long idUrb){
+        return loteRepo.obtenerVendidosPorUrb(idUrb);
+    }
+
+
 }

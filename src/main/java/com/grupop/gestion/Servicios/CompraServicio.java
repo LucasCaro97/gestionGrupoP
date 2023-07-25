@@ -28,6 +28,7 @@ public class CompraServicio {
         compra.setFormaDePago(dto.getFormaDePago());
         compra.setObservaciones(dto.getObservaciones());
         compra.setTotal(new BigDecimal(0));
+        compra.setBloqueado(false);
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         compraRepo.save(compra);
     }
@@ -93,6 +94,22 @@ public class CompraServicio {
         return compraRepo.obtenerTotalPorId(id); }
 
 
+    @Transactional(readOnly = true)
+    public List<Compra> obtenerComprasPendientesPagoPorProveedor(Long id) {
+        return compraRepo.obtenerComprasPendientesPagoPorProveedor(id);
+    }
 
+    @Transactional
+    public void marcarComoBloqueado(Long id){
+        Compra c = compraRepo.findById(id).get();
+        c.setBloqueado(true);
+        compraRepo.save(c);
+    }
 
+    @Transactional
+    public void marcarComoDesbloqueado(Long id) {
+        Compra c = compraRepo.findById(id).get();
+        c.setBloqueado(false);
+        compraRepo.save(c);
+    }
 }

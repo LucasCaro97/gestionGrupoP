@@ -1,6 +1,5 @@
 package com.grupop.gestion.Entidades;
 
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Compra {
+public class Pago {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,22 +34,13 @@ public class Compra {
     private Sector sector;
     private String observaciones;
     @Column(precision = 10, scale = 2)
-    private BigDecimal subTotalSinImpuestos;
-    private BigDecimal importesConImp;
-    @Column(precision = 10, scale = 2)
-    private BigDecimal importesSinImp;
-    @Column(precision = 10, scale = 2)
-    private BigDecimal totalImpuestos;
-    @Column(precision = 10, scale = 2)
     private BigDecimal total;
     //private Usuario usuario;
     @JoinColumn(name = "fk_forma_de_pago")
     @ManyToOne
     private FormaDePago formaDePago;
-    @OneToMany(mappedBy = "compraId")
-    private List<CompraDetalle> compraDetalle;
-    private Boolean bloqueado;
-
+    @OneToMany(mappedBy = "pagoId")
+    private List<PagoDetalle> PagoDetalle;
 
 
 
