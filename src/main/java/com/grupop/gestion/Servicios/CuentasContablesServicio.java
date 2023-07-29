@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.CuentasContables;
+import com.grupop.gestion.Entidades.Impuestos;
 import com.grupop.gestion.Repositorios.CuentasContablesRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class CuentasContablesServicio {
         cta.setImpuestos(dto.getImpuestos());
         cuentasContablesRepo.save(cta);
         System.out.println(cta.getImpuestos());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Impuestos> getImpuestosByCuentaContableId(Long idCuenta){
+        return cuentasContablesRepo.findImpuestosByCuentaContableId(idCuenta);
     }
 
     @Transactional(readOnly = true)

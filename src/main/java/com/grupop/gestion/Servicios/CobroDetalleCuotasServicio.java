@@ -26,14 +26,7 @@ public class CobroDetalleCuotasServicio {
 
     @Transactional
     public void crear(Long idVenta, Long idCred, Integer nroCuota, LocalDate fechaVenc, BigDecimal cuotaBase, BigDecimal ajuste, BigDecimal importePuni, BigDecimal importeBonif, BigDecimal importeFinal, Long idCobro) {
-        Venta v = ventaServicio.obtenerPorId(idVenta);
-//        if(!v.isBloqueada()){
-//            //CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA --- > HABLAR PARA VER CUANDO SE BLOQUEA LA VENTA ( CUANDO SE GENERA EL CREDITO O CUANDO SE GENERA EL COBRO <---
-//            System.out.println("cerrando venta: " + v.getId());
-//            ventaServicio.cerrarVenta(v.getId());
-//        }
         if ( cobroDetalleCuotasRepo.existByCreditoAndNroCuota(idCred, nroCuota) != 0) {
-            System.out.println("Ya existe el cobro, procedo a actualizarlo");
             CobroDetalleCuotas c = cobroDetalleCuotasRepo.searchByCreditoAndNroCuota(idCred, nroCuota);
             c.setVentaId((ventaServicio.obtenerPorId(idVenta)));
             c.setCobroId(cobroServicio.obtenerPorId(idCobro));
@@ -49,7 +42,6 @@ public class CobroDetalleCuotasServicio {
             cobroDetalleCuotasRepo.save(c);
         }
         else {
-            System.out.println("Creando nuevo item de cobro");
             CobroDetalleCuotas c = new CobroDetalleCuotas();
             c.setVentaId((ventaServicio.obtenerPorId(idVenta)));
             c.setCobroId(cobroServicio.obtenerPorId(idCobro));
@@ -64,6 +56,8 @@ public class CobroDetalleCuotasServicio {
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
             cobroDetalleCuotasRepo.save(c);
             creditoDetalleServicio.marcarComoCancelada(idCred,nroCuota);
+
+            if(!creditoServicio.validarEstado(idCred)) creditoServicio.marcarComoBloqueado(idCred);
         }
 
     }

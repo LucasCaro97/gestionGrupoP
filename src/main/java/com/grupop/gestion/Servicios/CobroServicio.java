@@ -16,6 +16,7 @@ public class CobroServicio {
 
     private final CobroRepo cobroRepo;
     private final TalonarioServicio talonarioServicio;
+    private final TipoOperacionServicio tipoOperacionServicio;
 
     @Transactional
     public void crear(Cobro dto){
@@ -32,6 +33,7 @@ public class CobroServicio {
         c.setFormaDePago(dto.getFormaDePago());
         c.setObservaciones(dto.getObservaciones());
         c.setTotal(new BigDecimal(0));
+        c.setTipoOperacion(tipoOperacionServicio.obtenerPorId(3l));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         cobroRepo.save(c);
     }

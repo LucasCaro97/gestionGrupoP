@@ -33,6 +33,11 @@ public class CobroDetalleCtaCteServicio {
             c.setVentaId(ventaServicio.obtenerPorId(idVenta));
             c.setTotalDetalle(importe);
             cobroDetalleCtaCteRepo.save(c);
+
+            //CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
+            System.out.println("cerrando venta: " + idVenta);
+            ventaServicio.cerrarVenta(idVenta);
+
         }
 
 

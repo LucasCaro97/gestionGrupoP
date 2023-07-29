@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+validarEstado($("#id").val())
 
 
 var fechaActual = document.getElementById("fechaAlta").value;
@@ -113,6 +113,34 @@ async function crearArrayListCuotas(){
     const dynamicArrayList = await crearArrayList();
     await enviarDatosAlServidor(dynamicArrayList);
     setTimeout(redireccionar, tiempoEspera);
+}
+
+function validarEstado(idPago){
+
+fetch('/credito/validarEstado/'+ idPago)
+  .then(response => response.text())
+  .then(data => {
+    const creditoCerrado = (data === "true");
+    if(creditoCerrado===true){
+        console.log("El credito ya posee un cobro");
+        comandosEncabezado = $("#comandos #btnAlta");
+        comandosDetalle = $(".comandosDet");
+        btnRegenerarCuotas = $(".btnRegenerarCuotas");
+        btnRegenerarCuotas.css('display', 'none');
+        comandosDetalle.css('visibility', 'hidden');
+//        botonEliminarCom.css('display', 'none');
+
+        $('input').prop('readonly', true);
+        $('input').css('background-color', 'var(--bs-secondary-bg)');
+        $('select').prop('disabled', true);
+//        $('textarea').prop('readonly', true);
+//        $('textarea').css('background-color', 'var(--bs-secondary-bg)');
+    }
+    })
+  .catch(error => {
+    console.error('Error al obtener el valor booleano:', error);
+  });
+
 }
 
 

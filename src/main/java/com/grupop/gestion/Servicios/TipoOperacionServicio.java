@@ -36,4 +36,5 @@ public class TipoOperacionServicio {
 
     @Transactional
     public void eliminarPorId(Long id){ tipoOperacionRepo.deleteById(id);}
+
 }

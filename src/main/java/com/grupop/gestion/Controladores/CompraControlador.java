@@ -157,6 +157,11 @@ public class CompraControlador {
         return ResponseEntity.status(HttpStatus.CREATED).body("Se actualizo el total correctamente");
     }
 
+    @GetMapping("/validarEstado/{idCompra}")
+    public ResponseEntity<Boolean> validarEstado(@PathVariable Long idCompra){
+        return  ResponseEntity.ok(compraServicio.validarEstado(idCompra));
+    }
+
 
 
 

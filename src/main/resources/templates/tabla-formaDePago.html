@@ -47,9 +47,9 @@
                                     <td th:text="${fdp.tipoOperacion.descripcion}"></td>
                                     <td th:text="${fdp.tipoPago.descripcion}"></td>
                                     <td th:text="${fdp.abreviatura}"></td>
-                                    <td th:text="${fdp.cuenta.descripcion}"></td>
-                                    <td th:text="${fdp.bancoTarjeta}"></td>
-                                    <td th:text="${fdp.moneda.descripcion}"></td>
+                                    <td th:text="${fdp.cuenta != null ? fdp.cuenta.descripcion : ''}"></td>
+                                    <td th:text="${fdp.bancoTarjeta != null ? fdp.bancoTarjeta.descripcion : '' }"></td>
+                                    <td th:text="${fdp.moneda != null ? fdp.moneda.descripcion : ''}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                         Accion

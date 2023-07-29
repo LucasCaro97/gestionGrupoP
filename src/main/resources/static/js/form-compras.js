@@ -1,5 +1,7 @@
 
 $(document).ready(function () {
+validarEstado($("#id").val())
+
 var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
@@ -140,17 +142,64 @@ $("#limpiarImp").click(function(){
 });
 
 $("#addItemImp").click(function(){
-    $("#tablaProductoImp tr").each(function(index, element){
+    function obtenerImpuestosPorCuenta(idCuenta){
+        const url = "/cuentas/obtenerListaDeImpuestosPorCuenta/" + idCuenta.text();
+
+    return new Promise((resolve, reject) => {
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              // Si la respuesta no es exitosa, rechazamos la promesa con un error
+              reject("Error en la solicitud: " + response.status);
+            } else {
+              // Convierte la respuesta en formato JSON y resuelve la promesa con los datos obtenidos
+              resolve(response.json());
+            }
+          })
+          .catch((error) => {
+            // Rechaza la promesa si ocurre un error durante la solicitud
+            reject("Error al procesar la solicitud: " + error.message);
+          });
+      });
+    }
+    function cargarListaDeImpuestos(){
+        const selectImpuestos = $("<select name='tax' multiple></select>")
+        return selectImpuestos;
+    }
+
+    $("#tablaProductoImp tr").each(async function(index, element){
+        var idCuenta = $(element).find("td:first-child")
         var checkbox = $(element).find(".checkImp");
         if (checkbox.is(":checked")) {
+            try{
+                const listaDeImpuestos = await obtenerImpuestosPorCuenta(idCuenta)
+                const selectImpuestos = cargarListaDeImpuestos()
+
+                if (listaDeImpuestos.length === 0) {
+                  // La lista de impuestos está vacía, puedes hacer algo aquí si es necesario
+                } else {
+                  // La lista de impuestos no está vacía, puedes agregar las opciones al select
+                  listaDeImpuestos.forEach((impuesto) => {
+                    const opcion = $("<option></option>").attr("value", impuesto.id).text(impuesto.descripcion);
+                    selectImpuestos.append(opcion);
+                  });
+                }
+
             var filaEditable = $("<tr></tr>");
             var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
             var celda2 = "<td  class='celdaOculta' >" + $(element).children().eq(0).text() + "</td>"
             var celda3 = "<td contenteditable='true' class='editable'>0.0</td>"
-            var celda4 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
-            filaEditable.append(celda1,celda2,celda3,celda4);
+            var celda4 = "<td></td>"
+            celda4 = celda4.replace("</td>", selectImpuestos.prop("outerHTML") + "</td>");
+            var celda5 = "<td>0.00</td>"
+            var celda6 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+
+            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6);
              $("#tablaDetalleImp tbody").append(filaEditable);
 
+            } catch(error){
+                console.log(error)
+            }
         }
     });
 
@@ -208,7 +257,6 @@ async function crearItemsDetalle(){
             let precioU =  parseFloat($(this).children().eq(3).text().replace(/\,/g, ''));
             let precioF = parseFloat($(this).children().eq(4).text().replace(/\,/g, ''));
 
-
             //GENERO LOS DETALLES DE LA COMPRA EN LA BASE DE DATOS
             fetch(nuevaUrl+ idCompra + "/" + idProd + "/" + cantidad + "/" + precioU + "/" + precioF, {
                 method : "POST",
@@ -218,34 +266,52 @@ async function crearItemsDetalle(){
             });
         });
     };
-    function confirmSaveImp(){
+    async function confirmSaveImp(){
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/compraDetalleImputacion/altaDetalle/";
+        urlObj.pathname = "/compraDetalleImputacion/altaDetalle";
         var nuevaUrl = urlObj.href;
 
         //RECORRO TABLA DETALLE IMPUTACION
-        $("#tablaDetalleImp tbody tr").each(function(){
-            let idVenta = $("#id").val();
+        $("#tablaDetalleImp tbody tr").each(async function(){
+            let idCompra = $("#id").val();
             let descCta = $(this).children().eq(0).text();
             let idCta = $(this).children().eq(1).text();
             let importe = parseFloat($(this).children().eq(2).text().replace(/\,/g, ''));
+            const impuestosSeleccionados = [];
+                $(this).find("select[name='tax'] option:selected").each(function() {
+                  const impuesto = {
+                    id: $(this).val(),
+                    descripcion: $(this).text(),
+                  };
+                  impuestosSeleccionados.push(impuesto);
+                });
 
 
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idCta + "/" + importe, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
+            const compraDetalleImputacionRequest = {
+                compraId: idCompra,
+                cuentaContableId: idCta,
+                importeBase: importe,
+                impuestosIds: impuestosSeleccionados.map(impuesto => impuesto.id), // Suponiendo que impuestosSeleccionados es una lista de objetos Impuestos con un campo "id"
+                importeTotal: 0,
+              }
+
+            fetch(nuevaUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify(compraDetalleImputacionRequest),
             })
-        });
-    };
+
+            })
+    }
 
     await confirmSave();
     await confirmSaveImp();
     setTimeout(redireccionar, tiempoEspera);
-}
+        }
+
 
 async function eliminarItemsDetalleProd(){
 
@@ -359,5 +425,34 @@ window.location.href= "/compras/form/"+ $("#id").val();
 }
 
 });
+
+
+function validarEstado(idCompra){
+
+fetch('/compras/validarEstado/'+ idCompra)
+  .then(response => response.text())
+  .then(data => {
+    const compraCerrada = (data === "true");
+    if(compraCerrada===true){
+        console.log("la compra esta cerrada");
+        comandosEncabezado = $("#comandos #btnAlta");
+        comandosDetalle = $(".comandosDet");
+//        botonEliminarCom = $(".eliminarCom");
+//        comandosEncabezado.css('display', 'none');
+        comandosDetalle.css('visibility', 'hidden');
+//        botonEliminarCom.css('display', 'none');
+
+        $('input').prop('readonly', true);
+        $('input').css('background-color', 'var(--bs-secondary-bg)');
+        $('select').prop('disabled', true);
+//        $('textarea').prop('readonly', true);
+//        $('textarea').css('background-color', 'var(--bs-secondary-bg)');
+    }
+    })
+  .catch(error => {
+    console.error('Error al obtener el valor booleano:', error);
+  });
+
+}
 
 

@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("credito")
+@RequestMapping("/credito")
 public class CreditoControlador {
 
     private final CreditoServicio creditoServicio;
@@ -152,6 +152,11 @@ public class CreditoControlador {
 
         creditoServicio.regenerarCuotas(idCredito, arrayListCuotas);
         return ResponseEntity.status(HttpStatus.CREATED).body("Se ha regenerado el credito correctamente");
+    }
+
+    @GetMapping("/validarEstado/{idCredito}")
+    public ResponseEntity<Boolean> validarEstado(@PathVariable Long idCredito){
+        return  ResponseEntity.ok(creditoServicio.validarEstado(idCredito));
     }
 
 

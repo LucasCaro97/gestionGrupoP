@@ -15,4 +15,7 @@ public interface CreditoRepo extends JpaRepository<Credito, Long> {
 
     @Query(value = "SELECT MAX(id) FROM credito", nativeQuery = true)
     Long buscarUltimoId();
+
+    @Query(value = "SELECT bloqueado FROM credito WHERE id = ?", nativeQuery = true)
+    boolean validarEstado(Long idCred);
 }

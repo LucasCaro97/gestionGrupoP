@@ -114,7 +114,7 @@
 
             <div class="tab-content mt-2">
                 <div id="tab1" class="tab-pane fade show active" role="tabpanel" aria-labelledby="tab1-tab">
-                    <div class="d-flex justify-content-center p-2">
+                    <div class="d-flex justify-content-center p-2 comandosDet">
                         <button class="btn btn-outline-success" id="add" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Añadir
                         </button>
@@ -280,7 +280,7 @@
                     </div>
                 </div>
                 <div id="tab2" class="tab-pane fade" role="tabpanel" aria-labelledby="tab2-tab">
-                    <div class="d-flex justify-content-center p-2">
+                    <div class="d-flex justify-content-center p-2 comandosDet">
                         <button class="btn btn-outline-success" id="addImp" type="submit" data-bs-toggle="modal" data-bs-target="#exampleModalImp">
                             Añadir
                         </button>
@@ -420,6 +420,8 @@
                                 <th>Cuenta</th>
                                 <th class="celdaOculta">IdCuenta</th>
                                 <th>Importe</th>
+                                <th class='celdaImpuesto'>Impuesto</th>
+                                <th>Total</th>
                                 <th>Accion</th>
                             </tr>
                             </thead>
@@ -427,8 +429,11 @@
                             <tr th:each="xxx : ${tablaDetalleImputacion}">
                                 <td th:text="${xxx.cuentasContables.descripcion}"></td>
                                 <td th:text="${xxx.cuentasContables.id}" class="celdaOculta"></td>
-                                <td  th:text="${#numbers.formatDecimal(xxx.importe,1,'COMMA',2,'POINT')}" contenteditable='true' class='editable'></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeBase,1,'COMMA',2,'POINT')}" contenteditable='true' class='editable'></td>
+                                <td th:text="${#strings.listJoin(xxx.impuestos.![descripcion], ' - ')}" class='celdaImpuesto'></td>
+                                <td th:text="${#numbers.formatDecimal(xxx.importeTotal,1,'COMMA',2,'POINT')}"></td>
                                 <td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>
+
                             </tr>
                             </tbody>
                         </table>

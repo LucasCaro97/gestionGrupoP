@@ -1,15 +1,19 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.DTO.CompraDetalleImputacionDto;
+import com.grupop.gestion.Entidades.Impuestos;
+import com.grupop.gestion.Mappers.ImpuestoMapper;
 import com.grupop.gestion.Servicios.CompraDetalleImputacionServicio;
 import com.grupop.gestion.Servicios.CompraServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,14 +23,16 @@ public class CompraDetalleImputacionControlador {
     private final CompraDetalleImputacionServicio compraDetalleImputacionServicio;
     private final CompraServicio compraServicio;
 
-    @PostMapping("altaDetalle/{idCompra}/{idCuenta}/{importe}")
-    public ResponseEntity<String> altaDetalle(@PathVariable Long idCompra, @PathVariable Long idCuenta,
-                                              @PathVariable Double importe, RedirectAttributes attributes){
+    @PostMapping("altaDetalle")
+    public ResponseEntity<String> altaDetalle(@RequestBody CompraDetalleImputacionDto request){
         try{
-            compraDetalleImputacionServicio.crear(idCompra,idCuenta, importe);
-            attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
+            Long compraId = request.getCompraId();
+            Long cuentaContableid = request.getCuentaContableId();
+            BigDecimal importeBase = request.getImporteBase();
+            List<Long> impuestosIds = request.getImpuestosIds();
+            compraDetalleImputacionServicio.crear(compraId, cuentaContableid, importeBase,impuestosIds);
+
         }catch(Exception e){
-            attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado correctamente");

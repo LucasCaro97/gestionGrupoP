@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ToString
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Venta implements Serializable {
 
@@ -64,5 +66,8 @@ public class Venta implements Serializable {
     @JoinColumn(name = "fk_indice_base")
     @ManyToOne
     private IndiceCAC indiceBase;
+    @JoinColumn(name = "fk_tipoOp")
+    @ManyToOne
+    private TipoOperacion tipoOperacion;
 
 }

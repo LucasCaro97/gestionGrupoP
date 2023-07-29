@@ -133,6 +133,8 @@ public class VentaControlador {
                 if(dto.getFormaDePago() != null || v.getFormaDePago() != null ){
                    if( (dto.getFormaDePago().getId() == 3 || v.getFormaDePago().getId() == 3 ) && creditoServicio.validarExistenciaPorVenta(dto.getId()) == 0){
                        redirect.setUrl("/credito/form/new/"+dto.getId());
+                   }else if(dto.getFormaDePago().getId() == 51 || v.getFormaDePago().getId() == 51 ){   //Validar tambien luego si existe ya un detalle de pago asignado
+                       System.out.println("Redirigir a form DetalleDePago porque tiene multiples FP");
                    }
                 }
             }else{
@@ -164,7 +166,6 @@ public class VentaControlador {
     @PostMapping("/actualizarTotalVenta/{idVenta}")
     public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta,RedirectAttributes attributes){
         try{
-            System.out.println("Actualizando Total Venta");
             ventaServicio.actualizarTotalNuevo(idVenta);
             attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
         }catch(Exception e){

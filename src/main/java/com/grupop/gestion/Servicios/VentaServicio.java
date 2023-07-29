@@ -1,9 +1,6 @@
 package com.grupop.gestion.Servicios;
 
-import com.grupop.gestion.Entidades.Cliente;
-import com.grupop.gestion.Entidades.Compra;
-import com.grupop.gestion.Entidades.IndiceCAC;
-import com.grupop.gestion.Entidades.Venta;
+import com.grupop.gestion.Entidades.*;
 import com.grupop.gestion.Repositorios.TalonarioRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +19,8 @@ public class VentaServicio {
     private final VentaRepo ventaRepo;
     private final TalonarioServicio talonarioServicio;
     private final IndiceCacServicio indiceCacServicio;
+    private final TipoOperacionServicio tipoOperacionServicio;
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
     @Transactional
     public void crear(Venta dto){
@@ -40,13 +39,16 @@ public class VentaServicio {
         vta.setTotal(new BigDecimal(0));
         vta.setBloqueada(false);
         vta.setIndiceBase(dto.getIndiceBase());
+        vta.setTipoOperacion(tipoOperacionServicio.obtenerPorId(1l));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+
         ventaRepo.save(vta);
     }
 
     @Transactional //AGREGAR VALIDACIONES PARA QUE NO SE PUEDA MODIFICAR CUANDO YA CONTIENE UN COBRO
     public void actualizar(Venta dto){
         Venta vta = ventaRepo.findById(dto.getId()).get();
+
         if(vta.isBloqueada()){
 
             vta.setObservaciones(dto.getObservaciones());
@@ -68,6 +70,15 @@ public class VentaServicio {
             vta.setFechaComprobante(dto.getFechaComprobante());
             vta.setIndiceBase(dto.getIndiceBase());
             ventaRepo.save(vta);
+
+            System.out.println("ID FP : " + vta.getFormaDePago().getId());
+            if(vta.getFormaDePago() != null) {
+                if (vta.getFormaDePago().getId() != 51) { //Validar que no exista ya uno, si ya existe no actualizar
+                    System.out.println("Creando Detalle de Pago!");
+                    formaDePagoDetalleServicio.crear(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
+                    System.out.println(vta);
+                }
+            }
         }
     }
 
@@ -111,12 +122,8 @@ public class VentaServicio {
     public void actualizarTotalNuevo(Long idVenta){
         BigDecimal resultado = new BigDecimal(0);
         Venta v = ventaRepo.findById(idVenta).get();
-        System.out.println(v);
         BigDecimal totalProd = ventaRepo.obtenerTotalProductos(v.getId());
         BigDecimal totalImp = ventaRepo.obtenerTotalImputacion(v.getId());
-
-        System.out.println("Total prod: " + totalProd);
-        System.out.println("Total Imp: " + totalImp);
 
         if(totalProd!=null && totalImp !=null){
             resultado = totalProd.add(totalImp);

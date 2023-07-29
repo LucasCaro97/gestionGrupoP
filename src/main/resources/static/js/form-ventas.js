@@ -344,6 +344,11 @@ generarComision();
 traducirVendedorTabla();
 
 
+$(".verDetallePago").click(function() {
+let url = "http://localhost:8080/detalleDePago/getForm/" + $("#id").val() + "/1"
+window.open(url,"_blank");
+})
+
 //FIN DOCUMENT READY
 });
 
@@ -371,9 +376,11 @@ fetch('/ventas/validarEstado/'+idVenta)
         console.log("la venta esta cerrada");
         comandosEncabezado = $("#comandos #btnAlta");
         comandosDetalle = $(".comandosDet");
+        comandoDelCom = $(".eliminarCom");
 //        botonEliminarCom = $(".eliminarCom");
 //        comandosEncabezado.css('display', 'none');
         comandosDetalle.css('visibility', 'hidden');
+        comandoDelCom.css('visibility', 'hidden');
 //        botonEliminarCom.css('display', 'none');
 
         $('input').prop('readonly', true);

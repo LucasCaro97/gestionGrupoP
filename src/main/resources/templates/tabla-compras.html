@@ -35,6 +35,7 @@
                                     <th>Fecha</th>
                                     <th>Nro Comp</th>
                                     <th>Sector</th>
+                                    <th>Forma Pago</th>
                                     <th>Observacion</th>
                                     <th>Accion</th>
                                 </tr>
@@ -46,6 +47,7 @@
                                     <td th:text="${xxx.fechaComprobante}"></td>
                                     <td th:text="${xxx.talonario.nroTalonario} + ' - ' + ${xxx.nroComprobante}"></td>
                                     <td th:text="${xxx.sector.descripcion}"></td>
+                                    <td th:text="${xxx.formaDePago != null ? xxx.formaDePago.descripcion : ''}"></td>
                                     <td th:text="${xxx.observaciones}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

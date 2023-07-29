@@ -2,6 +2,7 @@ package com.grupop.gestion.Controladores;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.grupop.gestion.Entidades.CuentasContables;
+import com.grupop.gestion.Entidades.Impuestos;
 import com.grupop.gestion.Entidades.TipoProducto;
 import com.grupop.gestion.Entidades.Urbanizacion;
 import com.grupop.gestion.Repositorios.CuentasContablesRepo;
@@ -115,12 +116,11 @@ public class CuentasContablesControlador {
         return ResponseEntity.ok(cuentasContablesServicio.obtenerPorDescripcion(descripcion));
     }
 
-//    @GetMapping("/obtenerCuentasUrb")
-//    public ResponseEntity<List<CuentasContables>> obtenerCuentasUrbanizaciones(){
-//        System.out.println(cuentasContablesServicio.obtenerCuentas1141());
-//        //return null;
-//        return ResponseEntity.ok(cuentasContablesServicio.obtenerCuentas1141());
-//    }
+        @GetMapping("/obtenerListaDeImpuestosPorCuenta/{idCuenta}")
+    public ResponseEntity<List<Impuestos>> obtenerImpuestosCuenta(@PathVariable Long idCuenta){
+        List<Impuestos> impuestos = cuentasContablesServicio.getImpuestosByCuentaContableId(idCuenta);
+        return ResponseEntity.ok(impuestos);
+    }
 
 
 }

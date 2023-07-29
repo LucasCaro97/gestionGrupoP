@@ -51,7 +51,7 @@
 
         <div class="col-md-4">
           <label for="cuenta" class="form-label">Cuenta: </label>
-          <select  th:field="*{cuenta}" id="cuenta" class="form-select" aria-label="Seleccionar cuenta" required>
+          <select  th:field="*{cuenta}" id="cuenta" class="form-select" aria-label="Seleccionar cuenta">
             <option selected value="">Seleccione una cuenta</option>
             <option th:each="xxx : ${listaCuentas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
           </select>
@@ -68,7 +68,7 @@
 
         <div class="col-md-4">
           <label for="moneda" class="form-label">Moneda: </label>
-          <select  th:field="*{moneda}" id="moneda" class="form-select" aria-label="Seleccionar moneda" required>
+          <select  th:field="*{moneda}" id="moneda" class="form-select" aria-label="Seleccionar moneda">
             <option selected value="">Seleccione moneda</option>
             <option th:each="mon : ${listaMon}" th:text="${mon.descripcion}" th:value="${mon.id}"></option>
           </select>

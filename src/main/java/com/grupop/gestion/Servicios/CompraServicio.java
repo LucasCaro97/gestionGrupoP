@@ -15,6 +15,7 @@ public class CompraServicio {
 
     private final CompraRepo compraRepo;
     private final TalonarioServicio talonarioServicio;
+    private final TipoOperacionServicio tipoOperacionServicio;
 
     @Transactional
     public void crear(Compra dto){
@@ -29,6 +30,7 @@ public class CompraServicio {
         compra.setObservaciones(dto.getObservaciones());
         compra.setTotal(new BigDecimal(0));
         compra.setBloqueado(false);
+        compra.setTipoOperacion(tipoOperacionServicio.obtenerPorId(2l));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         compraRepo.save(compra);
     }
@@ -36,6 +38,12 @@ public class CompraServicio {
     @Transactional
     public void actualizar(Compra dto){
         Compra compra = compraRepo.findById(dto.getId()).get();
+
+        if(compra.isBloqueado()){
+            compra.setObservaciones(dto.getObservaciones());
+            compraRepo.save(compra);
+        }else{
+
         compra.setProveedor(dto.getProveedor());
         compra.setFechaComprobante(dto.getFechaComprobante());
         compra.setTipoComprobante(dto.getTipoComprobante());
@@ -48,6 +56,7 @@ public class CompraServicio {
         compra.setFormaDePago(dto.getFormaDePago());
         compra.setObservaciones(dto.getObservaciones());
         compraRepo.save(compra);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -111,5 +120,10 @@ public class CompraServicio {
         Compra c = compraRepo.findById(id).get();
         c.setBloqueado(false);
         compraRepo.save(c);
+    }
+
+    @Transactional
+    public Boolean validarEstado(Long idCompra) {
+        return compraRepo.validarEstado(idCompra);
     }
 }

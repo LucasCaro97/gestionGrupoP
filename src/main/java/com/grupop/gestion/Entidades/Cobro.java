@@ -50,6 +50,9 @@ public class Cobro {
     @OneToMany(mappedBy = "cobroId")
     private List<CobroDetalleCtaCte> cobroDetalleCtaCte;
     private BigDecimal total;
+    @JoinColumn(name = "fk_tipoOp")
+    @ManyToOne
+    private TipoOperacion tipoOperacion;
 
 
 }

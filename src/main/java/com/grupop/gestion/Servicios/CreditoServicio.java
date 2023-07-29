@@ -50,6 +50,7 @@ public class CreditoServicio {
         c.setCapital(dto.getCapital());
         c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
         c.setObservaciones(dto.getObservaciones());
+        c.setBloqueado(false);
 
         creditoRepo.save(c);
 
@@ -96,26 +97,34 @@ public class CreditoServicio {
 
     @Transactional
     public void actualizar(Credito dto){
-        PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
-
         Credito c = creditoRepo.findById(dto.getId()).get();
-        c.setCliente(dto.getCliente());
-        c.setFecha(dto.getFecha());
-        c.setSector(dto.getSector());
-        c.setTipoComprobante(dto.getTipoComprobante());
-        c.setTalonario(dto.getTalonario());
-        c.setNroComprobante(dto.getNroComprobante());
-        c.setVenta(dto.getVenta());
-        c.setCapital(dto.getCapital());
-        c.setPlanPago(dto.getPlanPago());
-        c.setCantCuotas(dto.getCantCuotas());
-        c.setPorcentajeInteres(dto.getPorcentajeInteres());
-        c.setVencimiento(dto.getVencimiento());
-        c.setInteresesTotales(c.getCapital().multiply(c.getPorcentajeInteres()).divide(new BigDecimal(100)));
-        c.setGastosAdministrativos(dto.getCapital().multiply(plan.getPorcentajeGastos()).divide(new BigDecimal(100)));
-        c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
-        c.setObservaciones(dto.getObservaciones());
-        creditoRepo.save(c);
+
+        if(c.isBloqueado()){
+            c.setObservaciones(dto.getObservaciones());;
+            creditoRepo.save(c);
+        }else{
+
+            PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
+
+            c.setCliente(dto.getCliente());
+            c.setFecha(dto.getFecha());
+            c.setSector(dto.getSector());
+            c.setTipoComprobante(dto.getTipoComprobante());
+            c.setTalonario(dto.getTalonario());
+            c.setNroComprobante(dto.getNroComprobante());
+            c.setVenta(dto.getVenta());
+            c.setCapital(dto.getCapital());
+            c.setPlanPago(dto.getPlanPago());
+            c.setCantCuotas(dto.getCantCuotas());
+            c.setPorcentajeInteres(dto.getPorcentajeInteres());
+            c.setVencimiento(dto.getVencimiento());
+            c.setInteresesTotales(c.getCapital().multiply(c.getPorcentajeInteres()).divide(new BigDecimal(100)));
+            c.setGastosAdministrativos(dto.getCapital().multiply(plan.getPorcentajeGastos()).divide(new BigDecimal(100)));
+            c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
+            c.setObservaciones(dto.getObservaciones());
+            creditoRepo.save(c);
+
+        }
     }
 
     @Transactional(readOnly = true)
@@ -215,4 +224,13 @@ public class CreditoServicio {
 
     }
 
+    @Transactional(readOnly = true)
+    public boolean validarEstado(Long idCred) { return creditoRepo.validarEstado(idCred);    }
+
+    @Transactional
+    public void marcarComoBloqueado(Long idCred) {
+        Credito c = creditoRepo.findById(idCred).get();
+        c.setBloqueado(true);
+        creditoRepo.save(c);
+    }
 }

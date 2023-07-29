@@ -151,3 +151,11 @@
     display: none;
 }
 
+.celdaImpuesto{
+    width: 150px;
+}
+
+.verDetallePago{
+    background-color : darkgray;
+}
+

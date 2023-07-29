@@ -49,7 +49,10 @@ public class Compra {
     private FormaDePago formaDePago;
     @OneToMany(mappedBy = "compraId")
     private List<CompraDetalle> compraDetalle;
-    private Boolean bloqueado;
+    private boolean bloqueado;
+    @JoinColumn(name = "fk_tipoOp")
+    @ManyToOne
+    private TipoOperacion tipoOperacion;
 
 
 

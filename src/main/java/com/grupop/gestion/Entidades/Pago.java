@@ -41,6 +41,9 @@ public class Pago {
     private FormaDePago formaDePago;
     @OneToMany(mappedBy = "pagoId")
     private List<PagoDetalle> PagoDetalle;
+    @JoinColumn(name = "fk_tipoOp")
+    @ManyToOne
+    private TipoOperacion tipoOperacion;
 
 
 

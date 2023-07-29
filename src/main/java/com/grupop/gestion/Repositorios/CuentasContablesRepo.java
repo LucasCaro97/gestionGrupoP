@@ -1,14 +1,20 @@
 package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.CuentasContables;
+import com.grupop.gestion.Entidades.Impuestos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public interface CuentasContablesRepo extends JpaRepository<CuentasContables, Long> {
+
+
+    @Query("SELECT c.impuestos FROM CuentasContables c WHERE c.id = :cuentaContableId")
+    List<Impuestos> findImpuestosByCuentaContableId(@Param("cuentaContableId") Long cuentaContableId);
 
 
     @Query(value ="SELECT * FROM cuentas_contables WHERE fk_cta_totalizadora = 43;" , nativeQuery = true)

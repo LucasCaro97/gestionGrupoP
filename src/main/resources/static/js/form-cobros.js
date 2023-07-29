@@ -1,5 +1,6 @@
 
 $(document).ready(function () {
+
 var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
@@ -254,16 +255,26 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
             const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
             indiceActual = indiceActualResponse;
         }
+        async function obtenerIndiceBaseEspecial(){
+                    if( indiceBase > indiceActual){
+                        const indiceBaseResponseEspecial = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() ) + "/" + fechaIndiceBase.getFullYear());
+                        indiceBase = indiceBaseResponseEspecial;
+                    }
+                }
 
+//PRIMERO BUSCO EL INDICE CAC ASIGNADO A LA VENTA Y EN CASO DE NO ESTAR CARGADO BUSCO EL INDICE POR DEFAULT ( PRIMER VENCIMIENTO -2 ) Y EN EL CASO
+//QUE (PRIMER VENC -2 ) SEA MAYOR QUE EL INDICE BASE HAGO (PRIMER VENC - 3 )
         await obtenerIndiceVenta();
         await obtenerIndiceBaseDefault()
         await obtenerIndiceActual()
+        await obtenerIndiceBaseEspecial()
 
         if (indiceBase!=0){
             let resultado =   cuotaBase * ( indiceActual / indiceBase );
             let importeAjuste = resultado - cuotaBase;
             celdaImporteAjuste.text(importeAjuste.toLocaleString("en-US"))
-        }else{
+        }
+        else{
         console.log("Falta cargar indice base para calcular")
         }
     }
@@ -279,7 +290,10 @@ function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celd
     let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\,/g, ''))
     let ajuste = parseFloat(celdaImporteAjuste.text().replace(/\,/g, ''))
     let resultado = cuotaBase + interesPunitorio + ajuste
-    celdaTotal.text(resultado.toLocaleString("en-US"))
+    celdaTotal.text(resultado.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+    }))
 }
 
 function obtenerMesIndiceBase(year, mes, dia){
@@ -519,4 +533,6 @@ window.location.href= "/cobros/form/"+ $("#id").val();
     setTimeout(redireccionar, tiempoEspera);
 
 }
+
+
 

@@ -15,6 +15,7 @@ import java.util.List;
 public class PagoServicio {
 
     private final PagoRepo pagoRepo;
+    private final TipoOperacionServicio tipoOperacionServicio;
 
     @Transactional
     public void crear(Pago dto){
@@ -28,6 +29,7 @@ public class PagoServicio {
         p.setObservaciones(dto.getObservaciones());
         p.setTotal(new BigDecimal(0));
         p.setFormaDePago(dto.getFormaDePago());
+        p.setTipoOperacion(tipoOperacionServicio.obtenerPorId(4l));
         pagoRepo.save(p);
     }
 
