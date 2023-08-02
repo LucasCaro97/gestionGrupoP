@@ -221,7 +221,13 @@ crearItemsDetalle();
 $.get("/compras/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
            let datosFormatted = parseFloat(datos).toLocaleString("en-US");
            $("#totalCompra").val(datosFormatted);
+           validarFormaDePago($("#id").val(), 2, datos )
 });
+
+$(".verDetallePago").click(function() {
+let url = "http://localhost:8080/detalleDePago/getForm/" + $("#id").val() + "/2"
+window.open(url,"_blank");
+})
 
 
 
@@ -229,7 +235,7 @@ async function crearItemsDetalle(){
     let total = 0;
     let totalLinea = 0;
 
-    var tiempoEspera = 500;
+    var tiempoEspera = 800;
     function redireccionar() {
                 //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
                 fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
@@ -309,6 +315,7 @@ async function crearItemsDetalle(){
 
     await confirmSave();
     await confirmSaveImp();
+
     setTimeout(redireccionar, tiempoEspera);
         }
 
@@ -453,6 +460,22 @@ fetch('/compras/validarEstado/'+ idCompra)
     console.error('Error al obtener el valor booleano:', error);
   });
 
+}
+
+function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
+        $.get("/detalleDePago/obtenerTotal/" + idOperacion + "/" + idTipoOperacion, function(dato,status){
+            const totalDetallePago = dato;
+
+            console.log("TOTAL DP: " + typeof totalDetallePago + " = " + totalDetallePago)
+            console.log("TOTAL OP: " + typeof totalOperacion + " = " + totalOperacion)
+
+            if(totalDetallePago === totalOperacion){
+            $(".verDetallePago").css("background-color", "#48D383")
+            }else{
+            $(".verDetallePago").css("background-color", "#D34848")
+            }
+
+        })
 }
 
 

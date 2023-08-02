@@ -48,11 +48,13 @@ public class VentaServicio {
     @Transactional //AGREGAR VALIDACIONES PARA QUE NO SE PUEDA MODIFICAR CUANDO YA CONTIENE UN COBRO
     public void actualizar(Venta dto){
         Venta vta = ventaRepo.findById(dto.getId()).get();
+        Long idFormaDePagoAnterior = vta.getFormaDePago().getId();
 
         if(vta.isBloqueada()){
 
             vta.setObservaciones(dto.getObservaciones());
             ventaRepo.save(vta);
+
         }else{
             vta.setCliente(dto.getCliente());
             vta.setCuit(dto.getCuit());
@@ -71,12 +73,26 @@ public class VentaServicio {
             vta.setIndiceBase(dto.getIndiceBase());
             ventaRepo.save(vta);
 
-            System.out.println("ID FP : " + vta.getFormaDePago().getId());
             if(vta.getFormaDePago() != null) {
-                if (vta.getFormaDePago().getId() != 51) { //Validar que no exista ya uno, si ya existe no actualizar
-                    System.out.println("Creando Detalle de Pago!");
-                    formaDePagoDetalleServicio.crear(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
-                    System.out.println(vta);
+                if(formaDePagoDetalleServicio.validarExistencia(vta.getId(), 1l) == 0){ //Si no existe crea el detalleDePago
+                    if (vta.getFormaDePago().getId() != 51) { // Si no es a detallar crea el detalleDePago con su subDetalle
+                        formaDePagoDetalleServicio.crear(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
+                        System.out.println(vta);
+                    }else{                                      // Si es a detallar crea el detalleDePagoVacio
+                        formaDePagoDetalleServicio.crearSinSubDetalle(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal());
+                    }
+                }else{                                          // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+                    if(idFormaDePagoAnterior != vta.getFormaDePago().getId()){
+                        if(vta.getFormaDePago().getId() == 51){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                            formaDePagoDetalleServicio.eliminarSubDetalles(vta.getId(), vta.getTipoOperacion().getId());
+                        }else{      // Si no es aDetallar => generar automaticamente el item detalleDepago
+                            formaDePagoDetalleServicio.eliminarSubDetalles(vta.getId(), vta.getTipoOperacion().getId());
+                            formaDePagoDetalleServicio.crearSubDetalleAutomatico(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
+                        }
+                    }else{
+                        System.out.println("La forma de pago no ha cambiado");
+                    }
+
                 }
             }
         }

@@ -46,6 +46,7 @@ public class VentaControlador {
     private final ClienteServicio clienteServicio;
     private final ComisionServicio comisionServicio;
     private final IndiceCacServicio indiceCacServicio;
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
 
     @GetMapping
@@ -129,12 +130,11 @@ public class VentaControlador {
             Venta v = ventaServicio.obtenerPorId(dto.getId());
 
             if(!v.isBloqueada()){
-                System.out.println("Verificando si es credito ");
                 if(dto.getFormaDePago() != null || v.getFormaDePago() != null ){
                    if( (dto.getFormaDePago().getId() == 3 || v.getFormaDePago().getId() == 3 ) && creditoServicio.validarExistenciaPorVenta(dto.getId()) == 0){
                        redirect.setUrl("/credito/form/new/"+dto.getId());
-                   }else if(dto.getFormaDePago().getId() == 51 || v.getFormaDePago().getId() == 51 ){   //Validar tambien luego si existe ya un detalle de pago asignado
-                       System.out.println("Redirigir a form DetalleDePago porque tiene multiples FP");
+                   }else if( (dto.getFormaDePago().getId() == 51 || v.getFormaDePago().getId() == 51 ) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(v.getId(), 1l) == 0 ){   //Validar tambien luego si existe ya un detalle de pago asignado
+                       redirect.setUrl("/detalleDePago/getForm/"+dto.getId() + "/" + "1");
                    }
                 }
             }else{

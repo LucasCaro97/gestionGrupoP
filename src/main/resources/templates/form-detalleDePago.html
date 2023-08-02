@@ -6,8 +6,8 @@
     <title>Grupo Piñhero</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" th:href="@{/css/estiloFormEntidad.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/estiloFormEntidad.css}">
 </head>
 <body>
 
@@ -24,17 +24,19 @@
                   method="post" autocomplete="off">
                 <div class="col-md-4">
                     <label for="Operacion" class="form-label">Operacion: </label>
-                    <input id="Operacion" type="text" class="form-control" th:field="*{idOperacion}" readonly>
+                    <input id="Operacion" type="text" class="form-control sinBorde" th:field="*{idOperacion}" style="box-shadow: none;" readonly>
                 </div>
 
                 <div class="col-md-4">
                     <label for="tipoOperacion" class="form-label">Tipo Operacion: </label>
-                    <input id="tipoOperacion" type="text" class="form-control" th:field="*{tipoOperacion}" readonly>
+                    <select id="tipoOperacion" type="text" class="form-control sinBorde" style="box-shadow: none;" readonly>
+                        <option selected th:value="${tipoOperacion.id}" th:text="${tipoOperacion.descripcion}"></option>
+                    </select>
                 </div>
 
                 <div class="col-md-4">
                     <label for="totalOperacion" class="form-label">Total Operacion: </label>
-                    <input type="text" id="totalOperacion" class="form-control" th:field="*{totalOperacion}" readonly>
+                    <input type="text" id="totalOperacion" class="form-control sinBorde" th:field="*{totalOperacion}" style="box-shadow: none;" readonly>
                 </div>
 
                 <div id="comandos" class="d-flex">
@@ -47,37 +49,36 @@
         </div>
     </div>
 
-    <div class="container" id="divDetalle">
-<!--        <div class="p-2 comandosDet">-->
-<!--            <form class="row g-3 needs-validation d-flex justify-content-between" method="post" autocomplete="off">-->
-<!--                <div class="col-3">-->
-<!--                    <label for="selectVendedor" class="form-label">Vendedor: </label>-->
-<!--                    <select type="text" class="form-select" name="vendedor" id="selectVendedor">-->
-<!--                        <option selected value="">Seleccione vendedor</option>-->
-<!--                        <option th:each="xxx : ${listaVendedores}" th:value="${xxx.id}"></option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="col-3">-->
-<!--                    <label for="baseImponible" class="form-label">Base Imponible: </label>-->
-<!--                    <input type="number" step="0.01" class="form-control" name="baseImponible" id="baseImponible">-->
-<!--                </div>-->
-<!--                <div class="col-2">-->
-<!--                    <label for="porcentajeComisionGeneral" class="form-label">% Com Gral: </label>-->
-<!--                    <input type="number" step="0.01" class="form-control" name="porcentajeComisionGeneral" id="porcentajeComisionGeneral">-->
-<!--                </div>-->
-<!--                <div class="col-2">-->
-<!--                    <label for="comisionGeneral" class="form-label">$ Com Gral: </label>-->
-<!--                    <input type="number" step="0.01" class="form-control" name="comisionGeneral" id="comisionGeneral">-->
-<!--                </div>-->
-<!--                <div class="col-2">-->
-<!--                    <button class="btn btn-outline-success" id="addCom" type="button" data-bs-toggle="modal">-->
-<!--                        Añadir-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--        </div>-->
+    <div class="container mt-3" id="divDetalle">
+        <div class="p-2 comandosDet">
+            <form class="row g-3 needs-validation d-flex justify-content-between" method="post" autocomplete="off">
+                <div class="col-3">
+                    <label for="formaDePago" class="form-label">Forma de Pago: </label>
+                    <select type="text" class="form-select" name="formaDePago" id="formaDePago">
+                        <option selected value="">Seleccionar Form. Pago</option>
+                        <option th:each="xxx : ${listaFormaDePago}" th:value="${xxx.id}" th:text="${xxx.descripcion}"></option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="monto" class="form-label">Monto: </label>
+                    <input type="number" step="0.01" class="form-control" name="monto" id="monto">
+                </div>
+                <div class="col-2">
+                    <label for="cuenta" class="form-label">Cuenta: </label>
+                    <select type="text" class="form-select" name="cuenta" id="cuenta">
+                        <option selected value="">Seleccionar cuenta</option>
+                        <option>Proximamente</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-outline-success" id="addFormaDePago" type="button">
+                        Añadir
+                    </button>
+                </div>
+            </form>
+        </div>
         <div id="tablaDetalleCom mt-2">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover table-bordered" id="tablaDetalle">
                 <thead>
                 <tr class="table-dark">
                     <th>Forma de Pago</th>
@@ -89,14 +90,22 @@
                 <tbody>
                 <tr th:each="xxx : ${listaDetallePagoSubdetalle}">
                     <td th:text="${xxx.formaPago.descripcion}"></td>
-                    <td th:text="${xxx.monto}"></td>
+                    <td th:text="${#numbers.formatDecimal(xxx.monto,1,'COMMA',2,'POINT')}"></td>
                     <td th:text="Proximamente"></td>
                     <td>
-                        <a class="btn btn-danger eliminarCom" th:href="@{/comision/bajaComision/__${xxx.id}__}">Eliminar</a>
+                        <a class="btn btn-danger eliminarCom" th:href="@{/formaDePagoDetalleSubdetalle/baja/__${xxx.id}__}">Eliminar</a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="mt-2 d-flex justify-content-center">
+            <div class="col-1 d-flex align-items-center">
+                <label for="saldo" class="form-label">Saldo: </label>
+            </div>
+            <div class="col-4">
+                <input id="saldo" type="number" step="0.01" class="form-control sinBorde" style="box-shadow: none;" readonly>
+            </div>
         </div>
     </div>
 </main>
@@ -105,5 +114,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
+
+
+<script th:src="@{/js/form-detalleDePago.js}"></script>
 </body>
 </html>

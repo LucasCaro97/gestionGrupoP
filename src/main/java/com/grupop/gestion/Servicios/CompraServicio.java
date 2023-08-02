@@ -56,6 +56,10 @@ public class CompraServicio {
         compra.setFormaDePago(dto.getFormaDePago());
         compra.setObservaciones(dto.getObservaciones());
         compraRepo.save(compra);
+
+
+
+
         }
     }
 

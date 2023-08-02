@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -100,6 +101,27 @@ public class CreditoControlador {
         return mav;
     }
 
+    @GetMapping("/form/new/{idVenta}/{importe}")
+    public ModelAndView getFormCharged(HttpServletRequest request, @PathVariable Long idVenta, @PathVariable BigDecimal importe){
+        ModelAndView mav = new ModelAndView("form-credito");
+        Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+
+        if(inputFlashMap!=null){
+            mav.addObject("exception", inputFlashMap.get("exception"));
+            mav.addObject("credito", inputFlashMap.get("credito"));
+        }else{
+            mav.addObject("credito", new Credito());
+        }
+        mav.addObject("action", "create");
+        mav.addObject("listaPlanPago", planPagoServicio.obtenerTodos());
+        mav.addObject("venta", ventaServicio.obtenerPorId(idVenta));
+        mav.addObject("listaSector", sectorServicio.obtenerTodos());
+        mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
+        mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
+        mav.addObject("importe", importe);
+        return mav;
+    }
+
     @PostMapping("/create")
     public RedirectView create(Credito dto, RedirectAttributes attributes, HttpServletRequest request){
 
@@ -157,6 +179,11 @@ public class CreditoControlador {
     @GetMapping("/validarEstado/{idCredito}")
     public ResponseEntity<Boolean> validarEstado(@PathVariable Long idCredito){
         return  ResponseEntity.ok(creditoServicio.validarEstado(idCredito));
+    }
+
+    @GetMapping("/validarExistencia/{idOperacion}")
+    public ResponseEntity<Integer> validarExistencia(@PathVariable Long idOperacion){
+        return ResponseEntity.ok(creditoServicio.validarExistenciaPorVenta(idOperacion));
     }
 
 

@@ -69,7 +69,8 @@ $(".btnRegenerarCuotas").click(function() {
     crearArrayListCuotas()
 })
 
-});
+obtenerCapialCredito($("#idOperacion").val(), 1)
+}); //FIN DEL DOCUMENT READY
 
 
 function traducirCliente(selectCliente){
@@ -143,4 +144,9 @@ fetch('/credito/validarEstado/'+ idPago)
 
 }
 
+function obtenerCapialCredito(idOperacion, idTipoOperacion){
+    $.get("/detalleDePago/obtenerCapitalCredito/" + idOperacion + "/" + idTipoOperacion, function(datos,status){
+            $("#capitalNew").val(datos)
+        })
+}
 

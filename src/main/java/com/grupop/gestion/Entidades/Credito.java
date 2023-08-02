@@ -47,6 +47,6 @@ public class Credito {
     private BigDecimal totalCredito;
     private String observaciones;
     private boolean bloqueado;
-
+    
 
 }

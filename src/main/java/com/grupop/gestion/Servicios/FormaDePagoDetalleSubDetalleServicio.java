@@ -16,6 +16,7 @@ import java.util.List;
 public class FormaDePagoDetalleSubDetalleServicio {
 
     private final FormaDePagoSubDetalleRepo formaDePagoSubDetalleRepo;
+    private final FormaDePagoServicio formaDePagoServicio;
 
     @Transactional
     public void crear(FormaDePagoDetalle formaDePagoDetalle, FormaDePago formaDePago, BigDecimal importe){
@@ -26,8 +27,28 @@ public class FormaDePagoDetalleSubDetalleServicio {
         formaDePagoSubDetalleRepo.save(f);
     }
 
+    @Transactional
+    public void crearDetalleManual(FormaDePagoDetalleSubDetalle f){
+        formaDePagoSubDetalleRepo.save(f);
+    }
+
+    @Transactional(readOnly = true)
+    public FormaDePagoDetalleSubDetalle obtenerPorId(Long id){
+        return formaDePagoSubDetalleRepo.findById(id).get();
+    }
+
+    @Transactional
+    public void eliminarPorId(Long id){
+        formaDePagoSubDetalleRepo.deleteById(id);
+    }
+
+
     @Transactional(readOnly = true)
     public List<FormaDePagoDetalleSubDetalle> obtenerPorMaestro(Long idOperacion, Long idTipoOperacion) {
         return formaDePagoSubDetalleRepo.obtenerPorMaestro(idOperacion,idTipoOperacion);
+    }
+
+    public void eliminarPorIdOperacionAndTipoOperacion(Long idOperacion, Long tipoOperacion) {
+        formaDePagoSubDetalleRepo.deleteByIdOperacionAndTipoOperacion(idOperacion,tipoOperacion);
     }
 }

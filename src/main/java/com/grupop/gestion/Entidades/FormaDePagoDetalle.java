@@ -23,8 +23,6 @@ public class FormaDePagoDetalle {
 
     private BigDecimal totalOperacion;
 
-    @OneToMany(mappedBy = "formaDePagoDetalle", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<FormaDePagoDetalleSubDetalle> detalleFormaPago;
 
 
 }

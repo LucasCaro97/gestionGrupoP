@@ -105,10 +105,19 @@ public class CompraControlador {
 
     @PostMapping("/update")
     public RedirectView update(Compra dto, RedirectAttributes attributes){
-        RedirectView redirect = new RedirectView("/compras");
+        RedirectView redirect = new RedirectView("/compras/form/" + dto.getId());
         try{
             compraServicio.actualizar(dto);
-            redirect.setUrl("/compras/form/" + dto.getId());
+            Compra c = compraServicio.obtenerPorId(dto.getId());
+
+            if(!c.isBloqueado()){
+                if(dto.getFormaDePago().getId() == 52 || c.getFormaDePago().getId() == 52 ){
+                    System.out.println("Redirigir a form DetalleDePago porque tiene multiples FP");
+                }
+            }else{
+                System.out.println("Compra bloqueada");
+            }
+
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());

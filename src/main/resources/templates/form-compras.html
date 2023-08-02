@@ -77,12 +77,13 @@
                               id="observaciones"></textarea>
                 </div>
 
-                <div class="col-md-3 formaPago">
+                <div class="col-md-3 formaPago d-flex">
                     <select th:field="*{formaDePago}" id="formaDePago" class="form-select" aria-label="Seleccionar formaDePago">
                         <option selected value="">Forma de Pago</option>
                         <option th:each="xxx : ${listaFormasPago}" th:text="${xxx.descripcion}"
                                 th:value="${xxx.id}"></option>
                     </select>
+                    <a class="btn verDetallePago"> ... </a>
                 </div>
 
                 <div id="cajaTotal">

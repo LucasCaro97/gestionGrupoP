@@ -221,11 +221,13 @@ $(".guardarDetalle").click(function(){
 crearItemsDetalle();
 });
 
+//OBTENGO EL TOTAL DE LA OPERACION
 //agregar condicion para que solamente traiga el total cuando la venta exista en la bd
 $.get("/ventas/obtenerTotalPorId/" + $("#id").val())
     .done(function(datos, status){
            let datosFormatted = parseFloat(datos).toLocaleString("en-US");
            $("#totalVenta").val(datosFormatted);
+           validarFormaDePago($("#id").val(), 1, datos )
     })
     .fail(function(jqXHR, textStatus, errorThrown){
     console.log("No se puede traer el total porque la aun no esta en la base de datos");
@@ -348,6 +350,7 @@ $(".verDetallePago").click(function() {
 let url = "http://localhost:8080/detalleDePago/getForm/" + $("#id").val() + "/1"
 window.open(url,"_blank");
 })
+
 
 //FIN DOCUMENT READY
 });
@@ -548,5 +551,21 @@ async function eliminarItemsDetalleImp(){
 
     await eliminarFilas()
     setTimeout(redireccionar, tiempoEspera);
+}
+
+function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
+        $.get("/detalleDePago/obtenerTotal/" + idOperacion + "/" + idTipoOperacion, function(dato,status){
+            const totalDetallePago = dato;
+
+            console.log("TOTAL DP: " + typeof totalDetallePago + " = " + totalDetallePago)
+            console.log("TOTAL OP: " + typeof totalOperacion + " = " + totalOperacion)
+
+            if(totalDetallePago === totalOperacion){
+            $(".verDetallePago").css("background-color", "#48D383")
+            }else{
+            $(".verDetallePago").css("background-color", "#D34848")
+            }
+
+        })
 }
 
