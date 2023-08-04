@@ -89,8 +89,9 @@
                     </div>
 
                     <div id="comandos" class="d-flex">
+                        <a class="btn btn-primary" th:href="@{/pago/form}">Nuevo</a>
                         <button class="btn btn-primary" th:text="${action == 'create'} ? 'Crear' : 'Guardar'" type="submit" id="btnAlta"></button>
-                        <a class="btn btn-secondary" id="volverAtras" th:href="@{/pago}">Volver</a>
+                        <a class="btn btn-secondary" id="volverAtras" >Volver</a>
                     </div>
                 </form>
 

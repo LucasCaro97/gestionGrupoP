@@ -2,6 +2,10 @@
 $(document).ready(function () {
 validarEstado($("#id").val())
 
+$("#volverAtras").click(function() {
+    window.history.go(-1);
+})
+
 var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;

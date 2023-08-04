@@ -146,7 +146,7 @@ fetch('/credito/validarEstado/'+ idPago)
 
 function obtenerCapialCredito(idOperacion, idTipoOperacion){
     $.get("/detalleDePago/obtenerCapitalCredito/" + idOperacion + "/" + idTipoOperacion, function(datos,status){
-            $("#capitalNew").val(datos)
+            $("#capital").val(datos)
         })
 }
 

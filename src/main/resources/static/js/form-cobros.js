@@ -1,6 +1,10 @@
 
 $(document).ready(function () {
 
+$("#volverAtras").click(function() {
+    window.history.go(-1);
+})
+
 var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
@@ -71,23 +75,55 @@ traducirCliente($("#cliente"));
 //FUNCIONES TAB PRODUCTOS
 //AGREGO ITEMS AL DETALLE DE COBROS ( CUOTAS ) - CAMBIAR ITEMS QUE SE BAJAN
 $("#addItem").click(function(){
+    let entrega = $("#entrega").val()
+
     $("#tablaProducto tr").each(function(index, element){
         var checkbox = $(element).find(".check");
         if (checkbox.is(":checked")) {
-            var filaEditable = $("<tr></tr>");
-            var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
-            var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
-            var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
-            var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
-            var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
-            var celda6 = "<td>" + $(element).children().eq(10).text() + "</td>"
-            var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
-            var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
-            var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
-            var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
-            var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
-            filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
-             $("#tablaDetalle tbody").append(filaEditable);
+            let saldoFila = $(element).children().eq(10).text().replace(/\,/g, '')
+            saldoFilaParsed = parseFloat(saldoFila)
+            let aCobrarFila = saldoFilaParsed;
+
+
+            if(saldoFilaParsed < entrega ){
+                entrega = entrega - saldoFilaParsed
+
+                var filaEditable = $("<tr></tr>");
+                var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
+                var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
+                var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
+                var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
+                var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
+                var celda6 = "<td>" + aCobrarFila + "</td>"
+                var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
+                var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
+                var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+                filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
+                 $("#tablaDetalle tbody").append(filaEditable);
+
+            }else{
+                aCobrarFila = entrega
+
+                var filaEditable = $("<tr></tr>");
+                var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
+                var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
+                var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
+                var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
+                var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
+                var celda6 = "<td>" + aCobrarFila + "</td>"
+                var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
+                var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
+                var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+                filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
+                 $("#tablaDetalle tbody").append(filaEditable);
+            }
+
+
+
         }
     });
 
@@ -162,7 +198,7 @@ $("#tablaProducto tbody tr").each(function(){
 
 
 calcularCacAndPunitorio($(this).children().eq(2),  $(this).children().eq(4), new Date(textoPrimerVencimiento), $(this).children().eq(8), $(this).children().eq(11).text() , $(this).children().eq(12),
-                $(this).children().eq(7), $(this).children().eq(4), $(this).children().eq(8), $(this).children().eq(6), $(this).children().eq(10), $(this).children().eq(1) )
+                $(this).children().eq(7), $(this).children().eq(8), $(this).children().eq(6), $(this).children().eq(10), $(this).children().eq(1), $(this).children().eq(5) )
 
 
 })
@@ -180,6 +216,34 @@ $.get("/cobros/obtenerTotalPorId/" + $("#id").val())
     })
 
 
+// RECUENTO EL TOTAL DE LAS CUOTAS SELECCIONADAS
+$('.check').on('click', function() {
+      let total = $("#totalCuotas").val()
+      if( total == ""){
+        total = 0;
+      }else{
+        total =  parseFloat( total )
+      }
+
+      // Obtener el estado del checkbox (true si está marcado, false si no)
+      let isChecked = $(this).prop('checked');
+
+      // Obtener el valor de la celda correspondiente en la misma fila del checkbox
+      let valorCelda = $(this).closest('tr').find('td:eq(10)').text().replace(/\,/g, '');
+      let valorCeldaParseado = parseFloat(valorCelda)
+      // Realizar la operación deseada (en este caso, mostrar una alerta)
+      if (isChecked) {
+      console.log("Total ( " + total + " ) + " + valorCeldaParseado)
+        total = total + valorCeldaParseado;
+      } else {
+        // Aquí puedes realizar otra operación si el checkbox se desmarca
+         console.log("Total ( " + total + " ) - " + valorCeldaParseado + typeof total + typeof valorCeldaParseado)
+        total = total - valorCeldaParseado;
+      }
+
+       console.log(total.toFixed(2))
+      $("#totalCuotas").val(total.toFixed(2))
+    });
 
 //FIN DOCUMENT READY
 });
@@ -196,104 +260,6 @@ function traducirCliente(selectCliente){
             $(option).text(razonSocial);
         })
     })
-}
-
-function calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun){
-const opciones = { style: 'decimal', useGrouping: true, maximumFractionDigits: 2 };
-let fechaActual = new Date();
-var fechaPago = new Date (fechaVenc);
-var diferenciaMs = fechaActual - fechaPago;
-var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
-    if(diasAtraso > 0){
-
-        celdaDiasVenc.text(diasAtraso);
-        let textoCuotaBase = celdaCuotaBase.text().replace(/\./g, '').replace(',', '.')
-        let textoCeldaPorcIntPun = celdaPorcIntPun.text().replace(/\./g, '').replace(',', '.')
-        let textoceldaAjuste = celdaAjuste.text().replace(/\./g, '').replace(',', '.')
-
-        let cuotaBase = parseFloat(textoCuotaBase);
-        let ajuste = parseFloat(textoceldaAjuste);
-        let porcPun = parseFloat(textoCeldaPorcIntPun);
-
-
-
-        let interesPun = (cuotaBase + ajuste) * porcPun * diasAtraso / 100
-        celdaInteresPun.text(interesPun.toLocaleString('es-ES', opciones))
-    }
-}
-
-async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste, celdaVenta){
-    let idCredito = celdaCredito.text();
-    let cuotaBase = celdaCuotaBase.text().replace(/\,/g, '')
-    let idVenta = celdaVenta.text()
-
-    mesPrimerVenc = fechaPrimerVencimiento.getMonth()
-    anioPrimerVenc= fechaPrimerVencimiento.getFullYear()
-    diaPrimerVenc = fechaPrimerVencimiento.getDate()
-
-    let indiceBase = 0;
-    let indiceActual = 0
-
-    let fechaIndiceBase = obtenerMesIndiceBase(anioPrimerVenc, mesPrimerVenc, diaPrimerVenc)
-    let fechaIndiceActual = obtenerMesIndiceActual()
-
-    try{
-    const dato = await $.get("/credito/obtenerPorId/" + idCredito);
-    if(dato.planPago.tablaCac){
-
-        async function obtenerIndiceVenta(){
-            indiceBase = await $.get("/ventas/obtenerIndiceBase/" + idVenta);
-
-        }
-        async function obtenerIndiceBaseDefault(){
-            if(indiceBase === 0 ){
-                const indiceBaseResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() + 1 ) + "/" + fechaIndiceBase.getFullYear());
-                indiceBase = indiceBaseResponse;
-            }
-        }
-        async function obtenerIndiceActual(){
-            const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
-            indiceActual = indiceActualResponse;
-        }
-        async function obtenerIndiceBaseEspecial(){
-                    if( indiceBase > indiceActual){
-                        const indiceBaseResponseEspecial = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() ) + "/" + fechaIndiceBase.getFullYear());
-                        indiceBase = indiceBaseResponseEspecial;
-                    }
-                }
-
-//PRIMERO BUSCO EL INDICE CAC ASIGNADO A LA VENTA Y EN CASO DE NO ESTAR CARGADO BUSCO EL INDICE POR DEFAULT ( PRIMER VENCIMIENTO -2 ) Y EN EL CASO
-//QUE (PRIMER VENC -2 ) SEA MAYOR QUE EL INDICE BASE HAGO (PRIMER VENC - 3 )
-        await obtenerIndiceVenta();
-        await obtenerIndiceBaseDefault()
-        await obtenerIndiceActual()
-        await obtenerIndiceBaseEspecial()
-
-        if (indiceBase!=0){
-            let resultado =   cuotaBase * ( indiceActual / indiceBase );
-            let importeAjuste = resultado - cuotaBase;
-            celdaImporteAjuste.text(importeAjuste.toLocaleString("en-US"))
-        }
-        else{
-        console.log("Falta cargar indice base para calcular")
-        }
-    }
-
-    } catch(error){
-        console.log("Error al obtener los datos: ", error)
-    }
-
-}
-
-function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celdaTotal){
-    let cuotaBase = parseFloat(celdaCuotaBase.text().replace(/\,/g, ''))
-    let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\,/g, ''))
-    let ajuste = parseFloat(celdaImporteAjuste.text().replace(/\,/g, ''))
-    let resultado = cuotaBase + interesPunitorio + ajuste
-    celdaTotal.text(resultado.toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-    }))
 }
 
 function obtenerMesIndiceBase(year, mes, dia){
@@ -345,10 +311,104 @@ function obtenerMesIndiceActual(){
 
 }
 
-async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste , fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun, celdaTotal, celdaVenta){
+async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste , fechaVenc, celdaDiasVenc, celdaInteresPun, celdaAjuste, celdaPorcIntPun, celdaTotal, celdaVenta, celdaSaldo){
     await calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste, celdaVenta)
-    await calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun)
-    calcularTotal(celdaCuotaBase, celdaInteresPun , celdaAjuste, celdaTotal )
+    await calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaSaldo, celdaAjuste, celdaPorcIntPun)
+    calcularTotal(celdaSaldo, celdaInteresPun , celdaAjuste, celdaTotal )
+}
+async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste, celdaVenta){
+    let idCredito = celdaCredito.text();
+    let cuotaBase = celdaCuotaBase.text().replace(/\,/g, '')
+    let idVenta = celdaVenta.text()
+
+    mesPrimerVenc = fechaPrimerVencimiento.getMonth()
+    anioPrimerVenc= fechaPrimerVencimiento.getFullYear()
+    diaPrimerVenc = fechaPrimerVencimiento.getDate()
+
+    let indiceBase = 0;
+    let indiceActual = 0
+
+    let fechaIndiceBase = obtenerMesIndiceBase(anioPrimerVenc, mesPrimerVenc, diaPrimerVenc)
+    let fechaIndiceActual = obtenerMesIndiceActual()
+
+    try{
+    const dato = await $.get("/credito/obtenerPorId/" + idCredito);
+    if(dato.planPago.tablaCac){
+
+        async function obtenerIndiceVenta(){
+            indiceBase = await $.get("/ventas/obtenerIndiceBase/" + idVenta);
+
+        }
+        async function obtenerIndiceBaseDefault(){
+            if(indiceBase === 0 ){
+                const indiceBaseResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() + 1 ) + "/" + fechaIndiceBase.getFullYear());
+                indiceBase = indiceBaseResponse;
+            }
+        }
+        async function obtenerIndiceActual(){
+            const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
+            indiceActual = indiceActualResponse;
+        }
+        async function obtenerIndiceBaseEspecial(){
+                    if( indiceBase > indiceActual){
+                        const indiceBaseResponseEspecial = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() ) + "/" + fechaIndiceBase.getFullYear());
+                        indiceBase = indiceBaseResponseEspecial;
+                    }
+                }
+
+//PRIMERO BUSCO EL INDICE CAC ASIGNADO A LA VENTA Y EN CASO DE NO ESTAR CARGADO BUSCO EL INDICE POR DEFAULT ( PRIMER VENCIMIENTO -2 ) Y EN EL CASO
+//QUE (PRIMER VENC -2 ) SEA MAYOR QUE EL INDICE BASE HAGO (PRIMER VENC - 3 )
+        await obtenerIndiceVenta();
+        await obtenerIndiceBaseDefault()
+        await obtenerIndiceActual()
+        await obtenerIndiceBaseEspecial()
+
+        if (indiceBase!=0){
+            console.log( cuotaBase + " * ( " + indiceActual + " / " + indiceBase + " )")
+            let resultado =   cuotaBase * ( indiceActual / indiceBase );
+            let importeAjuste = resultado - cuotaBase;
+            celdaImporteAjuste.text(importeAjuste.toLocaleString("en-US"))
+        }
+        else{
+        console.log("Falta cargar indice base para calcular")
+        }
+    }
+
+    } catch(error){
+        console.log("Error al obtener los datos: ", error)
+    }
+
+}
+function calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun){
+let fechaActual = new Date();
+var fechaPago = new Date (fechaVenc);
+var diferenciaMs = fechaActual - fechaPago;
+var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+    if(diasAtraso > 0){
+
+        celdaDiasVenc.text(diasAtraso);
+        let textoCuotaBase = celdaCuotaBase.text().replace(/\,/g, '')
+        let textoCeldaPorcIntPun = celdaPorcIntPun.text().replace(/\,/g, '')
+        let textoceldaAjuste = celdaAjuste.text().replace(/\,/g, '')
+
+        let cuotaBase = parseFloat(textoCuotaBase);
+        let ajuste = parseFloat(textoceldaAjuste);
+        let porcPun = parseFloat(textoCeldaPorcIntPun);
+
+        let interesPun = ( (cuotaBase + ajuste) * porcPun * diasAtraso / 100).toFixed(2)
+        celdaInteresPun.text(interesPun.toLocaleString("en-US"))
+    }
+}
+function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celdaTotal){
+    let cuotaBase = parseFloat(celdaCuotaBase.text().replace(/\,/g, ''))
+    let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\,/g, ''))
+    let ajuste = parseFloat(celdaImporteAjuste.text().replace(/\,/g, ''))
+
+    let resultado = cuotaBase + interesPunitorio + ajuste
+    celdaTotal.text(resultado.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+    }))
 }
 
 async function eliminarItemsDetalleCuotas(){
@@ -432,20 +492,15 @@ async function crearItemsDetalle(){
             let nroCuota = $(this).children().eq(2).text().replace(/\,/g, '');
             let fechaVenc = $(this).children().eq(3).text().replace(/\,/g, '');
             let cuotaBase = $(this).children().eq(4).text().replace(/\,/g, '');
+            let cobrado = $(this).children().eq(5).text().replace(/\,/g, '');
             let ajuste = $(this).children().eq(6).text().replace(/\,/g, '');
             let punitorio = $(this).children().eq(7).text().replace(/\,/g, '');
             let importeBonif = $(this).children().eq(8).text().replace(/\,/g, '');
             let importeFinal = $(this).children().eq(9).text().replace(/\,/g, '');
 
-            console.log(cuotaBase)
-            console.log(ajuste)
-            console.log(punitorio)
-            console.log(importeBonif)
-            console.log(importeFinal)
-
             //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
 //          fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc+ "/" + cuotaBase + "/" + ajuste + "/" + punitorio+ "/" + importeBonif + "/" + importeFinal, {
-            fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() , {
+            fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() + "/" + cobrado , {
                             method : "POST",
                             headers:{
                             "Content-Type" : "application/json"

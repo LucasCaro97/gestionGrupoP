@@ -107,10 +107,11 @@
                     <input type="text" class="form-control inputTotal" id="totalCobro" readonly>
                 </div>
                 <div id="comandos" class="d-flex">
+                    <a class="btn btn-primary" th:href="@{/cobros/form}">Nuevo</a>
                     <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
                             class="btn btn-primary"></button>
 
-                    <a class="btn btn-secondary" id="volverAtras" th:href="@{/cobros}">Volver</a>
+                    <a class="btn btn-secondary" id="volverAtras">Volver</a>
                 </div>
             </form>
         </div>
@@ -147,10 +148,16 @@
                              aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <div class=" d-flex" autocomplete="off">
+                                    <div class="modal-header gap-5">
                                             <h3>Cuotas Pendientes</h3>
-                                        </div>
+                                            <div>
+                                                <label class="form-label">Total Cuotas: </label>
+                                                <input class="form-control" type="number" id="totalCuotas" step="0.01">
+                                            </div>
+                                            <div>
+                                                <label class="form-label">Entrega: </label>
+                                                <input class="form-control" type="number" id="entrega" step="0.01">
+                                            </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
@@ -181,7 +188,7 @@
                                                 <td th:text="${xxx.creditoId.id}"></td>
                                                 <td th:text="${xxx.nroCuota}"></td>
                                                 <td th:text="${#numbers.formatDecimal(xxx.monto,1,'COMMA',2,'POINT')}"></td>
-                                                <td>0</td>
+                                                <td th:text="${#numbers.formatDecimal(xxx.saldo,1,'COMMA',2,'POINT')}"></td>
                                                 <td th:text="${#numbers.formatDecimal(xxx.creditoId.planPago.interesPunitorio,1,'COMMA',2,'POINT')}">% Pun</td>
                                                 <td>0</td>
                                                 <td>0</td>

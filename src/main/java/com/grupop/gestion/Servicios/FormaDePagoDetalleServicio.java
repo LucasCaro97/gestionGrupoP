@@ -3,6 +3,7 @@ package com.grupop.gestion.Servicios;
 import com.grupop.gestion.Entidades.FormaDePago;
 import com.grupop.gestion.Entidades.FormaDePagoDetalle;
 import com.grupop.gestion.Entidades.FormaDePagoDetalleSubDetalle;
+import com.grupop.gestion.Entidades.TipoOperacion;
 import com.grupop.gestion.Repositorios.FormaDePagoADetallarRepo;
 import com.grupop.gestion.Repositorios.FormaDePagoSubDetalleRepo;
 import lombok.RequiredArgsConstructor;
@@ -93,4 +94,19 @@ public class FormaDePagoDetalleServicio {
     }
 
 
+    @Transactional
+    public void cerrarDetallePago(Long idOperacion, Long idTipoOperacion) {
+        FormaDePagoDetalle f = obtenerPorId(idOperacion, idTipoOperacion);
+        f.setBloqueado(true);
+        formaDePagoADetallarRepo.save(f);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean validarEstado(Long idOperacion, Long idTipoOperacion){
+        return formaDePagoADetallarRepo.obtenerEstado(idOperacion, idTipoOperacion);
+    }
+
+    public void eliminarMaestro(Long id, long l) {
+        formaDePagoADetallarRepo.eliminarPorIdOperacionAndIdTipoOperacion(id, 1l);
+    }
 }

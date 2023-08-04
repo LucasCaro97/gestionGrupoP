@@ -25,7 +25,8 @@ public class CobroDetalleCuotasServicio {
     private final CreditoDetalleServicio creditoDetalleServicio;
 
     @Transactional
-    public void crear(Long idVenta, Long idCred, Integer nroCuota, LocalDate fechaVenc, BigDecimal cuotaBase, BigDecimal ajuste, BigDecimal importePuni, BigDecimal importeBonif, BigDecimal importeFinal, Long idCobro) {
+    public void crear(Long idVenta, Long idCred, Integer nroCuota, LocalDate fechaVenc, BigDecimal cuotaBase, BigDecimal ajuste,
+                      BigDecimal importePuni, BigDecimal importeBonif, BigDecimal importeFinal, Long idCobro, BigDecimal cobrado) {
         if ( cobroDetalleCuotasRepo.existByCreditoAndNroCuota(idCred, nroCuota) != 0) {
             CobroDetalleCuotas c = cobroDetalleCuotasRepo.searchByCreditoAndNroCuota(idCred, nroCuota);
             c.setVentaId((ventaServicio.obtenerPorId(idVenta)));
@@ -36,7 +37,7 @@ public class CobroDetalleCuotasServicio {
             c.setImporteCuota(cuotaBase);
             c.setImporteAjuste(ajuste);
             c.setImporteIntereses(importePuni);
-            c.setImporteACobrar(c.getImporteCuota().add(c.getImporteAjuste()).add(c.getImporteIntereses()));
+            c.setImporteACobrar(cobrado);
             c.setImporteBonificacion(importeBonif);
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
             cobroDetalleCuotasRepo.save(c);
@@ -51,13 +52,13 @@ public class CobroDetalleCuotasServicio {
             c.setImporteCuota(cuotaBase);
             c.setImporteAjuste(ajuste);
             c.setImporteIntereses(importePuni);
-            c.setImporteACobrar(c.getImporteCuota().add(c.getImporteAjuste()).add(c.getImporteIntereses()));
+            c.setImporteACobrar(cobrado);
             c.setImporteBonificacion(importeBonif);
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
             cobroDetalleCuotasRepo.save(c);
-            creditoDetalleServicio.marcarComoCancelada(idCred,nroCuota);
 
-            if(!creditoServicio.validarEstado(idCred)) creditoServicio.marcarComoBloqueado(idCred);
+            creditoDetalleServicio.actualizarSaldo(idCred, nroCuota, c.getImporteFinal());
+
         }
 
     }

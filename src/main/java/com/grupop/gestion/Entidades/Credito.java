@@ -47,6 +47,8 @@ public class Credito {
     private BigDecimal totalCredito;
     private String observaciones;
     private boolean bloqueado;
-    
+    @JoinColumn(name = "fk_forma_pago")
+    @OneToOne
+    private FormaDePagoDetalleSubDetalle detallePago;
 
 }

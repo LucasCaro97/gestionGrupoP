@@ -2,6 +2,10 @@
 $(document).ready(function () {
 var url = $(location).attr('pathname');
 
+$("#volverAtras").click(function() {
+    window.history.go(-1);
+})
+
 var fechaActual = document.getElementById("fechaAlta").value;
 
 if (fechaActual.length){

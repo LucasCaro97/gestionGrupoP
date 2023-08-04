@@ -28,6 +28,7 @@ public class CreditoDetalle {
     private Integer nroCuota;
     private BigDecimal monto;
     private LocalDate vencimiento;
+    private BigDecimal saldo;
     private Boolean cobrado;
 
 

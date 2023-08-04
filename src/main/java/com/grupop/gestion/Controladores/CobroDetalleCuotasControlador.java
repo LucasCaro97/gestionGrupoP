@@ -22,14 +22,14 @@ public class CobroDetalleCuotasControlador {
 
     private final CobroDetalleCuotasServicio cobroDetalleCuotasServicio;
 
-    @PostMapping("/alta/{idVenta}/{idCred}/{nroCuota}/{fechaVenc}/{cuotaBase}/{ajuste}/{importePun}/{importeBonif}/{importeFinal}/{idCobro}")
+    @PostMapping("/alta/{idVenta}/{idCred}/{nroCuota}/{fechaVenc}/{cuotaBase}/{ajuste}/{importePun}/{importeBonif}/{importeFinal}/{idCobro}/{cobrado}")
     public ResponseEntity<String> altaDetalle(@PathVariable Long idVenta, @PathVariable Long idCred, @PathVariable Integer nroCuota,
                                               @PathVariable LocalDate fechaVenc, @PathVariable BigDecimal cuotaBase, @PathVariable BigDecimal ajuste,
                                               @PathVariable BigDecimal importePun, @PathVariable BigDecimal importeBonif, @PathVariable BigDecimal importeFinal,
-                                              @PathVariable Long idCobro){
+                                              @PathVariable Long idCobro, @PathVariable BigDecimal cobrado){
 
         try{
-            cobroDetalleCuotasServicio.crear(idVenta, idCred, nroCuota, fechaVenc, cuotaBase, ajuste, importePun, importeBonif, importeFinal, idCobro);
+            cobroDetalleCuotasServicio.crear(idVenta, idCred, nroCuota, fechaVenc, cuotaBase, ajuste, importePun, importeBonif, importeFinal, idCobro, cobrado);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }

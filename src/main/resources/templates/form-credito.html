@@ -141,9 +141,7 @@
                                 <input th:field="*{capital}" id="capitalNew" class="form-control" readonly/>
                             </div>
                             <div th:unless="${procedencia == 'nuevo'}">
-                                <select th:field="*{capital}" id="capital" class="form-control">
-                                    <option th:value="${venta.total}" th:text="${venta.total}"></option>
-                                </select>
+                                <input th:field="*{capital}" id="capital" class="form-control" readonly/>
                             </div>
 
                         </div>

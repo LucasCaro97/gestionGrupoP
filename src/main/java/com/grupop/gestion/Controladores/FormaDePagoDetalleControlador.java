@@ -46,4 +46,9 @@ public class FormaDePagoDetalleControlador {
         return  ResponseEntity.ok(formaDePagoDetalleServicio.obtenerCapitalCredito(idOperacion, idTipoOperacion));
     }
 
+    @GetMapping("/validarEstado/{idOperacion}/{idTipoOperacion}")
+    public ResponseEntity<Boolean> obtenerEstado(@PathVariable Long idOperacion, @PathVariable Long idTipoOperacion){
+        return ResponseEntity.ok(formaDePagoDetalleServicio.validarEstado(idOperacion, idTipoOperacion));
+    }
+
 }

@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+validarEstado($("#Operacion").val())
+
 $("#addFormaDePago").click( async function(){
    var tiempoEspera = 500;
    function redireccionar() {
@@ -52,7 +54,6 @@ function verificarSaldo(){
     let totalOperacion = $("#totalOperacion").val()
     let total = 0;
     $("#tablaDetalle tbody tr").each(function(){
-        console.log("Calculando total fila")
         let monto = parseFloat($(this).children().eq(1).text().replace(/\,/g, ''));
         total += monto;
     })
@@ -76,6 +77,20 @@ function validarExistenciaCredito(idOperacion , fila){
                     fila.css("background-color", "#D34848")
                 }
             })
+}
+
+function validarEstado(idOperacion){
+    $.get("/detalleDePago/validarEstado/" + idOperacion + "/" + "1", function(dato,status){
+                    console.log(typeof dato)
+                    if(dato === true){
+                        $("#btnAlta").css("display", "none")
+                        $("#addFormaDePago").css("display", "none")
+                        $(".eliminarCom").css("display", "none")
+                        $("#formaDePago").prop("disabled", true)
+                        $("#monto").prop("readonly", true)
+                        $("#cuenta").prop("disabled", true)
+                    }
+                })
 }
 
 

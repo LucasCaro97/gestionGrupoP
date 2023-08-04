@@ -1,9 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.DTO.CreditoDetalleDto;
-import com.grupop.gestion.Entidades.Credito;
-import com.grupop.gestion.Entidades.CreditoDetalle;
-import com.grupop.gestion.Entidades.PlanPago;
+import com.grupop.gestion.Entidades.*;
 import com.grupop.gestion.Repositorios.CreditoRepo;
 import jdk.swing.interop.SwingInterOpUtils;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +26,8 @@ public class CreditoServicio {
     private final VentaServicio ventaServicio;
     private final PlanPagoServicio planPagoServicio;
     private final CreditoDetalleServicio creditoDetalleServicio;
+    private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
     @Transactional
     public void crear(Credito dto, String venceLosDias){
@@ -51,7 +51,7 @@ public class CreditoServicio {
         c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
         c.setObservaciones(dto.getObservaciones());
         c.setBloqueado(false);
-
+        c.setDetallePago(formaDePagoDetalleSubDetalleServicio.obtenerPorIdOperacionAndIdTipoOperacion(c.getId(), 1l));
         creditoRepo.save(c);
 
 
@@ -92,7 +92,8 @@ public class CreditoServicio {
 //        CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
         System.out.println("cerrando venta: " + dto.getVenta().getId());
         ventaServicio.cerrarVenta(dto.getVenta().getId());
-
+//        CIERRO EL DETALLE DE PAGO DE LA VENTA
+        formaDePagoDetalleServicio.cerrarDetallePago(dto.getVenta().getId(), dto.getVenta().getTipoOperacion().getId());
     }
 
     @Transactional

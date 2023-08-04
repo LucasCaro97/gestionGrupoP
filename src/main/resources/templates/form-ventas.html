@@ -114,10 +114,12 @@
                     <input type="text" class="form-control inputTotal" id="totalVenta" readonly>
                 </div>
                 <div id="comandos" class="d-flex">
+                    <a class="btn btn-primary" th:href="@{/ventas/form}">Nuevo</a>
+
                     <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
                             class="btn btn-primary"></button>
 
-                    <a class="btn btn-secondary" id="volverAtras" th:href="@{/ventas}">Volver</a>
+                    <a class="btn btn-secondary" id="volverAtras" >Volver</a>
                 </div>
             </form>
         </div>

@@ -48,7 +48,13 @@ public class VentaServicio {
     @Transactional //AGREGAR VALIDACIONES PARA QUE NO SE PUEDA MODIFICAR CUANDO YA CONTIENE UN COBRO
     public void actualizar(Venta dto){
         Venta vta = ventaRepo.findById(dto.getId()).get();
-        Long idFormaDePagoAnterior = vta.getFormaDePago().getId();
+        Long idFormaDePagoAnterior;
+        try{
+            idFormaDePagoAnterior = vta.getFormaDePago().getId();
+        }catch (Exception e){
+            idFormaDePagoAnterior = null;
+        }
+
 
         if(vta.isBloqueada()){
 
@@ -106,7 +112,11 @@ public class VentaServicio {
     public Venta obtenerPorId(Long id){ return ventaRepo.findById(id).get(); }
 
     @Transactional
-    public void eliminarPorId(Long id){ ventaRepo.deleteById(id); }
+    public void eliminarPorId(Long id){
+        formaDePagoDetalleServicio.eliminarSubDetalles(id, 1l);
+        formaDePagoDetalleServicio.eliminarMaestro(id, 1l);
+        ventaRepo.deleteById(id);
+    }
 
     @Transactional(readOnly = true)
     public Long buscarUltimoId(){ return ventaRepo.findLastId(); }

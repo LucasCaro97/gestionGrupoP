@@ -4,6 +4,7 @@ import com.grupop.gestion.DTO.CreditoDetalleDto;
 import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.CreditoDetalle;
 import com.grupop.gestion.Entidades.TipoComprobante;
+import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class CreditoControlador {
     private final TalonarioServicio talonarioServicio;
     private final VentaServicio ventaServicio;
     private final CreditoDetalleServicio creditoDetalleServicio;
+    private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
 
 
     @GetMapping
@@ -85,6 +87,7 @@ public class CreditoControlador {
     public ModelAndView getFormCharged(HttpServletRequest request, @PathVariable Long idVenta){
         ModelAndView mav = new ModelAndView("form-credito");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        Venta v = ventaServicio.obtenerPorId(idVenta);
 
         if(inputFlashMap!=null){
             mav.addObject("exception", inputFlashMap.get("exception"));
@@ -94,10 +97,11 @@ public class CreditoControlador {
         }
         mav.addObject("action", "create");
         mav.addObject("listaPlanPago", planPagoServicio.obtenerTodos());
-        mav.addObject("venta", ventaServicio.obtenerPorId(idVenta));
+        mav.addObject("venta", v);
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
+        mav.addObject("detallePago", formaDePagoDetalleSubDetalleServicio.obtenerPorIdOperacionAndIdTipoOperacion(v.getId(), v.getTipoOperacion().getId()));
         return mav;
     }
 

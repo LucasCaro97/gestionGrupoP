@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -22,4 +23,8 @@ public interface FormaDePagoSubDetalleRepo extends JpaRepository<FormaDePagoDeta
     @Modifying
     @Query(value = "DELETE FROM forma_de_pago_detalle_sub_detalle WHERE id_operacion = ?1 AND tipo_operacion = ?2", nativeQuery = true)
     void deleteByIdOperacionAndTipoOperacion(Long idOperacion, Long tipoOperacion);
+
+    @Query(value = "SELECT * FROM forma_de_pago_detalle_sub_detalle WHERE id_operacion = ?1 AND tipo_operacion = ?2 AND fk_forma_de_pago = 3", nativeQuery = true)
+    FormaDePagoDetalleSubDetalle obtenerPorIdOperacionAndIdTipoOperacion(Long idOperacion, Long idTipoOperacion);
+
 }

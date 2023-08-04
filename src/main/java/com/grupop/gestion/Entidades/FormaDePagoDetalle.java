@@ -22,7 +22,7 @@ public class FormaDePagoDetalle {
     private String observacion;
 
     private BigDecimal totalOperacion;
-
+    private boolean bloqueado;
 
 
 }

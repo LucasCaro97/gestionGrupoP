@@ -144,6 +144,7 @@ public class VentaControlador {
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("venta", dto);
             redirect.setUrl("/ventas/form");
+            e.printStackTrace();
         }
         return redirect;
     }

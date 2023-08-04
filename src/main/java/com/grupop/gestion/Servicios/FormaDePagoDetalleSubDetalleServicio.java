@@ -37,6 +37,11 @@ public class FormaDePagoDetalleSubDetalleServicio {
         return formaDePagoSubDetalleRepo.findById(id).get();
     }
 
+    @Transactional(readOnly = true)
+    public FormaDePagoDetalleSubDetalle obtenerPorIdOperacionAndIdTipoOperacion(Long idOperacion, Long idTipoOperacion){
+        return formaDePagoSubDetalleRepo.obtenerPorIdOperacionAndIdTipoOperacion(idOperacion, idTipoOperacion);
+    }
+
     @Transactional
     public void eliminarPorId(Long id){
         formaDePagoSubDetalleRepo.deleteById(id);

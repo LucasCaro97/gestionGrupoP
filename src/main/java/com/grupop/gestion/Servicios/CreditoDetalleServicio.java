@@ -29,6 +29,7 @@ public class CreditoDetalleServicio {
         creditoDetalle.setMonto(valorCuota);
         creditoDetalle.setVencimiento(fechaVencimiento);
         creditoDetalle.setCliente(idCliente);
+        creditoDetalle.setSaldo(valorCuota);
         creditoDetalle.setCobrado(false);
         creditoDetalleRepo.save(creditoDetalle);
     }
@@ -39,9 +40,15 @@ public class CreditoDetalleServicio {
     }
 
     @Transactional
-    public void marcarComoCancelada(Long creditoId, Integer nroCuota){
+    public void actualizarSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
-        c.setCobrado(true);
+
+        if(c.getSaldo().subtract(importeCobrado).compareTo(BigDecimal.ZERO) <= 0){
+            c.setSaldo(BigDecimal.ZERO);
+            c.setCobrado(true);
+        }else{
+            c.setSaldo(c.getSaldo().subtract(importeCobrado));
+        }
         creditoDetalleRepo.save(c);
     }
 
