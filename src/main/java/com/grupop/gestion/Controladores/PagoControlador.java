@@ -33,7 +33,7 @@ public class PagoControlador {
     private final PagoDetalleServicioCtaCte pagoDetalleServicioCtaCte;
     private final CuentasContablesServicio cuentasContablesServicio;
     private final PagoDetalleImputacionServicio pagoDetalleImputacionServicio;
-
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -80,14 +80,16 @@ public class PagoControlador {
         mav.addObject("tablaDetalleCtaCte", pagoDetalleServicioCtaCte.obtenerPorPagoId(p.getId()));
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
         mav.addObject("tablaDetalleImp", pagoDetalleImputacionServicio.obtenerPorPago(p.getId()));
+        mav.addObject("fechaComprobante", p.getFechaComprobante());
         return mav;
     }
 
     @PostMapping("/create")
-    public RedirectView create (Pago dto, RedirectAttributes attributes){
+    public RedirectView create (HttpServletRequest request, Pago dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/pago");
         try{
-            pagoServicio.crear(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            pagoServicio.crear(dto, fechaComprobante);
             r.setUrl("/pago/form/" + pagoServicio.buscarUltimoId());
             attributes.addFlashAttribute("exito", "Se ha generado el pago correctamente");
             attributes.addFlashAttribute("pago", dto);
@@ -100,12 +102,20 @@ public class PagoControlador {
     }
 
     @PostMapping("/update")
-    public RedirectView update(Pago dto, RedirectAttributes attributes){
+    public RedirectView update(HttpServletRequest request,  Pago dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/pago");
         try{
-            pagoServicio.actualizar(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            pagoServicio.actualizar(dto, fechaComprobante);
+            Pago p = pagoServicio.obtenerPorId(dto.getId());
             r.setUrl("/pago/form/" + dto.getId());
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el pago");
+            if(dto.getFormaDePago() != null) {
+                if ((dto.getFormaDePago().getId() == 54 || p.getFormaDePago().getId() == 54) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(p.getId(), 4l) == 0) {
+                    r.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "4");
+                }
+            }
+
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("pago", dto);

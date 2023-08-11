@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -29,15 +31,7 @@ public class CobroDetalleCuotasServicio {
                       BigDecimal importePuni, BigDecimal importeBonif, BigDecimal importeFinal, Long idCobro, BigDecimal cobrado) {
         if ( cobroDetalleCuotasRepo.existByCreditoAndNroCuota(idCred, nroCuota) != 0) {
             CobroDetalleCuotas c = cobroDetalleCuotasRepo.searchByCreditoAndNroCuota(idCred, nroCuota);
-            c.setVentaId((ventaServicio.obtenerPorId(idVenta)));
-            c.setCobroId(cobroServicio.obtenerPorId(idCobro));
-            c.setCreditoId(creditoServicio.obtenerPorId(idCred));
-            c.setNroCuota(nroCuota);
-            c.setFechaVencimiento(fechaVenc);
-            c.setImporteCuota(cuotaBase);
-            c.setImporteAjuste(ajuste);
-            c.setImporteIntereses(importePuni);
-            c.setImporteACobrar(cobrado);
+            System.out.println(c.getImporteACobrar());
             c.setImporteBonificacion(importeBonif);
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
             cobroDetalleCuotasRepo.save(c);
@@ -55,6 +49,7 @@ public class CobroDetalleCuotasServicio {
             c.setImporteACobrar(cobrado);
             c.setImporteBonificacion(importeBonif);
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
+            System.out.println(c.getImporteACobrar());
             cobroDetalleCuotasRepo.save(c);
 
             creditoDetalleServicio.actualizarSaldo(idCred, nroCuota, c.getImporteFinal());
@@ -65,13 +60,25 @@ public class CobroDetalleCuotasServicio {
 
     @Transactional(readOnly = true)
     public List<CobroDetalleCuotas> obtenerPorCobro(Long id) {
-        return cobroDetalleCuotasRepo.obtenerPorCobro(id);
+        List<CobroDetalleCuotas> listaCuotas = cobroDetalleCuotasRepo.obtenerPorCobro(id);
+        Collections.sort(listaCuotas, new Comparator<CobroDetalleCuotas>() {
+            @Override
+            public int compare(CobroDetalleCuotas o1, CobroDetalleCuotas o2) {
+                return o1.getFechaVencimiento().compareTo(o2.getFechaVencimiento());
+            }
+        });
+
+        return listaCuotas;
     }
 
     @Transactional
-    public void eliminarLineaDetalle(Long idCred, Integer nroCuota, Long idCobro){
-        cobroDetalleCuotasRepo.eliminarDetalle(idCred, nroCuota, idCobro);
-        creditoDetalleServicio.marcarComoNoCancelada(idCred, nroCuota);
+    public void eliminarLineaDetalle(Long idCred, Integer nroCuota, Long idCobro, BigDecimal importeCobrado){
+        CobroDetalleCuotas c = cobroDetalleCuotasRepo.searchByCreditoAndNroCuota(idCred, nroCuota);
+
+        if(c!=null){
+            cobroDetalleCuotasRepo.eliminarDetalle(idCred, nroCuota, idCobro);
+            creditoDetalleServicio.devolverSaldo(idCred, nroCuota, importeCobrado);
+        }
 
     }
 

@@ -36,6 +36,7 @@ public class CompraControlador {
     private final FormaDePagoServicio formaDePagoServicio;
     private final CuentasContablesServicio cuentasContablesServicio;
     private final CompraDetalleImputacionServicio compraDetalleImputacionServicio;
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
 
     @GetMapping
@@ -70,8 +71,8 @@ public class CompraControlador {
     @GetMapping("/form/{id}")
     public ModelAndView getFormUpd(@PathVariable Long id){
         ModelAndView mav = new ModelAndView("form-compras");
-        //agregar validacion para no modificar en caso de que posea algun pago
-        mav.addObject("compra", compraServicio.obtenerPorId(id));
+        Compra c = compraServicio.obtenerPorId(id);
+        mav.addObject("compra", c);
         mav.addObject("action", "update");
         mav.addObject("listaProveedores", entidadBaseServicio.obtenerProveedores());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
@@ -82,16 +83,17 @@ public class CompraControlador {
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(2l));
         mav.addObject("tablaDetalleImputacion", compraDetalleImputacionServicio.obtenerPorCompra(id));
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
-
+        mav.addObject("fechaComprobante", c.getFechaComprobante());
         return mav;
     }
 
 
     @PostMapping("/create")
-    public RedirectView create (Compra dto, RedirectAttributes attributes){
+    public RedirectView create (HttpServletRequest request, Compra dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/compras");
         try{
-            compraServicio.crear(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            compraServicio.crear(dto, fechaComprobante);
             redirect.setUrl("/compras/form/" + compraServicio.buscarUltimoId());
             attributes.addFlashAttribute("exito", "Se ha generado la compra correctamente");
             attributes.addFlashAttribute("compra", dto);
@@ -104,15 +106,16 @@ public class CompraControlador {
     }
 
     @PostMapping("/update")
-    public RedirectView update(Compra dto, RedirectAttributes attributes){
+    public RedirectView update(HttpServletRequest request, Compra dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/compras/form/" + dto.getId());
         try{
-            compraServicio.actualizar(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            compraServicio.actualizar(dto, fechaComprobante);
             Compra c = compraServicio.obtenerPorId(dto.getId());
 
             if(!c.isBloqueado()){
-                if(dto.getFormaDePago().getId() == 52 || c.getFormaDePago().getId() == 52 ){
-                    System.out.println("Redirigir a form DetalleDePago porque tiene multiples FP");
+                if(dto.getFormaDePago().getId() == 52 || c.getFormaDePago().getId() == 52 && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 2l) == 0){
+                    redirect.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "2");
                 }
             }else{
                 System.out.println("Compra bloqueada");

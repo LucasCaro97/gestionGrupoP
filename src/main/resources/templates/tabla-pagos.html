@@ -46,7 +46,7 @@
                                     <td class="cliente" th:text="${xxx.proveedor}"></td>
                                     <td th:text="${xxx.fechaComprobante}"></td>
                                     <td th:text="${xxx.talonario.nroTalonario} + ' - ' + ${xxx.nroComprobante}"></td>
-                                    <td th:text="${xxx.sector.descripcion}"></td>
+                                    <td th:text="${xxx.sector != null ? xxx.sector.descripcion : ''}"></td>
                                     <td th:text="${xxx.formaDePago != null ? xxx.formaDePago.descripcion : ''}"></td>
                                     <td th:text="${xxx.observaciones}"></td>
                                     <td>

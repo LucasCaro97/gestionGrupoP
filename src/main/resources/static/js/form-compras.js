@@ -10,13 +10,11 @@ var url = $(location).attr('pathname');
 
 var fechaActual = document.getElementById("fechaAlta").value;
 
-if (fechaActual.length){
-    console.log("Hay contenido");
-}
-else{
+if ($("#btnAlta").text() == 'Crear'){
     var fecha = new Date();
     document.getElementById("fechaAlta").value = fecha.toJSON().slice(0,10);
 }
+
 
 const endPoint3= "/talonario/obtenerNroComprobante/";
 

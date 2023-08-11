@@ -38,10 +38,10 @@ public class CobroDetalleCuotasControlador {
     }
 
 
-    @PostMapping("delete/{idCred}/{nroCuota}/{idCobro}")
-    public ResponseEntity<String> bajaDetalle ( @PathVariable Long idCred, @PathVariable Integer nroCuota, @PathVariable Long idCobro){
+    @PostMapping("delete/{idCred}/{nroCuota}/{idCobro}/{importeCobrado}")
+    public ResponseEntity<String> bajaDetalle ( @PathVariable Long idCred, @PathVariable Integer nroCuota, @PathVariable Long idCobro, @PathVariable BigDecimal importeCobrado){
         try{
-            cobroDetalleCuotasServicio.eliminarLineaDetalle(idCred, nroCuota, idCobro);
+            cobroDetalleCuotasServicio.eliminarLineaDetalle(idCred, nroCuota, idCobro, importeCobrado);
         } catch (Exception e){
             System.out.println(e.getMessage());
         }

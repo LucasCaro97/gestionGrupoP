@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,8 +24,9 @@ public class VentaServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
     @Transactional
-    public void crear(Venta dto){
+    public void crear(Venta dto, String fechaComprobante){
         Venta vta = new Venta();
+
         vta.setCliente(dto.getCliente());
         vta.setCuit(dto.getCuit());
         vta.setTipoIva(dto.getTipoIva());
@@ -35,7 +37,7 @@ public class VentaServicio {
         vta.setMoneda(dto.getMoneda());
         vta.setFormaDePago(dto.getFormaDePago());
         vta.setObservaciones(dto.getObservaciones());
-        vta.setFechaComprobante(dto.getFechaComprobante());
+        vta.setFechaComprobante(LocalDate.parse(fechaComprobante));
         vta.setTotal(new BigDecimal(0));
         vta.setBloqueada(false);
         vta.setIndiceBase(dto.getIndiceBase());
@@ -45,8 +47,8 @@ public class VentaServicio {
         ventaRepo.save(vta);
     }
 
-    @Transactional //AGREGAR VALIDACIONES PARA QUE NO SE PUEDA MODIFICAR CUANDO YA CONTIENE UN COBRO
-    public void actualizar(Venta dto){
+    @Transactional
+    public void actualizar(Venta dto, String fechaComprobante){
         Venta vta = ventaRepo.findById(dto.getId()).get();
         Long idFormaDePagoAnterior;
         try{
@@ -75,7 +77,7 @@ public class VentaServicio {
             vta.setMoneda(dto.getMoneda());
             vta.setFormaDePago(dto.getFormaDePago());
             vta.setObservaciones(dto.getObservaciones());
-            vta.setFechaComprobante(dto.getFechaComprobante());
+            vta.setFechaComprobante(LocalDate.parse(fechaComprobante));
             vta.setIndiceBase(dto.getIndiceBase());
             ventaRepo.save(vta);
 
@@ -96,6 +98,7 @@ public class VentaServicio {
                             formaDePagoDetalleServicio.crearSubDetalleAutomatico(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
                         }
                     }else{
+                        formaDePagoDetalleServicio.actualizarMonto(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal());
                         System.out.println("La forma de pago no ha cambiado");
                     }
 
@@ -112,7 +115,7 @@ public class VentaServicio {
     public Venta obtenerPorId(Long id){ return ventaRepo.findById(id).get(); }
 
     @Transactional
-    public void eliminarPorId(Long id){
+    public void eliminarPorId(Long id){ // Cuando elimino subdetalles debo descontar el importe del saldo de la cuenta Banco/Tarjeta
         formaDePagoDetalleServicio.eliminarSubDetalles(id, 1l);
         formaDePagoDetalleServicio.eliminarMaestro(id, 1l);
         ventaRepo.deleteById(id);
@@ -178,6 +181,11 @@ public class VentaServicio {
             IndiceCAC indiceBase = indiceCacServicio.obtenerPorId(idIndiceCac);
             return indiceBase.getIndice();
         }
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerTotalMensual(){
+        return ventaRepo.obtenerTotalVendidoMensual();
     }
 }
 

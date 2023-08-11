@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,20 +43,46 @@ public class CreditoDetalleServicio {
 
     @Transactional
     public void actualizarSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
+        System.out.println("Actualizando saldo");
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
+        System.out.println("Linea " + c );
 
+
+        System.out.println("Saldo = " + c.getSaldo().subtract(importeCobrado));
         if(c.getSaldo().subtract(importeCobrado).compareTo(BigDecimal.ZERO) <= 0){
+            System.out.println("Saldado");
             c.setSaldo(BigDecimal.ZERO);
             c.setCobrado(true);
         }else{
+            System.out.println("No saldado");
             c.setSaldo(c.getSaldo().subtract(importeCobrado));
         }
         creditoDetalleRepo.save(c);
     }
 
+    @Transactional
+    public void devolverSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
+        System.out.println("Actualizando saldo");
+        CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
+        System.out.println("Linea " + c);
+
+        System.out.println("Saldo actual = " + c.getSaldo());
+        c.setSaldo(c.getSaldo().add(importeCobrado));
+        c.setCobrado(false);
+        creditoDetalleRepo.save(c);
+    }
+
     @Transactional(readOnly = true)
     public List<CreditoDetalle> obtenerCreditosPendientesPorFkCliente(Long id){
-        return creditoDetalleRepo.obtenerPorFkClienteAndEstado(id);
+        List<CreditoDetalle> listaCuotas = creditoDetalleRepo.obtenerPorFkClienteAndEstado(id);
+        Collections.sort(listaCuotas, new Comparator<CreditoDetalle>() {
+            @Override
+            public int compare(CreditoDetalle o1, CreditoDetalle o2) {
+                return o1.getVencimiento().compareTo(o2.getVencimiento());
+            }
+        });
+
+        return listaCuotas;
         
     }
 

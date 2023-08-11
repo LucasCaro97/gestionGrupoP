@@ -19,7 +19,7 @@
 
     <div class="container">
         <div class="row mt-4">
-            <h1>Registro de Ventas</h1>
+            <h1>Registro de Ventas - <span th:text="${venta.id}"></span></h1>
             <form class="row g-3 needs-validation" th:action="@{/ventas/__${action}__}" th:object="${venta}"
                   method="post" autocomplete="off">
                 <input type="hidden" th:field="*{id}">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="fechaAlta" class="form-label">Fecha Comp: </label>
-                    <input id="fechaAlta" type="date" class="form-control" th:field="*{fechaComprobante}">
+                    <input id="fechaAlta" type="date" class="form-control" name="fechaAlta" th:value="${fechaComprobante}" >
                 </div>
                 <div class="col-md-3">
                     <label for="IVA" class="form-label">IVA: </label>

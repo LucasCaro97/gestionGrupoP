@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +84,7 @@ public class VentaControlador {
     }
 
     @GetMapping("/form/{id}")
-    public ModelAndView getFormUpd(@PathVariable Long id){
+    public ModelAndView getFormUpd(@PathVariable Long id ){
         ModelAndView mav = new ModelAndView("form-ventas");
         Venta vta = ventaServicio.obtenerPorId(id);
         mav.addObject("venta",vta);
@@ -102,14 +103,16 @@ public class VentaControlador {
         mav.addObject("listaVendedores", entidadBaseServicio.obtenerVendedores());
         mav.addObject("listaComisiones", comisionServicio.obtenerComisionVenta(id));
         mav.addObject("listaIndice", indiceCacServicio.obtenerTodos());
+        mav.addObject("fechaComprobante", vta.getFechaComprobante());
         return mav;
     }
 
     @PostMapping("/create")
-    public RedirectView create(Venta dto, RedirectAttributes attributes){
+    public RedirectView create(HttpServletRequest request,  Venta dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/ventas");
         try{
-            ventaServicio.crear(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            ventaServicio.crear(dto, fechaComprobante);
             redirect.setUrl("/ventas/form/" + ( ventaServicio.buscarUltimoId()));
             attributes.addFlashAttribute("exito", "Se ha generado el registro correctamente");
             attributes.addFlashAttribute("venta", dto);
@@ -122,11 +125,12 @@ public class VentaControlador {
     }
 
     @PostMapping("/update")
-    public RedirectView update(Venta dto, RedirectAttributes attributes){
+    public RedirectView update(HttpServletRequest request, Venta dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/ventas/form/" + dto.getId());
 
         try{
-            ventaServicio.actualizar(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            ventaServicio.actualizar(dto, fechaComprobante);
             Venta v = ventaServicio.obtenerPorId(dto.getId());
 
             if(!v.isBloqueada()){

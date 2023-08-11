@@ -32,8 +32,13 @@ public class FormaDePagoDetalleServicio {
         formaDePagoADetallarRepo.save(f);
 
         formaDePagoDetalleSubDetalleServicio.crear(f, formaDePago, importe);
+    }
 
-
+    @Transactional
+    public void actualizarMonto(Long idOperacion, Long idTipoOperacion, BigDecimal importe){
+        FormaDePagoDetalle f = formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
+        f.setTotalOperacion(importe);
+        formaDePagoADetallarRepo.save(f);
     }
 
     @Transactional
@@ -106,7 +111,13 @@ public class FormaDePagoDetalleServicio {
         return formaDePagoADetallarRepo.obtenerEstado(idOperacion, idTipoOperacion);
     }
 
-    public void eliminarMaestro(Long id, long l) {
+    public void eliminarMaestro(Long id, Long l) {
         formaDePagoADetallarRepo.eliminarPorIdOperacionAndIdTipoOperacion(id, 1l);
     }
+
+    public void actualizarTotal(Long idOperacion, Long idTipoOperacion, BigDecimal total ){
+        FormaDePagoDetalle f =  formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
+        f.setTotalOperacion(total);
+        formaDePagoADetallarRepo.save(f);
+    };
 }

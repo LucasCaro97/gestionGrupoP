@@ -6,12 +6,7 @@ $("#volverAtras").click(function() {
     window.history.go(-1);
 })
 
-var fechaActual = document.getElementById("fechaAlta").value;
-
-if (fechaActual.length){
-    console.log("Hay contenido");
-}
-else{
+if ($("#btnAlta").text() == 'Crear'){
     var fecha = new Date();
     document.getElementById("fechaAlta").value = fecha.toJSON().slice(0,10);
 }
@@ -136,9 +131,13 @@ crearItemsDetalle();
 $.get("/pago/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
            let datosFormatted = parseFloat(datos).toLocaleString("en-US");
            $("#totalPago").val(datosFormatted);
+           validarFormaDePago($("#id").val(), 4, datos )
 });
 
-
+    $(".verDetallePago").click(function() {
+    let url = "http://localhost:8080/detalleDePago/getForm/" + $("#id").val() + "/4"
+    window.open(url,"_blank");
+    })
 
 async function crearItemsDetalle(){
     var tiempoEspera = 500;
@@ -317,4 +316,20 @@ window.location.href= "/pago/form/"+ $("#id").val();
 
 });
 
+
+function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
+        $.get("/detalleDePago/obtenerTotal/" + idOperacion + "/" + idTipoOperacion, function(dato,status){
+            const totalDetallePago = dato;
+
+            console.log("TOTAL DP: " + typeof totalDetallePago + " = " + totalDetallePago)
+            console.log("TOTAL OP: " + typeof totalOperacion + " = " + totalOperacion)
+
+            if(totalDetallePago === totalOperacion){
+            $(".verDetallePago").css("background-color", "#48D383")
+            }else{
+            $(".verDetallePago").css("background-color", "#D34848")
+            }
+
+        })
+}
 

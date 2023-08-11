@@ -23,6 +23,6 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
     @Query(value = "SELECT SUM(total_detalle) FROM cobro_detalle_cta_cte WHERE cobro_id_id = ?",nativeQuery = true)
     BigDecimal obtenerTotalCtaCte(Long idCobro);
 
-//    @Query(value = "SELECT SUM(total) FROM compra_detalle WHERE fk_compra = ?",nativeQuery = true)
-//    BigDecimal obtenerTotalCtaCte();
+    @Query(value = "SELECT SUM(total) FROM cobro WHERE fk_moneda = 1 AND DATE_FORMAT(fecha_comprobante, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')", nativeQuery = true)
+    BigDecimal obtenerTotalCobradoMensual();
 }

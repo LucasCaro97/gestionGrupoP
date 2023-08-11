@@ -7,12 +7,7 @@ $("#volverAtras").click(function() {
 
 var url = $(location).attr('pathname');
 
-var fechaActual = document.getElementById("fechaAlta").value;
-
-if (fechaActual.length){
-    console.log("Hay contenido");
-}
-else{
+if ($("#btnAlta").text() == 'Crear'){
     var fecha = new Date();
     document.getElementById("fechaAlta").value = fecha.toJSON().slice(0,10);
 }
@@ -76,6 +71,8 @@ traducirCliente($("#cliente"));
 //AGREGO ITEMS AL DETALLE DE COBROS ( CUOTAS ) - CAMBIAR ITEMS QUE SE BAJAN
 $("#addItem").click(function(){
     let entrega = $("#entrega").val()
+    let totalEntrega = $("#entrega").val()
+    let totalCuotas = $("#totalCuotas").val()
 
     $("#tablaProducto tr").each(function(index, element){
         var checkbox = $(element).find(".check");
@@ -84,17 +81,15 @@ $("#addItem").click(function(){
             saldoFilaParsed = parseFloat(saldoFila)
             let aCobrarFila = saldoFilaParsed;
 
-
-            if(saldoFilaParsed < entrega ){
-                entrega = entrega - saldoFilaParsed
-
+            if(entrega == ""){
+                //SI EL USUARIO BAJA LAS CUTAS SIN UN MONTO DE ENTREGA, SE COBRA EL MONTO TOTAL DE LA CUOTA
                 var filaEditable = $("<tr></tr>");
                 var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
                 var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
                 var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
                 var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
                 var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
-                var celda6 = "<td>" + aCobrarFila + "</td>"
+                var celda6 = "<td>" + aCobrarFila.toFixed(2) + "</td>"
                 var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
                 var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
                 var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
@@ -102,25 +97,46 @@ $("#addItem").click(function(){
                 var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
                 filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
                  $("#tablaDetalle tbody").append(filaEditable);
+            }else if(totalEntrega <= totalCuotas ){
+                //SI EL USUARIO INGRESA EL MONTO QUE ES PAGADO POR EL CLIENTE, SE HACE LA DISTRIBUCION
+                if(saldoFilaParsed < entrega ){
+                    entrega = entrega - saldoFilaParsed
+                    var filaEditable = $("<tr></tr>");
+                    var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
+                    var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
+                    var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
+                    var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
+                    var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
+                    var celda6 = "<td>" + aCobrarFila.toFixed(2) + "</td>"
+                    var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
+                    var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
+                    var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                    var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                    var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+                    filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
+                    $("#tablaDetalle tbody").append(filaEditable);
+                    }else{
+                        aCobrarFila = entrega
 
-            }else{
-                aCobrarFila = entrega
-
-                var filaEditable = $("<tr></tr>");
-                var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
-                var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
-                var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
-                var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
-                var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
-                var celda6 = "<td>" + aCobrarFila + "</td>"
-                var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
-                var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
-                var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
-                var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
-                var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
-                filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
-                 $("#tablaDetalle tbody").append(filaEditable);
+                        var filaEditable = $("<tr></tr>");
+                        var celda1 = "<td>" + $(element).children().eq(1).text() + "</td>"
+                        var celda2 = "<td>" + $(element).children().eq(2).text() + "</td>"
+                        var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
+                        var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
+                        var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
+                        var celda6 = "<td>" + aCobrarFila.toFixed(2) + "</td>"
+                        var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
+                        var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
+                        var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                        var celda10 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
+                        var celda11 = "<td> <div class='form-check text-center'> <input class='form-check-input row-item' type='checkbox'>  </div> </td>"
+                        filaEditable.append(celda1,celda2,celda3,celda4,celda5,celda6,celda7,celda8,celda9,celda10, celda11);
+                         $("#tablaDetalle tbody").append(filaEditable);
+                    }
+            }else if(totalEntrega > totalCuotas){
+                alert("El monto cobrado no puede ser mayor al total de cuotas a cobrar")
             }
+
 
 
 
@@ -210,6 +226,7 @@ $.get("/cobros/obtenerTotalPorId/" + $("#id").val())
     .done(function(datos, status){
             let datosFormatted = parseFloat(datos).toLocaleString("en-US");
             $("#totalCobro").val(datosFormatted);
+            validarFormaDePago($("#id").val(), 3, datos )
     })
     .fail(function(jqXHR, textStatus, errorThrown){
     console.log("No se puede traer el total porque la aun no esta en la base de datos");
@@ -233,17 +250,20 @@ $('.check').on('click', function() {
       let valorCeldaParseado = parseFloat(valorCelda)
       // Realizar la operación deseada (en este caso, mostrar una alerta)
       if (isChecked) {
-      console.log("Total ( " + total + " ) + " + valorCeldaParseado)
         total = total + valorCeldaParseado;
       } else {
         // Aquí puedes realizar otra operación si el checkbox se desmarca
-         console.log("Total ( " + total + " ) - " + valorCeldaParseado + typeof total + typeof valorCeldaParseado)
         total = total - valorCeldaParseado;
       }
 
-       console.log(total.toFixed(2))
       $("#totalCuotas").val(total.toFixed(2))
     });
+
+
+    $(".verDetallePago").click(function() {
+    let url = "http://localhost:8080/detalleDePago/getForm/" + $("#id").val() + "/3"
+    window.open(url,"_blank");
+    })
 
 //FIN DOCUMENT READY
 });
@@ -364,7 +384,6 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
         await obtenerIndiceBaseEspecial()
 
         if (indiceBase!=0){
-            console.log( cuotaBase + " * ( " + indiceActual + " / " + indiceBase + " )")
             let resultado =   cuotaBase * ( indiceActual / indiceBase );
             let importeAjuste = resultado - cuotaBase;
             celdaImporteAjuste.text(importeAjuste.toLocaleString("en-US"))
@@ -432,13 +451,14 @@ async function eliminarItemsDetalleCuotas(){
             var idCred = filaMarcada.find("td:eq(1)").text();
             var nroCuota = filaMarcada.find("td:eq(2)").text();
             var idCobro = $("#id").val();
+            var importeCobrado = filaMarcada.find("td:eq(5)").text();
 
             var url = window.location.href;
             var urlObj = new URL(url);
             urlObj.pathname = "/cobroDetalleCuotas/delete/";
             var nuevaUrl = urlObj.href;
             //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-            fetch(nuevaUrl+ idCred + "/" + nroCuota + "/" + idCobro, {
+            fetch(nuevaUrl + idCred + "/" + nroCuota + "/" + idCobro + "/" + importeCobrado, {
                 method : "POST",
                 headers:{
                     "Content-Type" : "application/json"
@@ -465,6 +485,8 @@ async function eliminarItemsDetalleCuotas(){
 
 async function crearItemsDetalle(){
     var tiempoEspera = 500;
+    let cobrado;
+
     function redireccionar() {
             //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
             fetch("/cobros/actualizarTotal/" + $("#id").val(), {
@@ -481,9 +503,6 @@ async function crearItemsDetalle(){
         urlObj.pathname = "/cobroDetalleCuotas/alta/";
         var nuevaUrl = urlObj.href;
 
-        console.log("URL: " + url)
-        console.log("URL OBJ: " + urlObj)
-        console.log(nuevaUrl)
 
 //        //RECORRO TABLA DETALLE PRODUCTO
         $("#tablaDetalle tbody tr").each(function(){
@@ -492,20 +511,21 @@ async function crearItemsDetalle(){
             let nroCuota = $(this).children().eq(2).text().replace(/\,/g, '');
             let fechaVenc = $(this).children().eq(3).text().replace(/\,/g, '');
             let cuotaBase = $(this).children().eq(4).text().replace(/\,/g, '');
-            let cobrado = $(this).children().eq(5).text().replace(/\,/g, '');
+            cobrado = $(this).children().eq(5).text().replace(/\,/g, '');
             let ajuste = $(this).children().eq(6).text().replace(/\,/g, '');
             let punitorio = $(this).children().eq(7).text().replace(/\,/g, '');
             let importeBonif = $(this).children().eq(8).text().replace(/\,/g, '');
             let importeFinal = $(this).children().eq(9).text().replace(/\,/g, '');
-
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+            console.log("COBRADO : " + cobrado + " type " + typeof cobrado)
+            //GENERO LOS DETALLES DEL COBRO EN LA BASE DE DATOS
 //          fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc+ "/" + cuotaBase + "/" + ajuste + "/" + punitorio+ "/" + importeBonif + "/" + importeFinal, {
             fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() + "/" + cobrado , {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-            })
+                                method : "POST",
+                                headers:{
+                                "Content-Type" : "application/json"
+                                }
+                })
+
         });
     };
     function confirmSaveImp(){
@@ -533,7 +553,11 @@ async function crearItemsDetalle(){
 
     await confirmSave();
     await  confirmSaveImp();
-    setTimeout(redireccionar, tiempoEspera);
+    if(cobrado == ''){
+        alert("Importe a cobrar vacio")
+    }else{
+        setTimeout(redireccionar, tiempoEspera);
+    }
 }
 
 
@@ -562,7 +586,6 @@ async function eliminarItemsDetalleCtaCte(){
                     urlObj.pathname = "/cobroDetalleCtaCte/bajaDetalle/";
                     var nuevaUrl = urlObj.href;
                     //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
-                    console.log(nuevaUrl + idDetalle);
                     fetch(nuevaUrl + idDetalle,  {
                             method : "POST",
                             headers:{
@@ -587,6 +610,18 @@ window.location.href= "/cobros/form/"+ $("#id").val();
     await eliminarFilas();
     setTimeout(redireccionar, tiempoEspera);
 
+}
+
+function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
+        $.get("/detalleDePago/obtenerTotal/" + idOperacion + "/" + idTipoOperacion, function(dato,status){
+            const totalDetallePago = dato;
+            if(totalDetallePago === totalOperacion){
+            $(".verDetallePago").css("background-color", "#48D383")
+            }else{
+            $(".verDetallePago").css("background-color", "#D34848")
+            }
+
+        })
 }
 
 

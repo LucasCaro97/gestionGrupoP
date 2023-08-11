@@ -55,6 +55,7 @@ public class EntidadBase {
     @Column(name = "fecha_modificacion")
     private LocalDate fechaModificacion = LocalDate.now();
 
+
     //AGREGAR CAMPOS DE DATOS FILIATORIOS EN CASO DE SER NECESARIO
 //    fechaNacimiento
 //    estadoCivil

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -16,12 +17,13 @@ public class CompraServicio {
     private final CompraRepo compraRepo;
     private final TalonarioServicio talonarioServicio;
     private final TipoOperacionServicio tipoOperacionServicio;
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
     @Transactional
-    public void crear(Compra dto){
+    public void crear(Compra dto, String fechaComprobante){
         Compra compra = new Compra();
         compra.setProveedor(dto.getProveedor());
-        compra.setFechaComprobante(dto.getFechaComprobante());
+        compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
         compra.setTipoComprobante(dto.getTipoComprobante());
         compra.setTalonario(dto.getTalonario());
         compra.setNroComprobante(dto.getNroComprobante());
@@ -36,8 +38,15 @@ public class CompraServicio {
     }
 
     @Transactional
-    public void actualizar(Compra dto){
+    public void actualizar(Compra dto, String fechaComprobante){
         Compra compra = compraRepo.findById(dto.getId()).get();
+        Long idFormaDePagoAnterior;
+        try{
+            idFormaDePagoAnterior = compra.getFormaDePago().getId();
+        }catch (Exception e){
+            idFormaDePagoAnterior = null;
+        }
+
 
         if(compra.isBloqueado()){
             compra.setObservaciones(dto.getObservaciones());
@@ -45,7 +54,7 @@ public class CompraServicio {
         }else{
 
         compra.setProveedor(dto.getProveedor());
-        compra.setFechaComprobante(dto.getFechaComprobante());
+        compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
         compra.setTipoComprobante(dto.getTipoComprobante());
         if(compra.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
             talonarioServicio.aumentarUltimoNro(dto.getTalonario());
@@ -57,6 +66,28 @@ public class CompraServicio {
         compra.setObservaciones(dto.getObservaciones());
         compraRepo.save(compra);
 
+            if(compra.getFormaDePago() != null){
+                if(formaDePagoDetalleServicio.validarExistencia(compra.getId(), 2l) == 0){ //Si no existe crea el detalleDePago
+                    if(compra.getFormaDePago().getId() != 52){ // Si no es a detallar crea el detalleDePago con su subDetalle
+                        formaDePagoDetalleServicio.crear(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
+                    }else{                                // Si es a detallar crea el detalleDePagoVacio
+                        formaDePagoDetalleServicio.crearSinSubDetalle(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal());
+                    }
+                }else{                                   // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+                    if(idFormaDePagoAnterior != compra.getFormaDePago().getId()){
+                        if(compra.getFormaDePago().getId() == 52){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                            formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
+                        }else{
+                            formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
+                            formaDePagoDetalleServicio.crearSubDetalleAutomatico(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
+                        }
+                    }
+                }
+            }else{
+
+                formaDePagoDetalleServicio.actualizarMonto(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal());
+                System.out.println("La forma de pago no ha cambiado");
+            }
 
 
 
@@ -129,5 +160,10 @@ public class CompraServicio {
     @Transactional
     public Boolean validarEstado(Long idCompra) {
         return compraRepo.validarEstado(idCompra);
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerTotalMensual(){
+        return compraRepo.obtenerTotalCompradoMensual();
     }
 }

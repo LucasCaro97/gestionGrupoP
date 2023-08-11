@@ -39,6 +39,7 @@ public class CobroControlador {
     private final CobroDetalleCuotasServicio cobroDetalleCuotasServicio;
     private final VentaServicio ventaServicio;
     private final CobroDetalleCtaCteServicio cobroDetalleCtaCteServicio;
+    private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
 
     @GetMapping
@@ -89,14 +90,16 @@ public class CobroControlador {
         mav.addObject("tablaDetalleCuotas", cobroDetalleCuotasServicio.obtenerPorCobro(id));
         mav.addObject("listaVentasCtaCte", ventaServicio.obtenerVtasCtaCtePorCliente(cobro.getCliente().getId()));
         mav.addObject("tablaDetalleCtaCte", cobroDetalleCtaCteServicio.obtenerTodosPorCobro(id));
+        mav.addObject("fechaComprobante", cobro.getFechaComprobante());
         return mav;
     }
 
     @PostMapping("/create")
-    public RedirectView create(Cobro dto, RedirectAttributes attributes){
+    public RedirectView create(HttpServletRequest request, Cobro dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/cobros");
         try{
-            cobroServicio.crear(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            cobroServicio.crear(dto, fechaComprobante);
             r.setUrl("/cobros/form/" + ( cobroServicio.buscarUltimoId()));
             attributes.addFlashAttribute("exito", "Se ha registrado el cobro correctamente");
         }catch (Exception e){
@@ -109,11 +112,22 @@ public class CobroControlador {
     }
 
     @PostMapping("/update")
-    public RedirectView update (Cobro dto, RedirectAttributes attributes){
+    public RedirectView update (HttpServletRequest request, Cobro dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/cobros/form/" + dto.getId());
         try {
-            cobroServicio.actualizar(dto);
+            String fechaComprobante = request.getParameter("fechaAlta");
+            cobroServicio.actualizar(dto, fechaComprobante);
+            Cobro c = cobroServicio.obtenerPorId(dto.getId());
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el cobro");
+            System.out.println("Foma de pago id: " + c.getFormaDePago().getId());
+            if(dto.getFormaDePago() != null) {
+                if ((dto.getFormaDePago().getId() == 53 || c.getFormaDePago().getId() == 53) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 3l) == 0) {
+                    r.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "3");
+                }else if(  dto.getFormaDePago().getId() == 15 || c.getFormaDePago().getId() == 15 ){
+                    r.setUrl("/cheque/form/" + dto.getId());
+                }
+            }
+
         }catch (Exception e){
             attributes.addFlashAttribute("cobro", dto);
             attributes.addFlashAttribute("exception", e.getMessage());

@@ -19,7 +19,7 @@
 
     <div class="container">
         <div class="row mt-4">
-            <h1>Registro de Cobros</h1>
+            <h1>Registro de Cobros - <span th:text="${cobro.id}"></span></h1>
             <form class="row g-3 needs-validation" th:action="@{/cobros/__${action}__}" th:object="${cobro}"
                   method="post" autocomplete="off">
                 <input type="hidden" th:field="*{id}">
@@ -34,7 +34,7 @@
                 </div>
                 <div class="col-md-4">
                     <label for="fechaAlta" class="form-label">Fecha Comp: </label>
-                    <input id="fechaAlta" type="date" class="form-control" th:field="*{fechaComprobante}">
+                    <input id="fechaAlta" type="date" class="form-control" name="fechaAlta" th:value="${fechaComprobante}">
                 </div>
 
                 <div class="col-md-3">
@@ -95,12 +95,13 @@
                     <textarea type="text" class="form-control" th:field="*{observaciones}"
                               id="observaciones"></textarea>
                 </div>
-                <div class="col-md-3 formaPago">
+                <div class="col-md-3 formaPago d-flex">
                     <select th:field="*{formaDePago}" id="formaDePago" class="form-select" aria-label="Seleccionar formaDePago">
                         <option selected value="">Forma de Pago</option>
                         <option th:each="xxx : ${listaFormasPago}" th:text="${xxx.descripcion}"
                                 th:value="${xxx.id}"></option>
                     </select>
+                    <a class="btn verDetallePago"> ... </a>
                 </div>
                 <div id="cajaTotal">
                     <label class="form-label">Total: </label>

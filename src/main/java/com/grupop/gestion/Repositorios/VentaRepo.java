@@ -38,4 +38,7 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
     @Query(value = "SELECT fk_indice_base FROM venta WHERE id = ?1", nativeQuery = true)
     Long obtenerIndiceBase(Long idVenta);
+
+    @Query(value = "SELECT SUM(total) FROM venta WHERE fk_moneda = 1 AND DATE_FORMAT(fecha_comprobante, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')", nativeQuery = true)
+    BigDecimal obtenerTotalVendidoMensual();
 }

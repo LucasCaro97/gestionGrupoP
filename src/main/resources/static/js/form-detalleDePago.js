@@ -1,4 +1,7 @@
 $(document).ready(function () {
+$("#cerrar").click(function () {
+    window.close()
+})
 
 validarEstado($("#Operacion").val())
 
@@ -80,7 +83,7 @@ function validarExistenciaCredito(idOperacion , fila){
 }
 
 function validarEstado(idOperacion){
-    $.get("/detalleDePago/validarEstado/" + idOperacion + "/" + "1", function(dato,status){
+    $.get("/detalleDePago/validarEstado/" + idOperacion + "/" + "3", function(dato,status){
                     console.log(typeof dato)
                     if(dato === true){
                         $("#btnAlta").css("display", "none")
@@ -89,6 +92,8 @@ function validarEstado(idOperacion){
                         $("#formaDePago").prop("disabled", true)
                         $("#monto").prop("readonly", true)
                         $("#cuenta").prop("disabled", true)
+                    }else{
+                        $("#btnAlta").css("display", "none")
                     }
                 })
 }
