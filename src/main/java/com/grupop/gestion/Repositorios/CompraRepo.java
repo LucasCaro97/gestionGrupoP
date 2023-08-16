@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CompraRepo extends JpaRepository<Compra,Long> {
@@ -18,10 +19,10 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
     Double obtenerTotalPorId(Long id);
 
     @Query(value = "SELECT SUM(total) FROM compra_detalle WHERE fk_compra = ?", nativeQuery = true)
-    BigDecimal obtenerTotalProductos(Long idCompra);
+    Optional<BigDecimal> obtenerTotalProductos(Long idCompra);
 
     @Query(value = "SELECT SUM(importe_total) FROM compra_detalle_imputacion WHERE fk_compra = ?", nativeQuery = true)
-    BigDecimal obtenerTotalImputacion(Long idCompra);
+    Optional<BigDecimal> obtenerTotalImputacion(Long idCompra);
 
     @Query(value = "SELECT * FROM compra WHERE fk_proveedor = ? AND bloqueado = 0", nativeQuery = true)
     List<Compra> obtenerComprasPendientesPagoPorProveedor(Long id);
@@ -32,5 +33,5 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
     @Query(value = "SELECT SUM(total) FROM compra WHERE DATE_FORMAT(fecha_comprobante, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')", nativeQuery = true)
     BigDecimal obtenerTotalCompradoMensual();
 
-
+    Compra findTopByOrderByIdDesc();
 }

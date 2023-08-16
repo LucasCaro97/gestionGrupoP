@@ -74,11 +74,10 @@ obtenerCapialCredito($("#idOperacion").val(), 1)
 
 
 function traducirCliente(selectCliente){
-
-$.get("/entidadBase/obtenerNombrePorFkCliente/" + selectCliente.val(), function(datos,status){
-    //console.log(datos);
+    let idCliente = selectCliente.val()
+$.get("/entidadBase/obtenerNombrePorFkCliente/" + idCliente, function(datos,status){
     selectCliente.empty();
-    selectCliente.append($("<option value='"+datos.id+"'> "+ datos.razonSocial +" </option>"));
+    selectCliente.append($("<option value='"+idCliente+"'> "+ datos.razonSocial +" </option>"));
          })
 }
 

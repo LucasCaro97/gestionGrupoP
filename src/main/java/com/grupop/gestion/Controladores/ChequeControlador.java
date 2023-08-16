@@ -1,11 +1,13 @@
 package com.grupop.gestion.Controladores;
 
+import com.fasterxml.jackson.core.JsonToken;
 import com.grupop.gestion.Entidades.Cheque;
 import com.grupop.gestion.Servicios.ChequeServicio;
 import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import com.grupop.gestion.Servicios.TipoOperacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Controller
@@ -48,7 +51,6 @@ public class ChequeControlador {
             mav.addObject("cheque", inputFlashMap.get("cheque"));
         }else{
             mav.addObject("cheque", new Cheque());
-            mav.addObject("operacion", inputFlashMap.get("operacion"));
         }
         mav.addObject("action", "create");
         mav.addObject("listaTipoOperacion", tipoOperacionServicio.obtenerTodos());
@@ -77,7 +79,6 @@ public class ChequeControlador {
         String fechaEmision = request.getParameter("fechaEmision");
         String fechaPago = request.getParameter("fechaPago");
         String fechaRecepcion = request.getParameter("fechaRecepcion");
-
         try {
             chequeServicio.crear(dto, fechaEmision, fechaPago, fechaRecepcion);
             attributes.addFlashAttribute("exito", "Se ha registrado el cheque correctamente");
@@ -95,7 +96,6 @@ public class ChequeControlador {
         String fechaEmision = request.getParameter("fechaEmision");
         String fechaPago = request.getParameter("fechaPago");
         String fechaRecepcion = request.getParameter("fechaRecepcion");
-
         try {
             chequeServicio.actualizar(dto, fechaEmision, fechaPago, fechaRecepcion);
             attributes.addFlashAttribute("exito", "Se ha actualizado el cheque correctamente");
@@ -113,6 +113,11 @@ public class ChequeControlador {
         chequeServicio.eliminarPorId(id);
         attributes.addFlashAttribute("exito", "Se ha eliminado correctamente el cheque");
         return r;
+    }
+
+    @GetMapping("/obtenerTotalDisponible")
+    public ResponseEntity<BigDecimal> obtenerTotalDisponible(){
+        return ResponseEntity.ok(chequeServicio.obtenerTotalDisponible());
     }
 
 

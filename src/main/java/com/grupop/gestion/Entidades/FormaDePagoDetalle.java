@@ -3,6 +3,7 @@ package com.grupop.gestion.Entidades;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @IdClass(FormaDePagoDetallePK.class)
-
+@ToString
 public class FormaDePagoDetalle {
 
     @Id

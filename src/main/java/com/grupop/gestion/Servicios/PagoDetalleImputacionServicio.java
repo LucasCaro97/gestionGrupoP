@@ -22,27 +22,20 @@ public class PagoDetalleImputacionServicio {
         Pago pago = pagoServicio.obtenerPorId(idPago);
         CuentasContables cuenta = cuentasContablesServicio.obtenerPorid(idCuenta);
 
-
-        System.out.println("Pago: " + pago.getId());
-        System.out.println("Cuenta: " + cuenta.getId());
-        System.out.println("ExistsByPagoAndCuenta: " + existByPagoAndCuenta(pago.getId(), cuenta.getId()));
-
-
         if (existByPagoAndCuenta(pago.getId(), cuenta.getId()) != 0) {
             PagoDetalleImputacion p = pagoDetalleImputacionRepo.searchByPagoAndCuenta(pago.getId(), cuenta.getId());
             p.setPagoId(pago);
             p.setCuenta(cuenta);
             p.setImporte(importe);
             pagoDetalleImputacionRepo.save(p);
-            System.out.println("Detalle ya existe");
+            pagoServicio.actualizarTotal(idPago);
         } else {
             PagoDetalleImputacion p = new PagoDetalleImputacion();
             p.setPagoId(pago);
             p.setCuenta(cuenta);
             p.setImporte(importe);
             pagoDetalleImputacionRepo.save(p);
-
-            System.out.println("Detalle no existe");
+            pagoServicio.actualizarTotal(idPago);
         }
 
     }
@@ -61,6 +54,7 @@ public class PagoDetalleImputacionServicio {
     public void eliminarPorPagoAndCuenta(Long idPago,Long idCuenta){
         PagoDetalleImputacion p = pagoDetalleImputacionRepo.searchByPagoAndCuenta(idPago,idCuenta);
         pagoDetalleImputacionRepo.deleteById(p.getId());
+        pagoServicio.actualizarTotal(idPago);
     }
 
 }

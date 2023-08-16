@@ -43,7 +43,7 @@ public class CobroDetalleCuotasControlador {
         try{
             cobroDetalleCuotasServicio.eliminarLineaDetalle(idCred, nroCuota, idCobro, importeCobrado);
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro eliminado correctamente");
     }

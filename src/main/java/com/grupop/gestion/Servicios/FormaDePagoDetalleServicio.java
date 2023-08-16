@@ -24,10 +24,8 @@ public class FormaDePagoDetalleServicio {
 
     @Transactional
     //Crear Detalle de Pago automatico
-    public void crear(Long idOperacion, Long idTipoOperacion, BigDecimal importe, FormaDePago formaDePago) {
-        FormaDePagoDetalle f = new FormaDePagoDetalle();
-        f.setIdOperacion(idOperacion);
-        f.setTipoOperacion(idTipoOperacion);
+    public void actualizar(Long idOperacion, Long idTipoOperacion, BigDecimal importe, FormaDePago formaDePago) {
+        FormaDePagoDetalle f = formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
         f.setTotalOperacion(importe);
         formaDePagoADetallarRepo.save(f);
 
@@ -37,6 +35,7 @@ public class FormaDePagoDetalleServicio {
     @Transactional
     public void actualizarMonto(Long idOperacion, Long idTipoOperacion, BigDecimal importe){
         FormaDePagoDetalle f = formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
+        System.out.println("Actualizar monto de: " + f.getTotalOperacion() + " a " + importe);
         f.setTotalOperacion(importe);
         formaDePagoADetallarRepo.save(f);
     }
@@ -44,12 +43,15 @@ public class FormaDePagoDetalleServicio {
     @Transactional
     //Crear Detalle de Pago automatico sin detalle para carga manual
     public void crearSinSubDetalle(Long idOperacion, Long idTipoOperacion, BigDecimal importe) {
-        FormaDePagoDetalle f = new FormaDePagoDetalle();
-        f.setIdOperacion(idOperacion);
-        f.setTipoOperacion(idTipoOperacion);
-        f.setTotalOperacion(importe);
-        formaDePagoADetallarRepo.save(f);
-
+       try{
+           FormaDePagoDetalle f = new FormaDePagoDetalle();
+           f.setIdOperacion(idOperacion);
+           f.setTipoOperacion(idTipoOperacion);
+           f.setTotalOperacion(importe);
+           formaDePagoADetallarRepo.save(f);
+       }catch (Exception e){
+           e.printStackTrace();
+       }
     }
 
     @Transactional(readOnly = true)
@@ -116,8 +118,18 @@ public class FormaDePagoDetalleServicio {
     }
 
     public void actualizarTotal(Long idOperacion, Long idTipoOperacion, BigDecimal total ){
+        System.out.println("Actualizo total detallePago");
+        System.out.println("Id Op: " + idOperacion + " tipo: " + idTipoOperacion + " importe : " + total);
+
         FormaDePagoDetalle f =  formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
+        System.out.println(f);
         f.setTotalOperacion(total);
+        System.out.println(f);
         formaDePagoADetallarRepo.save(f);
     };
+
+    @Transactional(readOnly = true)
+    public Integer existsByIdOperacionAndTipoOperacionId(Long idOperacion, Long idTipoOperacion) {
+       return formaDePagoADetallarRepo.existsByIdOperacionAndTipoOperacionId(idOperacion, idTipoOperacion);
+    }
 }

@@ -189,6 +189,11 @@ public class EntidadBaseControlador {
         //System.out.println(entidadBaseServicio.obtenerNombrePorFkCliente(id));
         return ResponseEntity.ok(entidadBaseServicio.obtenerNombrePorFkCliente(id));
     }
+    @GetMapping("/obtenerNombrePorFkProveedor/{id}")
+    public ResponseEntity<EntidadBase> obtenerNombreProveedor(@PathVariable Long id){
+        //System.out.println(entidadBaseServicio.obtenerNombrePorFkCliente(id));
+        return ResponseEntity.ok(entidadBaseServicio.obtenerNombrePorFkProveedor(id));
+    }
 
     @GetMapping("/obtenerNombrePorFkVendedor/{id}")
     public ResponseEntity<EntidadBase> obtenerNombreVendedor(@PathVariable Long id){

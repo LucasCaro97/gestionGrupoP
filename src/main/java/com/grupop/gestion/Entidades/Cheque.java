@@ -35,6 +35,7 @@ public class Cheque {
     private boolean esTitular;
     private String nombreEmisor;
     private BigDecimal importe;
+    private boolean disponible;
 
 
 

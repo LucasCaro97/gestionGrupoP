@@ -3,7 +3,7 @@ $("#cerrar").click(function () {
     window.close()
 })
 
-validarEstado($("#Operacion").val())
+validarEstado($("#Operacion").val(), $("#tipoOperacion").val())
 
 $("#addFormaDePago").click( async function(){
    var tiempoEspera = 500;
@@ -82,11 +82,11 @@ function validarExistenciaCredito(idOperacion , fila){
             })
 }
 
-function validarEstado(idOperacion){
-    $.get("/detalleDePago/validarEstado/" + idOperacion + "/" + "3", function(dato,status){
+function validarEstado(idOperacion, idTipoOperacion){
+    $.get("/detalleDePago/validarEstado/" + idOperacion + "/" + idTipoOperacion, function(dato,status){
                     console.log(typeof dato)
                     if(dato === true){
-                        $("#btnAlta").css("display", "none")
+//                        $("#btnAlta").css("display", "none")
                         $("#addFormaDePago").css("display", "none")
                         $(".eliminarCom").css("display", "none")
                         $("#formaDePago").prop("disabled", true)

@@ -1,5 +1,6 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.Entidades.Cheque;
 import com.grupop.gestion.Entidades.Cobro;
 import com.grupop.gestion.Entidades.FormaDePago;
 import com.grupop.gestion.Entidades.TipoIva;
@@ -40,7 +41,8 @@ public class CobroControlador {
     private final VentaServicio ventaServicio;
     private final CobroDetalleCtaCteServicio cobroDetalleCtaCteServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
-
+    private final ChequeServicio chequeServicio;
+    private final CobroDetalleAdelantoServicio cobroDetalleAdelantoServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -91,6 +93,7 @@ public class CobroControlador {
         mav.addObject("listaVentasCtaCte", ventaServicio.obtenerVtasCtaCtePorCliente(cobro.getCliente().getId()));
         mav.addObject("tablaDetalleCtaCte", cobroDetalleCtaCteServicio.obtenerTodosPorCobro(id));
         mav.addObject("fechaComprobante", cobro.getFechaComprobante());
+        mav.addObject("listaAdelanto", cobroDetalleAdelantoServicio.obtenerPorCobro(id));
         return mav;
     }
 
@@ -118,20 +121,21 @@ public class CobroControlador {
             String fechaComprobante = request.getParameter("fechaAlta");
             cobroServicio.actualizar(dto, fechaComprobante);
             Cobro c = cobroServicio.obtenerPorId(dto.getId());
-            attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el cobro");
-            System.out.println("Foma de pago id: " + c.getFormaDePago().getId());
+
             if(dto.getFormaDePago() != null) {
                 if ((dto.getFormaDePago().getId() == 53 || c.getFormaDePago().getId() == 53) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 3l) == 0) {
                     r.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "3");
-                }else if(  dto.getFormaDePago().getId() == 15 || c.getFormaDePago().getId() == 15 ){
-                    r.setUrl("/cheque/form/" + dto.getId());
+                }else if( ( dto.getFormaDePago().getId() == 15 || c.getFormaDePago().getId() == 15 ) && chequeServicio.validarExistencia(c.getId()) == 0 ){
+                    r.setUrl("/cheque/form");
                 }
+            }else{
+                attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el cobro");
             }
 
         }catch (Exception e){
             attributes.addFlashAttribute("cobro", dto);
             attributes.addFlashAttribute("exception", e.getMessage());
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             r.setUrl("/cobros/form");
         }
         return r;

@@ -25,21 +25,21 @@ public class PagoDetalleServicioCtaCte {
         Compra compra = compraServicio.obtenerPorId(compraId);
 
         if(existByCompraAndPago(compra.getId(),pago.getId()) != 0){
-            System.out.println("Ya existe, procesdo a actualizarlo");
             PagoDetalle p = pagoDetalleRepo.searchByCompraAndPago(compra.getId(),pago.getId());
             p.setPagoId(pago);
             p.setCompraId(compra);
             p.setImporte(importe);
             pagoDetalleRepo.save(p);
             compraServicio.marcarComoBloqueado(compra.getId());
+            pagoServicio.actualizarTotal(idPago);
         }else{
-            System.out.println("Creando nuevo detalle");
             PagoDetalle p = new PagoDetalle();
             p.setPagoId(pago);
             p.setCompraId(compra);
             p.setImporte(importe);
             pagoDetalleRepo.save(p);
             compraServicio.marcarComoBloqueado(compra.getId());
+            pagoServicio.actualizarTotal(idPago);
         }
 
     }
@@ -50,6 +50,9 @@ public class PagoDetalleServicioCtaCte {
         Compra compra = compraServicio.obtenerPorId(p.getCompraId().getId());
         compraServicio.marcarComoDesbloqueado(compra.getId());
         pagoDetalleRepo.deleteById(id);
+
+        System.out.println("Eliminando linea del pago" + p.getPagoId().getId() + " tipoOp " + p.getPagoId().getTipoOperacion().getId());
+        pagoServicio.actualizarTotal(p.getPagoId().getId());
     }
 
     @Transactional(readOnly = true)

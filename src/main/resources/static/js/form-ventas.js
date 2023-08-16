@@ -301,13 +301,13 @@ async function crearItemsDetalle(){
     };
     var tiempoEspera = 500;
     function redireccionar() {
-            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
-                    method : "POST",
-                    headers:{
-                    "Content-Type" : "application/json"
-                    }
-            })
+//            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//            fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
+//                    method : "POST",
+//                    headers:{
+//                    "Content-Type" : "application/json"
+//                    }
+//            })
           window.location.href= "/ventas/form/"+ $("#id").val();
         }
 
@@ -365,7 +365,7 @@ function traducirCliente(selectCliente){
 
         $.get("/entidadBase/obtenerNombrePorFkCliente/" + valor, function(dato,status){
             razonSocial = dato.razonSocial;
-            $(option).text(razonSocial);
+            $(option).text(razonSocial + "(" + valor + ")");
         })
     })
 }
@@ -487,13 +487,13 @@ async function eliminarItemsDetalleProd(){
         }
     var tiempoEspera = 500;
     function redireccionar() {
-            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
-                    method : "POST",
-                    headers:{
-                        "Content-Type" : "application/json"
-                    }
-                })
+//            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//                fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
+//                    method : "POST",
+//                    headers:{
+//                        "Content-Type" : "application/json"
+//                    }
+//                })
 
         window.location.href= "/ventas/form/"+ $("#id").val();
     }
@@ -539,13 +539,13 @@ async function eliminarItemsDetalleImp(){
     }
     var tiempoEspera = 500;
     function redireccionar() {
-        //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-            fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
-                method : "POST",
-                headers:{
-                    "Content-Type" : "application/json"
-                }
-            })
+//        //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//            fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
+//                method : "POST",
+//                headers:{
+//                    "Content-Type" : "application/json"
+//                }
+//            })
 
     window.location.href= "/ventas/form/"+ $("#id").val();
 }

@@ -1,6 +1,7 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.Pago;
+import com.grupop.gestion.Entidades.Proveedor;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class PagoControlador {
     private final CuentasContablesServicio cuentasContablesServicio;
     private final PagoDetalleImputacionServicio pagoDetalleImputacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final ProveedorServicio proveedorServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -57,7 +59,7 @@ public class PagoControlador {
         }
 
         mav.addObject("action", "create");
-        mav.addObject("listaProveedores", entidadBaseServicio.obtenerProveedores());
+        mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
@@ -71,7 +73,7 @@ public class PagoControlador {
         Pago p = pagoServicio.obtenerPorId(id);
         mav.addObject("action", "update");
         mav.addObject("pago", p);
-        mav.addObject("listaProveedores", entidadBaseServicio.obtenerProveedores());
+        mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());

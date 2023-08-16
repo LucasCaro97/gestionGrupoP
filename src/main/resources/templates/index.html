@@ -14,25 +14,45 @@
 
     <div class="container">
         <div class="row d-flex">
-            <div class="col-6 operaciones">
-                <h3>Ventas</h3>
-                <label class="form-label" for="totalVentas">Total Ventas</label>
-                <input class="form-control sinBorde" type="text" id="totalVentas" th:value="${totalVendido}" readonly>
+            <div class="col-6 operaciones d-flex justify-content-center align-items-center">
+               <div>
+                   <h3>Ventas</h3>
+                   <label class="form-label" for="totalVentas">Total Ventas</label>
+                   <input class="form-control sinBorde" type="text" id="totalVentas" th:value="${totalVendido}" readonly>
+               </div>
+                <div>
+                    <a class="btn btn-primary" th:href="@{/ventas/form}">+</a>
+                </div>
+                </div>
+            <div class="col-6 operaciones d-flex justify-content-center align-items-center">
+                <div>
+                    <h3>Cobros</h3>
+                    <label class="form-label" for="totalVentas">Total Cobros</label>
+                    <input class="form-control sinBorde" type="text" id="totalCobros" th:value="${totalCobrado}" readonly>
+                </div>
+                <div>
+                    <a class="btn btn-primary" th:href="@{/cobros/form}">+</a>
+                </div>
             </div>
-            <div class="col-6 operaciones">
-                <h3>Cobros</h3>
-                <label class="form-label" for="totalVentas">Total Cobros</label>
-                <input class="form-control sinBorde" type="text" id="totalCobros" th:value="${totalCobrado}" readonly>
+            <div class="col-6 operaciones d-flex justify-content-center align-items-center">
+                <div>
+                    <h3>Compras</h3>
+                    <label class="form-label" for="totalVentas">Total Compras</label>
+                    <input class="form-control sinBorde" type="text" id="totalCompras" th:value="${totalComprado}" readonly>
+                </div>
+                <div>
+                    <a class="btn btn-primary" th:href="@{/compras/form}">+</a>
+                </div>
             </div>
-            <div class="col-6 operaciones">
-                <h3>Compras</h3>
-                <label class="form-label" for="totalVentas">Total Compras</label>
-                <input class="form-control sinBorde" type="text" id="totalCompras" th:value="${totalComprado}" readonly>
-            </div>
-            <div class="col-6 operaciones">
-                <h3>Pagos</h3>
+            <div class="col-6 operaciones d-flex justify-content-center align-items-center">
+                <div>
+                    <h3>Pagos</h3>
                     <label class="form-label" for="totalVentas">Total Pagos</label>
                     <input class="form-control sinBorde" type="text" id="totalPagos" th:value="${totalPagado}" readonly>
+                </div>
+                <div>
+                    <a class="btn btn-primary" th:href="@{/pago/form}">+</a>
+                </div>
             </div>
         </div>
     </div>

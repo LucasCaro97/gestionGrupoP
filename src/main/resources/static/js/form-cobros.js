@@ -1,5 +1,7 @@
 
 $(document).ready(function () {
+checkboxPrincipal()
+checkboxProductos()
 
 $("#volverAtras").click(function() {
     window.history.go(-1);
@@ -74,7 +76,8 @@ $("#addItem").click(function(){
     let totalEntrega = $("#entrega").val()
     let totalCuotas = $("#totalCuotas").val()
 
-    $("#tablaProducto tr").each(function(index, element){
+    $("#tablaProducto tbody tr").each(function(index, element){
+
         var checkbox = $(element).find(".check");
         if (checkbox.is(":checked")) {
             let saldoFila = $(element).children().eq(10).text().replace(/\,/g, '')
@@ -107,7 +110,7 @@ $("#addItem").click(function(){
                     var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
                     var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
                     var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
-                    var celda6 = "<td>" + aCobrarFila.toFixed(2) + "</td>"
+                    var celda6 = "<td>" + aCobrarFila + "</td>"
                     var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
                     var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
                     var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
@@ -124,7 +127,7 @@ $("#addItem").click(function(){
                         var celda3 = "<td>" + $(element).children().eq(3).text() + "</td>"
                         var celda4 = "<td>" + $(element).children().eq(11).text() + "</td>"
                         var celda5 = "<td>" + $(element).children().eq(4).text() + "</td>"
-                        var celda6 = "<td>" + aCobrarFila.toFixed(2) + "</td>"
+                        var celda6 = "<td>" + aCobrarFila + "</td>"
                         var celda7 = "<td>" + $(element).children().eq(7).text() + "</td>"
                         var celda8 = "<td>" + $(element).children().eq(8).text() + "</td>"
                         var celda9 = "<td contenteditable='true' class='editable'>" + 0 + "</td>"
@@ -265,6 +268,11 @@ $('.check').on('click', function() {
     window.open(url,"_blank");
     })
 
+
+    $("#addCom").click(function(){
+    generarAdelanto();
+    })
+
 //FIN DOCUMENT READY
 });
 
@@ -357,22 +365,26 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
 
         async function obtenerIndiceVenta(){
             indiceBase = await $.get("/ventas/obtenerIndiceBase/" + idVenta);
-
+//            console.log("Ind Vta" + indiceBase)
         }
         async function obtenerIndiceBaseDefault(){
             if(indiceBase === 0 ){
                 const indiceBaseResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() + 1 ) + "/" + fechaIndiceBase.getFullYear());
                 indiceBase = indiceBaseResponse;
+//                console.log("Ind Default" + indiceBase)
+
             }
         }
         async function obtenerIndiceActual(){
             const indiceActualResponse = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceActual.getMonth() +1 ) + "/" + fechaIndiceActual.getFullYear());
             indiceActual = indiceActualResponse;
+//            console.log("Ind Actual" + indiceBase)
         }
         async function obtenerIndiceBaseEspecial(){
                     if( indiceBase > indiceActual){
                         const indiceBaseResponseEspecial = await $.get("/indiceCac/obtenerIndice/" + ( fechaIndiceBase.getMonth() ) + "/" + fechaIndiceBase.getFullYear());
                         indiceBase = indiceBaseResponseEspecial;
+//                        console.log("Ind Especial" + indiceBase)
                     }
                 }
 
@@ -451,13 +463,15 @@ async function eliminarItemsDetalleCuotas(){
             var idCred = filaMarcada.find("td:eq(1)").text();
             var nroCuota = filaMarcada.find("td:eq(2)").text();
             var idCobro = $("#id").val();
-            var importeCobrado = filaMarcada.find("td:eq(5)").text();
+            var importeCobradoText = filaMarcada.find("td:eq(5)").text();
+            var importeCobrado = parseFloat(importeCobradoText.replace(/\,/g, ''));
 
             var url = window.location.href;
             var urlObj = new URL(url);
             urlObj.pathname = "/cobroDetalleCuotas/delete/";
             var nuevaUrl = urlObj.href;
             //ELIMINO LAS LINEAS DE DETALLE SELECCIONADAS DE LA BD
+            console.log(nuevaUrl + idCred + "/" + nroCuota + "/" + idCobro + "/" + importeCobrado)
             fetch(nuevaUrl + idCred + "/" + nroCuota + "/" + idCobro + "/" + importeCobrado, {
                 method : "POST",
                 headers:{
@@ -467,15 +481,15 @@ async function eliminarItemsDetalleCuotas(){
         }
 
     }
-    var tiempoEspera = 500;
+    var tiempoEspera = 2000;
     function redireccionar() {
                 //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
-                fetch("/cobros/actualizarTotal/" + $("#id").val(), {
-                    method : "POST",
-                    headers:{
-                        "Content-Type" : "application/json"
-                    }
-                })
+//                fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+//                    method : "POST",
+//                    headers:{
+//                        "Content-Type" : "application/json"
+//                    }
+//                })
                 window.location.href= "/cobros/form/"+ $("#id").val();
             }
 
@@ -484,17 +498,17 @@ async function eliminarItemsDetalleCuotas(){
 }
 
 async function crearItemsDetalle(){
-    var tiempoEspera = 500;
+    var tiempoEspera = 2000;
     let cobrado;
 
     function redireccionar() {
             //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
-            fetch("/cobros/actualizarTotal/" + $("#id").val(), {
-                method : "POST",
-                headers:{
-                    "Content-Type" : "application/json"
-                }
-            })
+//            fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+//                method : "POST",
+//                headers:{
+//                    "Content-Type" : "application/json"
+//                }
+//            })
             window.location.href= "/cobros/form/"+ $("#id").val();
         }
     function confirmSave(){
@@ -516,9 +530,6 @@ async function crearItemsDetalle(){
             let punitorio = $(this).children().eq(7).text().replace(/\,/g, '');
             let importeBonif = $(this).children().eq(8).text().replace(/\,/g, '');
             let importeFinal = $(this).children().eq(9).text().replace(/\,/g, '');
-            console.log("COBRADO : " + cobrado + " type " + typeof cobrado)
-            //GENERO LOS DETALLES DEL COBRO EN LA BASE DE DATOS
-//          fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc+ "/" + cuotaBase + "/" + ajuste + "/" + punitorio+ "/" + importeBonif + "/" + importeFinal, {
             fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() + "/" + cobrado , {
                                 method : "POST",
                                 headers:{
@@ -595,15 +606,15 @@ async function eliminarItemsDetalleCtaCte(){
                 }
 
         }
-    var tiempoEspera = 500;
+    var tiempoEspera = 1000;
     function redireccionar() {
     //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-    fetch("/cobros/actualizarTotal/" + $("#id").val(), {
-        method : "POST",
-        headers:{
-            "Content-Type" : "application/json"
-        }
-    })
+//    fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+//        method : "POST",
+//        headers:{
+//            "Content-Type" : "application/json"
+//        }
+//    })
 window.location.href= "/cobros/form/"+ $("#id").val();
 }
 
@@ -622,6 +633,74 @@ function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
             }
 
         })
+}
+
+function checkboxPrincipal(){
+       //Obtengo el checkbox principal y todos los checkboxes del tbody
+    const checkPrincipal = document.getElementById("checkPrincipalSecond");
+    const checkboxes = document.querySelectorAll("#tablaDetalle tbody .check");
+     //Agrego un event listener al checkbox principal
+    checkPrincipal.addEventListener("change", function(){
+        checkboxes.forEach(checkbox => {
+            //  Cambio el estado de seleccion de los checkboxes en el tbody
+            checkbox.checked = checkPrincipal.checked;
+        })
+    })
+        //Agrego un event listener para los checkboxes en el tbody
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener("change", function(){
+            if(!checkbox.checked){
+            checkPrincipal.checked= false;
+            }
+        })
+    })
+}
+
+function checkboxProductos(){
+
+      //Obtengo el checkbox principal y todos los checkboxes del tbody
+        const checkPrincipal = document.getElementById("checkPrincipal");
+        const checkboxes = document.querySelectorAll("#tablaProducto tbody .check");
+         //Agrego un event listener al checkbox principal
+        checkPrincipal.addEventListener("change", function(){
+            checkboxes.forEach(checkbox => {
+                //  Cambio el estado de seleccion de los checkboxes en el tbody
+                checkbox.checked = checkPrincipal.checked;
+            })
+        })
+            //Agrego un event listener para los checkboxes en el tbody
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener("change", function(){
+                if(!checkbox.checked){
+                checkPrincipal.checked= false;
+                }
+            })
+        })
+}
+
+function generarAdelanto(){
+//console.log("/adelanto/generarAdelanto/"+ $("#cliente").val() + "/" + $("#id").val() + "/" + $("#importe").val() )
+
+    var tiempoEspera = 1000;
+    function redireccionar() {
+//        fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+//                method : "POST",
+//                headers:{
+//                    "Content-Type" : "application/json"
+//                }
+//        })
+    window.location.href= "/cobros/form/"+ $("#id").val();
+    }
+    //    GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+          fetch("/adelanto/generarAdelanto/"+ $("#cliente").val() + "/" + $("#id").val() + "/" + $("#importe").val() + "/" + $("#detalle").val() , {
+            method : "POST",
+            headers:{
+                "Content-Type" : "application/json"
+            }
+        })
+
+    setTimeout(redireccionar, tiempoEspera);
+
 }
 
 

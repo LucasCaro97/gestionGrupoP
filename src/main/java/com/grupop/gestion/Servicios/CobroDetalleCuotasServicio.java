@@ -31,10 +31,10 @@ public class CobroDetalleCuotasServicio {
                       BigDecimal importePuni, BigDecimal importeBonif, BigDecimal importeFinal, Long idCobro, BigDecimal cobrado) {
         if ( cobroDetalleCuotasRepo.existByCreditoAndNroCuota(idCred, nroCuota) != 0) {
             CobroDetalleCuotas c = cobroDetalleCuotasRepo.searchByCreditoAndNroCuota(idCred, nroCuota);
-            System.out.println(c.getImporteACobrar());
             c.setImporteBonificacion(importeBonif);
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
             cobroDetalleCuotasRepo.save(c);
+            cobroServicio.actualizarTotal(idCobro);
         }
         else {
             CobroDetalleCuotas c = new CobroDetalleCuotas();
@@ -49,10 +49,10 @@ public class CobroDetalleCuotasServicio {
             c.setImporteACobrar(cobrado);
             c.setImporteBonificacion(importeBonif);
             c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
-            System.out.println(c.getImporteACobrar());
             cobroDetalleCuotasRepo.save(c);
 
             creditoDetalleServicio.actualizarSaldo(idCred, nroCuota, c.getImporteFinal());
+            cobroServicio.actualizarTotal(idCobro);
 
         }
 
@@ -78,6 +78,7 @@ public class CobroDetalleCuotasServicio {
         if(c!=null){
             cobroDetalleCuotasRepo.eliminarDetalle(idCred, nroCuota, idCobro);
             creditoDetalleServicio.devolverSaldo(idCred, nroCuota, importeCobrado);
+            cobroServicio.actualizarTotal(idCobro);
         }
 
     }

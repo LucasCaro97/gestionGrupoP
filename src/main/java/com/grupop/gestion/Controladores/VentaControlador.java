@@ -141,8 +141,6 @@ public class VentaControlador {
                        redirect.setUrl("/detalleDePago/getForm/"+dto.getId() + "/" + "1");
                    }
                 }
-            }else{
-                System.out.println("La venta esta bloqueada, no es necesario redirigir a credito");
             }
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());

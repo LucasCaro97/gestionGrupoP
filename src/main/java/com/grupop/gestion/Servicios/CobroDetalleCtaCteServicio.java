@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.CobroDetalleCtaCte;
+import com.grupop.gestion.Entidades.CobroDetalleCuotas;
 import com.grupop.gestion.Repositorios.CobroDetalleCtaCteRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class CobroDetalleCtaCteServicio {
             c.setVentaId(ventaServicio.obtenerPorId(idVenta));
             c.setTotalDetalle(importe);
             cobroDetalleCtaCteRepo.save(c);
+            cobroServicio.actualizarTotal(idCobro);
         }else{
             System.out.println("Creando nuevo item de cobro cta cte");
             CobroDetalleCtaCte c = new CobroDetalleCtaCte();
@@ -33,10 +35,12 @@ public class CobroDetalleCtaCteServicio {
             c.setVentaId(ventaServicio.obtenerPorId(idVenta));
             c.setTotalDetalle(importe);
             cobroDetalleCtaCteRepo.save(c);
+            cobroServicio.actualizarTotal(idCobro);
 
             //CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
             System.out.println("cerrando venta: " + idVenta);
             ventaServicio.cerrarVenta(idVenta);
+
 
         }
 
@@ -49,7 +53,11 @@ public class CobroDetalleCtaCteServicio {
     }
 
     @Transactional
-    public void eliminar(Long idDetalle){ cobroDetalleCtaCteRepo.deleteById(idDetalle);}
+    public void eliminar(Long idDetalle){
+        Long idCobro = cobroDetalleCtaCteRepo.findById(idDetalle).get().getCobroId().getId();
+        cobroDetalleCtaCteRepo.deleteById(idDetalle);
+        cobroServicio.actualizarTotal(idCobro);
+    }
 
     @Transactional(readOnly = true)
     public List<CobroDetalleCtaCte> obtenerTodosPorCobro(Long id) {

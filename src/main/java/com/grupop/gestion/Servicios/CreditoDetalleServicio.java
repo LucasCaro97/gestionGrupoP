@@ -23,11 +23,14 @@ public class CreditoDetalleServicio {
     private final CreditoDetalleRepo creditoDetalleRepo;
 
     @Transactional
-    public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento, Cliente idCliente) {
+    public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento, Cliente idCliente, BigDecimal gastoAdministrativo) {
+
 
         CreditoDetalle creditoDetalle = new CreditoDetalle();
         creditoDetalle.setCreditoId(credito);
         creditoDetalle.setNroCuota(nroCuota);
+        creditoDetalle.setCapital(valorCuota.subtract(gastoAdministrativo));
+        creditoDetalle.setGastoAdm(gastoAdministrativo);
         creditoDetalle.setMonto(valorCuota);
         creditoDetalle.setVencimiento(fechaVencimiento);
         creditoDetalle.setCliente(idCliente);
@@ -43,18 +46,13 @@ public class CreditoDetalleServicio {
 
     @Transactional
     public void actualizarSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
-        System.out.println("Actualizando saldo");
+
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
-        System.out.println("Linea " + c );
 
-
-        System.out.println("Saldo = " + c.getSaldo().subtract(importeCobrado));
         if(c.getSaldo().subtract(importeCobrado).compareTo(BigDecimal.ZERO) <= 0){
-            System.out.println("Saldado");
             c.setSaldo(BigDecimal.ZERO);
             c.setCobrado(true);
         }else{
-            System.out.println("No saldado");
             c.setSaldo(c.getSaldo().subtract(importeCobrado));
         }
         creditoDetalleRepo.save(c);
@@ -62,11 +60,7 @@ public class CreditoDetalleServicio {
 
     @Transactional
     public void devolverSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
-        System.out.println("Actualizando saldo");
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
-        System.out.println("Linea " + c);
-
-        System.out.println("Saldo actual = " + c.getSaldo());
         c.setSaldo(c.getSaldo().add(importeCobrado));
         c.setCobrado(false);
         creditoDetalleRepo.save(c);

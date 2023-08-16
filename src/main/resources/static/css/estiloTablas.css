@@ -4,3 +4,11 @@
     justify-content: space-between;
     align-items: baseline;
 }
+
+.sinBorde{
+    border: none;
+}
+
+.margenImporteCheque{
+    margin-bottom: 8px;
+}

@@ -34,6 +34,9 @@ public class PagoServicio {
         p.setFormaDePago(dto.getFormaDePago());
         p.setTipoOperacion(tipoOperacionServicio.obtenerPorId(4l));
         pagoRepo.save(p);
+
+        Pago ultimoPago = pagoRepo.findTopByOrderByIdDesc();
+        formaDePagoDetalleServicio.crearSinSubDetalle(ultimoPago.getId(), ultimoPago.getTipoOperacion().getId(), ultimoPago.getTotal());
     }
 
     @Transactional
@@ -60,27 +63,17 @@ public class PagoServicio {
         pagoRepo.save(p);
 
         if(p.getFormaDePago() != null){
-            if(formaDePagoDetalleServicio.validarExistencia(p.getId(), 4l) == 0){ //Si no existe crea el detalleDePago
-                if(p.getFormaDePago().getId() != 54){ // Si no es a detallar crea el detalleDePago con su subDetalle
-                    formaDePagoDetalleServicio.crear(p.getId(), p.getTipoOperacion().getId(), p.getTotal(), p.getFormaDePago());
-                }else{                                // Si es a detallar crea el detalleDePagoVacio
-                    formaDePagoDetalleServicio.crearSinSubDetalle(p.getId(), p.getTipoOperacion().getId(), p.getTotal());
-                }
-            }else{                                   // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
-                if(idFormaDePagoAnterior != p.getFormaDePago().getId()){
-                    if(p.getFormaDePago().getId() == 54){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
-                        formaDePagoDetalleServicio.eliminarSubDetalles(p.getId(), p.getTipoOperacion().getId());
-                    }else{
-                        formaDePagoDetalleServicio.eliminarSubDetalles(p.getId(), p.getTipoOperacion().getId());
-                        formaDePagoDetalleServicio.crearSubDetalleAutomatico(p.getId(), p.getTipoOperacion().getId(), p.getTotal(), p.getFormaDePago());
-                    }
+            // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+            if(idFormaDePagoAnterior != p.getFormaDePago().getId()){
+                if(p.getFormaDePago().getId() == 54){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                    formaDePagoDetalleServicio.eliminarSubDetalles(p.getId(), p.getTipoOperacion().getId());
+                }else{      // Si no es aDetallar => generar automaticamente el item detalleDepago
+                    formaDePagoDetalleServicio.eliminarSubDetalles(p.getId(), p.getTipoOperacion().getId());
+                    formaDePagoDetalleServicio.crearSubDetalleAutomatico(p.getId(), p.getTipoOperacion().getId(), p.getTotal(), p.getFormaDePago());
                 }
             }
-        }else{
-
-            formaDePagoDetalleServicio.actualizarMonto(p.getId(), p.getTipoOperacion().getId(), p.getTotal());
-            System.out.println("La forma de pago no ha cambiado");
         }
+
     }
 
     @Transactional(readOnly = true)
@@ -107,19 +100,16 @@ public class PagoServicio {
 
     @Transactional
     public void actualizarTotal(Long idPago) {
-        BigDecimal resultado = new BigDecimal(0);
+        System.out.println("Actualizo total pago " + idPago);
+        BigDecimal resultado = BigDecimal.ZERO;
         Pago p = pagoRepo.findById(idPago).get();
-        BigDecimal totalCtaCte = pagoRepo.obtenerTotalCtaCte(idPago);
-        BigDecimal totalImp = pagoRepo.obtenerTotalImp(idPago);
+        BigDecimal totalCtaCte = pagoRepo.obtenerTotalCtaCte(idPago).orElse(BigDecimal.ZERO);
+        BigDecimal totalImp = pagoRepo.obtenerTotalImp(idPago).orElse(BigDecimal.ZERO);
 
-        if(totalCtaCte!=null && totalImp !=null){
-            resultado = totalCtaCte.add(totalImp);
-        }else if(totalCtaCte!=null){
-            resultado = totalCtaCte;
-        }else if(totalImp!=null){
-            resultado = totalImp;
-        }
+        resultado = totalCtaCte.add(totalImp);
         p.setTotal(resultado);
+
+        formaDePagoDetalleServicio.actualizarTotal(p.getId(), 4l, resultado);
         pagoRepo.save(p);
     }
 

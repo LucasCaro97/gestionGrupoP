@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -31,9 +32,11 @@ public class ChequeServicio {
 
         c.setFechaRecepcion(LocalDate.parse(fechaRecepcion));
         c.setOperacionIngreso(dto.getOperacionIngreso());
+        c.setIdOperacion(dto.getIdOperacion());
         c.setEsTitular(dto.isEsTitular());
         c.setNombreEmisor(dto.getNombreEmisor());
         c.setImporte(dto.getImporte());
+        c.setDisponible(true);
         chequeRepo.save(c);
     }
 
@@ -52,6 +55,7 @@ public class ChequeServicio {
 
         c.setFechaRecepcion(LocalDate.parse(fechaRecepcion));
         c.setOperacionIngreso(dto.getOperacionIngreso());
+        c.setIdOperacion(dto.getIdOperacion());
         c.setEsTitular(dto.isEsTitular());
         c.setNombreEmisor(dto.getNombreEmisor());
         c.setImporte(dto.getImporte());
@@ -69,5 +73,13 @@ public class ChequeServicio {
         chequeRepo.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
+    public Integer validarExistencia(Long id) {
+        return chequeRepo.validarExistencia(id);
+    }
 
+
+    public BigDecimal obtenerTotalDisponible() {
+        return chequeRepo.obtenerTotalDisponible();
+    }
 }

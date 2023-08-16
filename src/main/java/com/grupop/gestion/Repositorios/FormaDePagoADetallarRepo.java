@@ -33,4 +33,10 @@ public interface FormaDePagoADetallarRepo extends JpaRepository<FormaDePagoDetal
     @Modifying
     @Query(value = "DELETE FROM forma_de_pago_detalle WHERE id_operacion = ?1 AND tipo_operacion = ?2", nativeQuery = true)
     void eliminarPorIdOperacionAndIdTipoOperacion(Long id, long l);
+
+
+    @Query(value = "SELECT COUNT(*) FROM forma_de_pago_detalle WHERE id_operacion = ?1 AND tipo_operacion = ?2", nativeQuery = true)
+    Integer existsByIdOperacionAndTipoOperacionId(Long idOperacion, Long idTipoOperacion);
+
+    FormaDePagoDetalle findTopByOrderByIdOperacion();
 }

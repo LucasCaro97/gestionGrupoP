@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Repository
 public interface PagoRepo extends JpaRepository<Pago, Long> {
@@ -18,12 +19,14 @@ public interface PagoRepo extends JpaRepository<Pago, Long> {
 
 
     @Query(value = "SELECT SUM(importe) FROM pago_detalle WHERE fk_pago = ?", nativeQuery = true)
-    BigDecimal obtenerTotalCtaCte(Long idPago);
+    Optional<BigDecimal> obtenerTotalCtaCte(Long idPago);
 
     @Query(value = "SELECT SUM(importe) FROM pago_detalle_imputacion WHERE fk_pago = ?", nativeQuery = true)
-    BigDecimal obtenerTotalImp(Long idPago);
+    Optional<BigDecimal> obtenerTotalImp(Long idPago);
 
 
     @Query(value = "SELECT SUM(total) FROM pago WHERE DATE_FORMAT(fecha_comprobante, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')", nativeQuery = true)
     BigDecimal obtenerTotalPagadoMensual();
+
+    Pago findTopByOrderByIdDesc();
 }

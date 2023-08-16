@@ -73,15 +73,14 @@ public class CreditoServicio {
 
         Credito credito = creditoRepo.findFirstByOrderByIdDesc();
 
+
         for(int i = 1; i <= credito.getCantCuotas() ; i++){
 
             LocalDate fechaVencimiento = LocalDate.of(anioActual,mesActual,diaVencimiento);
-            System.out.println("Generando credito: " + i + " con fecha " + fechaVencimiento);
-            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento, credito.getCliente());
+            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento, credito.getCliente(), credito.getGastosAdministrativos().divide(new BigDecimal(credito.getCantCuotas()),4, RoundingMode.UP));
 
 
             if(mesActual == Month.DECEMBER){
-                System.out.println("FIN DEL AÑO " + Month.DECEMBER);
                 mesActual = mesActual.plus(1);
                 anioActual++;
             }else{
@@ -90,7 +89,6 @@ public class CreditoServicio {
         }
 
 //        CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
-        System.out.println("cerrando venta: " + dto.getVenta().getId());
         ventaServicio.cerrarVenta(dto.getVenta().getId());
 //        CIERRO EL DETALLE DE PAGO DE LA VENTA
         formaDePagoDetalleServicio.cerrarDetallePago(dto.getVenta().getId(), dto.getVenta().getTipoOperacion().getId());

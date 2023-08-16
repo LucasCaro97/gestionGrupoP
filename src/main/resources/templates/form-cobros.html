@@ -127,6 +127,9 @@
                 <li class="nav-item">
                     <a class="nav-link" id="tab2-tab" data-bs-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Ventas Cta. Cte.</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="tab3-tab" data-bs-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false">Adelanto</a>
+                </li>
             </ul>
 
             <div class="tab-content mt-2">
@@ -178,7 +181,11 @@
                                                 <th>A Cobrar</th>
                                                 <th>Vencimiento</th>
                                                 <th>Dias Vencidos</th>
-                                                <th>Accion</th>
+                                                <th class="d-flex">Accion
+                                                    <div class="form-check text-center">
+                                                    <input id="checkPrincipal" class="form-check-input row-item check" type="checkbox">
+                                                    </div>
+                                                </th>
 
                                             </tr>
                                             </thead>
@@ -282,7 +289,11 @@
                                 <th>Importe Ajuste</th>
                                 <th>$ Bonif</th>
                                 <th>Final</th>
-                                <th>Accion</th>
+                                <th class="d-flex">Accion
+                                    <div class="form-check text-center">
+                                        <input id="checkPrincipalSecond" class="form-check-input row-item check" type="checkbox">
+                                    </div>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -446,6 +457,51 @@
                         </table>
                     </div>
                 </div>
+<!--                TAB3-->
+                <div id="tab3" class="tab-pane fade" role="tabpanel" aria-labelledby="tab3-tab">
+
+
+                    <div class="p-2 comandosDet">
+                        <form class="row g-3 needs-validation d-flex justify-content-between" method="post" autocomplete="off">
+                            <div class="col-3">
+                                <label for="detalle" class="form-label">Detalle: </label>
+                                <input type="text" class="form-control" name="detalle" id="detalle">
+                            </div>
+                            <div class="col-3">
+                                <label for="importe" class="form-label">Importe: </label>
+                                <input type="importe" step="0.01" class="form-control" name="importe" id="importe">
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-outline-success" id="addCom" type="button" data-bs-toggle="modal">
+                                    Añadir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="tablaDetalleAdelanto">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                            <tr class="table-dark">
+                                <th>Detalle</th>
+                                <th>Importe</th>
+                                <th>Accion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="xxx : ${listaAdelanto}">
+                                <td th:text="${xxx.detalle}"></td>
+                                <td th:text="${xxx.importe}"></td>
+                                <td>
+                                    <a class="btn btn-danger eliminarCom" th:href="@{/adelanto/bajaAdelanto/__${xxx.id}__}">Eliminar</a>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
             </div>
         </div>
 

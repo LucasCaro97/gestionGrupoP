@@ -37,6 +37,7 @@ public class CompraControlador {
     private final CuentasContablesServicio cuentasContablesServicio;
     private final CompraDetalleImputacionServicio compraDetalleImputacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final ProveedorServicio proveedorServicio;
 
 
     @GetMapping
@@ -59,7 +60,7 @@ public class CompraControlador {
             mav.addObject("compra", new Compra());
         }
         mav.addObject("action", "create");
-        mav.addObject("listaProveedores", entidadBaseServicio.obtenerProveedores());
+        mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
@@ -74,7 +75,7 @@ public class CompraControlador {
         Compra c = compraServicio.obtenerPorId(id);
         mav.addObject("compra", c);
         mav.addObject("action", "update");
-        mav.addObject("listaProveedores", entidadBaseServicio.obtenerProveedores());
+        mav.addObject("listaProveedores", proveedorServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
@@ -114,17 +115,18 @@ public class CompraControlador {
             Compra c = compraServicio.obtenerPorId(dto.getId());
 
             if(!c.isBloqueado()){
-                if(dto.getFormaDePago().getId() == 52 || c.getFormaDePago().getId() == 52 && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 2l) == 0){
-                    redirect.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "2");
+                if(dto.getFormaDePago() != null || c.getFormaDePago() != null){
+                    if( (dto.getFormaDePago().getId() == 52 || c.getFormaDePago().getId() == 52) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 2l) == 0){
+                        redirect.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "2");
+                    }
                 }
-            }else{
-                System.out.println("Compra bloqueada");
             }
 
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
-            attributes.addFlashAttribute("venta", dto);
+            attributes.addFlashAttribute("compra", dto);
+            System.out.println("Exception : " + e.getMessage());
             redirect.setUrl("/compras/form");
         }
     return redirect;

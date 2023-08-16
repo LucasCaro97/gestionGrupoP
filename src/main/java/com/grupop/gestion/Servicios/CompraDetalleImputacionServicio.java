@@ -41,6 +41,7 @@ public class CompraDetalleImputacionServicio {
             }
             cdimp.setImporteTotal(cdimp.getImporteBase().add(totalLinea));
             compraDetalleImputacionRepo.save(cdimp);
+            compraServicio.actualizarTotal(idCompra);
         } else {
             BigDecimal totalImpuesto = new BigDecimal(0);
             List<Impuestos> impuestos = impuestosServicio.obtenerImpuestosPorIds(impuestosIds);
@@ -56,6 +57,7 @@ public class CompraDetalleImputacionServicio {
             }
             cdimp.setImporteTotal(cdimp.getImporteBase().add(totalLinea));
             compraDetalleImputacionRepo.save(cdimp);
+            compraServicio.actualizarTotal(idCompra);
         }
 
     }
@@ -64,6 +66,7 @@ public class CompraDetalleImputacionServicio {
     public void eliminar(Long idCompra, Long idCuenta){
         CompraDetalleImputacion cdimp = compraDetalleImputacionRepo.seachByCuentaAndCompra(idCompra, idCuenta);
         compraDetalleImputacionRepo.deleteById(cdimp.getId());
+        compraServicio.actualizarTotal(idCompra);
     }
 
     @Transactional(readOnly = true)

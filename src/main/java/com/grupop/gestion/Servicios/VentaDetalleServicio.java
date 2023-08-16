@@ -31,6 +31,7 @@ public class VentaDetalleServicio {
             vtaDetalle.setPrecioUnitario(precioU);
             vtaDetalle.setTotal(cantidad*precioU);
             ventaDetalleRepo.save(vtaDetalle);
+            ventaServicio.actualizarTotalNuevo(idVenta);
         }
         else {
             VentaDetalle vtaDetalle = new VentaDetalle();
@@ -40,6 +41,7 @@ public class VentaDetalleServicio {
             vtaDetalle.setPrecioUnitario(precioU);
             vtaDetalle.setTotal(cantidad*precioU);
             ventaDetalleRepo.save(vtaDetalle);
+            ventaServicio.actualizarTotalNuevo(idVenta);
         }
     }
 
@@ -48,6 +50,7 @@ public class VentaDetalleServicio {
         public void eliminar (Long idVenta, Long idProd){
             VentaDetalle vtaDetalle = ventaDetalleRepo.searchByProductoAndVenta(idVenta,idProd);
             ventaDetalleRepo.deleteById(vtaDetalle.getId());
+            ventaServicio.actualizarTotalNuevo(idVenta);
         }
 
         @Transactional(readOnly = true)

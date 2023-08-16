@@ -21,7 +21,7 @@ public class CobroServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
 
     @Transactional
-    public void crear(Cobro dto,  String fechaComprobante){
+    public void crear(Cobro dto, String fechaComprobante) {
         Cobro c = new Cobro();
         c.setCliente(dto.getCliente());
         c.setCuit(dto.getCuit());
@@ -38,24 +38,27 @@ public class CobroServicio {
         c.setTipoOperacion(tipoOperacionServicio.obtenerPorId(3l));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         cobroRepo.save(c);
+
+        Cobro ultimoCobro = cobroRepo.findTopByOrderByIdDesc();
+        formaDePagoDetalleServicio.crearSinSubDetalle(ultimoCobro.getId(), ultimoCobro.getTipoOperacion().getId(), ultimoCobro.getTotal());
     }
 
     @Transactional
-    public void actualizar(Cobro dto, String fechaComprobante){
+    public void actualizar(Cobro dto, String fechaComprobante) {
         Cobro c = cobroRepo.findById(dto.getId()).get();
-       Long idFormaDePagoAnterior;
-       try{
-           idFormaDePagoAnterior = c.getFormaDePago().getId();
-       }catch (Exception e){
-           idFormaDePagoAnterior = null;
-       }
+        Long idFormaDePagoAnterior;
+        try {
+            idFormaDePagoAnterior = c.getFormaDePago().getId();
+        } catch (Exception e) {
+            idFormaDePagoAnterior = null;
+        }
 
         c.setCliente(dto.getCliente());
         c.setCuit(dto.getCuit());
         c.setTipoIva(dto.getTipoIva());
         c.setFechaComprobante(LocalDate.parse(fechaComprobante));
         c.setTipoComprobante(dto.getTipoComprobante());
-        if(c.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
+        if (c.getTalonario().getNroTalonario() != dto.getTalonario().getNroTalonario()) {
             talonarioServicio.aumentarUltimoNro(dto.getTalonario());
             c.setTalonario(dto.getTalonario());
         }
@@ -66,30 +69,20 @@ public class CobroServicio {
         c.setObservaciones(dto.getObservaciones());
         cobroRepo.save(c);
 
-        if(c.getFormaDePago() != null){
-            if(formaDePagoDetalleServicio.validarExistencia(c.getId(), 3l) == 0){ //Si no existe crea el detalleDePago
-                if(c.getFormaDePago().getId() != 53){ // Si no es a detallar crea el detalleDePago con su subDetalle
-                    formaDePagoDetalleServicio.crear(c.getId(), c.getTipoOperacion().getId(), c.getTotal(), c.getFormaDePago());
-                }else{                                // Si es a detallar crea el detalleDePagoVacio
-                    formaDePagoDetalleServicio.crearSinSubDetalle(c.getId(), c.getTipoOperacion().getId(), c.getTotal());
-                }
-            }else{                                   // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
-                if(idFormaDePagoAnterior != c.getFormaDePago().getId()){
-                    if(c.getFormaDePago().getId() == 53){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
-                        formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
-                    }else{
-                        formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
-                        formaDePagoDetalleServicio.crearSubDetalleAutomatico(c.getId(), c.getTipoOperacion().getId(), c.getTotal(), c.getFormaDePago());
-                    }
+        if (c.getFormaDePago() != null) {
+            // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+            if ( idFormaDePagoAnterior != c.getFormaDePago().getId() ) {
+                if (c.getFormaDePago().getId() == 53) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                    formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
+                } else {            // Si no es aDetallar => generar automaticamente el item detalleDepago
+                    formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
+                    formaDePagoDetalleServicio.crearSubDetalleAutomatico(c.getId(), c.getTipoOperacion().getId(), c.getTotal(), c.getFormaDePago());
                 }
             }
-        }else{
-
-            formaDePagoDetalleServicio.actualizarMonto(c.getId(), c.getTipoOperacion().getId(), c.getTotal());
-            System.out.println("La forma de pago no ha cambiado");
         }
-
     }
+
+
 
     @Transactional(readOnly = true)
     public List<Cobro> obtenerTodos(){ return cobroRepo.findAll(); }
@@ -108,24 +101,20 @@ public class CobroServicio {
 
     @Transactional
     public void actualizarTotal(Long idCobro) {
-        BigDecimal resultado = new BigDecimal(0);
+        BigDecimal resultado = BigDecimal.ZERO;
         Cobro c = cobroRepo.findById(idCobro).get();
-        BigDecimal totalCuota = cobroRepo.obtenerTotalCuotas(idCobro);
-        BigDecimal totalCtaCte = cobroRepo.obtenerTotalCtaCte(idCobro);
+        BigDecimal totalCuota = cobroRepo.obtenerTotalCuotas(idCobro).orElse(BigDecimal.ZERO);
+        BigDecimal totalCtaCte = cobroRepo.obtenerTotalCtaCte(idCobro).orElse(BigDecimal.ZERO);
+        BigDecimal totalAdelanto = cobroRepo.obtenerTotalAdelanto(idCobro).orElse(BigDecimal.ZERO);
 
-        if(totalCuota!=null && totalCtaCte !=null){
-            resultado = totalCuota.add(totalCtaCte);
-        }else if(totalCuota!=null){
-            resultado = totalCuota;
-        }else if(totalCtaCte!=null){
-            resultado = totalCtaCte;
-        }
+
+        resultado = totalCuota.add(totalCtaCte).add(totalAdelanto);
         c.setTotal(resultado);
-
         formaDePagoDetalleServicio.actualizarTotal(c.getId(), 3l, resultado);
         cobroRepo.save(c);
 
     }
+
 
     @Transactional
     public BigDecimal obtenerTotalPorId(Long id) {

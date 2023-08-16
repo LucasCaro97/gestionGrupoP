@@ -35,6 +35,9 @@ public class CompraServicio {
         compra.setTipoOperacion(tipoOperacionServicio.obtenerPorId(2l));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         compraRepo.save(compra);
+
+        Compra ultimaCompra = compraRepo.findTopByOrderByIdDesc();
+        formaDePagoDetalleServicio.crearSinSubDetalle(ultimaCompra.getId(), ultimaCompra.getTipoOperacion().getId(), ultimaCompra.getTotal());
     }
 
     @Transactional
@@ -67,30 +70,16 @@ public class CompraServicio {
         compraRepo.save(compra);
 
             if(compra.getFormaDePago() != null){
-                if(formaDePagoDetalleServicio.validarExistencia(compra.getId(), 2l) == 0){ //Si no existe crea el detalleDePago
-                    if(compra.getFormaDePago().getId() != 52){ // Si no es a detallar crea el detalleDePago con su subDetalle
-                        formaDePagoDetalleServicio.crear(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
-                    }else{                                // Si es a detallar crea el detalleDePagoVacio
-                        formaDePagoDetalleServicio.crearSinSubDetalle(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal());
-                    }
-                }else{                                   // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
-                    if(idFormaDePagoAnterior != compra.getFormaDePago().getId()){
-                        if(compra.getFormaDePago().getId() == 52){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
-                            formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
-                        }else{
-                            formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
-                            formaDePagoDetalleServicio.crearSubDetalleAutomatico(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
-                        }
+                // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+                if(idFormaDePagoAnterior != compra.getFormaDePago().getId()){
+                    if(compra.getFormaDePago().getId() == 52){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                        formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
+                    }else{
+                        formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
+                        formaDePagoDetalleServicio.crearSubDetalleAutomatico(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
                     }
                 }
-            }else{
-
-                formaDePagoDetalleServicio.actualizarMonto(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal());
-                System.out.println("La forma de pago no ha cambiado");
             }
-
-
-
         }
     }
 
@@ -115,22 +104,16 @@ public class CompraServicio {
 
     @Transactional
     public void actualizarTotal(Long idCompra){
-        BigDecimal resultado = new BigDecimal(0);
+        BigDecimal resultado = BigDecimal.ZERO;
         Compra compra = compraRepo.findById(idCompra).get();
-        BigDecimal totalProd = compraRepo.obtenerTotalProductos(compra.getId());
-        BigDecimal totalImp = compraRepo.obtenerTotalImputacion(compra.getId());
+        BigDecimal totalProd = compraRepo.obtenerTotalProductos(compra.getId()).orElse(BigDecimal.ZERO);
+        BigDecimal totalImp = compraRepo.obtenerTotalImputacion(compra.getId()).orElse(BigDecimal.ZERO);
 
-
-        if(totalProd!=null && totalImp !=null){
-            resultado = totalProd.add(totalImp);
-        }else if(totalProd!=null){
-            resultado = totalProd;
-        }else if(totalImp!=null){
-            resultado = totalImp;
-        }
-
+        resultado = totalProd.add(totalImp);
         compra.setTotal(resultado);
         compraRepo.save(compra);
+
+        formaDePagoDetalleServicio.actualizarTotal(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal());
     }
 
     @Transactional(readOnly = true)

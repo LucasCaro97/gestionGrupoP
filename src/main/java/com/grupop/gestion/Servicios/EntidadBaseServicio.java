@@ -4,6 +4,7 @@ import com.grupop.gestion.Entidades.*;
 import com.grupop.gestion.Repositorios.EntidadBaseRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.ReactiveTransaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.transform.Source;
@@ -148,5 +149,10 @@ public class EntidadBaseServicio {
 
     @Transactional(readOnly = true)
     public EntidadBase obtenerNombrePorFkVendedor(Long id) { return entidadBaseRepo.obtenerNombreFkVendedorId(id);    }
+
+    public EntidadBase obtenerNombrePorFkProveedor(Long id) {
+        return entidadBaseRepo.obtenerNombreFkProveedorId(id);
+    }
+
 
 }

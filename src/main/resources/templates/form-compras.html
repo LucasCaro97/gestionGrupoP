@@ -28,7 +28,7 @@
                     <select th:field="*{proveedor}" id="proveedor" class="form-select" aria-label="Seleccionar proveedor"
                             required>
                         <option selected value="">Seleccione proveedor</option>
-                        <option th:each="xxx : ${listaProveedores}" th:text="${xxx.razonSocial}"
+                        <option th:each="xxx : ${listaProveedores}" th:text="${xxx.id}"
                                 th:value="${xxx.id}"></option>
                     </select>
                 </div>

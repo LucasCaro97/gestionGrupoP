@@ -127,12 +127,12 @@
                     <div class="d-flex justify-content-between">
                         <div class="col-md-3">
                             <label for="interesesTotales" class="form-label">Intereses $: </label>
-                            <input type="text" class="form-control" name="interesesTotales" id="interesesTotales" th:field="*{interesesTotales}">
+                            <input type="text" class="form-control" name="interesesTotales" id="interesesTotales" th:field="*{interesesTotales}" readonly>
                         </div>
 
                         <div class="col-md-3">
                             <label for="gastosAdministrativos" class="form-label">Gastos Admin $: </label>
-                            <input type="text" class="form-control" name="gastosAdministrativos" id="gastosAdministrativos" th:field="*{gastosAdministrativos}">
+                            <input type="text" class="form-control" name="gastosAdministrativos" id="gastosAdministrativos" th:field="*{gastosAdministrativos}" readonly>
                         </div>
 
                         <div class="col-md-3">
@@ -152,7 +152,7 @@
 
                 <div class="col-md-6">
                     <label for="totalCredito" class="form-label">Total Credito: </label>
-                    <input type="text" class="form-control" name="totalCredito" id="totalCredito" th:field="*{totalCredito}">
+                    <input type="text" class="form-control" name="totalCredito" id="totalCredito" th:field="*{totalCredito}" readonly   >
                 </div>
 
 
@@ -183,15 +183,22 @@
                     <thead class="theadFijo">
                         <tr class="table-dark">
                             <th>Nro Cuota</th>
+                            <th>Capital</th>
+                            <th>Gasto Adm</th>
                             <th>Monto</th>
+                            <th>Saldo</th>
                             <th>Vence</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="xxx : ${listaCreditoDetalle}">
                             <td th:text="${xxx.nroCuota}"></td>
+                            <td th:text="${xxx.capital}"></td>
+                            <td th:text="${xxx.gastoAdm}"></td>
                             <td contenteditable="true" th:text="${#numbers.formatDecimal(xxx.monto,1,'COMMA',2,'POINT')}"></td>
+                            <td th:text="${xxx.saldo}"></td>
                             <td contenteditable="true" th:text="${xxx.vencimiento}"></td>
+
                         </tr>
                     </tbody>
                 </table>

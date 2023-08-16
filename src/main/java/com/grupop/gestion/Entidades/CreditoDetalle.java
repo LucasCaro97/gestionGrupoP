@@ -26,10 +26,13 @@ public class CreditoDetalle {
     @ManyToOne
     private Cliente cliente;
     private Integer nroCuota;
+    private BigDecimal capital;
+    private BigDecimal gastoAdm;
     private BigDecimal monto;
     private LocalDate vencimiento;
     private BigDecimal saldo;
     private Boolean cobrado;
+
 
 
 }

@@ -45,6 +45,11 @@ public class VentaServicio {
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
 
         ventaRepo.save(vta);
+
+
+        Venta ultimaVenta = ventaRepo.findTopByOrderByIdDesc();
+
+        formaDePagoDetalleServicio.crearSinSubDetalle(ultimaVenta.getId(), ultimaVenta.getTipoOperacion().getId(), ultimaVenta.getTotal());
     }
 
     @Transactional
@@ -82,27 +87,15 @@ public class VentaServicio {
             ventaRepo.save(vta);
 
             if(vta.getFormaDePago() != null) {
-                if(formaDePagoDetalleServicio.validarExistencia(vta.getId(), 1l) == 0){ //Si no existe crea el detalleDePago
-                    if (vta.getFormaDePago().getId() != 51) { // Si no es a detallar crea el detalleDePago con su subDetalle
-                        formaDePagoDetalleServicio.crear(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
-                        System.out.println(vta);
-                    }else{                                      // Si es a detallar crea el detalleDePagoVacio
-                        formaDePagoDetalleServicio.crearSinSubDetalle(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal());
-                    }
-                }else{                                          // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
-                    if(idFormaDePagoAnterior != vta.getFormaDePago().getId()){
+                    // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+                    if( idFormaDePagoAnterior != vta.getFormaDePago().getId() ){
                         if(vta.getFormaDePago().getId() == 51){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
                             formaDePagoDetalleServicio.eliminarSubDetalles(vta.getId(), vta.getTipoOperacion().getId());
                         }else{      // Si no es aDetallar => generar automaticamente el item detalleDepago
                             formaDePagoDetalleServicio.eliminarSubDetalles(vta.getId(), vta.getTipoOperacion().getId());
                             formaDePagoDetalleServicio.crearSubDetalleAutomatico(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal(), vta.getFormaDePago());
                         }
-                    }else{
-                        formaDePagoDetalleServicio.actualizarMonto(vta.getId(), vta.getTipoOperacion().getId(), vta.getTotal());
-                        System.out.println("La forma de pago no ha cambiado");
                     }
-
-                }
             }
         }
     }
@@ -149,20 +142,14 @@ public class VentaServicio {
 
     @Transactional
     public void actualizarTotalNuevo(Long idVenta){
-        BigDecimal resultado = new BigDecimal(0);
+        BigDecimal resultado = BigDecimal.ZERO;
         Venta v = ventaRepo.findById(idVenta).get();
-        BigDecimal totalProd = ventaRepo.obtenerTotalProductos(v.getId());
-        BigDecimal totalImp = ventaRepo.obtenerTotalImputacion(v.getId());
+        BigDecimal totalProd = ventaRepo.obtenerTotalProductos(v.getId()).orElse(BigDecimal.ZERO);
+        BigDecimal totalImp = ventaRepo.obtenerTotalImputacion(v.getId()).orElse(BigDecimal.ZERO);
 
-        if(totalProd!=null && totalImp !=null){
-            resultado = totalProd.add(totalImp);
-        }else if(totalProd!=null){
-            resultado = totalProd;
-        }else if(totalImp!=null){
-            resultado = totalImp;
-        }
-
+        resultado = totalProd.add(totalImp);
         v.setTotal(resultado);
+        formaDePagoDetalleServicio.actualizarTotal(v.getId(), 1l, resultado);
         ventaRepo.save(v);
     }
 

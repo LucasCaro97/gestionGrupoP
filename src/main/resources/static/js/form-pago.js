@@ -2,6 +2,9 @@
 $(document).ready(function () {
 var url = $(location).attr('pathname');
 
+//TRADUCIR CLIENTESID A NOMBRE
+traducirProveedor($("#proveedor"));
+
 $("#volverAtras").click(function() {
     window.history.go(-1);
 })
@@ -142,13 +145,13 @@ $.get("/pago/obtenerTotalPorId/" + $("#id").val(), function(datos, status){
 async function crearItemsDetalle(){
     var tiempoEspera = 500;
     function redireccionar() {
-                //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/pago/actualizarTotalPago/" + $("#id").val(), {
-                        method : "POST",
-                        headers:{
-                        "Content-Type" : "application/json"
-                        }
-                })
+//                //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//                fetch("/pago/actualizarTotalPago/" + $("#id").val(), {
+//                        method : "POST",
+//                        headers:{
+//                        "Content-Type" : "application/json"
+//                        }
+//                })
 
           window.location.href= "/pago/form/"+ $("#id").val();
         }
@@ -242,13 +245,13 @@ async function eliminarItemsDetalleProd(){
     }
     var tiempoEspera = 500;
     function redireccionar() {
-                    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                    fetch("/pago/actualizarTotalPago/" + $("#id").val(), {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-                    })
+//                    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//                    fetch("/pago/actualizarTotalPago/" + $("#id").val(), {
+//                            method : "POST",
+//                            headers:{
+//                            "Content-Type" : "application/json"
+//                            }
+//                    })
 
       window.location.href= "/pago/form/"+ $("#id").val();
     }
@@ -298,13 +301,13 @@ async function eliminarItemsDetalleImp(){
     var tiempoEspera = 500;
     function redireccionar() {
 
-    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/pago/actualizarTotalPago/" + $("#id").val(), {
-                        method : "POST",
-                        headers:{
-                        "Content-Type" : "application/json"
-                        }
-                })
+//    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//                fetch("/pago/actualizarTotalPago/" + $("#id").val(), {
+//                        method : "POST",
+//                        headers:{
+//                        "Content-Type" : "application/json"
+//                        }
+//                })
 
 window.location.href= "/pago/form/"+ $("#id").val();
 }
@@ -331,5 +334,19 @@ function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
             }
 
         })
+}
+
+function traducirProveedor(selectProveedor){
+    let opciones = selectProveedor.find('option:not(:first)')
+
+    opciones.each(function(index, option){
+        let razonSocial;
+        let valor = $(option).val();
+
+        $.get("/entidadBase/obtenerNombrePorFkProveedor/" + valor, function(dato,status){
+            razonSocial = dato.razonSocial;
+            $(option).text(razonSocial);
+        })
+    })
 }
 

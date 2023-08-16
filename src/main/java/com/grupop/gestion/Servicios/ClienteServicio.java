@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -19,6 +20,7 @@ public class ClienteServicio {
         @Transactional
         public void crear(){
                 Cliente cliente = new Cliente();
+                cliente.setSaldoAFavor(new BigDecimal(0));
                 clienteRepo.save(cliente);
         }
 
@@ -36,4 +38,18 @@ public class ClienteServicio {
 
         @Transactional(readOnly = true)
         public List<Cliente> obtenerTodos(){ return clienteRepo.findAll(); }
+
+        @Transactional
+        public void actualizarSaldoAFavor(Long idCliente, BigDecimal importe) {
+                Cliente c = clienteRepo.findById(idCliente).get();
+                c.setSaldoAFavor(c.getSaldoAFavor().add(importe));
+                clienteRepo.save(c);
+        }
+
+        @Transactional
+        public void descontarSaldoAFavor(Long idCliente, BigDecimal importe) {
+                Cliente c = clienteRepo.findById(idCliente).get();
+                c.setSaldoAFavor(c.getSaldoAFavor().subtract(importe));
+                clienteRepo.save(c);
+        }
 }

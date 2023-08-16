@@ -27,11 +27,9 @@ public class CompraDetalleServicio {
         Producto prod = productoServicio.buscarPorId(idProd);
         Compra compra = compraServicio.obtenerPorId(idCompra);
         CompraDetalle cd = compraDetalleRepo.searchByProductoAndCompra(compra.getId(), prod.getId());
-        System.out.println("Detalle: " + cd);
 
         //VERIFICO QUE HAYA ALGUN CAMBIO RELEVANTE EN LA TABLA PARA RECALCULAR ( CAMBIO DE CANT / $INI / $FIN )
         if (existByProductoAndCompraId(compra.getId(), prod.getId()) != 0) {
-            System.out.println("Detalle en if exist: " + cd);
             if (cd.getCantidad().compareTo(cantidad) != 0 || cd.getPrecioUnitario().compareTo(precioU) != 0 || cd.getPrecioFinal().compareTo(precioF) != 0) {
                 cd.setCantidad(cantidad);
                 if (precioF.compareTo(cd.getPrecioFinal()) != 0) {
@@ -50,11 +48,9 @@ public class CompraDetalleServicio {
                 cd.setTotal(cd.getPrecioFinal().multiply(cd.getCantidad()));
 
                 compraDetalleRepo.save(cd);
-            }else{
-                System.out.println("No se registraron cambios");
+                compraServicio.actualizarTotal(idCompra);
             }
         }else {
-                System.out.println("Creando item");
                 CompraDetalle compradet = new CompraDetalle();
                 compradet.setCompraId(compra);
                 compradet.setProducto(prod);
@@ -84,7 +80,8 @@ public class CompraDetalleServicio {
                     compradet.setTotal(total.setScale(2, RoundingMode.UP));
                 }
 
-                compraDetalleRepo.save(compradet);
+            compraDetalleRepo.save(compradet);
+            compraServicio.actualizarTotal(idCompra);
             }
         }
 
@@ -92,6 +89,7 @@ public class CompraDetalleServicio {
     public void eliminar(Long idCompra, Long idProd) {
         CompraDetalle cd = compraDetalleRepo.searchByProductoAndCompra(idCompra, idProd);
         compraDetalleRepo.deleteById(cd.getId());
+        compraServicio.actualizarTotal(idCompra);
     }
 
     @Transactional(readOnly = true)

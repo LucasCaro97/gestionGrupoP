@@ -2,6 +2,9 @@
 $(document).ready(function () {
 validarEstado($("#id").val())
 
+//TRADUCIR CLIENTESID A NOMBRE
+traducirProveedor($("#proveedor"));
+
 $("#volverAtras").click(function() {
     window.history.go(-1);
 })
@@ -240,12 +243,12 @@ async function crearItemsDetalle(){
     var tiempoEspera = 800;
     function redireccionar() {
                 //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
-                        method : "POST",
-                        headers:{
-                        "Content-Type" : "application/json"
-                        }
-                })
+//                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
+//                        method : "POST",
+//                        headers:{
+//                        "Content-Type" : "application/json"
+//                        }
+//                })
 
           window.location.href= "/compras/form/"+ $("#id").val();
         }
@@ -361,13 +364,13 @@ async function eliminarItemsDetalleProd(){
     }
     var tiempoEspera = 500;
     function redireccionar() {
-                    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                    fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-                    })
+//                    //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+//                    fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
+//                            method : "POST",
+//                            headers:{
+//                            "Content-Type" : "application/json"
+//                            }
+//                    })
 
       window.location.href= "/compras/form/"+ $("#id").val();
     }
@@ -418,12 +421,12 @@ async function eliminarItemsDetalleImp(){
     function redireccionar() {
 
     //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
-                        method : "POST",
-                        headers:{
-                        "Content-Type" : "application/json"
-                        }
-                })
+//                fetch("/compras/actualizarTotalCompra/" + $("#id").val(), {
+//                        method : "POST",
+//                        headers:{
+//                        "Content-Type" : "application/json"
+//                        }
+//                })
 
 window.location.href= "/compras/form/"+ $("#id").val();
 }
@@ -478,6 +481,20 @@ function validarFormaDePago(idOperacion, idTipoOperacion, totalOperacion){
             }
 
         })
+}
+
+function traducirProveedor(selectProveedor){
+    let opciones = selectProveedor.find('option:not(:first)')
+
+    opciones.each(function(index, option){
+        let razonSocial;
+        let valor = $(option).val();
+
+        $.get("/entidadBase/obtenerNombrePorFkProveedor/" + valor, function(dato,status){
+            razonSocial = dato.razonSocial;
+            $(option).text(razonSocial);
+        })
+    })
 }
 
 

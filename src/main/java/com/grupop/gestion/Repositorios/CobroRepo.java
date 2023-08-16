@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 @Repository
 public interface CobroRepo extends JpaRepository<Cobro,Long>{
@@ -15,14 +16,18 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
     Long buscarUltimoId();
 
     @Query(value = "SELECT SUM(importe_final) FROM cobro_detalle_cuotas WHERE cobro_id_id = ?",nativeQuery = true)
-    BigDecimal obtenerTotalCuotas(Long idCobro);
+    Optional<BigDecimal> obtenerTotalCuotas(Long idCobro);
 
     @Query(value = "SELECT total FROM cobro WHERE id = ?", nativeQuery = true)
     BigDecimal obtenerTotalPorId(Long id);
 
     @Query(value = "SELECT SUM(total_detalle) FROM cobro_detalle_cta_cte WHERE cobro_id_id = ?",nativeQuery = true)
-    BigDecimal obtenerTotalCtaCte(Long idCobro);
+    Optional<BigDecimal> obtenerTotalCtaCte(Long idCobro);
 
     @Query(value = "SELECT SUM(total) FROM cobro WHERE fk_moneda = 1 AND DATE_FORMAT(fecha_comprobante, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')", nativeQuery = true)
     BigDecimal obtenerTotalCobradoMensual();
+
+    Cobro findTopByOrderByIdDesc();
+    @Query(value = "SELECT SUM(importe) FROM cobro_detalle_adelanto WHERE cobro_id_id = ?", nativeQuery = true)
+    Optional<BigDecimal> obtenerTotalAdelanto(Long idCobro);
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VentaRepo extends JpaRepository<Venta, Long> {
@@ -28,10 +29,10 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
 
     @Query(value = "SELECT SUM(total) FROM venta_detalle WHERE fk_venta = ?",nativeQuery = true)
-    BigDecimal obtenerTotalProductos(Long id);
+    Optional<BigDecimal> obtenerTotalProductos(Long id);
 
     @Query(value = "SELECT SUM(importe) FROM venta_detalle_imputacion WHERE fk_venta = ?", nativeQuery = true)
-    BigDecimal obtenerTotalImputacion(Long id);
+    Optional<BigDecimal> obtenerTotalImputacion(Long id);
 
     @Query(value = "SELECT * FROM venta WHERE fk_cliente = ? AND bloqueada = 0", nativeQuery = true)
     List<Venta> obtenerVentasCtaCtePorCliente(Long id);
@@ -41,4 +42,6 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
     @Query(value = "SELECT SUM(total) FROM venta WHERE fk_moneda = 1 AND DATE_FORMAT(fecha_comprobante, '%Y-%m') = DATE_FORMAT(CURRENT_DATE(), '%Y-%m')", nativeQuery = true)
     BigDecimal obtenerTotalVendidoMensual();
+
+    Venta findTopByOrderByIdDesc();
 }
