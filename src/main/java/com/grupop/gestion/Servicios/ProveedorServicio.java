@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -18,7 +19,9 @@ public class ProveedorServicio {
     @Transactional
     public void crear() {
         Proveedor prov = new Proveedor();
+        prov.setSaldoAFavor(BigDecimal.ZERO);
         proveedorRepo.save(prov);
+
     }
 
     @Transactional
@@ -37,5 +40,34 @@ public class ProveedorServicio {
     }
 
     @Transactional(readOnly = true)
+    public String obtenerNombre(Long id) { return proveedorRepo.obtenerNombre(id);}
+
+    @Transactional(readOnly = true)
     public List<Proveedor> obtenerTodos() { return proveedorRepo.findAll(); }
+
+    @Transactional
+    public void actualizarSaldoAFavor(Long idProv, BigDecimal importe){
+        Proveedor p = proveedorRepo.findById(idProv).get();
+        p.setSaldoAFavor(p.getSaldoAFavor().add(importe));
+        proveedorRepo.save(p);
+    }
+
+    @Transactional
+    public void descontarSaldoAFavor(Long idProv, BigDecimal importe){
+        Proveedor p = proveedorRepo.findById(idProv).get();
+        p.setSaldoAFavor(p.getSaldoAFavor().subtract(importe));
+        proveedorRepo.save(p);
+    }
+
+    @Transactional
+    public void devolverSaldoAFavor(Long idProv, BigDecimal monto) {
+        Proveedor p = proveedorRepo.findById(idProv).get();
+        p.setSaldoAFavor(p.getSaldoAFavor().add(monto));
+        proveedorRepo.save(p);
+    }
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerSaldo(Long idProveedor){
+        return proveedorRepo.obtenerSaldoPorIdProveedor(idProveedor);
+    }
+
 }

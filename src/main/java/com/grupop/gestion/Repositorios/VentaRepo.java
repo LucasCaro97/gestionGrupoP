@@ -1,5 +1,6 @@
 package com.grupop.gestion.Repositorios;
 
+import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Entidades.IndiceCAC;
 import com.grupop.gestion.Entidades.Venta;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -44,4 +45,7 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
     BigDecimal obtenerTotalVendidoMensual();
 
     Venta findTopByOrderByIdDesc();
+
+    @Query(value = "SELECT fk_cliente FROM venta WHERE id = ? ", nativeQuery = true)
+    Long obtenerCliente(Long idOperacion);
 }

@@ -1,6 +1,7 @@
 $(document).ready(function () {
 validarEstado($("#id").val())
 
+//formatearInputs($("#interesesTotales"),$("#gastosAdministrativos"), $("#capital"), $("#capitalNew"), $("#totalCredito") )
 
 var fechaActual = document.getElementById("fechaAlta").value;
 
@@ -88,8 +89,8 @@ async function crearArrayListCuotas(){
         const tableRows = document.querySelectorAll(".tablaCreditoDetalle tbody tr");
         tableRows.forEach( (row) => {
             const nroCuota = parseInt(row.querySelector("td:nth-child(1)").textContent);
-            const monto = parseFloat(row.querySelector("td:nth-child(2)").textContent.replace(",", "")).toFixed(2);
-            const vencimiento = row.querySelector("td:nth-child(3)").textContent;
+            const monto = parseFloat(row.querySelector("td:nth-child(4)").textContent.replace(",", "")).toFixed(2);
+            const vencimiento = row.querySelector("td:nth-child(6)").textContent;
             arrayList.push({ nroCuota, monto, vencimiento });
         } )
         return arrayList;
@@ -147,5 +148,21 @@ function obtenerCapialCredito(idOperacion, idTipoOperacion){
     $.get("/detalleDePago/obtenerCapitalCredito/" + idOperacion + "/" + idTipoOperacion, function(datos,status){
             $("#capital").val(datos)
         })
+}
+
+function formatearInputs(celda1, celda2, celda3, celda4, celda5){
+
+    let valor1Formated = new Intl.NumberFormat('en-US').format(celda1.val());
+    let valor2Formated = new Intl.NumberFormat('en-US').format(celda2.val());
+    let valor3Formated = new Intl.NumberFormat('en-US').format(celda3.val());
+    let valor4Formated = new Intl.NumberFormat('en-US').format(celda4.val());
+    let valor5Formated = new Intl.NumberFormat('en-US').format(celda5.val());
+
+    celda1.val(valor1Formated);
+    celda2.val(valor2Formated);
+    celda3.val(valor3Formated);
+    celda4.val(valor4Formated);
+    celda5.val(valor5Formated);
+
 }
 

@@ -29,4 +29,10 @@ public interface PagoRepo extends JpaRepository<Pago, Long> {
     BigDecimal obtenerTotalPagadoMensual();
 
     Pago findTopByOrderByIdDesc();
+
+    @Query(value = "SELECT SUM(importe) FROM pago_detalle_adelanto WHERE pago_id_id = ?", nativeQuery = true)
+    Optional<BigDecimal> obtenerTotalAdelanto(Long idCobro);
+
+    @Query(value = "SELECT fk_proveedor FROM pago WHERE id = ?", nativeQuery = true)
+    Long obtenerProveedor(Long idOperacion);
 }

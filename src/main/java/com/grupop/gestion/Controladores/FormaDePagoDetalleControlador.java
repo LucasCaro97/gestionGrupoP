@@ -1,11 +1,9 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.FormaDePago;
 import com.grupop.gestion.Entidades.FormaDePagoDetalle;
-import com.grupop.gestion.Servicios.FormaDePagoDetalleServicio;
-import com.grupop.gestion.Servicios.FormaDePagoDetalleSubDetalleServicio;
-import com.grupop.gestion.Servicios.FormaDePagoServicio;
-import com.grupop.gestion.Servicios.TipoOperacionServicio;
+import com.grupop.gestion.Servicios.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,6 +23,11 @@ public class FormaDePagoDetalleControlador {
     private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoServicio formaDePagoServicio;
+    private final VentaServicio ventaServicio;
+    private final CompraServicio compraServicio;
+    private final CobroServicio cobroServicio;
+    private final PagoServicio pagoServicio;
+
 
     @GetMapping("getForm/{idOperacion}/{idTipoOperacion}")
     public ModelAndView getFormUpd(@PathVariable Long idOperacion, @PathVariable Long idTipoOperacion){
@@ -49,6 +52,24 @@ public class FormaDePagoDetalleControlador {
     @GetMapping("/validarEstado/{idOperacion}/{idTipoOperacion}")
     public ResponseEntity<Boolean> obtenerEstado(@PathVariable Long idOperacion, @PathVariable Long idTipoOperacion){
         return ResponseEntity.ok(formaDePagoDetalleServicio.validarEstado(idOperacion, idTipoOperacion));
+    }
+
+    @GetMapping("/obtenerSaldoEntidad/{idOperacion}/{idTipoOperacion}")
+    public ResponseEntity<BigDecimal> obtenerCliente(@PathVariable Long idOperacion, @PathVariable Long idTipoOperacion){
+
+        ResponseEntity response = null;
+
+        if(idTipoOperacion == 1){
+            response = ResponseEntity.ok(ventaServicio.obtenerSaldoCliente(idOperacion));
+        } else if (idTipoOperacion == 2) {
+            response = ResponseEntity.ok(compraServicio.obtenerSaldoProveedor(idOperacion));
+        } else if (idTipoOperacion == 3) {
+            response = ResponseEntity.ok(cobroServicio.obtenerSaldoCliente(idOperacion));
+        } else if (idTipoOperacion == 4) {
+            response = ResponseEntity.ok(pagoServicio.obtenerSaldoProveedor(idOperacion));
+        }
+
+        return response;
     }
 
 }

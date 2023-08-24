@@ -34,4 +34,7 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
     BigDecimal obtenerTotalCompradoMensual();
 
     Compra findTopByOrderByIdDesc();
+
+    @Query(value = "SELECT fk_proveedor FROM compra WHERE id = ? ", nativeQuery = true)
+    Long obtenerCliente(Long idOperacion);
 }

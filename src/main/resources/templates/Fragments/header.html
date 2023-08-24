@@ -1,6 +1,7 @@
 <header th:fragment="header">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
+            <button id="botonTema" class="btn rounded-fill"><i id="dl-icon" class="bi bi-moon-fill"></i></button>
             <a class="navbar-brand" href="/">Grupo Piñhero</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -82,6 +83,7 @@
                     </li>
                     <a class="nav-link" th:href="@{/comision}">Comisiones</a>
                     <a class="nav-link" th:href="@{/cheque}">Cheques</a>
+                    <a class="nav-link" th:href="@{/errores}">Errores / Recomend</a>
                 </ul>
             </div>
         </div>

@@ -25,7 +25,6 @@ import java.util.Map;
 public class PagoControlador {
 
     private final PagoServicio pagoServicio;
-    private final EntidadBaseServicio entidadBaseServicio;
     private final TalonarioServicio talonarioServicio;
     private final TipoComprobanteServicio tipoComprobanteServicio;
     private final SectorServicio sectorServicio;
@@ -36,6 +35,7 @@ public class PagoControlador {
     private final PagoDetalleImputacionServicio pagoDetalleImputacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ProveedorServicio proveedorServicio;
+    private final PagoDetalleAdelantoServicio pagoDetalleAdelantoServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -83,6 +83,7 @@ public class PagoControlador {
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
         mav.addObject("tablaDetalleImp", pagoDetalleImputacionServicio.obtenerPorPago(p.getId()));
         mav.addObject("fechaComprobante", p.getFechaComprobante());
+        mav.addObject("listaAdelanto", pagoDetalleAdelantoServicio.obtenerPorPago(id));
         return mav;
     }
 

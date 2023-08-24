@@ -155,9 +155,9 @@ public class CreditoServicio {
         boolean montoHaCambiado = false;
         boolean fechaHaCambiado = false;
         LocalDate nuevaFecha = LocalDate.now();
-        BigDecimal acumulado = new BigDecimal(0);
+        BigDecimal acumulado = BigDecimal.ZERO;
         Integer contador = 0;
-        BigDecimal montoCuotasRestantes = new BigDecimal(0);
+        BigDecimal montoCuotasRestantes = BigDecimal.ZERO;
 
         for(int i = 0; i < arrayListA.size(); i++){
             BigDecimal montoA = arrayListA.get(i).getMonto();
@@ -169,6 +169,8 @@ public class CreditoServicio {
             if(!montoA.equals(montoB)){
                 montoHaCambiado = true;
                 arrayListA.get(i).setMonto(montoB);
+                arrayListA.get(i).setCapital(montoB.subtract(arrayListA.get(i).getGastoAdm()));
+                arrayListA.get(i).setSaldo(montoB);
 
                 acumulado = acumulado.add(montoB);
                 contador++;
@@ -195,6 +197,8 @@ public class CreditoServicio {
                 if(nroCuota > contador){
 
                     arrayListA.get(i).setMonto(montoCuotasRestantes);
+                    arrayListA.get(i).setCapital(montoCuotasRestantes.subtract(arrayListA.get(i).getGastoAdm()));
+                    arrayListA.get(i).setSaldo(montoCuotasRestantes);
                 }
             }
 

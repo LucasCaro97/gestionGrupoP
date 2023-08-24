@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
@@ -14,9 +15,9 @@ public interface ProveedorRepo extends JpaRepository<Proveedor,Long> {
 
     @Query( value= "SELECT MAX(id_proveedor) FROM proveedor", nativeQuery = true)
     Long findLastId();
+    @Query(value = "SELECT razon_social FROM entidad_base WHERE fk_proveedor = ?", nativeQuery = true)
+    String obtenerNombre(Long id);
+    @Query(value = "SELECT saldo_a_favor FROM proveedor WHERE id_proveedor = ? ", nativeQuery = true)
+    BigDecimal obtenerSaldoPorIdProveedor(Long idProveedor);
 
-    /*
-    @Query( value= "SELECT id_proveedor, razon_social FROM proveedor INNER JOIN entidad_base ON proveedor.id_proveedor = entidad_base.fk_proveedor", nativeQuery = true)
-    List<Proveedor> findSupplier();
-    */
 }

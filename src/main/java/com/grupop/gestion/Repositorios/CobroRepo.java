@@ -30,4 +30,8 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
     Cobro findTopByOrderByIdDesc();
     @Query(value = "SELECT SUM(importe) FROM cobro_detalle_adelanto WHERE cobro_id_id = ?", nativeQuery = true)
     Optional<BigDecimal> obtenerTotalAdelanto(Long idCobro);
+
+    @Query(value = "SELECT fk_cliente FROM cobro WHERE id = ?" , nativeQuery = true)
+    Long obtenerCliente(Long idOperacion);
+
 }

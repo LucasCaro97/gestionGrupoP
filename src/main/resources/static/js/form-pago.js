@@ -1,5 +1,8 @@
 
 $(document).ready(function () {
+
+obtenerSaldo($("#proveedor"))
+
 var url = $(location).attr('pathname');
 
 //TRADUCIR CLIENTESID A NOMBRE
@@ -36,6 +39,10 @@ $("#talonario").change(function(){
   }
 
 });
+
+$("#proveedor").change(function() {
+    obtenerSaldo($("#proveedor"))
+})
 
 //CARGO TIPO PRODUCTO
 $.get("/tipoProducto/obtenerTodos", function(datos,status){
@@ -317,6 +324,13 @@ window.location.href= "/pago/form/"+ $("#id").val();
 
 }
 
+
+
+$("#addAdelantoProv").click(function(){
+    generarAdelanto();
+    })
+
+
 });
 
 
@@ -348,5 +362,44 @@ function traducirProveedor(selectProveedor){
             $(option).text(razonSocial);
         })
     })
+}
+
+
+function generarAdelanto(){
+    var tiempoEspera = 1000;
+    function redireccionar() {
+//        fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+//                method : "POST",
+//                headers:{
+//                    "Content-Type" : "application/json"
+//                }
+//        })
+    window.location.href= "/pago/form/"+ $("#id").val();
+    }
+    //    GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
+          fetch("/adelantoProv/generarAdelanto/"+ $("#proveedor").val() + "/" + $("#id").val() + "/" + $("#importe").val() + "/" + $("#detalle").val() , {
+            method : "POST",
+            headers:{
+                "Content-Type" : "application/json"
+            }
+        })
+
+    setTimeout(redireccionar, tiempoEspera);
+
+}
+
+
+function obtenerSaldo(idProveedor){
+    $.get('/proveedor/obtenerSaldo/' + idProveedor.val()  , function(data) {
+      let saldoProveedor = data;
+      if(saldoProveedor != 0){
+        $("#divProveedor").removeClass("col-md-8").addClass("col-md-6");
+        $("#divSaldo").removeClass("d-none");
+        $("#saldoAFavor").val(saldoProveedor);
+      }else{
+        $("#divProveedor").removeClass("col-md-6").addClass("col-md-8");
+        $("#divSaldo").addClass("d-none");
+      }
+    });
 }
 

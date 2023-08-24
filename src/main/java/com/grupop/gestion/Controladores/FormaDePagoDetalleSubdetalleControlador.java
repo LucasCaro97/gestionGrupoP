@@ -2,8 +2,7 @@ package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.FormaDePagoDetalle;
 import com.grupop.gestion.Entidades.FormaDePagoDetalleSubDetalle;
-import com.grupop.gestion.Servicios.FormaDePagoDetalleServicio;
-import com.grupop.gestion.Servicios.FormaDePagoDetalleSubDetalleServicio;
+import com.grupop.gestion.Servicios.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -24,11 +23,30 @@ public class FormaDePagoDetalleSubdetalleControlador {
 
     private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final CobroServicio cobroServicio;
+    private final PagoServicio pagoServicio;
+    private final ClienteServicio clienteServicio;
+    private final ProveedorServicio proveedorServicio;
+
 
     @PostMapping("/alta/{idOperacion}/{idTipoOperacion}/{importe}/{idFormaDePago}")
     public ResponseEntity<String> altaDetalle(@PathVariable Long idOperacion, @PathVariable Long idTipoOperacion, @PathVariable BigDecimal importe, @PathVariable Long idFormaDePago){
         try{
-            formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
+
+            if(idFormaDePago == 16){
+                //ADELANTO DE CLIENTES ( COBRO )
+                formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
+                Long idCliente = cobroServicio.obtenerCliente(idOperacion);
+                clienteServicio.descontarSaldoAFavor(idCliente, importe);
+            } else if (idFormaDePago == 33) {
+                //ADELANTO A PROVEEDORES ( PAGO )
+                formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
+                Long idProveedor = pagoServicio.obtenerProveedor(idOperacion);
+                proveedorServicio.descontarSaldoAFavor(idProveedor, importe);
+            }else{
+                formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
+            }
+
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -41,10 +59,21 @@ public class FormaDePagoDetalleSubdetalleControlador {
         try{
             FormaDePagoDetalleSubDetalle fsub = formaDePagoDetalleSubDetalleServicio.obtenerPorId(id);
             FormaDePagoDetalle f = formaDePagoDetalleServicio.obtenerPorId(fsub.getFormaDePagoDetalle().getIdOperacion(), fsub.getFormaDePagoDetalle().getTipoOperacion());
-            formaDePagoDetalleSubDetalleServicio.eliminarPorId(id);
             r.setUrl("/detalleDePago/getForm/" + f.getIdOperacion() + "/" + f.getTipoOperacion());
+
+            if(fsub.getFormaPago().getId() == 16){
+                Long idCliente = cobroServicio.obtenerCliente(f.getIdOperacion());
+                clienteServicio.devolverSaldoAFavor(idCliente, fsub.getMonto());
+            } else if (fsub.getFormaPago().getId() == 33) {
+                Long idProveedor = pagoServicio.obtenerProveedor(f.getIdOperacion());
+                proveedorServicio.devolverSaldoAFavor(idProveedor, fsub.getMonto());
+            }
+
         }catch(Exception e){
             System.out.println(e.getMessage());
+        }finally {
+            formaDePagoDetalleSubDetalleServicio.eliminarPorId(id);
+
         }
 
     return r;

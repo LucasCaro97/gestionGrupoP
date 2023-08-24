@@ -2,6 +2,7 @@
 $(document).ready(function () {
 checkboxPrincipal()
 checkboxProductos()
+obtenerSaldo($("#cliente"))
 
 $("#volverAtras").click(function() {
     window.history.go(-1);
@@ -47,6 +48,8 @@ $("#cliente").change(function(){
     $.get(endPoint2 + $('select[id=cliente]').val(), function(dato){
       $("#cuit").val(dato);
     });
+
+    obtenerSaldo($("#cliente"));
 
 });
 
@@ -344,6 +347,7 @@ async function calcularCacAndPunitorio(celdaCredito, celdaCuotaBase, fechaPrimer
     await calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaSaldo, celdaAjuste, celdaPorcIntPun)
     calcularTotal(celdaSaldo, celdaInteresPun , celdaAjuste, celdaTotal )
 }
+
 async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimerVencimiento, celdaImporteAjuste, celdaVenta){
     let idCredito = celdaCredito.text();
     let cuotaBase = celdaCuotaBase.text().replace(/\,/g, '')
@@ -410,6 +414,7 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
     }
 
 }
+
 function calcularDiasVencidos(fechaVenc, celdaDiasVenc, celdaInteresPun, celdaCuotaBase, celdaAjuste, celdaPorcIntPun){
 let fechaActual = new Date();
 var fechaPago = new Date (fechaVenc);
@@ -430,6 +435,7 @@ var diasAtraso = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
         celdaInteresPun.text(interesPun.toLocaleString("en-US"))
     }
 }
+
 function calcularTotal(celdaCuotaBase, celdaInteresPun, celdaImporteAjuste, celdaTotal){
     let cuotaBase = parseFloat(celdaCuotaBase.text().replace(/\,/g, ''))
     let interesPunitorio = parseFloat(celdaInteresPun.text().replace(/\,/g, ''))
@@ -484,12 +490,12 @@ async function eliminarItemsDetalleCuotas(){
     var tiempoEspera = 2000;
     function redireccionar() {
                 //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
-//                fetch("/cobros/actualizarTotal/" + $("#id").val(), {
-//                    method : "POST",
-//                    headers:{
-//                        "Content-Type" : "application/json"
-//                    }
-//                })
+                fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+                    method : "POST",
+                    headers:{
+                        "Content-Type" : "application/json"
+                    }
+                })
                 window.location.href= "/cobros/form/"+ $("#id").val();
             }
 
@@ -503,12 +509,12 @@ async function crearItemsDetalle(){
 
     function redireccionar() {
             //GUARDO EL TOTAL DEL COBRO EN LA TABLA COBRO
-//            fetch("/cobros/actualizarTotal/" + $("#id").val(), {
-//                method : "POST",
-//                headers:{
-//                    "Content-Type" : "application/json"
-//                }
-//            })
+            fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+                method : "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                }
+            })
             window.location.href= "/cobros/form/"+ $("#id").val();
         }
     function confirmSave(){
@@ -571,7 +577,6 @@ async function crearItemsDetalle(){
     }
 }
 
-
 async function eliminarItemsDetalleCtaCte(){
     function eliminarFilas(){
             var filasMarcadas=[];
@@ -609,12 +614,12 @@ async function eliminarItemsDetalleCtaCte(){
     var tiempoEspera = 1000;
     function redireccionar() {
     //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-//    fetch("/cobros/actualizarTotal/" + $("#id").val(), {
-//        method : "POST",
-//        headers:{
-//            "Content-Type" : "application/json"
-//        }
-//    })
+    fetch("/cobros/actualizarTotal/" + $("#id").val(), {
+        method : "POST",
+        headers:{
+            "Content-Type" : "application/json"
+        }
+    })
 window.location.href= "/cobros/form/"+ $("#id").val();
 }
 
@@ -679,8 +684,6 @@ function checkboxProductos(){
 }
 
 function generarAdelanto(){
-//console.log("/adelanto/generarAdelanto/"+ $("#cliente").val() + "/" + $("#id").val() + "/" + $("#importe").val() )
-
     var tiempoEspera = 1000;
     function redireccionar() {
 //        fetch("/cobros/actualizarTotal/" + $("#id").val(), {
@@ -701,6 +704,21 @@ function generarAdelanto(){
 
     setTimeout(redireccionar, tiempoEspera);
 
+}
+
+
+function obtenerSaldo(idCliente){
+    $.get('/cliente/obtenerSaldo/' + idCliente.val()  , function(data) {
+      let saldoCliente = data;
+      if(saldoCliente != 0){
+        $("#divCliente").removeClass("col-md-8").addClass("col-md-6");
+        $("#divSaldo").removeClass("d-none");
+        $("#saldoAFavor").val(saldoCliente);
+      }else{
+        $("#divCliente").removeClass("col-md-6").addClass("col-md-8");
+        $("#divSaldo").addClass("d-none");
+      }
+    });
 }
 
 

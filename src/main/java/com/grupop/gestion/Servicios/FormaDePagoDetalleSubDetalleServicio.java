@@ -16,7 +16,6 @@ import java.util.List;
 public class FormaDePagoDetalleSubDetalleServicio {
 
     private final FormaDePagoSubDetalleRepo formaDePagoSubDetalleRepo;
-    private final FormaDePagoServicio formaDePagoServicio;
 
     @Transactional
     public void crear(FormaDePagoDetalle formaDePagoDetalle, FormaDePago formaDePago, BigDecimal importe){

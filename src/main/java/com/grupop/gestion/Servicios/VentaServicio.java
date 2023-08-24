@@ -22,6 +22,7 @@ public class VentaServicio {
     private final IndiceCacServicio indiceCacServicio;
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final ClienteServicio clienteServicio;
 
     @Transactional
     public void crear(Venta dto, String fechaComprobante){
@@ -174,5 +175,12 @@ public class VentaServicio {
     public BigDecimal obtenerTotalMensual(){
         return ventaRepo.obtenerTotalVendidoMensual();
     }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerSaldoCliente(Long idOperacion){
+        Long fkCliente = ventaRepo.obtenerCliente(idOperacion);
+        return clienteServicio.obtenerSaldo(fkCliente);
+    }
+
 }
 

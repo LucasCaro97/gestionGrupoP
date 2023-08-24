@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.Compra;
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.CompraRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class CompraServicio {
     private final TalonarioServicio talonarioServicio;
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final ProveedorServicio proveedorServicio;
 
     @Transactional
     public void crear(Compra dto, String fechaComprobante){
@@ -149,4 +151,11 @@ public class CompraServicio {
     public BigDecimal obtenerTotalMensual(){
         return compraRepo.obtenerTotalCompradoMensual();
     }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerSaldoProveedor(Long idOperacion){
+        Long fkProveedor = compraRepo.obtenerCliente(idOperacion);
+        return proveedorServicio.obtenerSaldo(fkProveedor);
+    }
+
 }

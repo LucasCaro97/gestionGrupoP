@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.Cobro;
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.CobroRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class CobroServicio {
     private final TalonarioServicio talonarioServicio;
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final ClienteServicio clienteServicio;
 
     @Transactional
     public void crear(Cobro dto, String fechaComprobante) {
@@ -82,8 +84,6 @@ public class CobroServicio {
         }
     }
 
-
-
     @Transactional(readOnly = true)
     public List<Cobro> obtenerTodos(){ return cobroRepo.findAll(); }
 
@@ -101,6 +101,7 @@ public class CobroServicio {
 
     @Transactional
     public void actualizarTotal(Long idCobro) {
+
         BigDecimal resultado = BigDecimal.ZERO;
         Cobro c = cobroRepo.findById(idCobro).get();
         BigDecimal totalCuota = cobroRepo.obtenerTotalCuotas(idCobro).orElse(BigDecimal.ZERO);
@@ -115,7 +116,6 @@ public class CobroServicio {
 
     }
 
-
     @Transactional
     public BigDecimal obtenerTotalPorId(Long id) {
         return cobroRepo.obtenerTotalPorId(id);
@@ -124,5 +124,16 @@ public class CobroServicio {
     @Transactional(readOnly = true)
     public BigDecimal obtenerTotalMensual(){
         return cobroRepo.obtenerTotalCobradoMensual();
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerSaldoCliente(Long idOperacion){
+        Long fkCliente = cobroRepo.obtenerCliente(idOperacion);
+        return clienteServicio.obtenerSaldo(fkCliente);
+    }
+
+    @Transactional(readOnly = true)
+    public Long obtenerCliente(Long idOperacion) {
+        return cobroRepo.obtenerCliente(idOperacion);
     }
 }

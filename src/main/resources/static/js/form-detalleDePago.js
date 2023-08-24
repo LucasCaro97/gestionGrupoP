@@ -5,6 +5,8 @@ $("#cerrar").click(function () {
 
 validarEstado($("#Operacion").val(), $("#tipoOperacion").val())
 
+obtenerSaldo($("#Operacion"), $("#tipoOperacion"), $("#aFavor"))
+
 $("#addFormaDePago").click( async function(){
    var tiempoEspera = 500;
    function redireccionar() {
@@ -22,14 +24,33 @@ $("#addFormaDePago").click( async function(){
     let importe = $("#monto").val()
     let idFormaDePago = $("#formaDePago").val()
 
-   await fetch(nuevaUrl + idOperacion + "/" + idTipoOperacion + "/" + importe + "/" + idFormaDePago, {
-                   method : "POST",
-                   headers:{
-                       "Content-Type" : "application/json"
-                   }
-               })
 
-   setTimeout(redireccionar, tiempoEspera);
+    if($("#formaDePago").val() == 16 || $("#formaDePago").val() == 33  ){
+        if( $("#monto").val() <=  $("#aFavor").val()  ){
+                await fetch(nuevaUrl + idOperacion + "/" + idTipoOperacion + "/" + importe + "/" + idFormaDePago, {
+                                   method : "POST",
+                                   headers:{
+                                       "Content-Type" : "application/json"
+                                   }
+                               })
+
+                   setTimeout(redireccionar, tiempoEspera);
+        }else{
+                alert("No se puede utilizar mas del saldo a favor disponible")
+            }
+
+    }else{
+        await fetch(nuevaUrl + idOperacion + "/" + idTipoOperacion + "/" + importe + "/" + idFormaDePago, {
+                method : "POST",
+                headers:{
+                    "Content-Type" : "application/json"
+                    }
+                })
+            setTimeout(redireccionar, tiempoEspera);
+        }
+
+
+
 
 })
 
@@ -98,6 +119,11 @@ function validarEstado(idOperacion, idTipoOperacion){
                 })
 }
 
+function obtenerSaldo(idOperacion, idTipoOperacion, inputSaldo){
+    $.get('/detalleDePago/obtenerSaldoEntidad/' + idOperacion.val() + "/" + idTipoOperacion.val()  , function(data) {
+      inputSaldo.val(data)
+    });
+}
 
 
 

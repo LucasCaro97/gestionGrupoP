@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.Entidades.Cobro;
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.Pago;
 import com.grupop.gestion.Repositorios.PagoRepo;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class PagoServicio {
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final TalonarioServicio talonarioServicio;
+    private final ProveedorServicio proveedorServicio;
 
     @Transactional
     public void crear(Pago dto, String fechaComprobante){
@@ -100,13 +102,13 @@ public class PagoServicio {
 
     @Transactional
     public void actualizarTotal(Long idPago) {
-        System.out.println("Actualizo total pago " + idPago);
         BigDecimal resultado = BigDecimal.ZERO;
         Pago p = pagoRepo.findById(idPago).get();
         BigDecimal totalCtaCte = pagoRepo.obtenerTotalCtaCte(idPago).orElse(BigDecimal.ZERO);
         BigDecimal totalImp = pagoRepo.obtenerTotalImp(idPago).orElse(BigDecimal.ZERO);
+        BigDecimal totalAdelanto = pagoRepo.obtenerTotalAdelanto(idPago).orElse(BigDecimal.ZERO);
 
-        resultado = totalCtaCte.add(totalImp);
+        resultado = totalCtaCte.add(totalImp).add(totalAdelanto);
         p.setTotal(resultado);
 
         formaDePagoDetalleServicio.actualizarTotal(p.getId(), 4l, resultado);
@@ -116,5 +118,18 @@ public class PagoServicio {
     @Transactional(readOnly = true)
     public BigDecimal obtenerTotalMensual(){
         return pagoRepo.obtenerTotalPagadoMensual();
+    }
+
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerSaldoProveedor(Long idOperacion){
+        Long fkProveedor = pagoRepo.obtenerProveedor(idOperacion);
+        return proveedorServicio.obtenerSaldo(fkProveedor);
+    }
+
+    @Transactional(readOnly = true)
+    public Long obtenerProveedor(Long idOperacion) {
+        return pagoRepo.obtenerProveedor(idOperacion);
+
     }
 }

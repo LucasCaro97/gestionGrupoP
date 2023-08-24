@@ -1,14 +1,11 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.FormaDePago;
 import com.grupop.gestion.Entidades.FormaDePagoDetalle;
 import com.grupop.gestion.Entidades.FormaDePagoDetalleSubDetalle;
-import com.grupop.gestion.Entidades.TipoOperacion;
 import com.grupop.gestion.Repositorios.FormaDePagoADetallarRepo;
-import com.grupop.gestion.Repositorios.FormaDePagoSubDetalleRepo;
 import lombok.RequiredArgsConstructor;
-import org.attoparser.prettyhtml.PrettyHtmlMarkupHandler;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +32,6 @@ public class FormaDePagoDetalleServicio {
     @Transactional
     public void actualizarMonto(Long idOperacion, Long idTipoOperacion, BigDecimal importe){
         FormaDePagoDetalle f = formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
-        System.out.println("Actualizar monto de: " + f.getTotalOperacion() + " a " + importe);
         f.setTotalOperacion(importe);
         formaDePagoADetallarRepo.save(f);
     }
@@ -118,13 +114,8 @@ public class FormaDePagoDetalleServicio {
     }
 
     public void actualizarTotal(Long idOperacion, Long idTipoOperacion, BigDecimal total ){
-        System.out.println("Actualizo total detallePago");
-        System.out.println("Id Op: " + idOperacion + " tipo: " + idTipoOperacion + " importe : " + total);
-
         FormaDePagoDetalle f =  formaDePagoADetallarRepo.findByIdOperacionAndTipoOperacion(idOperacion, idTipoOperacion);
-        System.out.println(f);
         f.setTotalOperacion(total);
-        System.out.println(f);
         formaDePagoADetallarRepo.save(f);
     };
 
@@ -132,4 +123,5 @@ public class FormaDePagoDetalleServicio {
     public Integer existsByIdOperacionAndTipoOperacionId(Long idOperacion, Long idTipoOperacion) {
        return formaDePagoADetallarRepo.existsByIdOperacionAndTipoOperacionId(idOperacion, idTipoOperacion);
     }
+
 }
