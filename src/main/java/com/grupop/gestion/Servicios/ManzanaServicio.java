@@ -21,6 +21,7 @@ public class ManzanaServicio {
         Manzana manzana = new Manzana();
         manzana.setDescripcion(dto.getDescripcion());
         manzana.setUrbanizacion(dto.getUrbanizacion());
+        manzana.setUltimoNroLote(0);
         manzanaRepo.save(manzana);
     }
 
@@ -46,13 +47,21 @@ public class ManzanaServicio {
         }
 
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true  )
     public Manzana obtenerPorId(Long id){ return manzanaRepo.findById(id).get();}
 
     @Transactional
     public void eliminarPorId(Long id){ manzanaRepo.deleteById(id);}
 
 
-    public List<Manzana> obtenerPorUrbanizacion(Long id) { return manzanaRepo.obtenerPorUrb(id);
+    public List<Manzana> obtenerPorUrbanizacion(Long id) { return manzanaRepo.obtenerPorUrb(id);}
+
+    public Integer asignarUltimoNroLote(Long idManzana){
+        Manzana m = manzanaRepo.findById(idManzana).get();
+        Integer nroLote = m.getUltimoNroLote() + 1;
+        m.setUltimoNroLote(nroLote);
+        manzanaRepo.save(m);
+        return  nroLote;
     }
+
 }

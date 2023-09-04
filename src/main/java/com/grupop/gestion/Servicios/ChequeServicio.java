@@ -30,6 +30,7 @@ public class ChequeServicio {
         c.setCiudad(dto.getCiudad());
         c.setProvincia(dto.getProvincia());
 
+
         c.setFechaRecepcion(LocalDate.parse(fechaRecepcion));
         c.setOperacionIngreso(dto.getOperacionIngreso());
         c.setIdOperacion(dto.getIdOperacion());

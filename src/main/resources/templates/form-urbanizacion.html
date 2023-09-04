@@ -121,6 +121,7 @@
                   <th>Id</th>
                   <th>Descripcion</th>
                   <th>Manzana</th>
+                  <th>Nro Lote</th>
                   <th>Estado</th>
                   <th>Es Producto</th>
                 </tr>
@@ -130,12 +131,42 @@
                   <td th:text="${xxx.id}"></td>
                   <td th:text="${xxx.descripcion}"></td>
                   <td th:text="${xxx.manzana}"></td>
+                  <td th:text="${xxx.nroLote}"></td>
                   <td th:text="${xxx.estado.descripcion}"></td>
                   <td class="esProducto" th:text="${xxx.esProducto}"></td>
                 </tr>
                 </tbody>
               </table>
 
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              Crear lotes por Manzana
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <div class="row g-3">
+                <div class="col-md-12">
+                  <label for="manzana" class="form-label">Manzana: </label>
+                  <select class="form-select" id="manzana">
+                    <option selected value>Seleccionar Manzana</option>
+                    <option th:each="xxx : ${listaManzanas}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+                  </select>
+                </div>
+
+                <div class="col-md-12">
+                  <label for="cantLotes" class="form-label">Cant. Lotes</label>
+                  <input type="number" id="cantLotes" class="form-control">
+                </div>
+
+                <div class="col-12">
+                  <button id="crearLotes" class="btn btn-primary">Crear</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

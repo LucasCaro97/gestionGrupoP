@@ -51,6 +51,7 @@
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" th:href="@{/tipoCuentaBanco}">Tipo Cuenta/Banco</a></li>
                             <li><a class="dropdown-item" th:href="@{/ctaBcoTja}">Cuentas Banco/Tarjeta</a></li>
+                            <li><a class="dropdown-item" th:href="@{/bancoEmisor}">Bancos Emisores de Cheques</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" th:href="@{/tipoTot}">Tipo Totalizadora</a></li>
                             <li><a class="dropdown-item" th:href="@{/ctaTot}">Cuentas Totalizadoras</a></li>
@@ -82,7 +83,16 @@
                         </ul>
                     </li>
                     <a class="nav-link" th:href="@{/comision}">Comisiones</a>
-                    <a class="nav-link" th:href="@{/cheque}">Cheques</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Cheques
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" th:href="@{/cheque}">En cartera</a></li>
+                            <li><a class="dropdown-item" th:href="@{/tipoCheque}">Categorias</a></li>
+                            <li><a class="dropdown-item" th:href="@{/tipoSubcheque}">Subcategorias</a></li>
+                        </ul>
+                    </li>
                     <a class="nav-link" th:href="@{/errores}">Errores / Recomend</a>
                 </ul>
             </div>

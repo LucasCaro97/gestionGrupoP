@@ -26,6 +26,8 @@
                 </div>
                 <div th:unless="${listaEntidad.isEmpty()}" class="table-responsive">
                     <a class="btn btn-primary mb-2" th:href="@{/entidadBase/form}">Crear registro</a>
+                    <a class="btn btn btn-secondary mb-2" th:href="@{/entidadBase/exportarPDF}">Exportar a PDF</a>
+                    <a class="btn btn-success mb-2" th:href="@{/entidadBase/exportarExcel}">Exportar a Excel</a>
 
                     <table class="table table-hover table-bordered">
                         <thead>

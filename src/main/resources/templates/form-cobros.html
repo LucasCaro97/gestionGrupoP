@@ -14,15 +14,15 @@
 
 <header th:replace="~{Fragments/header :: header}"></header>
 
-<main>
+<main class="d-flex flex-column align-items-center">
 
     <div th:if="${exception}" th:text="${exception}" class="alert alert-danger" role="alert"></div>
 
     <div class="container">
         <div class="row mt-4">
             <h1>Registro de Cobros - <span th:text="${cobro.id}"></span></h1>
-            <form class="row g-3 needs-validation" th:action="@{/cobros/__${action}__}" th:object="${cobro}"
-                  method="post" autocomplete="off">
+            <form class="row g-3 needs-validation" th:action="@{/cobros/__${action}__}" th:object="${cobro}" enctype="multipart/form-data"
+                  method="post" autocomplete="off" >
                 <input type="hidden" th:field="*{id}">
                 <div id="divCliente" class="col-md-8">
                     <label for="cliente" class="form-label">Cliente: </label>
@@ -101,6 +101,12 @@
                     <textarea type="text" class="form-control" th:field="*{observaciones}"
                               id="observaciones"></textarea>
                 </div>
+
+                <div id="imgComprobante" class="col mb-2">
+                    <label for="photo">Adjuntar:</label>
+                    <input type="file" class="form-control mt-2" id="photo" name="photo" accept="image/*">
+                </div>
+
                 <div class="col-md-3 formaPago d-flex">
                     <select th:field="*{formaDePago}" id="formaDePago" class="form-select" aria-label="Seleccionar formaDePago">
                         <option selected value="">Forma de Pago</option>
@@ -512,6 +518,15 @@
         </div>
 
     </div>
+
+
+    <div class="modal-container text-center my-2">
+        <img th:src="${cobro.image} ? @{'/imagenesGP/' + ${cobro.image} } : @{/uploads/default-image.png}">
+    </div>
+
+
+
+
 </main>
 
 
@@ -520,5 +535,6 @@
         crossorigin="anonymous"></script>
 <script th:src="@{/js/cambiarTema.js}"></script>
 <script th:src="@{/js/form-cobros.js}"></script>
+<script th:src="@{/js/imagenComprobante.js}"></script>
 </body>
 </html>

@@ -117,10 +117,19 @@ public class UrbanizacionControlador {
         return ResponseEntity.ok(manzanaRepo.obtenerPorUrb(id));
     }
 
-    @GetMapping("obtenerLinkMapa/{idUrb}")
+    @GetMapping("/obtenerLinkMapa/{idUrb}")
     public ResponseEntity<String> obtenerLinkMapa(@PathVariable Long idUrb){
         return ResponseEntity.ok(urbanizacionServicio.obtenerLinkMapa(idUrb));
     }
+
+    @GetMapping("/generarLotes/{id}")
+    public ModelAndView getFormGenerarLotesPorCantidad(@PathVariable Long id){
+        ModelAndView mav = new ModelAndView("form-generadorLotes");
+        mav.addObject("urbanizacion", urbanizacionServicio.obtenerPorId(id));
+        mav.addObject("listaManzana", manzanaServicio.obtenerPorUrbanizacion(id));
+        return mav;
+    }
+
 
 
 

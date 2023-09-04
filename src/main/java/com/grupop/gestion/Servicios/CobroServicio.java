@@ -6,6 +6,7 @@ import com.grupop.gestion.Repositorios.CobroRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -21,9 +22,10 @@ public class CobroServicio {
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ClienteServicio clienteServicio;
+    private final ImageService imageService;
 
     @Transactional
-    public void crear(Cobro dto, String fechaComprobante) {
+    public void crear(Cobro dto, String fechaComprobante, MultipartFile photo) {
         Cobro c = new Cobro();
         c.setCliente(dto.getCliente());
         c.setCuit(dto.getCuit());
@@ -38,6 +40,9 @@ public class CobroServicio {
         c.setObservaciones(dto.getObservaciones());
         c.setTotal(new BigDecimal(0));
         c.setTipoOperacion(tipoOperacionServicio.obtenerPorId(3l));
+
+        if(photo != null && !photo.isEmpty()) c.setImage(imageService.copy(photo));
+
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
         cobroRepo.save(c);
 
@@ -46,7 +51,7 @@ public class CobroServicio {
     }
 
     @Transactional
-    public void actualizar(Cobro dto, String fechaComprobante) {
+    public void actualizar(Cobro dto, String fechaComprobante, MultipartFile photo) {
         Cobro c = cobroRepo.findById(dto.getId()).get();
         Long idFormaDePagoAnterior;
         try {
@@ -69,6 +74,7 @@ public class CobroServicio {
         c.setMoneda(dto.getMoneda());
         c.setFormaDePago(dto.getFormaDePago());
         c.setObservaciones(dto.getObservaciones());
+        if(photo != null && !photo.isEmpty()) c.setImage(imageService.copy(photo));
         cobroRepo.save(c);
 
         if (c.getFormaDePago() != null) {

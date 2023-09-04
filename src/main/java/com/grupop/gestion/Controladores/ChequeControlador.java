@@ -1,10 +1,7 @@
 package com.grupop.gestion.Controladores;
 
-import com.fasterxml.jackson.core.JsonToken;
 import com.grupop.gestion.Entidades.Cheque;
-import com.grupop.gestion.Servicios.ChequeServicio;
-import com.grupop.gestion.Servicios.EntidadBaseServicio;
-import com.grupop.gestion.Servicios.TipoOperacionServicio;
+import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +26,9 @@ public class ChequeControlador {
     private final ChequeServicio chequeServicio;
     private final TipoOperacionServicio tipoOperacionServicio;
     private final EntidadBaseServicio entidadBaseServicio;
+    private final ChequeTipoServicio chequeTipoServicio;
+    private final ChequeSubtipoServicio chequeSubtipoServicio;
+    private final BancoEmisorServicio bancoEmisorServicio;
 
     @GetMapping
     public ModelAndView getAll(HttpServletRequest request){
@@ -53,9 +53,11 @@ public class ChequeControlador {
             mav.addObject("cheque", new Cheque());
         }
         mav.addObject("action", "create");
-        mav.addObject("listaTipoOperacion", tipoOperacionServicio.obtenerTodos());
-        mav.addObject("listaEntidadBase", entidadBaseServicio.obtenerTodos());
-
+        mav.addObject("listaTipoOperacion", tipoOperacionServicio.obtenerTodos() );
+        mav.addObject("listaEntidadBase", entidadBaseServicio.obtenerTodos() );
+        mav.addObject("listaTipoCheque", chequeTipoServicio.obtenerTodos() );
+        mav.addObject("listaSubtipoCheque", chequeSubtipoServicio.obtenerTodos() );
+        mav.addObject("listaBancos", bancoEmisorServicio.obtenerTodos());
         return mav;
     }
 
@@ -70,6 +72,10 @@ public class ChequeControlador {
         mav.addObject("fechaEmision", c.getFechaEmision() );
         mav.addObject("fechaPago", c.getFechaPago());
         mav.addObject("fechaRecepcion", c.getFechaRecepcion());
+        mav.addObject("listaTipoCheque", chequeTipoServicio.obtenerTodos() );
+        mav.addObject("listaSubtipoCheque", chequeSubtipoServicio.obtenerTodos() );
+        mav.addObject("listaBancos", bancoEmisorServicio.obtenerTodos());
+
         return mav;
     }
 

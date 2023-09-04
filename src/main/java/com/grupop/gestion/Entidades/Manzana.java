@@ -17,6 +17,9 @@ public class Manzana {
     @JoinColumn(name = "fk_urb")
     @ManyToOne
     private Urbanizacion urbanizacion;
+    private Integer ultimoNroLote;
+
+
 
     @Override
     public String toString() {

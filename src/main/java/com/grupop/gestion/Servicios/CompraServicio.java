@@ -6,6 +6,7 @@ import com.grupop.gestion.Repositorios.CompraRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,9 +21,10 @@ public class CompraServicio {
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ProveedorServicio proveedorServicio;
+    private final ImageService imageService;
 
     @Transactional
-    public void crear(Compra dto, String fechaComprobante){
+    public void crear(Compra dto, String fechaComprobante, MultipartFile photo){
         Compra compra = new Compra();
         compra.setProveedor(dto.getProveedor());
         compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
@@ -36,6 +38,8 @@ public class CompraServicio {
         compra.setBloqueado(false);
         compra.setTipoOperacion(tipoOperacionServicio.obtenerPorId(2l));
         talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+        System.out.println("Servicio " + photo);
+        if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
         compraRepo.save(compra);
 
         Compra ultimaCompra = compraRepo.findTopByOrderByIdDesc();
@@ -43,7 +47,7 @@ public class CompraServicio {
     }
 
     @Transactional
-    public void actualizar(Compra dto, String fechaComprobante){
+    public void actualizar(Compra dto, String fechaComprobante, MultipartFile photo){
         Compra compra = compraRepo.findById(dto.getId()).get();
         Long idFormaDePagoAnterior;
         try{
@@ -55,6 +59,7 @@ public class CompraServicio {
 
         if(compra.isBloqueado()){
             compra.setObservaciones(dto.getObservaciones());
+            if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
             compraRepo.save(compra);
         }else{
 
@@ -69,6 +74,8 @@ public class CompraServicio {
         compra.setSector(dto.getSector());
         compra.setFormaDePago(dto.getFormaDePago());
         compra.setObservaciones(dto.getObservaciones());
+            System.out.println("Servicio " + photo);
+        if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
         compraRepo.save(compra);
 
             if(compra.getFormaDePago() != null){

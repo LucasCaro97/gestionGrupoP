@@ -15,12 +15,12 @@
 
 <header th:replace="~{Fragments/header :: header}"></header>
 
-<main>
+<main class="d-flex flex-column align-items-center">
 
     <div class="container">
         <div class="row mt-4">
             <h1>Registro de Compras - <span th:text="${compra.id}"></span></h1>
-            <form class="row g-3 needs-validation" th:action="@{/compras/__${action}__}" th:object="${compra}"
+            <form class="row g-3 needs-validation" th:action="@{/compras/__${action}__}" th:object="${compra}" enctype="multipart/form-data"
                   method="post" autocomplete="off">
                 <input type="hidden" th:field="*{id}">
 
@@ -76,6 +76,11 @@
                     <label for="observaciones" class="form-label">Observaciones: </label>
                     <textarea type="text" class="form-control" th:field="*{observaciones}"
                               id="observaciones"></textarea>
+                </div>
+
+                <div id="imgComprobante" class="col mb-2">
+                    <label for="photo">Adjuntar:</label>
+                    <input type="file" class="form-control mt-2" id="photo" name="photo" accept="image/*">
                 </div>
 
                 <div class="col-md-3 formaPago d-flex">
@@ -446,6 +451,11 @@
         </div>
 
     </div>
+
+    <div class="modal-container text-center my-2">
+        <img th:src="${compra.image} ? @{'/imagenesGP/' + ${compra.image} } : @{/uploads/default-image.png}">
+    </div>
+
 </main>
 
 
@@ -454,5 +464,6 @@
         crossorigin="anonymous"></script>
 <script th:src="@{/js/cambiarTema.js}"></script>
 <script th:src="@{/js/form-compras.js}"></script>
+<script th:src="@{/js/imagenComprobante.js}"></script>
 </body>
 </html>

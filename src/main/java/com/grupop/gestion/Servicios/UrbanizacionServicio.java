@@ -63,4 +63,7 @@ public class UrbanizacionServicio {
     public String obtenerLinkMapa(Long idUrb) {
         return urbanizacionRepo.obtenerLinkMapa(idUrb);
     }
+
 }
+
+

@@ -1,12 +1,14 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.Entidades.EntidadBase;
-import com.grupop.gestion.Entidades.Manzana;
-import com.grupop.gestion.Entidades.TipoIva;
+import com.grupop.gestion.Reportes.EntidadBaseExporterExcel;
+import com.grupop.gestion.Reportes.EntidadBaseExporterPDF;
 import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import com.grupop.gestion.Servicios.TipoIvaServicio;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -199,6 +205,45 @@ public class EntidadBaseControlador {
     public ResponseEntity<EntidadBase> obtenerNombreVendedor(@PathVariable Long id){
         //System.out.println(entidadBaseServicio.obtenerNombrePorFkCliente(id));
         return ResponseEntity.ok(entidadBaseServicio.obtenerNombrePorFkVendedor(id));
+    }
+
+    @GetMapping("/generarReporte")
+    public ModelAndView exportInvoice( ){
+
+        ModelAndView mav = new ModelAndView("tabla-entidadBase");
+        mav.addObject("listaEntidad", entidadBaseServicio.obtenerTodos());
+        entidadBaseServicio.exportInvoice();
+        return mav;
+    }
+
+    @GetMapping("/exportarPDF")
+    public void exportarListadoEntidades(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fechaActual = dateFormater.format(new Date());
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Entidades_" + fechaActual + ".pdf";
+        response.setHeader(cabecera,valor);
+        List<EntidadBase> entidades = entidadBaseServicio.obtenerTodos();
+
+        EntidadBaseExporterPDF exporter = new EntidadBaseExporterPDF(entidades);
+        exporter.exportar(response);
+
+    }
+
+    @GetMapping("/exportarExcel")
+    public void exportarListadoExcel(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octec-stream");
+        DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fechaActual = dateFormater.format(new Date());
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Entidades_" + fechaActual + ".xlsx";
+        response.setHeader(cabecera,valor);
+        List<EntidadBase> entidades = entidadBaseServicio.obtenerTodos();
+
+        EntidadBaseExporterExcel exporter = new EntidadBaseExporterExcel(entidades);
+        exporter.exportar(response);
+
     }
 
 

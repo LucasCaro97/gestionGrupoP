@@ -3,10 +3,10 @@ $(".boton-alta-producto").click(function(){
 });
 
 $(".tbody tr").each(function(){
-      if($(this).children().eq(4).text() == "true"){
-          $(this).children().eq(4).text("Si");
+      if($(this).children().eq(5).text() == "true"){
+          $(this).children().eq(5).text("Si");
       }else{
-          $(this).children().eq(4).text("No");
+          $(this).children().eq(5).text("No");
       }
       //console.log("Iteracion" + $(this).children().eq(11).text());
 });
@@ -21,3 +21,19 @@ $(".btnVerMapa").click(async function(){
     })
  window.open(urlMapa, '_blank')
 })
+
+$("#crearLotes").click(function(){
+    let idUrbanizacion = $("#id").val()
+    let idManzana = $("#manzana").val()
+    let cantLotes = $("#cantLotes").val()
+
+   //console.log("generarLotes/" + idUrbanizacion + "/" + idManzana + "/" + cantLotes)
+    fetch("/lote/crearLotesPorGrupo/" + idUrbanizacion + "/" + idManzana + "/" + cantLotes, {
+        method : "POST",
+        headers:{
+            "Content-Type" : "application/json"
+            }
+    })
+
+})
+

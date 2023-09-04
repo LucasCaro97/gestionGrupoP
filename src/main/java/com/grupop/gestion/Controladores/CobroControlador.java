@@ -10,10 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -98,11 +96,11 @@ public class CobroControlador {
     }
 
     @PostMapping("/create")
-    public RedirectView create(HttpServletRequest request, Cobro dto, RedirectAttributes attributes){
+    public RedirectView create(@RequestParam String fechaAlta, @RequestParam(required = false)MultipartFile photo, Cobro dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/cobros");
         try{
-            String fechaComprobante = request.getParameter("fechaAlta");
-            cobroServicio.crear(dto, fechaComprobante);
+            System.out.println(photo.getName());
+            cobroServicio.crear(dto, fechaAlta, photo);
             r.setUrl("/cobros/form/" + ( cobroServicio.buscarUltimoId()));
             attributes.addFlashAttribute("exito", "Se ha registrado el cobro correctamente");
         }catch (Exception e){
@@ -115,11 +113,11 @@ public class CobroControlador {
     }
 
     @PostMapping("/update")
-    public RedirectView update (HttpServletRequest request, Cobro dto, RedirectAttributes attributes){
+    public RedirectView update (@RequestParam String fechaAlta, @RequestParam(required = false)MultipartFile photo, Cobro dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/cobros/form/" + dto.getId());
         try {
-            String fechaComprobante = request.getParameter("fechaAlta");
-            cobroServicio.actualizar(dto, fechaComprobante);
+            System.out.println(photo.getName());
+            cobroServicio.actualizar(dto, fechaAlta, photo);
             Cobro c = cobroServicio.obtenerPorId(dto.getId());
 
             if(dto.getFormaDePago() != null) {

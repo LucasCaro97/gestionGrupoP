@@ -45,22 +45,41 @@
                         </div>
                     </div>
 
-                    <div class="col-md-2">
-                        <label for="fechaPago" class="form-label">Fecha Pago: </label>
-                        <input id="fechaPago" type="date" class="form-control" name="fechaPago" th:value="${fechaPago}">
+                    <div class="col-md-3">
+                        <label for="tipoCheque" class="form-label">Tipo: </label>
+                        <select th:field="*{chequeTipo}" id="tipoCheque" class="form-select" required>
+                            <option selected value="">Seleccione tipo</option>
+                            <option th:each="xxx : ${listaTipoCheque}" th:text="${xxx.descripcion}"
+                                    th:value="${xxx.id}"></option>
+                        </select>
                     </div>
 
-                    <div class="col-md-4">
-                        <label for="bancoEmisor" class="form-label">Banco Emisor: </label>
-                        <input id="bancoEmisor" type="text" class="form-control" name="bancoEmisor" th:field="*{bancoEmisor}">
+                    <div class="col-md-3">
+                        <label for="chequeSubtipo" class="form-label">Subtipo: </label>
+                        <select th:field="*{chequeSubtipo}" id="chequeSubtipo" class="form-select" required>
+                            <option selected value="">Seleccione subtipo</option>
+                        </select>
                     </div>
                 </div>
+
                     <div class="row mt-3">
-                        <div class="col-4">
+                        <div class="col-md-2">
+                            <label for="fechaPago" class="form-label">Fecha Pago: </label>
+                            <input id="fechaPago" type="date" class="form-control" name="fechaPago" th:value="${fechaPago}">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="bancoEmisor" class="form-label">Banco Emisor: </label>
+                            <select th:field="*{bancoEmisor}" id="bancoEmisor" class="form-select" required>
+                                <option selected value="">Seleccione subtipo</option>
+                                <option th:each="xxx : ${listaBancos}" th:value="${xxx.id}" th:text="${xxx.descripcion}"></option>
+                            </select>
+                        </div>
+                        <div class="col-2">
                             <label for="nroIdentificacion" class="form-label">Nro Identificacion: </label>
                             <input type="text" id="nroIdentificacion" class="form-control" th:field="*{nroIdentificacion}">
                         </div>
-                        <div class="col-8">
+                        <div class="col-5">
                             <label for="titularDeLaCuenta" class="form-label">Titular Cta: </label>
                             <input type="text" id="titularDeLaCuenta" class="form-control" th:field="*{titularDeLaCuenta}">
                         </div>
@@ -149,5 +168,6 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 <script th:src="@{/js/cambiarTema.js}"></script>
+<script th:src="@{/js/form-cheque.js}"></script>
 </body>
 </html>

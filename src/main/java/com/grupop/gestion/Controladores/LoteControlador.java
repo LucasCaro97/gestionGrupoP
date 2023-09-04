@@ -1,8 +1,6 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Entidades.EstadoLote;
 import com.grupop.gestion.Entidades.Lote;
-import com.grupop.gestion.Entidades.Urbanizacion;
 import com.grupop.gestion.Servicios.EstadoLoteServicio;
 import com.grupop.gestion.Servicios.LoteServicio;
 import com.grupop.gestion.Servicios.ManzanaServicio;
@@ -13,10 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -175,6 +170,11 @@ public class LoteControlador {
         return ResponseEntity.ok(loteServicio.obtenerVendidosPorUrb(id));
     }
 
+    @PostMapping("crearLotesPorGrupo/{idUrb}/{idManzana}/{cantLotes}")
+    public ResponseEntity<String> crearLotesPorGrupo(@PathVariable Long idUrb, @PathVariable Long idManzana, @PathVariable Integer cantLotes){
+        loteServicio.crearGrupoDeLotes(idUrb, idManzana, cantLotes);
+        return null;
+    }
 
 
 

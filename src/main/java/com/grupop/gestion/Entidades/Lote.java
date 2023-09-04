@@ -32,4 +32,8 @@ public class Lote {
     private EstadoLote estado;
     private boolean esProducto;
 
+    private Integer nroLote;
+
+
+
 }

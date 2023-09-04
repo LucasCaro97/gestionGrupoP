@@ -55,6 +55,8 @@ public class Compra {
     @JoinColumn(name = "fk_tipoOp")
     @ManyToOne
     private TipoOperacion tipoOperacion;
+    @Column( name = "image")
+    private String image;
 
 
 

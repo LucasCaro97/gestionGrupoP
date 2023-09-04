@@ -1,6 +1,5 @@
 package com.grupop.gestion.Entidades;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +52,8 @@ public class Cobro {
     @JoinColumn(name = "fk_tipoOp")
     @ManyToOne
     private TipoOperacion tipoOperacion;
+    @Column( name = "image")
+    private String image;
 
 
 }

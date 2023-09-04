@@ -5,10 +5,12 @@ import com.grupop.gestion.Repositorios.VentaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.time.LocalDate;
 
 @SpringBootApplication
+@EnableAsync
 public class GestionApplication {
 
 
@@ -17,7 +19,6 @@ public class GestionApplication {
 
 
 		SpringApplication.run(GestionApplication.class, args);
-		System.out.println("Hello World");
 
 
 	}

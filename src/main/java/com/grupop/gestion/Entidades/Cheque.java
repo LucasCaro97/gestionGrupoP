@@ -21,7 +21,9 @@ public class Cheque {
     private String serie;
     private Long nroCheque;
     private LocalDate fechaPago;
-    private String bancoEmisor;
+    @JoinColumn(name = "fk_banco_emisor")
+    @ManyToOne
+    private BancoEmisor bancoEmisor;
     private Long nroIdentificacion;
     private String titularDeLaCuenta;
     private String ciudad;
@@ -36,6 +38,12 @@ public class Cheque {
     private String nombreEmisor;
     private BigDecimal importe;
     private boolean disponible;
+    @JoinColumn(name = "fk_tipo_cheque")
+    @OneToOne
+    private ChequeTipo chequeTipo;
+    @JoinColumn(name = "fk_subtipo_cheque")
+    @OneToOne
+    private ChequeSubtipo chequeSubtipo;
 
 
 

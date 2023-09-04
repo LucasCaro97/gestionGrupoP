@@ -15,4 +15,7 @@ public interface ManzanaRepo extends JpaRepository<Manzana,Long> {
 
     @Query(value = "SELECT * FROM manzana WHERE fk_urb = ?", nativeQuery = true)
     List<Manzana> searchByUrbanizacion(Long manzana);
+
+    @Query(value = "SELECT ultimo_nro_lote FROM manzana WHERE id = ?", nativeQuery = true)
+    Integer obtenerUltimoNroLote(Long idManzana);
 }

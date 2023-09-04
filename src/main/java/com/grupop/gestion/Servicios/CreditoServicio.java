@@ -28,6 +28,7 @@ public class CreditoServicio {
     private final CreditoDetalleServicio creditoDetalleServicio;
     private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final EmailService emailService;
 
     @Transactional
     public void crear(Credito dto, String venceLosDias){
@@ -92,6 +93,9 @@ public class CreditoServicio {
         ventaServicio.cerrarVenta(dto.getVenta().getId());
 //        CIERRO EL DETALLE DE PAGO DE LA VENTA
         formaDePagoDetalleServicio.cerrarDetallePago(dto.getVenta().getId(), dto.getVenta().getTipoOperacion().getId());
+//    HAGO UN ENVIO DE EMAIL
+        String email="lucascaro97@gmail.com";
+        emailService.send(email, "credito", c.getVenta().getNroComprobante(), c.getCliente().getId(), c.getTotalCredito(), c.getPlanPago());
     }
 
     @Transactional

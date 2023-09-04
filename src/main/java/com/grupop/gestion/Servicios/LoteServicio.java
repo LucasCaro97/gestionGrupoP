@@ -7,10 +7,15 @@ import com.grupop.gestion.Entidades.Producto;
 import com.grupop.gestion.Repositorios.LoteRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -20,6 +25,8 @@ public class LoteServicio {
     private final LoteRepo loteRepo;
     private final ProductoServicio productoServicio;
     private final EstadoLoteServicio estadoLoteServicio;
+    private final ManzanaServicio manzanaServicio;
+    private final UrbanizacionServicio urbanizacionServicio;
 
     @Transactional
     public void crear(Lote dto) {
@@ -35,6 +42,7 @@ public class LoteServicio {
         lote.setUbicacion(dto.getUbicacion());
         lote.setEstado(dto.getEstado());
         lote.setEsProducto(false);
+        lote.setNroLote(manzanaServicio.asignarUltimoNroLote(lote.getManzana().getId()));
         loteRepo.save(dto);
     }
 
@@ -55,15 +63,23 @@ public class LoteServicio {
     }
 
     @Transactional(readOnly = true)
+    public Page<Lote> findAll(Pageable pageable){
+        return loteRepo.findAll(pageable);
+    }
+
+
+    @Transactional(readOnly = true)
     public List<Lote> obtenerTodos(Long idUrbanizacion, Long idManzana) {
-        //Sort sort = Sort.by("id").descending();
+        List<Lote> listaLotes;
+
         if (idUrbanizacion != null && idManzana != null) {
-            return loteRepo.searchByUrbanizacionAndManzana(idUrbanizacion, idManzana);
+           listaLotes = loteRepo.searchByUrbanizacionAndManzana(idUrbanizacion, idManzana);
         } else if (idUrbanizacion != null) {
-            return loteRepo.searchByUrbanizacion(idUrbanizacion);
+            listaLotes = loteRepo.searchByUrbanizacion(idUrbanizacion);
         } else {
-            return loteRepo.findAll();
+             listaLotes = loteRepo.findAllByOrderByManzanaDescripcionAscNroLoteAsc();
         }
+    return  listaLotes;
     }
 
 
@@ -152,4 +168,17 @@ public class LoteServicio {
     }
 
 
+    @Transactional
+    public void crearGrupoDeLotes(Long idUrb, Long idManzana, Integer cantLotes) {
+     for (int i = 0; i < cantLotes ; i++){
+        Lote lote = new Lote();
+        lote.setUrbanizacion(urbanizacionServicio.obtenerPorId(idUrb));
+        lote.setManzana(manzanaServicio.obtenerPorId(idManzana));
+        lote.setNroLote(manzanaServicio.asignarUltimoNroLote(idManzana));
+        lote.setDescripcion("Lote " + lote.getNroLote() + " de la manzana " + lote.getManzana().getDescripcion() + " urb " + lote.getUrbanizacion().getId());
+        lote.setEstado(estadoLoteServicio.buscarPorId(1l));
+        loteRepo.save(lote);
+     }
+
+    }
 }
