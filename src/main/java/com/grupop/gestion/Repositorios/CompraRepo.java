@@ -1,6 +1,9 @@
 package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.Compra;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -37,4 +40,6 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
 
     @Query(value = "SELECT fk_proveedor FROM compra WHERE id = ? ", nativeQuery = true)
     Long obtenerCliente(Long idOperacion);
+
+    Page<Compra> findAllByOrderByIdDesc(Pageable pageable);
 }

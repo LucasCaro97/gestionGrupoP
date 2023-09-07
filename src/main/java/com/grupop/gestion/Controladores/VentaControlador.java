@@ -9,13 +9,11 @@ import com.grupop.gestion.Repositorios.VentaRepo;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -25,6 +23,8 @@ import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -51,11 +51,26 @@ public class VentaControlador {
 
 
     @GetMapping
-    public ModelAndView getAll (HttpServletRequest request){
+    public ModelAndView getAll (@RequestParam Map<String, Object> params, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("tabla-ventas");
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if(inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaVentas", ventaServicio.obtenerTodas());
+
+        int page = params.get("page") != null ? ( Integer.valueOf(params.get("page").toString()) -1) : 0;
+        Page<Venta> pageVentas = ventaServicio.obtenerTodas(page, 50);
+        int totalPage = pageVentas.getTotalPages();
+        if(totalPage > 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            mav.addObject("pages", pages);
+        }
+
+        mav.addObject("listaVentas", pageVentas.getContent());
+        mav.addObject("current", page + 1);
+        mav.addObject("next", page + 2);
+        mav.addObject("prev", page);
+        mav.addObject("last", totalPage);
+        mav.addObject("object", "ventas");
+
         return mav;
     }
 

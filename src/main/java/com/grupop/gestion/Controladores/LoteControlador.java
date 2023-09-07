@@ -7,6 +7,8 @@ import com.grupop.gestion.Servicios.ManzanaServicio;
 import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,8 +34,8 @@ public class LoteControlador {
     private final UrbanizacionServicio urbanizacionServicio;
     private final EstadoLoteServicio estadoLoteServicio;
 
-    @GetMapping
-    public ModelAndView getAll(HttpServletRequest request,  @Param("urbanizacion") Long urbanizacion, @Param("manzana") Long manzana){
+    @GetMapping()
+    public ModelAndView getAll(@RequestParam Map<String, Object> params, HttpServletRequest request,  @Param("urbanizacion") Long urbanizacion, @Param("manzana") Long manzana){
         ModelAndView mav = new ModelAndView("tabla-lote");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if(inputFlashMap!=null) {
@@ -40,8 +45,25 @@ public class LoteControlador {
                 mav.addObject("exception", inputFlashMap.get("exception"));
             }
         }
+
+        int page = params.get("page") != null ? ( Integer.valueOf(params.get("page").toString()) -1) : 0;
+        PageRequest pageRequest = PageRequest.of(page, 250);
+        Page<Lote> pageLotes = loteServicio.obtenerTodos(urbanizacion, manzana, page, 200);
+        int totalPage = pageLotes.getTotalPages();
+        if(totalPage > 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            mav.addObject("pages", pages);
+        }
+
+
+        mav.addObject("listaLotes",pageLotes.getContent());
+        mav.addObject("current", page + 1 );
+        mav.addObject("next", page + 2 );
+        mav.addObject("prev", page);
+        mav.addObject("last", totalPage);
         mav.addObject("listaUrbs", urbanizacionServicio.obtenerTodos());
-        mav.addObject("listaLotes",loteServicio.obtenerTodos(urbanizacion, manzana));
+        mav.addObject("object", "lote");
+//        mav.addObject("listaLotes",loteServicio.obtenerTodos(urbanizacion, manzana, page, 20));
         return mav;
     }
 

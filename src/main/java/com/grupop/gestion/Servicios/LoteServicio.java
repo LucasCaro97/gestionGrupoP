@@ -8,6 +8,7 @@ import com.grupop.gestion.Repositorios.LoteRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -69,15 +70,15 @@ public class LoteServicio {
 
 
     @Transactional(readOnly = true)
-    public List<Lote> obtenerTodos(Long idUrbanizacion, Long idManzana) {
-        List<Lote> listaLotes;
+    public Page<Lote> obtenerTodos(Long idUrbanizacion, Long idManzana, int page, int size) {
+        Page<Lote> listaLotes;
 
         if (idUrbanizacion != null && idManzana != null) {
-           listaLotes = loteRepo.searchByUrbanizacionAndManzana(idUrbanizacion, idManzana);
+           listaLotes = loteRepo.searchByUrbanizacionAndManzana(idUrbanizacion, idManzana, PageRequest.of(page,size));
         } else if (idUrbanizacion != null) {
-            listaLotes = loteRepo.searchByUrbanizacion(idUrbanizacion);
+            listaLotes = loteRepo.searchByUrbanizacion(idUrbanizacion, PageRequest.of(page,size));
         } else {
-             listaLotes = loteRepo.findAllByOrderByManzanaDescripcionAscNroLoteAsc();
+             listaLotes = loteRepo.findAllByOrderByUrbanizacionDescripcionAscManzanaDescripcionAscNroLoteAsc(PageRequest.of(page,size));
         }
     return  listaLotes;
     }

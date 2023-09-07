@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grupo Piñhero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/estiloTablas.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+</head>
+<body>
+
+<header th:replace="~{Fragments/header :: header}"></header>
+
+
+    <main class="container mt-2">
+        <div class="row">
+            <h1>Lista de Departamentos</h1>
+            <div class="col">
+                <div th:if="${exito}" th:text="${exito}" class="alert alert-primary" role="alert"></div>
+
+                <div th:if="${listaDepartamento.isEmpty()}" class="alert alert-info alert-dismissible fade show" role="alert">
+                    Debe ingresar registros <a th:href="@{/departamento/form}" class="alert-link">Crear registro</a>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:unless="${listaDepartamento.isEmpty()}" class="table-responsive">
+                    <a class="btn btn-primary mb-2" th:href="@{/departamento/form}">Crear registro</a>
+
+                    <table class="table table-hover table-bordered">
+                        <thead>
+                                <tr class="table-dark">
+                                    <th>Id</th>
+                                    <th>Descripcion</th>
+                                    <th>Accion</th>
+                                </tr>
+                        </thead>
+                        <tbody>
+                                <tr th:each="dep : ${listaDepartamento}">
+                                    <td th:text="${dep.id}"></td>
+                                    <td th:text="${dep.descripcion}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Accion
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" th:href="@{departamento/form/__${dep.id}__}">Actualizar</a></li>
+                                            <li><a class="dropdown-item" th:href="@{departamento/delete/__${dep.id}__}">Eliminar</a></li>
+                                        </ul></td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script th:src="@{/js/cambiarTema.js}"></script>
+</body>
+</html>

@@ -1,15 +1,19 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.VentasDTO;
 import com.grupop.gestion.Entidades.*;
 import com.grupop.gestion.Repositorios.TalonarioRepo;
 import com.grupop.gestion.Repositorios.VentaRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +27,7 @@ public class VentaServicio {
     private final TipoOperacionServicio tipoOperacionServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ClienteServicio clienteServicio;
+    private final EntidadBaseServicio entidadBaseServicio;
 
     @Transactional
     public void crear(Venta dto, String fechaComprobante){
@@ -43,7 +48,7 @@ public class VentaServicio {
         vta.setBloqueada(false);
         vta.setIndiceBase(dto.getIndiceBase());
         vta.setTipoOperacion(tipoOperacionServicio.obtenerPorId(1l));
-        talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+        talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
 
         ventaRepo.save(vta);
 
@@ -74,8 +79,8 @@ public class VentaServicio {
             vta.setCuit(dto.getCuit());
             vta.setTipoIva(dto.getTipoIva());
             vta.setTipoComprobante(dto.getTipoComprobante());
-            if(vta.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
-                talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+            if(vta.getTalonario() != dto.getTalonario() ){
+                talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
                 vta.setTalonario(dto.getTalonario());
             }
             vta.setNroComprobante(dto.getNroComprobante());
@@ -103,7 +108,7 @@ public class VentaServicio {
 
 
     @Transactional(readOnly = true)
-    public List<Venta> obtenerTodas(){ return ventaRepo.findAll(); }
+    public Page<Venta> obtenerTodas(int page, int size){ return ventaRepo.findAllByOrderByIdDesc(PageRequest.of(page, size)); }
 
     @Transactional(readOnly = true)
     public Venta obtenerPorId(Long id){ return ventaRepo.findById(id).get(); }
@@ -180,6 +185,55 @@ public class VentaServicio {
     public BigDecimal obtenerSaldoCliente(Long idOperacion){
         Long fkCliente = ventaRepo.obtenerCliente(idOperacion);
         return clienteServicio.obtenerSaldo(fkCliente);
+    }
+
+    @Transactional(readOnly = true)
+    public List<VentasDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago) {
+     if(excluirTal){
+         System.out.println("Excluir talonarios");
+         List<Venta> listaVentas = ventaRepo.obtenerOperacionesExcluyendoTalonario(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+         List<VentasDTO> listaVentasDTO = new ArrayList<>();
+
+         for (Venta v: listaVentas) {
+
+             System.out.println("Venta - " + v);
+            VentasDTO ventasDto = new VentasDTO();
+            ventasDto.setId(v.getId());
+            ventasDto.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(v.getCliente().getId()).getRazonSocial());
+            ventasDto.setFechaComprobante(v.getFechaComprobante());
+            ventasDto.setTalonario(v.getTalonario());
+            ventasDto.setNroComprobante(v.getNroComprobante());
+            ventasDto.setSector(v.getSector().getDescripcion());
+            ventasDto.setFormaPago(v.getFormaDePago().getDescripcion());
+            ventasDto.setTotal(v.getTotal());
+            listaVentasDTO.add(ventasDto);
+             System.out.println("VentaDTO - " + ventasDto);
+         }
+
+
+         return listaVentasDTO;
+     }else{
+         System.out.println("No excluir talonarios");
+         List<Venta> listaVentas = ventaRepo.obtenerOperaciones(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+         List<VentasDTO> listaVentasDTO = new ArrayList<>();
+
+         for (Venta v: listaVentas) {
+
+             System.out.println("Venta - " v);
+             VentasDTO ventasDto = new VentasDTO();
+             ventasDto.setId(v.getId());
+             ventasDto.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(v.getCliente().getId()).getRazonSocial());
+             ventasDto.setFechaComprobante(v.getFechaComprobante());
+             ventasDto.setTalonario(v.getTalonario());
+             ventasDto.setNroComprobante(v.getNroComprobante());
+             ventasDto.setSector(v.getSector().getDescripcion());
+             ventasDto.setFormaPago(v.getFormaDePago().getDescripcion());
+             ventasDto.setTotal(v.getTotal());
+             listaVentasDTO.add(ventasDto);
+             System.out.println("VentaDTO - " + ventasDto);
+         }
+         return listaVentasDTO;
+        }
     }
 
 }

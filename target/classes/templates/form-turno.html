@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grupo Piñhero</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+<body>
+
+<header th:replace="~{Fragments/header :: header}"></header>
+
+<main>
+  <div class="container">
+    <div class="row mt-4">
+      <h1>Carga de Turno</h1>
+      <div class="col-6">
+
+
+        <form th:action="@{/turno/create}" th:object="${turno}" method="post" autocomplete="off">
+          <input type="hidden" th:field="*{id}">
+          <div class="form-floating mb-3">
+            <input type="text" id="descripcion" th:field="*{descripcion}" class="form-control" required>
+            <label for="descripcion">Descripcion</label>
+            <div class="invalid-feedback">La descripcion es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsEntrada" th:field="*{hsEntrada}" class="form-control" required>
+            <label for="hsEntrada">hs Entrada</label>
+            <div class="invalid-feedback">La hs Entrada es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsSalida" th:field="*{hsSalida}" class="form-control" required>
+            <label for="hsSalida">hs Salida</label>
+            <div class="invalid-feedback">La hs Salida es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsEntradaReceso" th:field="*{hsEntradaReceso}" class="form-control" required>
+            <label for="hsEntradaReceso">hs Entrada Receso</label>
+            <div class="invalid-feedback">La hs Entrada Receso es requerida</div>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="time" id="hsSalidaReceso" th:field="*{hsSalidaReceso}" class="form-control" required>
+            <label for="hsSalidaReceso">hs Salida Receso</label>
+            <div class="invalid-feedback">La hs Salida Receso es requerida</div>
+          </div>
+
+
+          <button th:text="${action == 'create' ? 'Crear' : 'Actualizar'}" type="submit" class="btn btn-primary"></button>
+        </form>
+
+      </div>
+      <div class="col-6">
+        <table class="table table-hover table-bordered">
+          <thead>
+          <tr class="table-dark">
+            <th>Id</th>
+            <th>Descripcion</th>
+            <th>Hs Entrada</th>
+            <th>Hs Salida</th>
+            <th>Hs Ent Receso</th>
+            <th>Hs Sal Receso</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="tur : ${listaTurno}">
+            <td th:text="${tur.id}"></td>
+            <td th:text="${tur.descripcion}"></td>
+            <td th:text="${tur.hsEntrada}"></td>
+            <td th:text="${tur.hsSalida}"></td>
+            <td th:text="${tur.hsEntradaReceso}"></td>
+            <td th:text="${tur.hsSalidaReceso}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+<script th:src="@{/js/cambiarTema.js}"></script>
+</body>
+</html>

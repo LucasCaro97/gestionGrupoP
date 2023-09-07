@@ -1,6 +1,8 @@
 package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.Lote;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -14,10 +16,10 @@ public interface LoteRepo extends JpaRepository<Lote, Long> {
 
 
     @Query(value = "SELECT * FROM lote WHERE fk_urb = ? ORDER BY fk_manzana ASC", nativeQuery = true)
-    List<Lote> searchByUrbanizacion(Long idUrbanizacion);
+    Page<Lote> searchByUrbanizacion(Long idUrbanizacion, Pageable pageable);
 
     @Query(value = "SELECT * FROM lote WHERE fk_urb = ?1 AND fk_manzana = ?2 ORDER BY fk_manzana ASC", nativeQuery = true)
-    List<Lote> searchByUrbanizacionAndManzana(Long idUrbanizacion, Long idManzana);
+    Page<Lote> searchByUrbanizacionAndManzana(Long idUrbanizacion, Long idManzana, Pageable pageable);
 
     @Query(value = "SELECT COUNT(*) FROM  lote WHERE fk_urb = ?", nativeQuery = true)
     Integer obtenerStockPorUrb(Long idUrb);
@@ -28,7 +30,7 @@ public interface LoteRepo extends JpaRepository<Lote, Long> {
     @Query(value = "SELECT COUNT(*) FROM  lote WHERE fk_urb = ? AND fk_estado = 3", nativeQuery = true)
     Integer obtenerVendidosPorUrb(Long idUrb);
 
-    List<Lote> findAllByOrderByManzanaDescripcionAscNroLoteAsc();
+    Page<Lote> findAllByOrderByUrbanizacionDescripcionAscManzanaDescripcionAscNroLoteAsc(Pageable pageable);
 
 
 

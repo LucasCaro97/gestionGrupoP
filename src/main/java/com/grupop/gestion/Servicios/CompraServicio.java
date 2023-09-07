@@ -4,6 +4,8 @@ import com.grupop.gestion.Entidades.Compra;
 import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.CompraRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,7 +95,7 @@ public class CompraServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Compra> obtenerTodas(){ return compraRepo.findAll(); }
+    public Page<Compra> obtenerTodas(int page, int size){ return compraRepo.findAllByOrderByIdDesc(PageRequest.of(page,size)); }
 
     @Transactional(readOnly = true)
     public Compra obtenerPorId(Long id){ return compraRepo.findById(id).get(); }

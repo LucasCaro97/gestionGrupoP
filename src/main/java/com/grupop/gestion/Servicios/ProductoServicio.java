@@ -8,6 +8,9 @@ import com.grupop.gestion.Repositorios.ProductoRepo;
 import com.grupop.gestion.Repositorios.TipoProductoRepo;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,32 +69,34 @@ public class ProductoServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Producto> obtenerTodos(String descripcion,Long idTipoProd, Long idCuenta){
-        if(descripcion==null){
-            if(idTipoProd!=null && idCuenta!= null){
-                return productoRepo.searchByTipoProdAndCuenta(idTipoProd, idCuenta);
-            }else if (idTipoProd!=null && idCuenta==null){
-                return productoRepo.searchByTipoProd(idTipoProd);
-            }else if(idTipoProd==null && idCuenta!=null){
-                return productoRepo.searchByCuenta(idCuenta);
-            }else{
-                return productoRepo.findAll();
-            }
-        }else{
-            if(idTipoProd!=null && idCuenta!= null){
-                return productoRepo.searchByTipoProdAndCuentaAndDesc(idTipoProd, idCuenta, descripcion);
-            }else if (idTipoProd!=null && idCuenta==null){
-                return productoRepo.searchByTipoProd(idTipoProd,descripcion);
-            }else if(idTipoProd==null && idCuenta!=null){
-                return productoRepo.searchByCuentaAndDesc(idCuenta, descripcion);
-            }else if(idTipoProd==null && idCuenta == null){
-                return productoRepo.searchByDescripcion(descripcion);
-            }
+    public Page<Producto> obtenerTodos(String descripcion, Long idTipoProd, Long idCuenta, int page, int size){
 
-            else{
-                return productoRepo.findAll();
+        if(descripcion==null || descripcion == ""){
+            if(idTipoProd!=null && idCuenta!= null){
+                return productoRepo.searchByTipoProdAndCuenta(idTipoProd, idCuenta, PageRequest.of(page,size));
+            }else if (idTipoProd!=null && idCuenta==null){
+                return productoRepo.searchByTipoProd(idTipoProd, PageRequest.of(page,size));
+            }else if(idTipoProd==null && idCuenta!=null){
+                return productoRepo.searchByCuentaPageable(idCuenta, PageRequest.of(page,size));
+            }else if (idTipoProd==null && idCuenta == null){
+                return productoRepo.findAllPageable(PageRequest.of(page,size));
             }
         }
+        else{
+            if(idTipoProd!=null && idCuenta!= null){
+                return productoRepo.searchByTipoProdAndCuentaAndDesc(idTipoProd, idCuenta, descripcion, PageRequest.of(page,size));
+            }else if (idTipoProd!=null && idCuenta==null){
+                return productoRepo.searchByTipoProdAndDescripcion(idTipoProd,descripcion, PageRequest.of(page,size));
+            }else if(idTipoProd==null && idCuenta!=null){
+                return productoRepo.searchByCuentaAndDescPageable(idCuenta, descripcion, PageRequest.of(page,size));
+            }else if(idTipoProd==null && idCuenta == null){
+                return productoRepo.searchByDescripcionPageable(descripcion, PageRequest.of(page,size));
+            }
+            else{
+                return productoRepo.findAllPageable(PageRequest.of(page,size));
+            }
+        }
+        return null;
     }
 
     public List<Producto> obtenerActivos(Boolean estado){ return productoRepo.searchByEstado(estado); }

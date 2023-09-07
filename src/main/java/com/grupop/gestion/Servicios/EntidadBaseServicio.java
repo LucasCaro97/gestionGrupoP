@@ -8,10 +8,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.ReactiveTransaction;
 import org.springframework.transaction.annotation.Transactional;
@@ -170,14 +167,12 @@ public class EntidadBaseServicio {
         return entidadBaseRepo.obtenerNombreFkProveedorId(id);
     }
 
-    public void exportInvoice() {
+    public ResponseEntity<byte[]> exportInvoice() {
 
         try{
             //CARGO EL ARCHIVO .JASPER DESDE EL CLASSPATH
             InputStream jasperStream = EntidadBase.class.getResourceAsStream("/static/reportes/ReporteEntidades.jasper");
             //CARGO LOS DATOS A MOSTRAR EN UNA LISTA
-
-
             List<EntidadBase> listaEntidades = entidadBaseRepo.findAll();
             EntidadBase dummyEntidad = new EntidadBase();
             dummyEntidad.setId(null);
@@ -197,10 +192,6 @@ public class EntidadBaseServicio {
 
             listaEntidades.add(0,dummyEntidad);
 
-            for (EntidadBase ent: listaEntidades) {
-                System.out.println(ent);
-            }
-
             //CONVIERTO LA LISTA EN UNA FUENTE DE DATOS JRBEANCOLLECTIONDATASOURCE
             JRDataSource dataSource = new JRBeanCollectionDataSource(listaEntidades);
 
@@ -212,16 +203,19 @@ public class EntidadBaseServicio {
             parametros.put("logoEmpresa", logoStream);
             parametros.put("dsEntidades", dataSource);
 
-            String nombreArchivo = generarNombreArchivo();
-            String outputPath = "C://Users//Admin//desarollo_web//gestion_local//gestionBorrador//src//main//resources//static//informes//" + nombreArchivo;
-
             //GENERO EL REPORTE
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperStream, parametros, dataSource);
-            //EXPORTO EL REPORTE A PDF
-            JasperExportManager.exportReportToPdfFile(jasperPrint, outputPath);
+
+            byte[] pdfBytes = JasperExportManager.exportReportToPdf(jasperPrint);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", generarNombreArchivo());
             System.out.println("Reporte generado exitosamente");
+            return ResponseEntity.ok().headers(headers).body(pdfBytes);
+
         }catch (Exception e){
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
 
     }

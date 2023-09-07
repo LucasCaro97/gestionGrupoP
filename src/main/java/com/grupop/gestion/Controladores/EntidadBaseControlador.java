@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -207,28 +208,14 @@ public class EntidadBaseControlador {
         return ResponseEntity.ok(entidadBaseServicio.obtenerNombrePorFkVendedor(id));
     }
 
-    @GetMapping("/generarReporte")
-    public ModelAndView exportInvoice( ){
-
-        ModelAndView mav = new ModelAndView("tabla-entidadBase");
-        mav.addObject("listaEntidad", entidadBaseServicio.obtenerTodos());
-        entidadBaseServicio.exportInvoice();
-        return mav;
-    }
-
     @GetMapping("/exportarPDF")
-    public void exportarListadoEntidades(HttpServletResponse response) throws IOException {
-        response.setContentType("application/pdf");
-        DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
-        String fechaActual = dateFormater.format(new Date());
-        String cabecera = "Content-Disposition";
-        String valor = "attachment; filename=Entidades_" + fechaActual + ".pdf";
-        response.setHeader(cabecera,valor);
-        List<EntidadBase> entidades = entidadBaseServicio.obtenerTodos();
-
-        EntidadBaseExporterPDF exporter = new EntidadBaseExporterPDF(entidades);
-        exporter.exportar(response);
-
+    public ResponseEntity<byte[]> exportInvoice( ){
+        try{
+            return entidadBaseServicio.exportInvoice();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/exportarExcel")
@@ -243,7 +230,6 @@ public class EntidadBaseControlador {
 
         EntidadBaseExporterExcel exporter = new EntidadBaseExporterExcel(entidades);
         exporter.exportar(response);
-
     }
 
 

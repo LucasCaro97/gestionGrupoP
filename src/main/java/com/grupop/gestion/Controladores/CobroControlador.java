@@ -7,6 +7,7 @@ import com.grupop.gestion.Entidades.TipoIva;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,7 +19,10 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,12 +47,26 @@ public class CobroControlador {
     private final CobroDetalleAdelantoServicio cobroDetalleAdelantoServicio;
 
     @GetMapping
-    public ModelAndView getAll(HttpServletRequest request){
+    public ModelAndView getAll(@RequestParam Map<String, Object> params,  HttpServletRequest request){
         ModelAndView mav = new ModelAndView("tabla-cobros");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
         if(inputFlashMap!=null) mav.addObject("exito", inputFlashMap.get("exito"));
-        mav.addObject("listaCobros", cobroServicio.obtenerTodos());
+
+        int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0 ;
+        Page<Cobro> pageCobros = cobroServicio.obtenerTodos(page, 50);
+        int totalPage = pageCobros.getTotalPages();
+        if(totalPage > 0){
+            List<Integer> pages = IntStream.rangeClosed(1 , totalPage).boxed().collect(Collectors.toList());
+            mav.addObject("pages", pages);
+        }
+
+        mav.addObject("listaCobros", pageCobros.getContent());
+        mav.addObject("current", page + 1);
+        mav.addObject("next", page + 2);
+        mav.addObject("prev", page);
+        mav.addObject("last", totalPage);
+        mav.addObject("object", "cobros");
         return mav;
     }
 

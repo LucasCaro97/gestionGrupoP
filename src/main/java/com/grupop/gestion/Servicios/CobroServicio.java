@@ -4,6 +4,8 @@ import com.grupop.gestion.Entidades.Cobro;
 import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.CobroRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -91,7 +93,7 @@ public class CobroServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Cobro> obtenerTodos(){ return cobroRepo.findAll(); }
+    public Page<Cobro> obtenerTodos(int page, int size){ return cobroRepo.findAllByOrderByIdDesc(PageRequest.of(page, size)); }
 
     @Transactional(readOnly = true)
     public Cobro obtenerPorId(Long id){ return cobroRepo.findById(id).get(); }

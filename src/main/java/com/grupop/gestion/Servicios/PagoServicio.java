@@ -5,6 +5,8 @@ import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.Pago;
 import com.grupop.gestion.Repositorios.PagoRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,8 +81,8 @@ public class PagoServicio {
     }
 
     @Transactional(readOnly = true)
-    public List<Pago> obtenerTodos(){
-        return pagoRepo.findAll();
+    public Page<Pago> obtenerTodos(int page, int size){
+        return pagoRepo.findAllByOrderByIdDesc(PageRequest.of(page, size));
     }
 
     @Transactional(readOnly = true)

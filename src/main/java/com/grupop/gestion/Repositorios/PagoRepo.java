@@ -1,6 +1,8 @@
 package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.Pago;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -35,4 +37,6 @@ public interface PagoRepo extends JpaRepository<Pago, Long> {
 
     @Query(value = "SELECT fk_proveedor FROM pago WHERE id = ?", nativeQuery = true)
     Long obtenerProveedor(Long idOperacion);
+
+    Page<Pago> findAllByOrderByIdDesc(Pageable pageable);
 }

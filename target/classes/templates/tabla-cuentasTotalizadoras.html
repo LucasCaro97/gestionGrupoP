@@ -1,0 +1,1553 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grupo Piñhero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/estiloTablas.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
+<body>
+
+<header th:replace="~{Fragments/header :: header}"></header>
+
+<main>
+
+<div class="tituloTabla">
+    <h1 class="pt-4 px-4">Cuentas Totalizadoras</h1>
+    <a class="btn btn-primary mx-5" th:href="@{/ctaTot/form}">Crear registro</a>
+</div>
+
+<div class="accordion p-4" id="accordionExample">
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne"
+                    aria-expanded="false" aria-controls="collapseOne"> 1 ACTIVO
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cOne" aria-expanded="false" aria-controls="cOne"> 1.1 ACTIVO CORRIENTE
+                        </button>
+                    </h2>
+
+                    <div id="cOne" class="accordion-collapse collapse m-3" aria-labelledby="hOne">
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hTen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cTen" aria-expanded="false" aria-controls="cTen"> 1.1.1
+                                    DISPONIBILIDADES
+                                </button>
+                            </h2>
+                            <div id="cTen" class="accordion-collapse collapse" aria-labelledby="hTen">
+                                <div class="accordion-body">
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwenty">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwenty" aria-expanded="false" aria-controls="cTwenty"> 1.1.1.1 CAJA
+                                            </button>
+                                        </h2>
+                                        <div id="cTwenty" class="accordion-collapse collapse" aria-labelledby="hTwenty">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1111}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyOne">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyOne" aria-expanded="false" aria-controls="cTwentyOne"> 1.1.1.2 BANCOS - FINTECHS
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyOne" class="accordion-collapse collapse" aria-labelledby="hTwentyOne">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1112}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyTwo">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyTwo" aria-expanded="false" aria-controls="cTwentyTwo"> 1.1.1.3 VALORES EN CARTERA
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyTwo" class="accordion-collapse collapse" aria-labelledby="hTwentyTwo">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1113}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hEleven">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cEleven" aria-expanded="false" aria-controls="cEleven"> 1.1.2
+                                    INVERSIONES CORRIENTES
+                                </button>
+                            </h2>
+                            <div id="cEleven" class="accordion-collapse collapse" aria-labelledby="hEleven">
+                                <div class="accordion-body">
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyThree">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyThree" aria-expanded="false" aria-controls="cTwentyThree"> 1.1.2.1 PLAZOS FIJOS
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyThree" class="accordion-collapse collapse" aria-labelledby="hTwentyThree">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1121}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyFour">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyFour" aria-expanded="false" aria-controls="cTwentyFour"> 1.1.2.2 ACCIONES - BONOS
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyFour" class="accordion-collapse collapse" aria-labelledby="hTwentyFour">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1122}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hTwelve">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cTwelve" aria-expanded="false" aria-controls="cTwelve"> 1.1.3
+                                    CREDITOS
+                                </button>
+                            </h2>
+                            <div id="cTwelve" class="accordion-collapse collapse" aria-labelledby="hTwelve">
+                                <div class="accordion-body">
+
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyFive">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyFive" aria-expanded="false" aria-controls="cTwentyFive"> 1.1.3.1 CREDITOS POR VENTAS
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyFive" class="accordion-collapse collapse" aria-labelledby="hTwentyFive">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1131}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentySix">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentySix" aria-expanded="false" aria-controls="cTwentySix"> 1.1.3.2 CREDITOS TARJETA
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentySix" class="accordion-collapse collapse" aria-labelledby="hTwentySix">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1132}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentySeven">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentySeven" aria-expanded="false" aria-controls="cTwentySeven"> 1.1.3.3 CREDITOS FISCALES
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentySeven" class="accordion-collapse collapse" aria-labelledby="hTwentySeven">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1133}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyEigth">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyEigth" aria-expanded="false" aria-controls="cTwentyEigth"> 1.1.3.4 OTROS CREDITOS
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyEigth" class="accordion-collapse collapse" aria-labelledby="hTwentyEigth">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1134}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hThirdteen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cThirdteen" aria-expanded="false" aria-controls="cThirdteen">
+                                    1.1.4 BIENES DE CAMBIO
+                                </button>
+                            </h2>
+                            <div id="cThirdteen" class="accordion-collapse collapse" aria-labelledby="hThirdteen">
+                                <div class="accordion-body">
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hTwentyNine">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cTwentyNine" aria-expanded="false" aria-controls="cTwentyNine"> 1.1.4.1 URBANIZACIONES
+                                            </button>
+                                        </h2>
+                                        <div id="cTwentyNine" class="accordion-collapse collapse" aria-labelledby="hTwentyNine">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1141}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirdty">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirty" aria-expanded="false" aria-controls="cThirty"> 1.1.4.2 VEHICULOS
+                                            </button>
+                                        </h2>
+                                        <div id="cThirty" class="accordion-collapse collapse" aria-labelledby="hThirty">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1142}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtyOne">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtyOne" aria-expanded="false" aria-controls="cThirtyOne"> 1.1.4.3 INSUMOS PARA LOTEOS
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtyOne" class="accordion-collapse collapse" aria-labelledby="hThirtyOne">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1143}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtyTwo">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtyTwo" aria-expanded="false" aria-controls="cThirtyTwo"> 1.1.4.4 SERVICIOS
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtyTwo" class="accordion-collapse collapse" aria-labelledby="hThirtyTwo">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1144}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cTwo" aria-expanded="false" aria-controls="cThTwo"> 1.2 ACTIVO NO
+                            CORRIENTE
+                        </button>
+                    </h2>
+                    <div id="cTwo" class="accordion-collapse collapse m-3" aria-labelledby="hTwo">
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hFourteen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cFourteen" aria-expanded="false" aria-controls="cFourteen">
+                                    1.2.1 INVERSIONES NO CORRIENTES
+                                </button>
+                            </h2>
+                            <div id="cFourteen" class="accordion-collapse collapse" aria-labelledby="hFourteen">
+                                <div class="accordion-body">
+
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtyThree">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtyThree" aria-expanded="false" aria-controls="cThirtyThree"> 1.2.1.1 ACCIONES - INVERSIONES A LARGO PLAZO
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtyThree" class="accordion-collapse collapse" aria-labelledby="hThirtyThree">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1211}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtyFour">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtyFour" aria-expanded="false" aria-controls="cThirtyFour"> 1.2.1.2 PARTICIPACION EN EMPRESAS
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtyFour" class="accordion-collapse collapse" aria-labelledby="hThirtyFour">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1212}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hFiveteen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cFiveteen" aria-expanded="false" aria-controls="cFiveteen">
+                                    1.2.2 CREDITOS NO CORRIENTES
+                                </button>
+                            </h2>
+                            <div id="cFiveteen" class="accordion-collapse collapse" aria-labelledby="hFiveteen">
+                                <div class="accordion-body">
+
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtyFive">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtyFive" aria-expanded="false" aria-controls="cThirtyFive"> 1.2.2.1 CREDITOS POR VENTAS
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtyFive" class="accordion-collapse collapse" aria-labelledby="hThirtyFive">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1221}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtySix">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtySix" aria-expanded="false" aria-controls="cThirtySix"> 1.2.2.2 CREDITOS FISCALES
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtySix" class="accordion-collapse collapse" aria-labelledby="hThirtySix">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1222}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hThirtySeven">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cThirtySeven" aria-expanded="false" aria-controls="cThirtySeven"> 1.2.2.3 OTROS CREDITOS
+                                            </button>
+                                        </h2>
+                                        <div id="cThirtySeven" class="accordion-collapse collapse" aria-labelledby="hThirtySeven">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1223}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hSixteen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cSixteen" aria-expanded="false" aria-controls="cSixteen"> 1.2.3
+                                    BIENES DE USO
+                                </button>
+                            </h2>
+                            <div id="cSixteen" class="accordion-collapse collapse" aria-labelledby="hSixteen">
+                                <div class="accordion-body">
+
+
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                        <tr class="table-dark">
+                                            <th>Id</th>
+                                            <th>Descripcion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="xxx : ${listaCuentas123}">
+                                            <td th:text="${xxx.id}"></td>
+                                            <td th:text="${xxx.descripcion}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="hSeventeen">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cSeventeen" aria-expanded="false" aria-controls="cSeventeen">
+                                    1.2.4 BIENES INTANGIBLES
+                                </button>
+                            </h2>
+                            <div id="cSeventeen" class="accordion-collapse collapse" aria-labelledby="hSeventeen">
+                                <div class="accordion-body">
+
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                        <tr class="table-dark">
+                                            <th>Id</th>
+                                            <th>Descripcion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="xxx : ${listaCuentas124}">
+                                            <td th:text="${xxx.id}"></td>
+                                            <td th:text="${xxx.descripcion}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseTwo"
+                    aria-expanded="false" aria-controls="collapseTwo"> 2 PASIVO
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cThree" aria-expanded="false" aria-controls="cThree"> 2.1 PASIVO
+                            CORRIENTE
+                        </button>
+                    </h2>
+                    <div id="cThree" class="accordion-collapse collapse" aria-labelledby="hThree">
+                        <div class="accordion-body">
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hThirtyEigth">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cThirtyEigth" aria-expanded="false" aria-controls="cThirtyEigth"> 2.1.1 DEUDAS COMERCIALES
+                                    </button>
+                                </h2>
+                                <div id="cThirtyEigth" class="accordion-collapse collapse" aria-labelledby="hThirtyEigth">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas211}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hThirtyNine">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cThirtyNine" aria-expanded="false" aria-controls="cThirtyNine"> 2.1.2 DEUDAS BANCARIAS
+                                    </button>
+                                </h2>
+                                <div id="cThirtyNine" class="accordion-collapse collapse" aria-labelledby="hThirtyNine">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas212}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hForty">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cForty" aria-expanded="false" aria-controls="cForty"> 2.1.3 DEUDAS FINANCIERAS
+                                    </button>
+                                </h2>
+                                <div id="cForty" class="accordion-collapse collapse" aria-labelledby="hForty">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas213}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyOne" aria-expanded="false" aria-controls="cFortyOne"> 2.1.4 DEUDAS FISCALES
+                                    </button>
+                                </h2>
+                                <div id="cFortyOne" class="accordion-collapse collapse" aria-labelledby="hFortyOne">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas214}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyTwo" aria-expanded="false" aria-controls="cFortyTwo"> 2.1.5 DEUDAS PREVISIONAES
+                                    </button>
+                                </h2>
+                                <div id="cFortyTwo" class="accordion-collapse collapse" aria-labelledby="hFortyTwo">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas215}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyThree" aria-expanded="false" aria-controls="cFortyThree"> 2.1.6 OTRAS DEUDAS
+                                    </button>
+                                </h2>
+                                <div id="cFortyThree" class="accordion-collapse collapse" aria-labelledby="hFortyThree">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas216}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cFour" aria-expanded="false" aria-controls="cFour"> 2.2 PASIVO NO
+                            CORRIENTE
+                        </button>
+                    </h2>
+                    <div id="cFour" class="accordion-collapse collapse" aria-labelledby="hFour">
+                        <div class="accordion-body">
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyFour" aria-expanded="false" aria-controls="cFortyFour"> 2.2.1 DEUDAS COMERCIALES LARGO PLAZO
+                                    </button>
+                                </h2>
+                                <div id="cFortyFour" class="accordion-collapse collapse" aria-labelledby="hFortyFour">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas221}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyFive" aria-expanded="false" aria-controls="cFortyFive"> 2.2.2 DEUDAS BANCARIAS LARGO PLAZO
+                                    </button>
+                                </h2>
+                                <div id="cFortyFive" class="accordion-collapse collapse" aria-labelledby="hFortyFive">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas222}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortySix">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortySix" aria-expanded="false" aria-controls="cFortySix"> 2.2.3 DEUDAS FINANCIERAS LARGO PLAZO
+                                    </button>
+                                </h2>
+                                <div id="cFortySix" class="accordion-collapse collapse" aria-labelledby="hFortySix">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas223}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortySeven">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortySeven" aria-expanded="false" aria-controls="cFortySeven"> 2.2.4 DEUDAS FISCALES LARGO PLAZO
+                                    </button>
+                                </h2>
+                                <div id="cFortySeven" class="accordion-collapse collapse" aria-labelledby="hFortySeven">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas224}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyEigth">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyEigth" aria-expanded="false" aria-controls="cFortyEigth"> 2.2.5 DEUDAS PREVISIONALES LARGO PLAZO
+                                    </button>
+                                </h2>
+                                <div id="cFortyEigth" class="accordion-collapse collapse" aria-labelledby="hFortyEigth">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas225}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseThree"
+                    aria-expanded="false" aria-controls="collapseThree"> 3 PATRIMONIO NETO
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cFive" aria-expanded="false" aria-controls="cFive"> 3.1 CAPITAL
+                        </button>
+                    </h2>
+                    <div id="cFive" class="accordion-collapse collapse" aria-labelledby="hFive">
+                        <div class="accordion-body">
+
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr class="table-dark">
+                                    <th>Id</th>
+                                    <th>Descripcion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="xxx : ${listaCuentas31}">
+                                    <td th:text="${xxx.id}"></td>
+                                    <td th:text="${xxx.descripcion}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hSix">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cSix" aria-expanded="false" aria-controls="cSix"> 3.2 RESERVAS
+                        </button>
+                    </h2>
+                    <div id="cSix" class="accordion-collapse collapse" aria-labelledby="hSix">
+                        <div class="accordion-body">
+
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr class="table-dark">
+                                    <th>Id</th>
+                                    <th>Descripcion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="xxx : ${listaCuentas32}">
+                                    <td th:text="${xxx.id}"></td>
+                                    <td th:text="${xxx.descripcion}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseFour"
+                    aria-expanded="false" aria-controls="collapseThree"> 4 RESULTADOS
+            </button>
+        </h2>
+        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hSeven">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cSeven" aria-expanded="false" aria-controls="cSeven"> 4.1 RESULTADOS
+                            POSITIVOS
+                        </button>
+                    </h2>
+                    <div id="cSeven" class="accordion-collapse collapse" aria-labelledby="hSeven">
+                        <div class="accordion-body">
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFortyNine">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFortyNine" aria-expanded="false" aria-controls="cFortyNine"> 4.1.1 VENTAS
+                                    </button>
+                                </h2>
+                                <div id="cFortyNine" class="accordion-collapse collapse" aria-labelledby="hFortyNine">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas411}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFifty">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFifty" aria-expanded="false" aria-controls="cFifty"> 4.1.2 DESCUENTO Y BONIFICACIONES OBTENIDAS
+                                    </button>
+                                </h2>
+                                <div id="cFifty" class="accordion-collapse collapse" aria-labelledby="hFifty">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas412}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftOne" aria-expanded="false" aria-controls="cFiftOne"> 4.1.3 OTROS RESULTADOS POSITIVOS
+                                    </button>
+                                </h2>
+                                <div id="cFiftOne" class="accordion-collapse collapse" aria-labelledby="hFiftOne">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas413}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hEigth">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cEigth" aria-expanded="false" aria-controls="cEigth"> 4.2 RESULTADOS
+                            NEGATIVOS
+                        </button>
+                    </h2>
+                    <div id="cEigth" class="accordion-collapse collapse" aria-labelledby="hEigth">
+                        <div class="accordion-body">
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftyTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftyTwo" aria-expanded="false" aria-controls="cFiftyTwo"> 4.2.1 COSTO DE VENTAS
+                                    </button>
+                                </h2>
+                                <div id="cFiftyTwo" class="accordion-collapse collapse" aria-labelledby="hFiftyTwo">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas421}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftyThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftyThree" aria-expanded="false" aria-controls="cFiftyThree"> 4.2.2 GASTOS ADMINISTRATIVOS
+                                    </button>
+                                </h2>
+                                <div id="cFiftyThree" class="accordion-collapse collapse" aria-labelledby="hFiftyThree">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas422}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftyFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftyFour" aria-expanded="false" aria-controls="cFiftyFour"> 4.2.3 GASTOS COMERCIALES
+                                    </button>
+                                </h2>
+                                <div id="cFiftyFour" class="accordion-collapse collapse" aria-labelledby="hFiftyFour">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas423}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                            <h2 class="accordion-header" id="hFiftyFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#cFiftyFive" aria-expanded="false" aria-controls="cFiftyFive"> 4.2.4 GASTOS DE FINANCIACION
+                                </button>
+                            </h2>
+                            <div id="cFiftyFive" class="accordion-collapse collapse" aria-labelledby="hFiftyFive">
+                                <div class="accordion-body">
+
+                                    <table class="table table-hover table-bordered">
+                                        <thead>
+                                        <tr class="table-dark">
+                                            <th>Id</th>
+                                            <th>Descripcion</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="xxx : ${listaCuentas424}">
+                                            <td th:text="${xxx.id}"></td>
+                                            <td th:text="${xxx.descripcion}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftySix">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftySix" aria-expanded="false" aria-controls="cFiftySix"> 4.2.5 GASTOS DE PRODUCCION
+                                    </button>
+                                </h2>
+                                <div id="cFiftySix" class="accordion-collapse collapse" aria-labelledby="hFiftySix">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas425}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftySeven">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftySeven" aria-expanded="false" aria-controls="cFiftySeven"> 4.2.6 GASTOS IMPOSITIVOS
+                                    </button>
+                                </h2>
+                                <div id="cFiftySeven" class="accordion-collapse collapse" aria-labelledby="hFiftySeven">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas426}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="hFiftyEigth">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#cFiftyEigth" aria-expanded="false" aria-controls="cFiftyEigth"> 4.2.7 GASTOS VARIOS
+                                    </button>
+                                </h2>
+                                <div id="cFiftyEigth" class="accordion-collapse collapse" aria-labelledby="hFiftyEigth">
+                                    <div class="accordion-body">
+
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr class="table-dark">
+                                                <th>Id</th>
+                                                <th>Descripcion</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="xxx : ${listaCuentas427}">
+                                                <td th:text="${xxx.id}"></td>
+                                                <td th:text="${xxx.descripcion}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="hNine">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#cNine" aria-expanded="false" aria-controls="cNine"> 4.3 RESULTADOS NO
+                            ASIGNADOS
+                        </button>
+                    </h2>
+                    <div id="cNine" class="accordion-collapse collapse" aria-labelledby="hNine">
+                        <div class="accordion-body">
+
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                <tr class="table-dark">
+                                    <th>Id</th>
+                                    <th>Descripcion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="xxx : ${listaCuentas43}">
+                                    <td th:text="${xxx.id}"></td>
+                                    <td th:text="${xxx.descripcion}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+<script th:src="@{/js/cambiarTema.js}"></script>
+
+</body>
+</html>

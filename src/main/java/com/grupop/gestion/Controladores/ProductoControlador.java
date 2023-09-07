@@ -3,17 +3,17 @@ package com.grupop.gestion.Controladores;
 import com.grupop.gestion.Entidades.Impuestos;
 import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Entidades.Producto;
+import com.grupop.gestion.Entidades.Venta;
 import com.grupop.gestion.Servicios.*;
+import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -21,6 +21,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequiredArgsConstructor
@@ -35,11 +37,26 @@ public class ProductoControlador {
 
 
     @GetMapping
-    public ModelAndView getAll(HttpServletRequest request, @Param("tipoProd") Long tipoProd, @Param("cuenta") Long cuenta, @Param("descripcion") String descripcion){
+    public ModelAndView getAll(@RequestParam Map<String, Object> params , HttpServletRequest request, @Param("tipoProd") Long tipoProd, @Param("cuenta") Long cuenta, @Param("descripcion") String descripcion){
         ModelAndView mav = new ModelAndView("tabla-producto");
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         if (inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
-        mav.addObject("listaProd", productoServicio.obtenerTodos(descripcion,tipoProd,cuenta));
+
+        int page = params.get("page") != null ? ( Integer.valueOf(params.get("page").toString()) -1) : 0;
+        Page<Producto> pageProducto = productoServicio.obtenerTodos(descripcion,tipoProd,cuenta,page, 50);
+        int totalPage = pageProducto.getTotalPages();
+        if(totalPage > 0){
+            List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+            mav.addObject("pages", pages);
+        }
+
+        mav.addObject("listaProd", pageProducto.getContent());
+        mav.addObject("current", page + 1);
+        mav.addObject("next", page + 2);
+        mav.addObject("prev", page);
+        mav.addObject("last", totalPage);
+        mav.addObject("object", "producto");
+
         mav.addObject("listaTipoProd", tipoProductoServicio.obtenerTodos());
         mav.addObject("listaCuentas", cuentasContablesServicio.obtenerTodos(52l));
         return mav;

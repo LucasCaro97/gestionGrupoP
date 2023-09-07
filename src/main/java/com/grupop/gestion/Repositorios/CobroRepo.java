@@ -1,11 +1,15 @@
 package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.Cobro;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -34,4 +38,5 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
     @Query(value = "SELECT fk_cliente FROM cobro WHERE id = ?" , nativeQuery = true)
     Long obtenerCliente(Long idOperacion);
 
+    Page<Cobro> findAllByOrderByIdDesc(Pageable pageable);
 }
