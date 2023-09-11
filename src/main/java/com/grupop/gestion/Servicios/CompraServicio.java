@@ -1,5 +1,7 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.ComprasDTO;
+import com.grupop.gestion.Entidades.Cobro;
 import com.grupop.gestion.Entidades.Compra;
 import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.CompraRepo;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,6 +27,7 @@ public class CompraServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ProveedorServicio proveedorServicio;
     private final ImageService imageService;
+    private final EntidadBaseServicio entidadBaseServicio;
 
     @Transactional
     public void crear(Compra dto, String fechaComprobante, MultipartFile photo){
@@ -39,8 +43,7 @@ public class CompraServicio {
         compra.setTotal(new BigDecimal(0));
         compra.setBloqueado(false);
         compra.setTipoOperacion(tipoOperacionServicio.obtenerPorId(2l));
-        talonarioServicio.aumentarUltimoNro(dto.getTalonario());
-        System.out.println("Servicio " + photo);
+        talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
         if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
         compraRepo.save(compra);
 
@@ -68,15 +71,14 @@ public class CompraServicio {
         compra.setProveedor(dto.getProveedor());
         compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
         compra.setTipoComprobante(dto.getTipoComprobante());
-        if(compra.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
-            talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+        if(compra.getTalonario() != dto.getTalonario()){
+            talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
             compra.setTalonario(dto.getTalonario());
         }
         compra.setNroComprobante(dto.getNroComprobante());
         compra.setSector(dto.getSector());
         compra.setFormaDePago(dto.getFormaDePago());
         compra.setObservaciones(dto.getObservaciones());
-            System.out.println("Servicio " + photo);
         if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
         compraRepo.save(compra);
 
@@ -167,4 +169,48 @@ public class CompraServicio {
         return proveedorServicio.obtenerSaldo(fkProveedor);
     }
 
+
+    public List<ComprasDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago ){
+        if(excluirTal){
+            List<Compra> listaCompra = compraRepo.obtenerOperacionesExcluyendoTalonario(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+            List<ComprasDTO> listaCompraDTO = new ArrayList<>();
+
+            for (Compra c: listaCompra) {
+                ComprasDTO comprasDTO = new ComprasDTO();
+                comprasDTO.setId(c.getId());
+                comprasDTO.setProveedor(entidadBaseServicio.obtenerNombrePorFkProveedor(c.getProveedor().getId()).getRazonSocial());
+                comprasDTO.setFechaComprobante(c.getFechaComprobante());
+                comprasDTO.setTalonario(c.getTalonario());
+                comprasDTO.setNroComprobante(c.getNroComprobante());
+                comprasDTO.setSector(c.getSector().getDescripcion());
+                comprasDTO.setFormaPago(c.getFormaDePago().getDescripcion());
+                comprasDTO.setTotal(c.getTotal());
+                listaCompraDTO.add(comprasDTO);
+            }
+            return listaCompraDTO;
+
+        }else{
+            List<Compra> listaCompra = compraRepo.obtenerOperaciones(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+            List<ComprasDTO> listaCompraDTO = new ArrayList<>();
+
+            for (Compra c: listaCompra) {
+                ComprasDTO comprasDTO = new ComprasDTO();
+                comprasDTO.setId(c.getId());
+                comprasDTO.setProveedor(entidadBaseServicio.obtenerNombrePorFkProveedor(c.getProveedor().getId()).getRazonSocial());
+                comprasDTO.setFechaComprobante(c.getFechaComprobante());
+                comprasDTO.setTalonario(c.getTalonario());
+                comprasDTO.setNroComprobante(c.getNroComprobante());
+                comprasDTO.setSector(c.getSector().getDescripcion());
+                comprasDTO.setFormaPago(c.getFormaDePago().getDescripcion());
+                comprasDTO.setTotal(c.getTotal());
+                listaCompraDTO.add(comprasDTO);
+            }
+            return listaCompraDTO;
+        }
+
+    }
+
+
+
 }
+

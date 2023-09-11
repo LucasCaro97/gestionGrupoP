@@ -1,7 +1,7 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.CobrosDTO;
 import com.grupop.gestion.Entidades.Cobro;
-import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Repositorios.CobroRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +26,7 @@ public class CobroServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ClienteServicio clienteServicio;
     private final ImageService imageService;
+    private final EntidadBaseServicio entidadBaseServicio;
 
     @Transactional
     public void crear(Cobro dto, String fechaComprobante, MultipartFile photo) {
@@ -45,7 +47,7 @@ public class CobroServicio {
 
         if(photo != null && !photo.isEmpty()) c.setImage(imageService.copy(photo));
 
-        talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+        talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
         cobroRepo.save(c);
 
         Cobro ultimoCobro = cobroRepo.findTopByOrderByIdDesc();
@@ -67,8 +69,8 @@ public class CobroServicio {
         c.setTipoIva(dto.getTipoIva());
         c.setFechaComprobante(LocalDate.parse(fechaComprobante));
         c.setTipoComprobante(dto.getTipoComprobante());
-        if (c.getTalonario().getNroTalonario() != dto.getTalonario().getNroTalonario()) {
-            talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+        if (c.getTalonario() != dto.getTalonario()) {
+            talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
             c.setTalonario(dto.getTalonario());
         }
         c.setNroComprobante(dto.getNroComprobante());
@@ -144,4 +146,48 @@ public class CobroServicio {
     public Long obtenerCliente(Long idOperacion) {
         return cobroRepo.obtenerCliente(idOperacion);
     }
+
+
+    @Transactional(readOnly = true)
+    public List<CobrosDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago ){
+        if(excluirTal){
+            List<Cobro> listaCobro = cobroRepo.obtenerOperacionesExcluyendoTalonario(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+            List<CobrosDTO> listaCobrosDTO = new ArrayList<>();
+
+            for ( Cobro c : listaCobro ) {
+                CobrosDTO cobrosDTO = new CobrosDTO();
+                cobrosDTO.setId(c.getId());
+                cobrosDTO.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
+                cobrosDTO.setFechaComprobante(c.getFechaComprobante());
+                cobrosDTO.setTalonario(c.getTalonario());
+                cobrosDTO.setNroComprobante(c.getNroComprobante());
+                cobrosDTO.setSector(c.getSector().getDescripcion());
+                cobrosDTO.setFormaPago(c.getFormaDePago().getDescripcion());
+                cobrosDTO.setTotal(c.getTotal());
+                listaCobrosDTO.add(cobrosDTO);
+            }
+            return listaCobrosDTO;
+        }else {
+
+            List<Cobro> listaCobro = cobroRepo.obtenerOperaciones(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+            List<CobrosDTO> listaCobrosDTO = new ArrayList<>();
+
+            for (Cobro c: listaCobro) {
+                CobrosDTO cobrosDTO = new CobrosDTO();
+                cobrosDTO.setId(c.getId());
+                cobrosDTO.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
+                cobrosDTO.setFechaComprobante(c.getFechaComprobante());
+                cobrosDTO.setTalonario(c.getTalonario());
+                cobrosDTO.setNroComprobante(c.getNroComprobante());
+                cobrosDTO.setSector(c.getSector().getDescripcion());
+                cobrosDTO.setFormaPago(c.getFormaDePago().getDescripcion());
+                cobrosDTO.setTotal(c.getTotal());
+                listaCobrosDTO.add(cobrosDTO);
+            }
+            return listaCobrosDTO;
+        }
+
+    }
+
+
 }

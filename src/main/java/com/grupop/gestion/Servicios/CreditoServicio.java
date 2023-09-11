@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -40,6 +41,7 @@ public class CreditoServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final EmailService emailService;
     private final EntidadBaseServicio entidadBaseServicio;
+    private final IndiceCacServicio indiceCacServicio;
 
     @Transactional
     public void crear(Credito dto, String venceLosDias) {
@@ -293,4 +295,99 @@ public class CreditoServicio {
 
         }
     }
+
+    @Transactional(readOnly = true)
+    public List<CreditoDetalleDto> obtenerCuotasCobrarMensual() {
+        List<CreditoDetalle> listaCuotas = creditoDetalleServicio.obtenerCuotasCobrarMensual();
+        List<CreditoDetalleDto> listaCuotasDTO = new ArrayList<>();
+
+
+
+        for (CreditoDetalle c: listaCuotas ) {
+            CreditoDetalleDto creditoDetalleDto = new CreditoDetalleDto();
+            creditoDetalleDto.setId(c.getId());
+            creditoDetalleDto.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
+            creditoDetalleDto.setIdCredito(c.getCreditoId().getId());
+            creditoDetalleDto.setNroCuota(c.getNroCuota());
+            creditoDetalleDto.setCapital(c.getCapital());
+            creditoDetalleDto.setGastoAdm(c.getGastoAdm());
+            creditoDetalleDto.setMonto(c.getMonto());
+            creditoDetalleDto.setVencimiento(c.getVencimiento());
+            creditoDetalleDto.setSaldo(c.getSaldo());
+            //CALCULO SI TIENE DIAS ATRASADOS
+            Long diferenciaEnDias = ChronoUnit.DAYS.between(creditoDetalleDto.getVencimiento(), LocalDate.now());
+            creditoDetalleDto.setDiasAtrasados( (diferenciaEnDias > 0 ) ? diferenciaEnDias.toString() : "0");
+            creditoDetalleDto.setAjusteCac(calcularAjuste(creditoDetalleDto.getIdCredito(), creditoDetalleDto.getSaldo()));
+            //SI TIENE DIAS ATRASADOS, CALCULO EL INTERES PUNITORIO DEPENDIENDO DEL % ESTIPULADO EN EL PLAN DE PAGO
+            creditoDetalleDto.setInteresPun((diferenciaEnDias > 0) ? calcularInteresPunitorio(creditoDetalleDto.getIdCredito(), creditoDetalleDto.getSaldo(), diferenciaEnDias, creditoDetalleDto.getAjusteCac()) : BigDecimal.ZERO);
+            creditoDetalleDto.setTotal(creditoDetalleDto.getAjusteCac().add(creditoDetalleDto.getInteresPun()).add(creditoDetalleDto.getSaldo()));
+            listaCuotasDTO.add(creditoDetalleDto);
+
+            System.out.println(creditoDetalleDto);
+        }
+
+        return listaCuotasDTO;
+
+
+
+
+    }
+
+    public BigDecimal calcularInteresPunitorio(Long idCredito, BigDecimal saldo, Long diasVencidos, BigDecimal ajuste){
+        Credito credito = creditoRepo.findById(idCredito).get();
+        PlanPago plan = planPagoServicio.obtenerPorId(credito.getPlanPago().getId());
+
+        BigDecimal saldoPlusAjuste = saldo.add(ajuste);
+        BigDecimal interesPun = saldoPlusAjuste.multiply(plan.getInteresPunitorio()).multiply(new BigDecimal(diasVencidos)).divide(new BigDecimal(100), 2, RoundingMode.UP);
+        return interesPun;
+    }
+
+    public BigDecimal calcularAjuste(Long idCredito, BigDecimal saldo){
+        Credito credito = creditoRepo.findById(idCredito).get();
+        PlanPago plan = planPagoServicio.obtenerPorId(credito.getPlanPago().getId());
+
+        if(plan.getTablaCac()){
+            LocalDate fechaActual = LocalDate.now();
+            fechaActual = fechaActual.minusMonths(2);
+            BigDecimal indiceActual = null;
+            BigDecimal indiceBase = null;
+
+
+            //OBTENGO EL INDICE ACTUAL
+            do{
+                indiceActual = indiceCacServicio.obtenerIndiceBase(fechaActual.getMonthValue(), fechaActual.getYear());
+                fechaActual = fechaActual.minusMonths(1);
+            }while(indiceActual == null);
+
+            // 3 variantes de formas de obtener el indice BASE
+            //PRIMERO VERIFICO QUE EL INDICE BASE ESTE ESTIPULADO EN LA OPERACION DE VENTA SI NO ESTA ==> 0
+            indiceBase = ventaServicio.obtenerIndiceBase(credito.getVenta().getId());
+            //SEGUNDO OBTENGO EL INDICE BASE DEL PRIMER VENCIMIENTO  (MES - 2)
+            if(indiceBase == BigDecimal.ZERO ){
+            LocalDate fechaPrimerVencimiento = creditoDetalleServicio.obtenerFechaPrimerVencimiento(credito.getId());
+            fechaPrimerVencimiento = fechaPrimerVencimiento.minusMonths(2);
+            indiceBase = indiceCacServicio.obtenerIndiceBase(fechaPrimerVencimiento.getMonthValue(), fechaPrimerVencimiento.getYear());
+            }
+            //TERCERO OBTENGO EL INDICE BASE DEL PRIMER VENCIMIENTO -3
+            if(indiceBase.compareTo(indiceActual) > 0 ){
+                LocalDate fechaPrimerVencimiento = creditoDetalleServicio.obtenerFechaPrimerVencimiento(credito.getId());
+                fechaPrimerVencimiento = fechaPrimerVencimiento.minusMonths(3);
+                indiceBase = indiceCacServicio.obtenerIndiceBase(fechaPrimerVencimiento.getMonthValue() , fechaPrimerVencimiento.getYear());
+            }
+
+
+            BigDecimal indice = indiceActual.divide(indiceBase, 16, RoundingMode.UP);
+            BigDecimal ajuste = saldo.multiply(indice).subtract(saldo);
+            return ajuste.setScale(2, RoundingMode.DOWN) ;
+        }else{
+            return BigDecimal.ZERO;
+        }
+
+    }
+
+
+
+
+
+
 }

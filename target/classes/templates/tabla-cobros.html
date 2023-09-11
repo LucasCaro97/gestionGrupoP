@@ -27,6 +27,7 @@
                 </div>
                 <div th:unless="${listaCobros.isEmpty()}" class="table-responsive">
                     <a class="btn btn-primary mb-2" th:href="@{/cobros/form}">Crear registro</a>
+                    <a class="btn btn-secondary mb-2" th:href="@{/credito/obtenerCuotasCobrarMensual}">Cuotas a cobrar</a>
 
                     <div th:replace="~{Fragments/navigator :: navigator}" >
                     </div>
@@ -48,7 +49,7 @@
                                     <td> <a class="btn btn-secondary" th:text="${xxx.id}" th:href="@{/cobros/form/__${xxx.id}__}"></a> </td>
                                     <td class="cliente" th:text="${xxx.cliente}"></td>
                                     <td th:text="${xxx.fechaComprobante}"></td>
-                                    <td th:text="${xxx.talonario.nroTalonario} + ' - ' + ${xxx.nroComprobante}"></td>
+                                    <td th:text="${xxx.talonario} + ' - ' + ${xxx.nroComprobante}"></td>
                                     <td th:text="${xxx.sector != null ? xxx.sector.descripcion : ''}"></td>
                                     <td th:text="${xxx.formaDePago != null ? xxx.formaDePago.descripcion : ''}"></td>
                                     <td th:text="${xxx.observaciones}"></td>

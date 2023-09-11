@@ -55,8 +55,8 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
     @Query(value = "SELECT * FROM venta WHERE fecha_comprobante BETWEEN :fechaDesde AND :fechaHasta" +
             " AND (:sectorId IS NULL OR fk_sector = :sectorId) " +
-            " AND (:talDesde IS NULL OR talonario >= :talDesde) " +
-            " AND (:talHasta IS NULL OR talonario <= :talHasta) " +
+            " AND (:talDesde IS NULL OR fk_talonario >= :talDesde) " +
+            " AND (:talHasta IS NULL OR fk_talonario <= :talHasta) " +
             " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
             nativeQuery = true)
     List<Venta> obtenerOperaciones(@Param("fechaDesde") String fechaDesde,
@@ -68,7 +68,7 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
     @Query(value = "SELECT * FROM venta WHERE fecha_comprobante BETWEEN :fechaDesde AND :fechaHasta" +
             " AND (:sectorId IS NULL OR fk_sector = :sectorId) " +
-            " AND (talonario NOT BETWEEN :talDesde AND :talHasta) " +
+            " AND (fk_talonario NOT BETWEEN :talDesde AND :talHasta) " +
             " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
             nativeQuery = true)
     List<Venta> obtenerOperacionesExcluyendoTalonario(

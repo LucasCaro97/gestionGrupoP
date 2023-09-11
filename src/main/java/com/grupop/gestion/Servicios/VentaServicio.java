@@ -196,7 +196,6 @@ public class VentaServicio {
 
          for (Venta v: listaVentas) {
 
-             System.out.println("Venta - " + v);
             VentasDTO ventasDto = new VentasDTO();
             ventasDto.setId(v.getId());
             ventasDto.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(v.getCliente().getId()).getRazonSocial());
@@ -207,7 +206,6 @@ public class VentaServicio {
             ventasDto.setFormaPago(v.getFormaDePago().getDescripcion());
             ventasDto.setTotal(v.getTotal());
             listaVentasDTO.add(ventasDto);
-             System.out.println("VentaDTO - " + ventasDto);
          }
 
 
@@ -219,7 +217,6 @@ public class VentaServicio {
 
          for (Venta v: listaVentas) {
 
-             System.out.println("Venta - " v);
              VentasDTO ventasDto = new VentasDTO();
              ventasDto.setId(v.getId());
              ventasDto.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(v.getCliente().getId()).getRazonSocial());
@@ -230,7 +227,7 @@ public class VentaServicio {
              ventasDto.setFormaPago(v.getFormaDePago().getDescripcion());
              ventasDto.setTotal(v.getTotal());
              listaVentasDTO.add(ventasDto);
-             System.out.println("VentaDTO - " + ventasDto);
+
          }
          return listaVentasDTO;
         }

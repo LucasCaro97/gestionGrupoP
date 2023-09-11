@@ -56,7 +56,7 @@
                                 required>
                             <option selected value="">00000</option>
                             <option th:each="xxx : ${listaTalonario}" th:text="${xxx.nroTalonario}"
-                                    th:value="${xxx.id}"></option>
+                                    th:value="${xxx.nroTalonario}"></option>
                         </select>
                         <input type="number" id="nroComprobante" th:field="*{nroComprobante}" class="form-control"
                                readonly>

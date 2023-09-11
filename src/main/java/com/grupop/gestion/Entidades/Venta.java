@@ -37,7 +37,7 @@ public class Venta implements Serializable {
     @ManyToOne
     @JsonIgnore
     private TipoComprobante tipoComprobante;
-    @JoinColumn(name = "fk_talonario")
+    @Column(name = "fk_talonario")
     private Integer talonario;
     private String nroComprobante;
     @JoinColumn(name = "fk_sector")

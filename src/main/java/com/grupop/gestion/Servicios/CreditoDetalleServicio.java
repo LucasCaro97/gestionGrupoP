@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.CreditoDetalleDto;
 import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.CreditoDetalle;
@@ -10,10 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +20,7 @@ public class CreditoDetalleServicio {
 
 
     private final CreditoDetalleRepo creditoDetalleRepo;
+    private final EntidadBaseServicio entidadBaseServicio;
 
     @Transactional
     public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento, Cliente idCliente, BigDecimal gastoAdministrativo) {
@@ -109,4 +109,16 @@ public class CreditoDetalleServicio {
             creditoDetalleRepo.save(lineaCredito.get());
         }
     }
+
+
+    @Transactional(readOnly = true)
+    public List<CreditoDetalle> obtenerCuotasCobrarMensual() {
+        return creditoDetalleRepo.obtenerCuotasCobrarMensual();
+    }
+
+    @Transactional(readOnly = true)
+    public LocalDate obtenerFechaPrimerVencimiento(Long idCredito){
+        return creditoDetalleRepo.obtenerFechaPrimerVencimiento(idCredito);
+    }
+
 }

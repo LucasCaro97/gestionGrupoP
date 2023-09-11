@@ -106,7 +106,6 @@ public class CompraControlador {
     public RedirectView create (@RequestParam String fechaAlta, @RequestParam(required = false) MultipartFile photo, Compra dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/compras");
         try{
-            System.out.println("Controlador" + photo);
             compraServicio.crear(dto, fechaAlta, photo);
             redirect.setUrl("/compras/form/" + compraServicio.buscarUltimoId());
             attributes.addFlashAttribute("exito", "Se ha generado la compra correctamente");

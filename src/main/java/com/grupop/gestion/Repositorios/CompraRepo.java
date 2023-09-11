@@ -42,4 +42,20 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
     Long obtenerCliente(Long idOperacion);
 
     Page<Compra> findAllByOrderByIdDesc(Pageable pageable);
+
+
+    @Query(value = "SELECT * FROM compra WHERE fecha_comprobante BETWEEN :fechaDesde AND :fechaHasta" +
+            " AND (:sectorId IS NULL OR fk_sector = :sectorId) " +
+            " AND (:talDesde IS NULL OR fk_talonario >= :talDesde) " +
+            " AND (:talHasta IS NULL OR fk_talonario <= :talHasta) " +
+            " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
+            nativeQuery = true)
+    List<Compra> obtenerOperacionesExcluyendoTalonario(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Long idFormaPago);
+
+    @Query(value = "SELECT * FROM compra WHERE fecha_comprobante BETWEEN :fechaDesde AND :fechaHasta" +
+            " AND (:sectorId IS NULL OR fk_sector = :sectorId) " +
+            " AND (fk_talonario NOT BETWEEN :talDesde AND :talHasta) " +
+            " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
+            nativeQuery = true)
+    List<Compra> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Long idFormaPago);
 }

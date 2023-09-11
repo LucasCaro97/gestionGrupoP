@@ -6,7 +6,7 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-07T18:51:13-0300",
+    date = "2023-09-11T18:49:50-0300",
     comments = "version: 1.4.2.Final, compiler: javac, environment: Java 20.0.1 (Oracle Corporation)"
 )
 public class ImpuestoMapperImpl implements ImpuestoMapper {

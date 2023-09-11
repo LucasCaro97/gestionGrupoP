@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.PagoDTO;
 import com.grupop.gestion.Entidades.Cobro;
 import com.grupop.gestion.Entidades.EntidadBase;
 import com.grupop.gestion.Entidades.Pago;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +25,7 @@ public class PagoServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final TalonarioServicio talonarioServicio;
     private final ProveedorServicio proveedorServicio;
+    private final EntidadBaseServicio entidadBaseServicio;
 
     @Transactional
     public void crear(Pago dto, String fechaComprobante){
@@ -37,6 +40,7 @@ public class PagoServicio {
         p.setTotal(new BigDecimal(0));
         p.setFormaDePago(dto.getFormaDePago());
         p.setTipoOperacion(tipoOperacionServicio.obtenerPorId(4l));
+        talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
         pagoRepo.save(p);
 
         Pago ultimoPago = pagoRepo.findTopByOrderByIdDesc();
@@ -56,8 +60,8 @@ public class PagoServicio {
         p.setProveedor(dto.getProveedor());
         p.setFechaComprobante(LocalDate.parse(fechaComprobante));
         p.setTipoComprobante(dto.getTipoComprobante());
-        if(p.getTalonario().getNroTalonario()!=dto.getTalonario().getNroTalonario()){
-            talonarioServicio.aumentarUltimoNro(dto.getTalonario());
+        if(p.getTalonario() != dto.getTalonario()){
+            talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
             p.setTalonario(dto.getTalonario());
         }
         p.setNroComprobante(dto.getNroComprobante());
@@ -134,4 +138,49 @@ public class PagoServicio {
         return pagoRepo.obtenerProveedor(idOperacion);
 
     }
+
+
+    public List<PagoDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago ){
+        if(excluirTal){
+            List<Pago> listaPagos = pagoRepo.obtenerOperacionesExcluyendoTalonario(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+            List<PagoDTO> listaPagoDTO = new ArrayList<>();
+
+            for (Pago p : listaPagos) {
+                PagoDTO pagoDTO = new PagoDTO();
+                pagoDTO.setId(p.getId());
+                pagoDTO.setProveedor(entidadBaseServicio.obtenerNombrePorFkProveedor(p.getProveedor().getId()).getRazonSocial());
+                pagoDTO.setFechaComprobante(p.getFechaComprobante());
+                pagoDTO.setTalonario(p.getTalonario());
+                pagoDTO.setNroComprobante(p.getNroComprobante());
+                pagoDTO.setSector(p.getSector().getDescripcion());
+                pagoDTO.setFormaPago(p.getFormaDePago().getDescripcion());
+                pagoDTO.setTotal(p.getTotal());
+                listaPagoDTO.add(pagoDTO);
+            }
+            return listaPagoDTO;
+        }else {
+            List<Pago> listaPagos = pagoRepo.obtenerOperaciones(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
+            List<PagoDTO> listaPagoDTO = new ArrayList<>();
+
+            for (Pago p: listaPagos) {
+                PagoDTO pagoDTO = new PagoDTO();
+                pagoDTO.setId(p.getId());
+                pagoDTO.setProveedor(entidadBaseServicio.obtenerNombrePorFkProveedor(p.getProveedor().getId()).getRazonSocial());
+                pagoDTO.setFechaComprobante(p.getFechaComprobante());
+                pagoDTO.setTalonario(p.getTalonario());
+                pagoDTO.setNroComprobante(p.getNroComprobante());
+                pagoDTO.setSector(p.getSector().getDescripcion());
+                pagoDTO.setFormaPago(p.getFormaDePago().getDescripcion());
+                pagoDTO.setTotal(p.getTotal());
+                listaPagoDTO.add(pagoDTO);
+            }
+            return listaPagoDTO;
+        }
+
+
+
+    }
+
+
+
 }

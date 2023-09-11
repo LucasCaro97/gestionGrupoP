@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -39,4 +40,27 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
     Long obtenerCliente(Long idOperacion);
 
     Page<Cobro> findAllByOrderByIdDesc(Pageable pageable);
-}
+
+
+    @Query(value = "SELECT * FROM cobro WHERE fecha_comprobante BETWEEN :fechaDesde AND :fechaHasta" +
+            " AND (:sectorId IS NULL OR fk_sector = :sectorId) " +
+            " AND (:talDesde IS NULL OR fk_talonario >= :talDesde) " +
+            " AND (:talHasta IS NULL OR fk_talonario <= :talHasta) " +
+            " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
+            nativeQuery = true)
+    List<Cobro> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Long idFormaPago);
+
+
+    @Query(value = "SELECT * FROM cobro WHERE fecha_comprobante BETWEEN :fechaDesde AND :fechaHasta" +
+            " AND (:sectorId IS NULL OR fk_sector = :sectorId) " +
+            " AND (fk_talonario NOT BETWEEN :talDesde AND :talHasta) " +
+            " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
+            nativeQuery = true)
+    List<Cobro> obtenerOperacionesExcluyendoTalonario(@Param("fechaDesde") String fechaDesde,
+                                                      @Param("fechaHasta") String fechaHasta,
+                                                      @Param("sectorId") Long sectorId,
+                                                      @Param("talDesde") Integer talDesde,
+                                                      @Param("talHasta") Integer talHasta,
+                                                      @Param("idFormaPago") Long idFormaPago);
+
+   }

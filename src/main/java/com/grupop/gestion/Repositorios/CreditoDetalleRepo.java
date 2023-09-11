@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -23,4 +24,11 @@ public interface CreditoDetalleRepo extends JpaRepository<CreditoDetalle,Long> {
 
     @Query(value = "SELECT MAX(nro_cuota) FROM credito_detalle WHERE fk_credito = ?", nativeQuery = true)
     Integer obtenerUltimoNroCuota(Long idCredito);
+
+
+    @Query(value = "SELECT * FROM credito_detalle WHERE vencimiento < LAST_DAY(CURDATE()) AND saldo > 0", nativeQuery = true)
+    List<CreditoDetalle> obtenerCuotasCobrarMensual();
+
+    @Query(value = "SELECT vencimiento FROM credito_detalle WHERE fk_credito = ? LIMIT 1;", nativeQuery = true)
+    LocalDate obtenerFechaPrimerVencimiento(Long idCredito);
 }

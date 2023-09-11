@@ -30,9 +30,8 @@ public class Cobro {
     @JoinColumn(name = "fk_tipo_comprobante")
     @ManyToOne
     private TipoComprobante tipoComprobante;
-    @JoinColumn(name = "fk_talonario")
-    @ManyToOne
-    private Talonario talonario;
+    @Column(name = "fk_talonario")
+    private Integer talonario;
     private String nroComprobante;
     @JoinColumn(name = "fk_sector")
     @ManyToOne

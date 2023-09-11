@@ -29,6 +29,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\CompraServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Configuracion\imgConfig.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\TalonarioControlador.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\CobroExporterExcel.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\TipoComprobanteControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\TipoProducto.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\CobroDetalleAdelantoRepo.java
@@ -87,6 +88,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Urbanizacion.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\EmpleadoRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\CuentasContablesRepo.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\PagoDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\TurnoRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\PagoDetalleImputacionControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\ChequeTipoRepo.java
@@ -98,10 +100,12 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\ProductoControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\EstadoLote.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\VentasExporterExcel.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\ComprasDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\TipoPagoControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\EntidadBaseExporterPDF.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\SectorServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\ClienteRepo.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\PagoExporterExcel.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\TipoCuentaBancoServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Errores.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\ManzanaServicio.java
@@ -140,6 +144,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\ChequeServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\EmpleadoServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\VentaDetalleImputacionServicio.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\CobrosDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\PagoDetalleAdelanto.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\AuthController.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\CuentasDeBancoTarjetaServicio.java
@@ -163,6 +168,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\FormaDePagoDetalle.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\MonedaServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Cobro.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\CompraExporterExcel.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\BancoEmisor.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\PagoDetalleRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\ReportingController.java
@@ -194,6 +200,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\DepartamentoControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Proveedor.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\TipoOperacionRepo.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\CuotasAtrasadosAndMensualesExporterExcel.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\TipoEmpleadoControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\CobroServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\IndiceCacControlador.java

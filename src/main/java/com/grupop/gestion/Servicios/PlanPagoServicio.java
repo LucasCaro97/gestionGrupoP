@@ -54,7 +54,6 @@ public class PlanPagoServicio {
 
     @Transactional(readOnly = true)
     public PlanPago obtenerPorId(Long id){
-        System.out.println(planPagoRepo.findById(id).get());
         return planPagoRepo.findById(id).get(); }
 
     @Transactional

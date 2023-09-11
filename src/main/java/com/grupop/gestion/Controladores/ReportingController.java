@@ -1,6 +1,7 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Reportes.VentasExporterExcel;
+import com.grupop.gestion.Entidades.CreditoDetalle;
+import com.grupop.gestion.Reportes.*;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,6 +27,10 @@ public class ReportingController {
     private final SectorServicio sectorServicio;
     private final FormaDePagoServicio formaDePagoServicio;
     private final VentaServicio ventaServicio;
+    private final CobroServicio cobroServicio;
+    private final CompraServicio compraServicio;
+    private final PagoServicio pagoServicio;
+    private final CreditoServicio creditoServicio ;
 
 
     @GetMapping("operaciones")
@@ -43,13 +48,11 @@ public class ReportingController {
 
     @PostMapping("/generarExcelOperaciones")
     public void generarExcel(@RequestParam Map<String, Object> params, HttpServletResponse response) throws IOException {
-        RedirectView redirect = new RedirectView("/");
         response.setContentType("application/octec-stream");
         DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
         String fechaActual = dateFormater.format(new Date());
         String cabecera = "Content-Disposition";
-        String valor = "attachment; filename=ReporteVentas_" + fechaActual + ".xlsx";
-        response.setHeader(cabecera,valor);
+
 
         Long tipoOp = (params.get("tipoOperacion") != null) ? Long.valueOf(params.get("tipoOperacion").toString()) : null;
         String fechaDesde = (params.get("fechaDesde") != null ) ? params.get("fechaDesde").toString() : null ;
@@ -60,12 +63,39 @@ public class ReportingController {
         Boolean excluirTal = params.get("flexCheckDefault") != null;
         Long idFormaPago = (params.get("formaPago") != "") ? Long.valueOf(params.get("formaPago").toString()) : null;
 
-        //VER COMO MANEJAR LA SEPARACION POR TIPO DE OPERACION
         if(tipoOp == 1){
+            String valor = "attachment; filename=ReporteVentas_" + fechaActual + ".xlsx";
+            response.setHeader(cabecera,valor);
             VentasExporterExcel exporter = new VentasExporterExcel(ventaServicio.obtenerOperaciones(fechaDesde,fechaHasta,sectorId,talDesde,talHasta,excluirTal,idFormaPago));
+            exporter.exportar(response);
+        }else if(tipoOp == 2){
+            String valor = "attachment; filename=ReporteCompras_" + fechaActual + ".xlsx";
+            CompraExporterExcel exporter = new CompraExporterExcel(compraServicio.obtenerOperaciones(fechaDesde,fechaHasta,sectorId,talDesde,talHasta,excluirTal,idFormaPago));
+            exporter.exportar(response);
+        } else if (tipoOp == 3) {
+            String valor = "attachment; filename=ReporteCobros_" + fechaActual + ".xlsx";
+            response.setHeader(cabecera,valor);
+            CobroExporterExcel exporter = new CobroExporterExcel(cobroServicio.obtenerOperaciones(fechaDesde,fechaHasta,sectorId,talDesde,talHasta,excluirTal,idFormaPago));
+            exporter.exportar(response);
+        } else if (tipoOp == 4) {
+            String valor = "attachment; filename=ReportePagos_" + fechaActual + ".xlsx";
+            response.setHeader(cabecera,valor);
+            PagoExporterExcel exporter = new PagoExporterExcel(pagoServicio.obtenerOperaciones(fechaDesde,fechaHasta,sectorId,talDesde,talHasta,excluirTal,idFormaPago));
             exporter.exportar(response);
         }
     }
 
+
+    @GetMapping("/generarExcelAtrasadosAndMensuales")
+    public void generarExcelCuotasMensualAndAtrasados(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octec-stream");
+        DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String fechaActual = dateFormater.format(new Date());
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=ReporteCuotasCobrarMensual_" + fechaActual + ".xlsx";
+        response.setHeader(cabecera,valor);
+        CuotasAtrasadosAndMensualesExporterExcel exporter = new CuotasAtrasadosAndMensualesExporterExcel(creditoServicio.obtenerCuotasCobrarMensual());
+        exporter.exportar(response);
+    }
 
 }

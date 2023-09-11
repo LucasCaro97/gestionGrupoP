@@ -220,6 +220,13 @@ public class CreditoControlador {
         }
     }
 
+    @GetMapping("/obtenerCuotasCobrarMensual")
+    public ModelAndView obtenerCuotasCobrarMensual(){
+        ModelAndView mav = new ModelAndView("tabla-cuotasCobrarMensual");
+        mav.addObject("listaCuotas", creditoServicio.obtenerCuotasCobrarMensual());
+        return mav;
+    }
+
 
 
 

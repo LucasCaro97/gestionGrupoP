@@ -10,6 +10,7 @@ com\grupop\gestion\Controladores\PagoDetalleControlador.class
 com\grupop\gestion\Entidades\ChequeTipo.class
 com\grupop\gestion\Servicios\CreditoDetalleServicio$1.class
 com\grupop\gestion\Repositorios\ClasificacionCtaRepo.class
+com\grupop\gestion\DTO\PagoDTO.class
 com\grupop\gestion\Controladores\TipoIvaControlador.class
 com\grupop\gestion\Entidades\ChequeSubtipo.class
 com\grupop\gestion\Repositorios\ClienteRepo.class
@@ -58,6 +59,7 @@ com\grupop\gestion\Servicios\ImageService.class
 com\grupop\gestion\DTO\CompraDetalleImputacionDto.class
 com\grupop\gestion\Servicios\FormaDePagoDetalleSubDetalleServicio.class
 com\grupop\gestion\Controladores\CompraControlador.class
+com\grupop\gestion\Reportes\PagoExporterExcel.class
 com\grupop\gestion\Controladores\ChequeTipoControlador.class
 com\grupop\gestion\Controladores\CuentasContablesControlador.class
 com\grupop\gestion\Controladores\EmpleadoControlador.class
@@ -72,6 +74,7 @@ com\grupop\gestion\Entidades\ClasificacionCta.class
 com\grupop\gestion\Entidades\FormaDePagoDetalle.class
 com\grupop\gestion\Entidades\TipoOperacion.class
 com\grupop\gestion\Controladores\CobroControlador.class
+com\grupop\gestion\Reportes\CobroExporterExcel.class
 com\grupop\gestion\Servicios\CobroDetalleCuotasServicio.class
 com\grupop\gestion\Repositorios\LoteRepo.class
 com\grupop\gestion\Servicios\EntidadBaseServicio.class
@@ -79,6 +82,7 @@ com\grupop\gestion\Entidades\Departamento.class
 com\grupop\gestion\Servicios\EmpleadoServicio.class
 com\grupop\gestion\Repositorios\TipoPagoRepo.class
 com\grupop\gestion\Servicios\ChequeSubtipoServicio.class
+com\grupop\gestion\DTO\CobrosDTO.class
 com\grupop\gestion\Repositorios\TipoProductoRepo.class
 com\grupop\gestion\Servicios\TalonarioServicio.class
 com\grupop\gestion\Entidades\EntidadBase.class
@@ -118,6 +122,7 @@ com\grupop\gestion\Entidades\PagoDetalleImputacion.class
 com\grupop\gestion\Entidades\Turno.class
 com\grupop\gestion\Repositorios\TurnoRepo.class
 com\grupop\gestion\Servicios\TipoIvaServicio.class
+com\grupop\gestion\DTO\ComprasDTO.class
 com\grupop\gestion\Controladores\PagoDetalleImputacionControlador.class
 com\grupop\gestion\Controladores\ChequeControlador.class
 com\grupop\gestion\Controladores\ManzanaControlador.class
@@ -159,6 +164,7 @@ com\grupop\gestion\Repositorios\VentaDetalleRepo.class
 com\grupop\gestion\Servicios\TipoTotalizadoraServicio.class
 com\grupop\gestion\Repositorios\EntidadBaseRepo.class
 com\grupop\gestion\Controladores\ChequeSubtipoControlador.class
+com\grupop\gestion\Reportes\CompraExporterExcel.class
 com\grupop\gestion\Entidades\Venta.class
 com\grupop\gestion\Servicios\TurnoServicio.class
 com\grupop\gestion\Entidades\Impuestos.class
@@ -230,6 +236,7 @@ com\grupop\gestion\Entidades\Vendedor.class
 com\grupop\gestion\Servicios\CuentasDeBancoTarjetaServicio.class
 com\grupop\gestion\Entidades\CuentasDeBancoTarjeta.class
 com\grupop\gestion\Entidades\TipoEmpleado.class
+com\grupop\gestion\Reportes\CuotasAtrasadosAndMensualesExporterExcel.class
 com\grupop\gestion\Servicios\VentaDetalleServicio.class
 com\grupop\gestion\Repositorios\CompraRepo.class
 com\grupop\gestion\Controladores\UrbanizacionControlador.class

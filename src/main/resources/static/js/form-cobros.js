@@ -353,6 +353,7 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
     let cuotaBase = celdaCuotaBase.text().replace(/\,/g, '')
     let idVenta = celdaVenta.text()
 
+    //FECHA PRIMER VENCIMIENTO ( PRIMER CUOTA )
     mesPrimerVenc = fechaPrimerVencimiento.getMonth()
     anioPrimerVenc= fechaPrimerVencimiento.getFullYear()
     diaPrimerVenc = fechaPrimerVencimiento.getDate()
@@ -400,8 +401,11 @@ async function calcularAjusteIndiceCac(celdaCredito, celdaCuotaBase, fechaPrimer
         await obtenerIndiceBaseEspecial()
 
         if (indiceBase!=0){
+            console.log("Indice Actual " + indiceActual)
+            console.log("Indice Base " + indiceBase)
+            console.log("Indice " + ( indiceActual / indiceBase ) )
             let resultado =   cuotaBase * ( indiceActual / indiceBase );
-            let importeAjuste = resultado - cuotaBase;
+            let importeAjuste = (resultado - cuotaBase).toFixed(2);
             celdaImporteAjuste.text(importeAjuste.toLocaleString("en-US"))
         }
         else{

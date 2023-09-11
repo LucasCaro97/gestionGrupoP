@@ -59,7 +59,7 @@
                                     required>
                                 <option selected value="">00000</option>
                                 <option th:each="xxx : ${listaTalonario}" th:text="${xxx.nroTalonario}"
-                                        th:value="${xxx.id}"></option>
+                                        th:value="${xxx.nroTalonario}"></option>
                             </select>
                             <input type="number" id="nroComprobante" th:field="*{nroComprobante}" class="form-control"
                                    readonly>
@@ -158,7 +158,7 @@
                                             <tbody>
                                             <tr th:each="xxx : ${listaComprasPendientesPago}">
                                                 <td th:text="${xxx.id}"></td>
-                                                <td th:text="|CPA/${xxx.id} ${xxx.tipoComprobante.descripcion} ${xxx.talonario.nroTalonario}-${xxx.nroComprobante} - ${xxx.fechaComprobante}|"></td>
+                                                <td th:text="|CPA/${xxx.id} ${xxx.tipoComprobante.descripcion} ${xxx.talonario}-${xxx.nroComprobante} - ${xxx.fechaComprobante}|"></td>
                                                 <td th:text="${#numbers.formatDecimal(xxx.total,1,'COMMA',2,'POINT')}"></td>
                                                 <td>
                                                     <div class="form-check text-center">
@@ -246,7 +246,7 @@
                             <tr th:each="xxx : ${tablaDetalleCtaCte}">
                                 <td class="celdaOculta" th:text="${xxx.id}"></td>
                                 <td th:text="${xxx.compraId.id}"></td>
-                                <td th:text="|CPA/${xxx.compraId.id} ${xxx.compraId.tipoComprobante.descripcion} ${xxx.compraId.talonario.nroTalonario}-${xxx.compraId.nroComprobante} - ${xxx.compraId.fechaComprobante}|"></td>
+                                <td th:text="|CPA/${xxx.compraId.id} ${xxx.compraId.tipoComprobante.descripcion} ${xxx.compraId.talonario}-${xxx.compraId.nroComprobante} - ${xxx.compraId.fechaComprobante}|"></td>
                                 <td th:text="${#numbers.formatDecimal(xxx.importe,1,'COMMA',2,'POINT')}"></td>
                                 <td>
                                     <div class="form-check text-center">

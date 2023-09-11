@@ -48,7 +48,7 @@
                                     <td> <a class="btn btn-secondary" th:text="${xxx.id}" th:href="@{/compras/form/__${xxx.id}__}"></a> </td>
                                     <td class="cliente" th:text="${xxx.proveedor}"></td>
                                     <td th:text="${xxx.fechaComprobante}"></td>
-                                    <td th:text="${xxx.talonario.nroTalonario} + ' - ' + ${xxx.nroComprobante}"></td>
+                                    <td th:text="${xxx.talonario} + ' - ' + ${xxx.nroComprobante}"></td>
                                     <td th:text="${xxx.sector != null ? xxx.sector.descripcion : ''}"></td>
                                     <td th:text="${xxx.formaDePago != null ? xxx.formaDePago.descripcion : ''}"></td>
                                     <td th:text="${xxx.observaciones}"></td>
