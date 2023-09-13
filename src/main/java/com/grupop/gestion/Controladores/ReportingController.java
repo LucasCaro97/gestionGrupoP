@@ -46,6 +46,21 @@ public class ReportingController {
         return mav;
     }
 
+    @GetMapping("adelanos")
+    public ModelAndView getFormAdelantos(HttpServletRequest request){
+        ModelAndView mav = new ModelAndView("form-reporteAdelantos");
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        if(inputFlashMap!=null){
+            mav.addObject("exception", inputFlashMap.get("exception"));
+            mav.addObject("reporte", inputFlashMap.get("reporte"));
+        }
+        mav.addObject("listaOperaciones", tipoOperacionServicio.obtenerTodos());
+        mav.addObject("listaSector", sectorServicio.obtenerTodos());
+        return mav;
+    }
+
+
+
     @PostMapping("/generarExcelOperaciones")
     public void generarExcel(@RequestParam Map<String, Object> params, HttpServletResponse response) throws IOException {
         response.setContentType("application/octec-stream");
