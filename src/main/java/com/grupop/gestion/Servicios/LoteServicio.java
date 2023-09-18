@@ -147,6 +147,9 @@ public class LoteServicio {
                 }else if(idEstado==1){
                     System.out.println("Alterando estado de producto: true/disponible");
                     productoServicio.actualizarEstadoPorId(idProd, 1);
+                }else if(idEstado == 2){
+                    System.out.println("Alterando estado de producto: false/reservado");
+                    productoServicio.actualizarEstadoPorId(idProd, 0);
                 }
 
         }else{

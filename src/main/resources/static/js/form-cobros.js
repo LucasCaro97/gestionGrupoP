@@ -524,61 +524,70 @@ async function crearItemsDetalle(){
     function confirmSave(){
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/cobroDetalleCuotas/alta/";
+        urlObj.pathname = "/cobroDetalleCuotas/alta";
         var nuevaUrl = urlObj.href;
 
+        const arrayList = []
+        const rows = Array.from($("#tablaDetalle tbody tr"));
 
-//        //RECORRO TABLA DETALLE PRODUCTO
-        $("#tablaDetalle tbody tr").each(function(){
-            let idVenta = $(this).children().eq(0).text().replace(/\,/g, '');
-            let idCred = $(this).children().eq(1).text().replace(/\,/g, '');
-            let nroCuota = $(this).children().eq(2).text().replace(/\,/g, '');
-            let fechaVenc = $(this).children().eq(3).text().replace(/\,/g, '');
-            let cuotaBase = $(this).children().eq(4).text().replace(/\,/g, '');
-            cobrado = $(this).children().eq(5).text().replace(/\,/g, '');
-            let ajuste = $(this).children().eq(6).text().replace(/\,/g, '');
-            let punitorio = $(this).children().eq(7).text().replace(/\,/g, '');
-            let importeBonif = $(this).children().eq(8).text().replace(/\,/g, '');
-            let importeFinal = $(this).children().eq(9).text().replace(/\,/g, '');
-            fetch(nuevaUrl+ idVenta + "/" + idCred + "/" + nroCuota + "/" + fechaVenc + "/" + cuotaBase + "/" + ajuste + "/" + punitorio + "/" + importeBonif + "/" + importeFinal + "/" + $("#id").val() + "/" + cobrado , {
-                                method : "POST",
-                                headers:{
-                                "Content-Type" : "application/json"
-                                }
+        rows.forEach( (row) => {
+                    let idVenta = $(row).children().eq(0).text().replace(/\,/g, '');
+                    let idCredito = $(row).children().eq(1).text().replace(/\,/g, '');
+                    let nroCuota = $(row).children().eq(2).text().replace(/\,/g, '');
+                    let fechaVenc = $(row).children().eq(3).text().replace(/\,/g, '');
+                    let cuotaBase = $(row).children().eq(4).text().replace(/\,/g, '');
+                    importeCobrado = $(row).children().eq(5).text().replace(/\,/g, '');
+                    let ajuste = $(row).children().eq(6).text().replace(/\,/g, '');
+                    let punitorio = $(row).children().eq(7).text().replace(/\,/g, '');
+                    let importeBonif = $(row).children().eq(8).text().replace(/\,/g, '');
+                    let importeFinal = $(row).children().eq(9).text().replace(/\,/g, '');
+                    let idCobro = $("#id").val();
+
+                    arrayList.push( { idCobro , idVenta, idCredito, nroCuota, fechaVenc, cuotaBase, ajuste, punitorio, importeBonif, importeFinal, importeCobrado });
                 })
 
-        });
+
+        fetch(nuevaUrl, {
+                    method : "POST",
+                    headers:{
+                        "Content-Type" : "application/json"
+                    },
+                    body: JSON.stringify(arrayList)
+                })
+
     };
     function confirmSaveImp(){
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/cobroDetalleCtaCte/alta/";
+        urlObj.pathname = "/cobroDetalleCtaCte/alta";
         var nuevaUrl = urlObj.href;
 
-        //RECORRO TABLA DETALLE IMPUTACION
-        $("#tablaDetalleImp tbody tr").each(function(){
-            let idCobro = $("#id").val();
-            let idVenta = $(this).children().eq(0).text();
-            let detalle = $(this).children().eq(1).text();
-            let importe = parseFloat($(this).children().eq(2).text().replace(/\,/g, ''));
+        const arrayList = []
+        const rows = Array.from($("#tablaDetalleImp tbody tr"));
 
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idCobro + "/" + idVenta + "/" + importe, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-        });
+        rows.forEach( (row) => {
+        let idCobro = $("#id").val();
+        let idVenta = $(row).children().eq(0).text();
+        let detalle = $(row).children().eq(1).text();
+        let importe = parseFloat($(row).children().eq(2).text().replace(/\,/g, ''));
+
+        arrayList.push({ idCobro, idVenta, importe})
+        })
+
+        fetch(nuevaUrl, {
+                        method : "POST",
+                        headers:{
+                        "Content-Type" : "application/json"
+                        },
+                        body: JSON.stringify(arrayList)
+                    })
+
     };
 
     await confirmSave();
-    await  confirmSaveImp();
-    if(cobrado == ''){
-        alert("Importe a cobrar vacio")
-    }else{
-        setTimeout(redireccionar, tiempoEspera);
-    }
+    await confirmSaveImp();
+    setTimeout(redireccionar, tiempoEspera);
+
 }
 
 async function eliminarItemsDetalleCtaCte(){

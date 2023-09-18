@@ -49,5 +49,8 @@ public class Credito {
     @JoinColumn(name = "fk_forma_pago")
     @OneToOne
     private FormaDePagoDetalleSubDetalle detallePago;
+    @JoinColumn(name = "estado")
+    @ManyToOne
+    private EstadoCredito estadoCredito;
 
 }

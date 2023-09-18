@@ -42,12 +42,14 @@ public class CreditoServicio {
     private final EmailService emailService;
     private final EntidadBaseServicio entidadBaseServicio;
     private final IndiceCacServicio indiceCacServicio;
+    private final EstadoCreditoServicio estadoCreditoServicio;
 
     @Transactional
     public void crear(Credito dto, String venceLosDias) {
         PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
 
         Credito c = new Credito();
+        c.setEstadoCredito(estadoCreditoServicio.obtenerPorId(1l));
         c.setCliente(dto.getCliente());
         c.setFecha(dto.getFecha());
         c.setSector(dto.getSector());
@@ -90,7 +92,7 @@ public class CreditoServicio {
         for (int i = 1; i <= credito.getCantCuotas(); i++) {
 
             LocalDate fechaVencimiento = LocalDate.of(anioActual, mesActual, diaVencimiento);
-            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento, credito.getCliente(), credito.getGastosAdministrativos().divide(new BigDecimal(credito.getCantCuotas()), 4, RoundingMode.UP));
+            creditoDetalleServicio.generarCuotas(credito, i, credito.getTotalCredito().divide(new BigDecimal(credito.getCantCuotas())), fechaVencimiento, credito.getCliente(), credito.getGastosAdministrativos().divide(new BigDecimal(credito.getCantCuotas()), 4, RoundingMode.UP), c.getEstadoCredito());
 
 
             if (mesActual == Month.DECEMBER) {
@@ -102,7 +104,7 @@ public class CreditoServicio {
         }
 
 //        CIERRO LA VENTA PARA QUE NO SE PUEDA MODIFICAR NADA
-        ventaServicio.cerrarVenta(dto.getVenta().getId());
+        ventaServicio.cerrarVenta(dto.getVenta().getId(), true);
 //        CIERRO EL DETALLE DE PAGO DE LA VENTA
         formaDePagoDetalleServicio.cerrarDetallePago(dto.getVenta().getId(), dto.getVenta().getTipoOperacion().getId());
 //    HAGO UN ENVIO DE EMAIL
@@ -110,8 +112,8 @@ public class CreditoServicio {
 //        emailService.send(email, "credito", c.getVenta().getNroComprobante(), c.getCliente().getId(), c.getTotalCredito(), c.getPlanPago());
     }
 
-    @Transactional
-    public void actualizar(Credito dto) {
+    @Transactional(rollbackFor = Exception.class)
+    public void actualizar(Credito dto) throws Exception {
         Credito c = creditoRepo.findById(dto.getId()).get();
 
         if (c.isBloqueado()) {
@@ -137,7 +139,19 @@ public class CreditoServicio {
             c.setGastosAdministrativos(dto.getCapital().multiply(plan.getPorcentajeGastos()).divide(new BigDecimal(100)));
             c.setTotalCredito(c.getCapital().add(c.getInteresesTotales()).add(c.getGastosAdministrativos()));
             c.setObservaciones(dto.getObservaciones());
-            creditoRepo.save(c);
+
+            if(c.getEstadoCredito().getId() != dto.getEstadoCredito().getId()){
+                try{
+                    c.setEstadoCredito(dto.getEstadoCredito());
+                    creditoDetalleServicio.actualizarEstadoCuotasConSaldo(dto.getId(), dto.getEstadoCredito());
+                    creditoRepo.save(c);
+                }catch (Exception e){
+                    throw new Exception(e);
+                }
+
+            }else{
+                creditoRepo.save(c);
+            }
 
         }
     }
@@ -386,8 +400,10 @@ public class CreditoServicio {
     }
 
 
-
-
-
-
+    @Transactional
+    public void alterarEstado(Long idCredito, Long idEstado) {
+        Credito c = creditoRepo.findById(idCredito).get();
+        c.setEstadoCredito(estadoCreditoServicio.obtenerPorId(idEstado));
+        creditoRepo.save(c);
+    }
 }

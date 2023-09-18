@@ -38,6 +38,7 @@
                                     <th>Fecha</th>
                                     <th>Operacion</th>
                                     <th>Plan Pago</th>
+                                    <th>Estado</th>
                                     <th>Observacion</th>
                                     <th>Accion</th>
                                 </tr>
@@ -49,6 +50,7 @@
                                     <td th:text="${xxx.fecha}"></td>
                                     <td th:text="|${xxx.venta.id} - ${xxx.venta.nroComprobante} - $ ${xxx.venta.total} |"></td>
                                     <td th:text="${xxx.planPago.descripcion}"></td>
+                                    <td th:text="${xxx.estadoCredito.descripcion}"></td>
                                     <td th:text="${xxx.observaciones}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

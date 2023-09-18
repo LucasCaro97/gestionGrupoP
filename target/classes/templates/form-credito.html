@@ -17,6 +17,8 @@
 
 <main>
 
+    <div th:if="${exception}" th:text="${exception}" class="alert alert-danger" role="alert"></div>
+
     <div class="container">
         <div class="row mt-4">
             <h1>Registro de Creditos</h1>
@@ -40,9 +42,17 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <label for="fechaAlta" class="form-label">Fecha Comp: </label>
                     <input id="fechaAlta" type="date" class="form-control" th:field="*{fecha}">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="estadoCredito" class="form-label">Estado: </label>
+                    <select th:field="*{estadoCredito}" id="estadoCredito" class="form-select" th:disabled="${action == 'create'}">
+                        <option selected value="">Seleccionar estado</option>
+                        <option th:each="xxx : ${listaEstados}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+                    </select>
                 </div>
 
                 <div class="col-md-3">
@@ -190,6 +200,7 @@
                             <th>Monto</th>
                             <th>Saldo</th>
                             <th>Vence</th>
+                            <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -200,6 +211,7 @@
                             <td contenteditable="true" th:text="${#numbers.formatDecimal(xxx.monto,1,'COMMA',2,'POINT')}"></td>
                             <td th:text="${#numbers.formatDecimal(xxx.saldo,1,'COMMA',2,'POINT')}"></td>
                             <td contenteditable="true" th:text="${xxx.vencimiento}"></td>
+                            <td contenteditable="true" th:text="${xxx.estadoCuota.descripcion}"></td>
 
                         </tr>
                     </tbody>

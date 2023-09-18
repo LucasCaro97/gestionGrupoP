@@ -241,38 +241,30 @@ async function crearItemsDetalle(){
     function confirmSave(){
         var url = window.location.href;
         var urlObj = new URL(url);
-        urlObj.pathname = "/ventaDetalle/altaDetalle/";
+        urlObj.pathname = "/ventaDetalle/altaDetalle";
         var nuevaUrl = urlObj.href;
 
+        const arrayList = []
+        const rows = Array.from($("#tablaDetalle tbody tr"));
 
-        //RECORRO TABLA DETALLE PRODUCTO
-        $("#tablaDetalle tbody tr").each(function(){
+        rows.forEach( (row) => {
             let idVenta = $("#id").val();
-            let descProd = $(this).children().eq(0).text();
-            let idProd = $(this).children().eq(1).text();
-            let cantidad = parseFloat( $(this).children().eq(2).text() );
-            let precioU =  parseFloat( $(this).children().eq(3).text().replace(/\,/g, '') );
+            let descProd = $(row).children().eq(0).text();
+            let idProd = $(row).children().eq(1).text();
+            let cantidad = parseFloat( $(row).children().eq(2).text() );
+            let precioU =  parseFloat( $(row).children().eq(3).text().replace(/\,/g, '') );
 
+            arrayList.push({ idVenta, idProd, cantidad, precioU})
+        })
 
-            let totalLinea = (cantidad*precioU);
-            total += totalLinea;
+        fetch(nuevaUrl, {
+                        method : "POST",
+                        headers:{
+                        "Content-Type" : "application/json"
+                        },
+                        body: JSON.stringify(arrayList)
+                    })
 
-            //GENERO LOS DETALLES DE LA VENTA EN LA BASE DE DATOS
-            fetch(nuevaUrl+ idVenta + "/" + idProd + "/" + cantidad + "/" + precioU, {
-                method : "POST",
-                headers:{
-                "Content-Type" : "application/json"
-                }
-            })
-
-            fetch("/lote/setEstadoVendido"+ "/" + idProd, {
-                            method : "POST",
-                            headers:{
-                            "Content-Type" : "application/json"
-                            }
-            })
-
-        });
     };
     function confirmSaveImp(){
         var url = window.location.href;
@@ -301,13 +293,13 @@ async function crearItemsDetalle(){
     };
     var tiempoEspera = 500;
     function redireccionar() {
-//            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
-//            fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
-//                    method : "POST",
-//                    headers:{
-//                    "Content-Type" : "application/json"
-//                    }
-//            })
+            //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+            fetch("/ventas/actualizarTotalVenta/" + $("#id").val(), {
+                    method : "POST",
+                    headers:{
+                    "Content-Type" : "application/json"
+                    }
+            })
           window.location.href= "/ventas/form/"+ $("#id").val();
         }
 

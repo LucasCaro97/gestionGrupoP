@@ -43,6 +43,7 @@ public class CreditoControlador {
     private final VentaServicio ventaServicio;
     private final CreditoDetalleServicio creditoDetalleServicio;
     private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
+    private final EstadoCreditoServicio estadoCreditoServicio;
 
 
     @GetMapping
@@ -84,6 +85,7 @@ public class CreditoControlador {
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
+        mav.addObject("listaEstados", estadoCreditoServicio.obtenerTodos());
         return mav;
     }
 
@@ -100,6 +102,7 @@ public class CreditoControlador {
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("listaCreditoDetalle", creditoDetalleServicio.obtenerLineasDetalle(cred.getId()));
+        mav.addObject("listaEstados", estadoCreditoServicio.obtenerTodos());
         return mav;
     }
 
@@ -123,6 +126,7 @@ public class CreditoControlador {
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("detallePago", formaDePagoDetalleSubDetalleServicio.obtenerPorIdOperacionAndIdTipoOperacion(v.getId(), v.getTipoOperacion().getId()));
+        mav.addObject("listaEstados", estadoCreditoServicio.obtenerTodos());
         return mav;
     }
 
@@ -144,6 +148,7 @@ public class CreditoControlador {
         mav.addObject("listaTipoCompro", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("importe", importe);
+        mav.addObject("listaEstados", estadoCreditoServicio.obtenerTodos());
         return mav;
     }
 

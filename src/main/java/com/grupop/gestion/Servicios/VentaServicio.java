@@ -28,6 +28,7 @@ public class VentaServicio {
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
     private final ClienteServicio clienteServicio;
     private final EntidadBaseServicio entidadBaseServicio;
+    private final LoteServicio loteServicio;
 
     @Transactional
     public void crear(Venta dto, String fechaComprobante){
@@ -130,9 +131,9 @@ public class VentaServicio {
     }
 
     @Transactional
-    public void cerrarVenta(Long idVenta){
+    public void cerrarVenta(Long idVenta, boolean estado){
         Venta vta = ventaRepo.findById(idVenta).get();
-        vta.setBloqueada(true);
+        vta.setBloqueada(estado);
         ventaRepo.save(vta);
     }
 
@@ -233,5 +234,14 @@ public class VentaServicio {
         }
     }
 
+    @Transactional
+    public void alterarEstadoLotes(Long idVenta, Long estadoId) {
+        System.out.println("-----MARCANDO LOTES COMO VENDIDOS---");
+        System.out.println("Venta : " + idVenta );
+        List<Long> idProductosVinculadosVenta =ventaRepo.obtenerProductosVinculados(idVenta);
+        for (Long productoId : idProductosVinculadosVenta ) {
+            loteServicio.alterarEstado(productoId, estadoId);
+        }
+    }
 }
 

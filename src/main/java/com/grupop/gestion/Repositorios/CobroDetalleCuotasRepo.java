@@ -19,9 +19,9 @@ public interface CobroDetalleCuotasRepo extends JpaRepository<CobroDetalleCuotas
     @Query(value = "DELETE FROM cobro_detalle_cuotas WHERE fk_credito = ?1 AND nro_cuota = ?2 AND cobro_id_id = ?3", nativeQuery = true)
     void eliminarDetalle(Long idCred, Integer nroCuota, Long idCobro);
 
-    @Query( value = "SELECT COUNT(*) FROM cobro_detalle_cuotas WHERE fk_credito = ?1 AND nro_cuota = ?2", nativeQuery = true)
-    Integer existByCreditoAndNroCuota(Long idCredito, Integer nroCuota);
+    @Query( value = "SELECT COUNT(*) FROM cobro_detalle_cuotas WHERE fk_credito = ?1 AND nro_cuota = ?2 AND cobro_id_id = ?3", nativeQuery = true)
+    Integer existByCreditoAndNroCuotaAndOperacion(Long idCredito, Integer nroCuota, Long idOperacion);
 
-    @Query(value = "SELECT * FROM cobro_detalle_cuotas WHERE fk_credito = ?1 AND nro_cuota = ?2", nativeQuery = true)
-    CobroDetalleCuotas searchByCreditoAndNroCuota(Long idCred, Integer nroCuota);
+    @Query(value = "SELECT * FROM cobro_detalle_cuotas WHERE fk_credito = ?1 AND nro_cuota = ?2 AND cobro_id_id = ?3", nativeQuery = true)
+    CobroDetalleCuotas searchByCreditoAndNroCuotaAndOperacion(Long idCred, Integer nroCuota, Long idOperacion);
 }

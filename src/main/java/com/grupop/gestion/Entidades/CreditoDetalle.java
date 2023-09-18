@@ -32,6 +32,9 @@ public class CreditoDetalle {
     private LocalDate vencimiento;
     private BigDecimal saldo;
     private Boolean cobrado;
+    @JoinColumn(name = "estado_cuota")
+    @ManyToOne
+    private EstadoCredito estadoCuota;
 
 
 

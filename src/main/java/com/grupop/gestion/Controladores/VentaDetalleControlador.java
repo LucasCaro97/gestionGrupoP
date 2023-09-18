@@ -1,5 +1,6 @@
 package com.grupop.gestion.Controladores;
 
+import com.grupop.gestion.DTO.VentaDetalleDTO;
 import com.grupop.gestion.Servicios.VentaDetalleServicio;
 import com.grupop.gestion.Servicios.VentaServicio;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,17 @@ public class VentaDetalleControlador {
                                             @PathVariable Double precioU, RedirectAttributes attributes){
         try{
             ventaDetalleServicio.crear(idVenta,idProd,cantidad,precioU);
-            attributes.addFlashAttribute("exito", "Se guardaron los cambios de detalle correctamente");
+        }catch(Exception e){
+            attributes.addFlashAttribute("exception", e.getMessage());
+            System.out.println(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Registro creado exitosamente");
+    }
+
+    @PostMapping("/altaDetalle")
+    public ResponseEntity<String> altaDetalle(@RequestBody List<VentaDetalleDTO> listaItems, RedirectAttributes attributes){
+        try{
+            ventaDetalleServicio.crear(listaItems);
         }catch(Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
             System.out.println(e.getMessage());
@@ -43,19 +55,6 @@ public class VentaDetalleControlador {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body("Registro eliminado correctamente");
     }
-
-//    @PostMapping("/actualizarTotalVenta/{idVenta}/{total}")
-//    public ResponseEntity<String> actualizarTotal(@PathVariable Long idVenta, @PathVariable String total, RedirectAttributes attributes){
-//        try{
-//            BigDecimal totalBD = new BigDecimal(total);
-//            ventaServicio.actualizarTotal(idVenta, totalBD);
-//            System.out.println("Se actualizo el total correctamente");
-//        }catch(Exception e){
-//            attributes.addFlashAttribute("exception", e.getMessage());
-//            System.out.println(e.getMessage());
-//        }
-//        return ResponseEntity.status(HttpStatus.CREATED).body("Se actualizo el total correctamente");
-//    }
 
 
 }

@@ -3,6 +3,7 @@ package com.grupop.gestion.Repositorios;
 import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Entidades.IndiceCAC;
 import com.grupop.gestion.Entidades.Venta;
+import com.grupop.gestion.Entidades.VentaDetalle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -79,4 +80,6 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
                                     @Param("talHasta") Integer talHasta,
                                     @Param("idFormaPago") Long idFormaPago);
 
+    @Query(value = "SELECT fk_producto FROM venta_detalle WHERE fk_venta = ?", nativeQuery = true)
+    List<Long> obtenerProductosVinculados(Long idVenta);
 }

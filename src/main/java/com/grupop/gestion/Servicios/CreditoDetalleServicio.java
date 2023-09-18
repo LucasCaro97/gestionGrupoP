@@ -4,6 +4,7 @@ import com.grupop.gestion.DTO.CreditoDetalleDto;
 import com.grupop.gestion.Entidades.Cliente;
 import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.CreditoDetalle;
+import com.grupop.gestion.Entidades.EstadoCredito;
 import com.grupop.gestion.Repositorios.CreditoDetalleRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,10 @@ public class CreditoDetalleServicio {
 
 
     private final CreditoDetalleRepo creditoDetalleRepo;
-    private final EntidadBaseServicio entidadBaseServicio;
+    private final EstadoCreditoServicio estadoCreditoServicio;
 
     @Transactional
-    public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento, Cliente idCliente, BigDecimal gastoAdministrativo) {
+    public void generarCuotas(Credito credito, int nroCuota, BigDecimal valorCuota, LocalDate fechaVencimiento, Cliente idCliente, BigDecimal gastoAdministrativo, EstadoCredito estadoCredito) {
 
 
         CreditoDetalle creditoDetalle = new CreditoDetalle();
@@ -35,6 +36,7 @@ public class CreditoDetalleServicio {
         creditoDetalle.setVencimiento(fechaVencimiento);
         creditoDetalle.setCliente(idCliente);
         creditoDetalle.setSaldo(valorCuota);
+        creditoDetalle.setEstadoCuota(estadoCredito);
         creditoDetalle.setCobrado(false);
         creditoDetalleRepo.save(creditoDetalle);
     }
@@ -52,6 +54,7 @@ public class CreditoDetalleServicio {
         if(c.getSaldo().subtract(importeCobrado).compareTo(BigDecimal.ZERO) <= 0){
             c.setSaldo(BigDecimal.ZERO);
             c.setCobrado(true);
+            c.setEstadoCuota(estadoCreditoServicio.obtenerPorId(2l));
         }else{
             c.setSaldo(c.getSaldo().subtract(importeCobrado));
         }
@@ -63,12 +66,13 @@ public class CreditoDetalleServicio {
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
         c.setSaldo(c.getSaldo().add(importeCobrado));
         c.setCobrado(false);
+        c.setEstadoCuota(estadoCreditoServicio.obtenerPorId(1l));
         creditoDetalleRepo.save(c);
     }
 
     @Transactional(readOnly = true)
     public List<CreditoDetalle> obtenerCreditosPendientesPorFkCliente(Long id){
-        List<CreditoDetalle> listaCuotas = creditoDetalleRepo.obtenerPorFkClienteAndEstado(id);
+        List<CreditoDetalle> listaCuotas = creditoDetalleRepo.obtenerPorFkClienteAndEstadoActivo(id);
         Collections.sort(listaCuotas, new Comparator<CreditoDetalle>() {
             @Override
             public int compare(CreditoDetalle o1, CreditoDetalle o2) {
@@ -121,4 +125,72 @@ public class CreditoDetalleServicio {
         return creditoDetalleRepo.obtenerFechaPrimerVencimiento(idCredito);
     }
 
+    @Transactional
+    public void actualizarEstadoCuotasConSaldo(Long creditoId, EstadoCredito estadoCredito) throws Exception {
+
+        List<CreditoDetalle> listaCuotas = creditoDetalleRepo.obtenerPorCreditoId(creditoId);
+
+        switch (estadoCredito.getId().intValue()){
+            case 1:
+                throw new Exception("No se puede volver al estado activo");
+            case 2:
+                throw new Exception("No se puede cancelar el credito desde este modulo");
+            case 3:
+                BigDecimal totalRefinancia = BigDecimal.ZERO;
+                for (CreditoDetalle c: listaCuotas) {
+                    if(c.getSaldo().compareTo(BigDecimal.ZERO) == 0){
+                        System.out.println("Cuota nro " + c.getNroCuota() + " saldo " + c.getSaldo() + " - SALDADA");
+                    }else{
+                        //ACTUALIZO LA CUOTA CON ESTADO *REFINANCIADO*
+                        c.setEstadoCuota(estadoCreditoServicio.obtenerPorId(3l));
+                        creditoDetalleRepo.save(c);
+                        totalRefinancia = totalRefinancia.add(c.getSaldo());
+                    }
+                }
+                System.out.println("Total a refinanciar: " + totalRefinancia);
+                break;
+            case 4:
+                for (CreditoDetalle c: listaCuotas) {
+                    if(c.getMonto().compareTo(c.getSaldo()) != 0){
+                        throw new Exception("No se puede anular un credito con cuotas cobradas");
+                    }else{
+                        c.setEstadoCuota(estadoCreditoServicio.obtenerPorId(4l));
+                        creditoDetalleRepo.save(c);
+                    }
+                }
+                break;
+            case 5:
+                for (CreditoDetalle c: listaCuotas) {
+                    if(c.getSaldo().compareTo(BigDecimal.ZERO) == 0){
+                        System.out.println("Cuota nro " + c.getNroCuota() + " saldo " + c.getSaldo() + " - SALDADA");
+                    }else{
+                        c.setEstadoCuota(estadoCreditoServicio.obtenerPorId(5l));
+                        creditoDetalleRepo.save(c);
+                    }
+                }
+                break;
+            default:
+                throw new Exception("El estado no coincide con ningun valor");
+
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public boolean verificarSiEstaCancelado(Long idCredito) {
+        if(creditoDetalleRepo.verificarSaldoByIdCredito(idCredito).compareTo(BigDecimal.ZERO) == 0){
+            System.out.println("Saldo 0");
+            return true;
+        }else{
+            System.out.println("Saldo " + creditoDetalleRepo.verificarSaldoByIdCredito(idCredito));
+            return false;
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public CreditoDetalle obtenerPorCreditoAndNroCuota(Long idCred, Integer nroCuota){
+        return creditoDetalleRepo.obtenerPorIdCreditoAndNroCuota(idCred, nroCuota);
+
+    }
 }
