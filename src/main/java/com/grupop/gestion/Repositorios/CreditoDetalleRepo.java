@@ -3,6 +3,7 @@ package com.grupop.gestion.Repositorios;
 import com.grupop.gestion.Entidades.Credito;
 import com.grupop.gestion.Entidades.CreditoDetalle;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -38,4 +39,13 @@ public interface CreditoDetalleRepo extends JpaRepository<CreditoDetalle,Long> {
 
     @Query(value = "SELECT * FROM credito_detalle WHERE fk_credito = ?1 AND nro_cuota = ?2"  , nativeQuery = true)
     CreditoDetalle obtenerPorIdCreditoAndNroCuota(Long idCred, Integer nroCuota);
+
+
+    @Modifying
+    @Query(value = "UPDATE credito SET refinancia = ?1 WHERE id = ?2", nativeQuery = true)
+    void guardarSaldoRefinancia(BigDecimal totalRefinancia, Long idCredito);
+
+    @Modifying
+    @Query(value = "DELETE FROM cobro_detalle_cuotas WHERE fk_credito = ?1 AND nro_cuota = ?2 AND cobro_id_id = ?3", nativeQuery = true)
+    void eliminarDetalle(Long idCred, Integer nroCuota, Long idCobro);
 }

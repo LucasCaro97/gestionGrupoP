@@ -52,5 +52,6 @@ public class Credito {
     @JoinColumn(name = "estado")
     @ManyToOne
     private EstadoCredito estadoCredito;
+    private BigDecimal refinancia;
 
 }

@@ -68,6 +68,7 @@ public class CreditoServicio {
         c.setObservaciones(dto.getObservaciones());
         c.setBloqueado(false);
         c.setDetallePago(formaDePagoDetalleSubDetalleServicio.obtenerPorIdOperacionAndIdTipoOperacion(c.getId(), 1l));
+        c.setRefinancia(BigDecimal.ZERO);
         creditoRepo.save(c);
 
 
@@ -143,8 +144,10 @@ public class CreditoServicio {
             if(c.getEstadoCredito().getId() != dto.getEstadoCredito().getId()){
                 try{
                     c.setEstadoCredito(dto.getEstadoCredito());
-                    creditoDetalleServicio.actualizarEstadoCuotasConSaldo(dto.getId(), dto.getEstadoCredito());
+                    if(dto.getEstadoCredito().getId() != 1l ) c.setBloqueado(true);
                     creditoRepo.save(c);
+                    creditoDetalleServicio.actualizarEstadoCuotasConSaldo(dto);
+
                 }catch (Exception e){
                     throw new Exception(e);
                 }
@@ -405,5 +408,11 @@ public class CreditoServicio {
         Credito c = creditoRepo.findById(idCredito).get();
         c.setEstadoCredito(estadoCreditoServicio.obtenerPorId(idEstado));
         creditoRepo.save(c);
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal obtenerImporteRefinancia(Long id) {
+        Credito c = creditoRepo.findById(id).get();
+        return c.getRefinancia();
     }
 }

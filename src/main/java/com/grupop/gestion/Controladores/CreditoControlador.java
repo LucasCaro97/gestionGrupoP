@@ -172,13 +172,13 @@ public class CreditoControlador {
 
     @PostMapping("/update")
     public RedirectView update(Credito dto, RedirectAttributes attributes){
-        RedirectView r = new RedirectView("/credito");
+        RedirectView r = new RedirectView("/credito/form/" + dto.getId());
         try{
             creditoServicio.actualizar(dto);
-            r.setUrl("/credito/form/" + dto.getId());
+            if(dto.getEstadoCredito().getId() == 3l && dto.isBloqueado()) r.setUrl("/credito/new/" + dto.getVenta().getId() + "/" + creditoServicio.obtenerImporteRefinancia(dto.getId()));
             attributes.addFlashAttribute("exito", "Se ha actualizado el credito correctamente");
         } catch (Exception e){
-            System.out.println(e.getMessage());
+            e.printStackTrace();
             attributes.addFlashAttribute("exception", e.getMessage());
             attributes.addFlashAttribute("credito", dto);
             r.setUrl("/credito/form/" + dto.getId());
