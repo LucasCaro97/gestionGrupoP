@@ -46,7 +46,7 @@ public class ReportingController {
         return mav;
     }
 
-    @GetMapping("adelanos")
+    @GetMapping("adelantos")
     public ModelAndView getFormAdelantos(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("form-reporteAdelantos");
         Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);

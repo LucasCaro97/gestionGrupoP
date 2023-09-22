@@ -133,7 +133,7 @@ public class CreditoDetalleServicio {
     public void actualizarEstadoCuotasConSaldo(Credito dto) throws Exception {
 
         List<CreditoDetalle> listaCuotas = creditoDetalleRepo.obtenerPorCreditoId(dto.getId());
-        
+
 
         switch (dto.getEstadoCredito().getId().intValue()){
             case 1:

@@ -55,4 +55,9 @@ public class FormaDePagoDetalleSubDetalleServicio {
     public void eliminarPorIdOperacionAndTipoOperacion(Long idOperacion, Long tipoOperacion) {
         formaDePagoSubDetalleRepo.deleteByIdOperacionAndTipoOperacion(idOperacion,tipoOperacion);
     }
+
+    @Transactional(readOnly = true)
+    public List<FormaDePagoDetalleSubDetalle> obtenerPorIdCobro(Long idCobro) {
+        return formaDePagoSubDetalleRepo.obtenerPorIdCobro(idCobro);
+    }
 }

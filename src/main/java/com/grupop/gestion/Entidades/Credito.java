@@ -53,5 +53,6 @@ public class Credito {
     @ManyToOne
     private EstadoCredito estadoCredito;
     private BigDecimal refinancia;
+    private Long creditoAnterior;
 
 }

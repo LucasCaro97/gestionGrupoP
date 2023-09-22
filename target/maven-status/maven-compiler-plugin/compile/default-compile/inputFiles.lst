@@ -42,6 +42,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\TipoCuentaBanco.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\FormaDePagoSubDetalleRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\TipoTotalizadoraServicio.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\ReporteDeCobroRecibo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\SectorControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\BancoEmisorRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\UrbanizacionControlador.java
@@ -114,6 +115,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Errores.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\ManzanaServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\BancoEmisorServicio.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\FormaDePagoDetalleDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\CobroDetalleCtaCteServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\TipoTotalizadora.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\CobroDetalleCtaCteControlador.java
@@ -128,6 +130,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\ImpuestosServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\CreditoExporterPDF.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\CuentasDeBancoTarjeta.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\CobroDetalleCuotasReporteDto.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\ProveedorServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Empleado.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\CuentasTotalizadoras.java
@@ -250,6 +253,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\TipoProductoControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\CompraDetalle.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\CompraRepo.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Configuracion\ConvertidorNumATexto.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\ChequeSubtipoRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\CobroDetalleCtaCteRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\CuentasTotalizadorasControlador.java

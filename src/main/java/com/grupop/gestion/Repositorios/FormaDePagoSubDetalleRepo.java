@@ -27,4 +27,7 @@ public interface FormaDePagoSubDetalleRepo extends JpaRepository<FormaDePagoDeta
     @Query(value = "SELECT * FROM forma_de_pago_detalle_sub_detalle WHERE id_operacion = ?1 AND tipo_operacion = ?2 AND fk_forma_de_pago = 3", nativeQuery = true)
     FormaDePagoDetalleSubDetalle obtenerPorIdOperacionAndIdTipoOperacion(Long idOperacion, Long idTipoOperacion);
 
+    @Query(value = "SELECT * FROM forma_de_pago_detalle_sub_detalle WHERE id_operacion = ? AND tipo_operacion = 3", nativeQuery = true)
+    List<FormaDePagoDetalleSubDetalle> obtenerPorIdCobro(Long idCobro);
+
 }

@@ -136,6 +136,7 @@ public class CreditoControlador {
         Map<String,?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
 
         if(inputFlashMap!=null){
+            System.out.println(inputFlashMap);
             mav.addObject("exception", inputFlashMap.get("exception"));
             mav.addObject("credito", inputFlashMap.get("credito"));
         }else{
@@ -170,12 +171,20 @@ public class CreditoControlador {
         return r;
     }
 
+
     @PostMapping("/update")
     public RedirectView update(Credito dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/credito/form/" + dto.getId());
         try{
             creditoServicio.actualizar(dto);
-            if(dto.getEstadoCredito().getId() == 3l && dto.isBloqueado()) r.setUrl("/credito/new/" + dto.getVenta().getId() + "/" + creditoServicio.obtenerImporteRefinancia(dto.getId()));
+            Credito credito = creditoServicio.obtenerPorId(dto.getId());
+            //validar que no exista un nuevo credito que haya refinanciado
+            if(credito.getEstadoCredito().getId() == 3l && !creditoServicio.verificarSiHayUnCreditoActivoPorFkVenta(credito.getVenta().getId())){
+                System.out.println("Refinanciar credito");
+                r.setUrl("/credito/form/new/" + credito.getVenta().getId() + "/" + creditoServicio.obtenerImporteRefinancia(credito.getId()));
+                attributes.addFlashAttribute("credito", new Credito());
+            }
+
             attributes.addFlashAttribute("exito", "Se ha actualizado el credito correctamente");
         } catch (Exception e){
             e.printStackTrace();

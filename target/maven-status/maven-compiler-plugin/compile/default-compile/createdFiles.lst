@@ -45,6 +45,7 @@ com\grupop\gestion\Controladores\TipoComprobanteControlador.class
 com\grupop\gestion\Controladores\EntidadBaseControlador.class
 com\grupop\gestion\Entidades\FormaDePagoDetalleSubDetalle.class
 com\grupop\gestion\Repositorios\CuentasTotalizadorasRepo.class
+com\grupop\gestion\DTO\FormaDePagoDetalleDTO.class
 com\grupop\gestion\Controladores\ErroresControlador.class
 com\grupop\gestion\Repositorios\VentaDetalleImputacionRepo.class
 com\grupop\gestion\Entidades\CobroDetalleCtaCte.class
@@ -121,6 +122,7 @@ com\grupop\gestion\Repositorios\PuestoRepo.class
 com\grupop\gestion\Entidades\TipoProducto.class
 com\grupop\gestion\Entidades\CompraDetalleImputacion.class
 com\grupop\gestion\Entidades\Moneda.class
+com\grupop\gestion\DTO\CobroDetalleCuotasReporteDto.class
 com\grupop\gestion\Entidades\PagoDetalleImputacion.class
 com\grupop\gestion\Entidades\Turno.class
 com\grupop\gestion\Repositorios\TurnoRepo.class
@@ -189,6 +191,7 @@ com\grupop\gestion\Servicios\CompraDetalleServicio.class
 com\grupop\gestion\Reportes\EntidadBaseExporterExcel.class
 com\grupop\gestion\Servicios\UrbanizacionServicio.class
 com\grupop\gestion\Entidades\EstadoCredito.class
+com\grupop\gestion\Reportes\ReporteDeCobroRecibo.class
 com\grupop\gestion\Servicios\CompraDetalleImputacionServicio.class
 com\grupop\gestion\DTO\ManzanaDto.class
 com\grupop\gestion\Repositorios\CobroDetalleCuotasRepo.class
@@ -209,6 +212,7 @@ com\grupop\gestion\Repositorios\ProductoRepo.class
 com\grupop\gestion\Servicios\BancoEmisorServicio.class
 com\grupop\gestion\Controladores\CobroDetalleCtaCteControlador.class
 com\grupop\gestion\Controladores\ClasificacionCtaControlador.class
+com\grupop\gestion\Configuracion\ConvertidorNumATexto.class
 com\grupop\gestion\Controladores\CreditoControlador.class
 com\grupop\gestion\Repositorios\ErroresRepo.class
 com\grupop\gestion\Controladores\CompraDetalleControlador.class

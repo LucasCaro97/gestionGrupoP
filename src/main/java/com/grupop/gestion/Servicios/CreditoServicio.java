@@ -44,6 +44,7 @@ public class CreditoServicio {
     private final IndiceCacServicio indiceCacServicio;
     private final EstadoCreditoServicio estadoCreditoServicio;
 
+
     @Transactional
     public void crear(Credito dto, String venceLosDias) {
         PlanPago plan = planPagoServicio.obtenerPorId(dto.getPlanPago().getId());
@@ -87,7 +88,7 @@ public class CreditoServicio {
             }
         }
 
-        Credito credito = creditoRepo.findFirstByOrderByIdDesc();
+        Credito credito = buscarUltimoCredito();
 
 
         for (int i = 1; i <= credito.getCantCuotas(); i++) {
@@ -143,8 +144,12 @@ public class CreditoServicio {
 
             if(c.getEstadoCredito().getId() != dto.getEstadoCredito().getId()){
                 try{
-                    c.setEstadoCredito(dto.getEstadoCredito());
-                    if(dto.getEstadoCredito().getId() != 1l ) c.setBloqueado(true);
+                    if (dto.getEstadoCredito().getId() != null )    c.setEstadoCredito(dto.getEstadoCredito());
+                    if(dto.getEstadoCredito().getId() != 1l && dto.getEstadoCredito().getId() != null) c.setBloqueado(true);
+                    if(dto.getEstadoCredito().getId() == 5 && dto.getEstadoCredito().getId() != null){
+                        System.out.println("Marcar lote como disponible");
+                        ventaServicio.alterarEstadoLotes(c.getVenta().getId(), 1l);
+                    }
                     creditoRepo.save(c);
                     creditoDetalleServicio.actualizarEstadoCuotasConSaldo(dto);
 
@@ -183,6 +188,11 @@ public class CreditoServicio {
     @Transactional(readOnly = true)
     public Long buscarUltimoId() {
         return creditoRepo.buscarUltimoId();
+    }
+
+    @Transactional(readOnly = true)
+    public Credito buscarUltimoCredito() {
+        return creditoRepo.findFirstByOrderByIdDesc();
     }
 
     public void regenerarCuotas(Long idCredito, List<CreditoDetalleDto> arrayListB) {
@@ -412,7 +422,12 @@ public class CreditoServicio {
 
     @Transactional(readOnly = true)
     public BigDecimal obtenerImporteRefinancia(Long id) {
-        Credito c = creditoRepo.findById(id).get();
-        return c.getRefinancia();
+        return creditoRepo.obtenerImporteRefinancia(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean verificarSiHayUnCreditoActivoPorFkVenta(Long id) {
+        if(creditoRepo.verificarSiHayUnCreditoActivoPorFkVenta(id) == 0) return false;
+        else return true;
     }
 }

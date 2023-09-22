@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -123,5 +124,7 @@ public class FormaDePagoDetalleServicio {
     public Integer existsByIdOperacionAndTipoOperacionId(Long idOperacion, Long idTipoOperacion) {
        return formaDePagoADetallarRepo.existsByIdOperacionAndTipoOperacionId(idOperacion, idTipoOperacion);
     }
+
+
 
 }

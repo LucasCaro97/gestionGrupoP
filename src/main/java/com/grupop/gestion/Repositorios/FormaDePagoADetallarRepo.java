@@ -2,11 +2,13 @@ package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.FormaDePagoDetalle;
 import com.grupop.gestion.Entidades.FormaDePagoDetallePK;
+import com.grupop.gestion.Entidades.FormaDePagoDetalleSubDetalle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
 public interface FormaDePagoADetallarRepo extends JpaRepository<FormaDePagoDetalle, FormaDePagoDetallePK> {
@@ -39,4 +41,6 @@ public interface FormaDePagoADetallarRepo extends JpaRepository<FormaDePagoDetal
     Integer existsByIdOperacionAndTipoOperacionId(Long idOperacion, Long idTipoOperacion);
 
     FormaDePagoDetalle findTopByOrderByIdOperacion();
+
+
 }

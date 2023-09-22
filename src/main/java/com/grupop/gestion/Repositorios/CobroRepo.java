@@ -1,6 +1,7 @@
 package com.grupop.gestion.Repositorios;
 
 import com.grupop.gestion.Entidades.Cobro;
+import com.grupop.gestion.Entidades.CobroDetalleCuotas;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -63,4 +64,7 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
                                                       @Param("talHasta") Integer talHasta,
                                                       @Param("idFormaPago") Long idFormaPago);
 
-   }
+
+    @Query( value = "SELECT * FROM cobro_detalle_cuotas WHERE cobro_id_id = ?" , nativeQuery = true)
+    List<CobroDetalleCuotas> obtenerLineasDetalle(Long idCobro);
+}

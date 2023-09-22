@@ -50,10 +50,11 @@
 
 
 #comandos {
-    position: absolute;
-    top: 10%;
-    left: 74%;
-    width: 100px;
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        top: 115px;
+        width: 1300px;
 }
 
 .btn-outline-success {

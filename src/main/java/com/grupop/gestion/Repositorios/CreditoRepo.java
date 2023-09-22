@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
+
 @Repository
 public interface CreditoRepo extends JpaRepository<Credito, Long> {
 
@@ -24,4 +26,11 @@ public interface CreditoRepo extends JpaRepository<Credito, Long> {
 
 
     Page<Credito> findAllByOrderByIdDesc(Pageable pageable);
+
+
+    @Query(value = "SELECT refinancia FROM credito WHERE id = ?", nativeQuery = true)
+    BigDecimal obtenerImporteRefinancia(Long id);
+
+    @Query( value = "SELECT COUNT(*) FROM credito WHERE fk_venta = ? AND bloqueado = 0 " , nativeQuery = true)
+    Integer verificarSiHayUnCreditoActivoPorFkVenta(Long id);
 }

@@ -1,11 +1,12 @@
 package com.grupop.gestion.Controladores;
 
-import com.grupop.gestion.Entidades.Cheque;
-import com.grupop.gestion.Entidades.Cobro;
-import com.grupop.gestion.Entidades.FormaDePago;
-import com.grupop.gestion.Entidades.TipoIva;
+import com.grupop.gestion.DTO.CobroDetalleCuotasReporteDto;
+import com.grupop.gestion.DTO.FormaDePagoDetalleDTO;
+import com.grupop.gestion.Entidades.*;
+import com.grupop.gestion.Reportes.ReporteDeCobroRecibo;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,8 +45,10 @@ public class CobroControlador {
     private final VentaServicio ventaServicio;
     private final CobroDetalleCtaCteServicio cobroDetalleCtaCteServicio;
     private final FormaDePagoDetalleServicio formaDePagoDetalleServicio;
+    private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
     private final ChequeServicio chequeServicio;
     private final CobroDetalleAdelantoServicio cobroDetalleAdelantoServicio;
+    private final EntidadBaseServicio entidadBaseServicio;
 
     @GetMapping
     public ModelAndView getAll(@RequestParam Map<String, Object> params,  HttpServletRequest request){
@@ -181,6 +185,44 @@ public class CobroControlador {
     @GetMapping("/obtenerTotalPorId/{id}")
     public ResponseEntity<BigDecimal> obtenerTotalPorId(@PathVariable Long id){
         return ResponseEntity.ok(cobroServicio.obtenerTotalPorId(id));
+    }
+
+    @GetMapping("/exportarPDF/{idCobro}")
+    public ResponseEntity<byte[]> generarReporteRecibo(HttpServletResponse response, @PathVariable Long idCobro){
+        try{
+            Cobro cobro = cobroServicio.obtenerPorId(idCobro);
+            List<CobroDetalleCuotas> listaItems = cobroDetalleCuotasServicio.obtenerPorCobro(idCobro);
+            List<FormaDePagoDetalleSubDetalle> listaFormasDePago = formaDePagoDetalleSubDetalleServicio.obtenerPorIdCobro(idCobro);
+            BigDecimal subtotal = BigDecimal.ZERO;
+
+            List<CobroDetalleCuotasReporteDto> listaItemsDto = new ArrayList<>();
+            List<FormaDePagoDetalleDTO> listaFormaDePagoDetalleDto = new ArrayList<>();
+
+            for (CobroDetalleCuotas c:listaItems ) {
+                CobroDetalleCuotasReporteDto cDTO = new CobroDetalleCuotasReporteDto();
+                cDTO.setDescripcion("Venta: " + c.getVentaId().getId() + " Credito: " + c.getCreditoId().getId() + "("+ c.getCreditoId().getTalonario() + "-"+ c.getCreditoId().getNroComprobante() +")" +
+                        " Cuota Nro. " + c.getNroCuota() +"/" + c.getCreditoId().getPlanPago().getCantCuota() + " Fecha Venc. " + c.getFechaVencimiento());
+                cDTO.setIntereses(BigDecimal.ZERO);
+                cDTO.setTotal(c.getImporteFinal());
+                listaItemsDto.add(cDTO);
+                subtotal = subtotal.add(c.getImporteFinal());
+            }
+
+
+            for (FormaDePagoDetalleSubDetalle f: listaFormasDePago ) {
+                FormaDePagoDetalleDTO fDto = new FormaDePagoDetalleDTO();
+                fDto.setDescripcion(f.getFormaPago().getDescripcion());
+                fDto.setImporte(f.getMonto());
+                listaFormaDePagoDetalleDto.add(fDto);
+            }
+
+            ReporteDeCobroRecibo recibo = new ReporteDeCobroRecibo(cobro, entidadBaseServicio.obtenerNombrePorFkCliente(cobro.getCliente().getId()).getRazonSocial()  ,listaItemsDto, listaFormaDePagoDetalleDto);
+            return recibo.exportInvoice();
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 
