@@ -37,3 +37,42 @@ $("#crearLotes").click(function(){
 
 })
 
+
+$("#btnCrearManzana").click(function(){
+   var url = window.location.href;
+   var urlObj = new URL(url);
+   urlObj.pathname = "/manzana/createRest";
+   var nuevaUrl = urlObj.href;
+
+    if($("#inputManzana").val() == ""){
+        alert("La descripcion esta vacia")
+    }else{
+        const data = {
+            descripcion: $("#inputManzana").val(),
+            idUrbanizacion: $("#id").val()
+            };
+
+        const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(data)
+                };
+
+        console.log(data)
+
+        fetch(nuevaUrl, requestOptions)
+            .then(response =>{
+                if(!response.ok){
+                    alert("La solicitud no fue exitosa")
+                }else{
+                    window.location.reload()
+                }
+            })
+            .catch(error => {
+                alert("Hubo un error", error)
+                })
+    }
+})
+

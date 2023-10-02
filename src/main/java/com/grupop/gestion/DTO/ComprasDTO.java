@@ -13,7 +13,8 @@ import java.time.LocalDate;
 public class ComprasDTO {
 
     private Long id;
-    private String proveedor;
+    private String entidad;
+    private Long tipoOperacion;
     private LocalDate fechaComprobante;
     private Integer talonario;
     private String nroComprobante;

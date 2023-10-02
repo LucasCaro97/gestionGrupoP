@@ -1,8 +1,8 @@
 package com.grupop.gestion.Reportes;
 
 
-import com.grupop.gestion.DTO.CobrosDTO;
 import com.grupop.gestion.DTO.ComprasDTO;
+import com.grupop.gestion.DTO.OperacionesDTO;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
@@ -87,7 +87,7 @@ public class CompraExporterExcel {
             celda.setCellStyle(estilo);
 
             celda = fila.createCell(1);
-            celda.setCellValue(c.getProveedor());
+            celda.setCellValue(c.getEntidad());
             hoja.autoSizeColumn(1);
             celda.setCellStyle(estilo);
 

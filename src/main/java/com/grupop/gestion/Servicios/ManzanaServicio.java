@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.ManzanaAltDTO;
 import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Repositorios.ManzanaRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ManzanaServicio {
 
     private final ManzanaRepo manzanaRepo;
+    private final UrbanizacionServicio urbanizacionServicio;
 
 
     @Transactional
@@ -21,6 +23,15 @@ public class ManzanaServicio {
         Manzana manzana = new Manzana();
         manzana.setDescripcion(dto.getDescripcion());
         manzana.setUrbanizacion(dto.getUrbanizacion());
+        manzana.setUltimoNroLote(0);
+        manzanaRepo.save(manzana);
+    }
+
+    @Transactional
+    public void crear(ManzanaAltDTO dto){
+        Manzana manzana = new Manzana();
+        manzana.setDescripcion(dto.getDescripcion());
+        manzana.setUrbanizacion(urbanizacionServicio.obtenerPorId(dto.getIdUrbanizacion()));
         manzana.setUltimoNroLote(0);
         manzanaRepo.save(manzana);
     }

@@ -96,8 +96,9 @@ public class CobroControlador {
     }
 
     @GetMapping("/form/{id}")
-    public ModelAndView getFormUpd(@PathVariable Long id){
+    public ModelAndView getFormUpd(@PathVariable Long id, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("form-cobros");
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         Cobro cobro = cobroServicio.obtenerPorId(id);
         mav.addObject("cobro", cobro);
         mav.addObject("listaClientes", clienteServicio.obtenerTodos());
@@ -114,8 +115,11 @@ public class CobroControlador {
         mav.addObject("tablaDetalleCtaCte", cobroDetalleCtaCteServicio.obtenerTodosPorCobro(id));
         mav.addObject("fechaComprobante", cobro.getFechaComprobante());
         mav.addObject("listaAdelanto", cobroDetalleAdelantoServicio.obtenerPorCobro(id));
+        if( inputFlashMap != null) mav.addObject("exception", inputFlashMap.get("exception"));
         return mav;
-    }
+
+        }
+
 
     @PostMapping("/create")
     public RedirectView create(@RequestParam String fechaAlta, @RequestParam(required = false)MultipartFile photo, Cobro dto, RedirectAttributes attributes){
@@ -138,7 +142,6 @@ public class CobroControlador {
     public RedirectView update (@RequestParam String fechaAlta, @RequestParam(required = false)MultipartFile photo, Cobro dto, RedirectAttributes attributes){
         RedirectView r = new RedirectView("/cobros/form/" + dto.getId());
         try {
-            System.out.println(photo.getName());
             cobroServicio.actualizar(dto, fechaAlta, photo);
             Cobro c = cobroServicio.obtenerPorId(dto.getId());
 
@@ -148,15 +151,11 @@ public class CobroControlador {
                 }else if( ( dto.getFormaDePago().getId() == 15 || c.getFormaDePago().getId() == 15 ) && chequeServicio.validarExistencia(c.getId()) == 0 ){
                     r.setUrl("/cheque/form");
                 }
-            }else{
-                attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el cobro");
             }
-
         }catch (Exception e){
-            attributes.addFlashAttribute("cobro", dto);
             attributes.addFlashAttribute("exception", e.getMessage());
-            e.printStackTrace();
-            r.setUrl("/cobros/form");
+            e.getMessage();
+            r.setUrl("/cobros/form/" + dto.getId());
         }
         return r;
     }

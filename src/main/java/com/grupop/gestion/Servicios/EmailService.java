@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Service
 @RequiredArgsConstructor
@@ -20,30 +21,34 @@ public class EmailService {
     @Value("${spring.mail.username}")
     private String from;
 
-    private static final String SUBJECT = "Welcome email";
-    private static final String TEXT = "Welcome to our Page. Thank you for registering!";
-
     @Async
-    public void send(String to, String tipoCorreo, String nroComprobante, Long cliente, BigDecimal importe, PlanPago planPago){
+    public void sendCobranza(String to, String tipoCorreo, String cliente, LocalDate fechaVencimiento, BigDecimal montoTotal, String subject){
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setFrom(from);
-        message.setSubject(SUBJECT);
-        message.setText(generarMensaje(tipoCorreo,nroComprobante,cliente,importe,planPago));
+        message.setSubject(subject);
+        message.setText(generarMensajeCobranza(tipoCorreo,cliente,fechaVencimiento, montoTotal));
         sender.send(message);
     }
 
-    public String generarMensaje(String tipoCorreo, String nroComprobante, Long cliente, BigDecimal importe, PlanPago planPago){
+
+    public String generarMensajeCobranza(String tipoCorreo, String cliente, LocalDate fechaVencimiento, BigDecimal montoTotal){
         String texto = "";
         switch (tipoCorreo){
-            case "credito":
-                texto = "Se ha creado un nuevo credito, correspondiente a la venta -" + nroComprobante + " cliente Nro-" + cliente + " con un importe de " + importe +
-                        " con el plan de pago " + planPago.getDescripcion();
+            case "atrasados":
+                texto = "Buenas tardes cliente " + cliente +", le informamos que tiene cuotas vencidas (" + fechaVencimiento + ") con un valor de $" + montoTotal +
+                ". Le agradecemos pueda acercarse a la sucursal mas cercana o comunicar su intencion de pago. Muchas gracias. ";
+                break;
+            case "mensualidad":
+                texto = "Buenas tardes cliente " + cliente +", le informamos que su cuota actual esta proxima a vencer (" + fechaVencimiento + ") con un valor de $" + montoTotal +
+                        ". Le agradecemos pueda acercarse a la sucursal mas cercana o comunicar su intencion de pago. Muchas gracias. ";
                 break;
         }
 
         return texto;
 
     }
+
+
 
 }

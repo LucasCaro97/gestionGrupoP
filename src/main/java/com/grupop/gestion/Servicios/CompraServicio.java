@@ -1,6 +1,7 @@
 package com.grupop.gestion.Servicios;
 
 import com.grupop.gestion.DTO.ComprasDTO;
+import com.grupop.gestion.DTO.OperacionesDTO;
 import com.grupop.gestion.Entidades.Cobro;
 import com.grupop.gestion.Entidades.Compra;
 import com.grupop.gestion.Entidades.EntidadBase;
@@ -30,7 +31,7 @@ public class CompraServicio {
     private final EntidadBaseServicio entidadBaseServicio;
 
     @Transactional
-    public void crear(Compra dto, String fechaComprobante, MultipartFile photo){
+    public void crear(Compra dto, String fechaComprobante, MultipartFile photo) {
         Compra compra = new Compra();
         compra.setProveedor(dto.getProveedor());
         compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
@@ -44,7 +45,7 @@ public class CompraServicio {
         compra.setBloqueado(false);
         compra.setTipoOperacion(tipoOperacionServicio.obtenerPorId(2l));
         talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
-        if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
+        if (photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
         compraRepo.save(compra);
 
         Compra ultimaCompra = compraRepo.findTopByOrderByIdDesc();
@@ -52,44 +53,48 @@ public class CompraServicio {
     }
 
     @Transactional
-    public void actualizar(Compra dto, String fechaComprobante, MultipartFile photo){
-        Compra compra = compraRepo.findById(dto.getId()).get();
-        Long idFormaDePagoAnterior;
-        try{
-            idFormaDePagoAnterior = compra.getFormaDePago().getId();
-        }catch (Exception e){
-            idFormaDePagoAnterior = null;
-        }
+    public void actualizar(Compra dto, String fechaComprobante, MultipartFile photo) throws Exception {
+        if (dto.getFormaDePago() == null && existsByCompra(dto.getId())) {
+            throw new Exception("Antes de guardar debe seleccionar una forma de pago");
+        } else {
+            Compra compra = compraRepo.findById(dto.getId()).get();
+            Long idFormaDePagoAnterior;
+            try {
+                idFormaDePagoAnterior = compra.getFormaDePago().getId();
+            } catch (Exception e) {
+                idFormaDePagoAnterior = null;
+            }
 
 
-        if(compra.isBloqueado()){
-            compra.setObservaciones(dto.getObservaciones());
-            if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
-            compraRepo.save(compra);
-        }else{
+            if (compra.isBloqueado()) {
+                compra.setObservaciones(dto.getObservaciones());
+                if (photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
+                compraRepo.save(compra);
+            } else {
 
-        compra.setProveedor(dto.getProveedor());
-        compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
-        compra.setTipoComprobante(dto.getTipoComprobante());
-        if(compra.getTalonario() != dto.getTalonario()){
-            talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
-            compra.setTalonario(dto.getTalonario());
-        }
-        compra.setNroComprobante(dto.getNroComprobante());
-        compra.setSector(dto.getSector());
-        compra.setFormaDePago(dto.getFormaDePago());
-        compra.setObservaciones(dto.getObservaciones());
-        if(photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
-        compraRepo.save(compra);
+                compra.setProveedor(dto.getProveedor());
+                compra.setFechaComprobante(LocalDate.parse(fechaComprobante));
+                compra.setTipoComprobante(dto.getTipoComprobante());
+                if (compra.getTalonario() != dto.getTalonario()) {
+                    talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
+                    compra.setTalonario(dto.getTalonario());
+                }
+                compra.setNroComprobante(dto.getNroComprobante());
+                compra.setSector(dto.getSector());
+                compra.setFormaDePago(dto.getFormaDePago());
+                compra.setObservaciones(dto.getObservaciones());
+                if (photo != null && !photo.isEmpty()) compra.setImage(imageService.copy(photo));
+                compraRepo.save(compra);
 
-            if(compra.getFormaDePago() != null){
-                // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
-                if(idFormaDePagoAnterior != compra.getFormaDePago().getId()){
-                    if(compra.getFormaDePago().getId() == 52){ //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
-                        formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
-                    }else{
-                        formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
-                        formaDePagoDetalleServicio.crearSubDetalleAutomatico(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
+                if (compra.getFormaDePago() != null) {
+                    // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+                    if (idFormaDePagoAnterior != compra.getFormaDePago().getId()) {
+                        if (compra.getFormaDePago().getId() == 52) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                            formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
+                        } else {
+                            formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
+                            formaDePagoDetalleServicio.crearSubDetalleAutomatico(compra.getId(), compra.getTipoOperacion().getId(), compra.getTotal(), compra.getFormaDePago());
+                        }
                     }
                 }
             }
@@ -97,26 +102,34 @@ public class CompraServicio {
     }
 
     @Transactional(readOnly = true)
-    public Page<Compra> obtenerTodas(int page, int size){ return compraRepo.findAllByOrderByIdDesc(PageRequest.of(page,size)); }
+    public Page<Compra> obtenerTodas(int page, int size) {
+        return compraRepo.findAllByOrderByIdDesc(PageRequest.of(page, size));
+    }
 
     @Transactional(readOnly = true)
-    public Compra obtenerPorId(Long id){ return compraRepo.findById(id).get(); }
+    public Compra obtenerPorId(Long id) {
+        return compraRepo.findById(id).get();
+    }
 
     @Transactional
-    public void eliminarPorId(Long id){ compraRepo.deleteById(id); }
+    public void eliminarPorId(Long id) {
+        compraRepo.deleteById(id);
+    }
 
     @Transactional(readOnly = true)
-    public Long buscarUltimoId(){ return compraRepo.findLastId(); }
+    public Long buscarUltimoId() {
+        return compraRepo.findLastId();
+    }
 
     @Transactional
-    public void actualizarTotal(Long idCompra, BigDecimal total){
+    public void actualizarTotal(Long idCompra, BigDecimal total) {
         Compra cpa = compraRepo.findById(idCompra).get();
         cpa.setTotal(total);
         compraRepo.save(cpa);
     }
 
     @Transactional
-    public void actualizarTotal(Long idCompra){
+    public void actualizarTotal(Long idCompra) {
         BigDecimal resultado = BigDecimal.ZERO;
         Compra compra = compraRepo.findById(idCompra).get();
         BigDecimal totalProd = compraRepo.obtenerTotalProductos(compra.getId()).orElse(BigDecimal.ZERO);
@@ -131,7 +144,8 @@ public class CompraServicio {
 
     @Transactional(readOnly = true)
     public Double obtenerTotalPorId(Long id) {
-        return compraRepo.obtenerTotalPorId(id); }
+        return compraRepo.obtenerTotalPorId(id);
+    }
 
 
     @Transactional(readOnly = true)
@@ -140,7 +154,7 @@ public class CompraServicio {
     }
 
     @Transactional
-    public void marcarComoBloqueado(Long id){
+    public void marcarComoBloqueado(Long id) {
         Compra c = compraRepo.findById(id).get();
         c.setBloqueado(true);
         compraRepo.save(c);
@@ -159,58 +173,65 @@ public class CompraServicio {
     }
 
     @Transactional(readOnly = true)
-    public BigDecimal obtenerTotalMensual(){
+    public BigDecimal obtenerTotalMensual() {
         return compraRepo.obtenerTotalCompradoMensual();
     }
 
     @Transactional(readOnly = true)
-    public BigDecimal obtenerSaldoProveedor(Long idOperacion){
+    public BigDecimal obtenerSaldoProveedor(Long idOperacion) {
         Long fkProveedor = compraRepo.obtenerCliente(idOperacion);
         return proveedorServicio.obtenerSaldo(fkProveedor);
     }
 
 
-    public List<ComprasDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago ){
-        if(excluirTal){
+    @Transactional(readOnly = true)
+    public List<ComprasDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago) {
+        if (excluirTal) {
             List<Compra> listaCompra = compraRepo.obtenerOperacionesExcluyendoTalonario(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
-            List<ComprasDTO> listaCompraDTO = new ArrayList<>();
+            List<ComprasDTO> listaOperacionesDTO = new ArrayList<>();
 
-            for (Compra c: listaCompra) {
-                ComprasDTO comprasDTO = new ComprasDTO();
-                comprasDTO.setId(c.getId());
-                comprasDTO.setProveedor(entidadBaseServicio.obtenerNombrePorFkProveedor(c.getProveedor().getId()).getRazonSocial());
-                comprasDTO.setFechaComprobante(c.getFechaComprobante());
-                comprasDTO.setTalonario(c.getTalonario());
-                comprasDTO.setNroComprobante(c.getNroComprobante());
-                comprasDTO.setSector(c.getSector().getDescripcion());
-                comprasDTO.setFormaPago(c.getFormaDePago().getDescripcion());
-                comprasDTO.setTotal(c.getTotal());
-                listaCompraDTO.add(comprasDTO);
+            for (Compra c : listaCompra) {
+                ComprasDTO opDto = new ComprasDTO();
+                opDto.setId(c.getId());
+                opDto.setTipoOperacion(c.getTipoOperacion().getId());
+                opDto.setEntidad(entidadBaseServicio.obtenerNombrePorFkProveedor(c.getProveedor().getId()).getRazonSocial());
+                opDto.setFechaComprobante(c.getFechaComprobante());
+                opDto.setTalonario(c.getTalonario());
+                opDto.setNroComprobante(c.getNroComprobante());
+                opDto.setSector(c.getSector().getDescripcion());
+                opDto.setFormaPago(c.getFormaDePago().getDescripcion());
+                opDto.setTotal(c.getTotal());
+                listaOperacionesDTO.add(opDto);
             }
-            return listaCompraDTO;
+            return listaOperacionesDTO;
 
-        }else{
+        } else {
             List<Compra> listaCompra = compraRepo.obtenerOperaciones(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
-            List<ComprasDTO> listaCompraDTO = new ArrayList<>();
+            List<ComprasDTO> listaOperacionesDTO = new ArrayList<>();
 
-            for (Compra c: listaCompra) {
-                ComprasDTO comprasDTO = new ComprasDTO();
-                comprasDTO.setId(c.getId());
-                comprasDTO.setProveedor(entidadBaseServicio.obtenerNombrePorFkProveedor(c.getProveedor().getId()).getRazonSocial());
-                comprasDTO.setFechaComprobante(c.getFechaComprobante());
-                comprasDTO.setTalonario(c.getTalonario());
-                comprasDTO.setNroComprobante(c.getNroComprobante());
-                comprasDTO.setSector(c.getSector().getDescripcion());
-                comprasDTO.setFormaPago(c.getFormaDePago().getDescripcion());
-                comprasDTO.setTotal(c.getTotal());
-                listaCompraDTO.add(comprasDTO);
+            for (Compra c : listaCompra) {
+                ComprasDTO opDto = new ComprasDTO();
+                opDto.setId(c.getId());
+                opDto.setTipoOperacion(c.getTipoOperacion().getId());
+                opDto.setEntidad(entidadBaseServicio.obtenerNombrePorFkProveedor(c.getProveedor().getId()).getRazonSocial());
+                opDto.setFechaComprobante(c.getFechaComprobante());
+                opDto.setTalonario(c.getTalonario());
+                opDto.setNroComprobante(c.getNroComprobante());
+                opDto.setSector(c.getSector().getDescripcion());
+                opDto.setFormaPago(c.getFormaDePago().getDescripcion());
+                opDto.setTotal(c.getTotal());
+                listaOperacionesDTO.add(opDto);
             }
-            return listaCompraDTO;
+            return listaOperacionesDTO;
         }
 
     }
 
-
+    @Transactional(readOnly = true)
+    public boolean existsByCompra(Long compraId){
+        if(compraRepo.existsByCompra(compraId) == 0 && compraRepo.existsImputacionByCompra(compraId) == 0) return false;
+        else return true;
+    }
 
 }
 

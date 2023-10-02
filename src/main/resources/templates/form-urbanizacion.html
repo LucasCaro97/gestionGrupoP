@@ -88,21 +88,30 @@
           <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
             <div class="accordion-body">
 
-              <table class="table table-hover table-bordered">
-                <thead>
-                <tr class="table-dark">
-                  <th>Id</th>
-                  <th>Descripcion</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="xxx : ${listaManzanas}">
-                  <td th:text="${xxx.id}"></td>
-                  <td th:text="${xxx.descripcion}"></td>
-                </tr>
-                </tbody>
-              </table>
+              <div class="d-flex gap-4 mb-2">
+                <div>
+                  <input class="form-control" id="inputManzana" type="text" placeholder="Descripcion">
+                </div>
+                <buttton class="btn btn-primary" id="btnCrearManzana">Crear</buttton>
+              </div>
 
+              <div>
+                <table class="table table-hover table-bordered">
+                  <thead>
+                  <tr class="table-dark">
+                    <th>Id</th>
+                    <th>Descripcion</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="xxx : ${listaManzanas}">
+                    <td th:text="${xxx.id}"></td>
+                    <td th:text="${xxx.descripcion}"></td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              
             </div>
           </div>
         </div>

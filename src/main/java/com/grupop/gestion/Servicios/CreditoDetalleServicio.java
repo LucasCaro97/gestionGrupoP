@@ -51,7 +51,7 @@ public class CreditoDetalleServicio {
     }
 
     @Transactional
-    public void actualizarSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
+    public boolean actualizarSaldo(Long creditoId, Integer nroCuota, BigDecimal importeCobrado){
 
         CreditoDetalle c = creditoDetalleRepo.buscarPorCreditoAndNroCuota(creditoId, nroCuota);
 
@@ -59,10 +59,14 @@ public class CreditoDetalleServicio {
             c.setSaldo(BigDecimal.ZERO);
             c.setCobrado(true);
             c.setEstadoCuota(estadoCreditoServicio.obtenerPorId(2l));
+            creditoDetalleRepo.save(c);
+            return true;
         }else{
             c.setSaldo(c.getSaldo().subtract(importeCobrado));
+            creditoDetalleRepo.save(c);
+            return false;
         }
-        creditoDetalleRepo.save(c);
+
     }
 
     @Transactional
@@ -122,6 +126,11 @@ public class CreditoDetalleServicio {
     @Transactional(readOnly = true)
     public List<CreditoDetalle> obtenerCuotasCobrarMensual() {
         return creditoDetalleRepo.obtenerCuotasCobrarMensual();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CreditoDetalle> obtenerCuotasCobrarAtrasados() {
+        return creditoDetalleRepo.obtenerCuotasCobrarAtrasados();
     }
 
     @Transactional(readOnly = true)

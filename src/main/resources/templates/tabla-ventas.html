@@ -39,6 +39,7 @@
                                     <th>Nro Comp</th>
                                     <th>Sector</th>
                                     <th>Forma Pago</th>
+                                    <th>Total</th>
                                     <th>Observacion</th>
                                     <th>Accion</th>
                                 </tr>
@@ -51,6 +52,7 @@
                                     <td th:text="${xxx.talonario} + ' - ' + ${xxx.nroComprobante}"></td>
                                     <td th:text="${xxx.sector != null ? xxx.sector.descripcion : ''}"></td>
                                     <td th:text="${xxx.formaDePago != null ? xxx.formaDePago.descripcion : ''}"></td>
+                                    <td th:text="${#numbers.formatDecimal(xxx.total,1,'COMMA',2,'POINT')}"></td>
                                     <td th:text="${xxx.observaciones}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">

@@ -20,13 +20,13 @@
 
     <div class="container">
         <div class="row mt-4">
-            <h1>Reportes de Operaciones</h1>
-                <form th:action="@{/reporting/generarExcelOperaciones}" method="post" class="row mb-4">
+            <h1>Reportes de Cuotas Cobradas </h1>
+                <form th:action="@{/reporting/generarExcelAdelantos}" method="post" class="row mb-4">
                     <div class="col-md-4 mb-3">
-                        <label for="tipoOperacion" class="form-label">Tipo de Operacion: </label>
-                        <select id="tipoOperacion" name="tipoOperacion" class="form-select" aria-label="Seleccionar tipo Operacion" required>
-                            <option selected value="">Seleccione operacion</option>
-                            <option th:each="xxx : ${listaOperaciones}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
+                        <label for="cliente" class="form-label">Cliente: </label>
+                        <select id="cliente" name="cliente" class="form-select" aria-label="Seleccionar Cliente">
+                            <option selected value="">Seleccione Cliente</option>
+                            <option th:each="xxx : ${listaClientes}" th:text="${xxx.id}" th:value="${xxx.id}"></option>
                         </select>
                     </div>
 
@@ -43,41 +43,17 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="sector" class="form-label">Sector: </label>
-                        <select id="sector" name="sector" class="form-select" aria-label="Seleccionar sector">
-                            <option selected value="">Seleccione Sector</option>
-                            <option th:each="xxx : ${listaSector}" th:text="${xxx.descripcion}"
-                                    th:value="${xxx.id}"></option>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="planPago" class="form-label">Plan: </label>
+                        <select  name="planPago" size="4" multiple id="planPago" class="form-select" aria-label="Seleccionar Plan">
+                            <option selected value="">Seleccione Plan</option>
+                            <option th:each="xxx : ${listaPlanPago}" th:text="${xxx.descripcion}" th:value="${xxx.id}"></option>
                         </select>
                     </div>
 
-                    <div class="col-md-8 d-flex justify-content-around mb-3" id="divTalonario">
-                        <div class="col-md-4">
-                            <label for="talonarioDesde" class="form-label">Talonario Desde: </label>
-                            <input type="number" class="form-control" id="talonarioDesde" name="talonarioDesde">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="talonarioHasta" class="form-label">Talonario Hasta: </label>
-                            <input type="number" class="form-control" id="talonarioHasta" name="talonarioHasta">
-                        </div>
 
-                        <div id="btnExclude">
-                            <input class="form-check-input" type="checkbox" id="flexCheckDefault" name="flexCheckDefault">
-                            <label class="form-check-label" for="flexCheckDefault">
-                                Excluir
-                            </label>
-                        </div>
-                    </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label for="formaPago" class="form-label">Forma de Pago</label>
-                        <select id="formaPago" name="formaPago" class="form-select" aria-label="Seleccionar formaDePago">
-                            <option selected value="">Forma de Pago</option>
-                            <option th:each="xxx : ${listaFormasPago}" th:text="${xxx.descripcion}"
-                                    th:value="${xxx.id}"></option>
-                        </select>
-                    </div>
 
                     <div class="row d-flex justify-content-center">
                         <button type="submit" id="exportarExcel" class=" col-4 btn btn-success">Exportar Excel</button>
@@ -96,6 +72,5 @@
         integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
         crossorigin="anonymous"></script>
 <script th:src="@{/js/cambiarTema.js}"></script>
-<script th:src="@{/js/form-reporteOperaciones.js}"></script>
 </body>
 </html>

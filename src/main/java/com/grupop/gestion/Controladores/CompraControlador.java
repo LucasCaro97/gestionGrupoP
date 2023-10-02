@@ -83,8 +83,9 @@ public class CompraControlador {
     }
 
     @GetMapping("/form/{id}")
-    public ModelAndView getFormUpd(@PathVariable Long id){
+    public ModelAndView getFormUpd(@PathVariable Long id, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("form-compras");
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         Compra c = compraServicio.obtenerPorId(id);
         mav.addObject("compra", c);
         mav.addObject("action", "update");
@@ -98,6 +99,7 @@ public class CompraControlador {
         mav.addObject("tablaDetalleImputacion", compraDetalleImputacionServicio.obtenerPorCompra(id));
         mav.addObject("listaCuentasImp", cuentasContablesServicio.obtenerTodos());
         mav.addObject("fechaComprobante", c.getFechaComprobante());
+        if(inputFlashMap != null) mav.addObject("exception", inputFlashMap.get("exception"));
         return mav;
     }
 
@@ -123,7 +125,6 @@ public class CompraControlador {
     public RedirectView update(@RequestParam String fechaAlta, @RequestParam(required = false) MultipartFile photo, Compra dto, RedirectAttributes attributes){
         RedirectView redirect = new RedirectView("/compras/form/" + dto.getId());
         try{
-            System.out.println(photo);
             compraServicio.actualizar(dto, fechaAlta, photo);
             Compra c = compraServicio.obtenerPorId(dto.getId());
 
@@ -138,9 +139,8 @@ public class CompraControlador {
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el registro");
         } catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
-            attributes.addFlashAttribute("compra", dto);
-            System.out.println("Exception : " + e.getMessage());
-            redirect.setUrl("/compras/form");
+            e.getMessage();
+            redirect.setUrl("/compras/form/" + dto.getId());
         }
     return redirect;
     }

@@ -87,7 +87,7 @@ public class CobroExporterExcel {
             celda.setCellStyle(estilo);
 
             celda = fila.createCell(1);
-            celda.setCellValue(c.getCliente());
+            celda.setCellValue(c.getEntidad());
             hoja.autoSizeColumn(1);
             celda.setCellStyle(estilo);
 

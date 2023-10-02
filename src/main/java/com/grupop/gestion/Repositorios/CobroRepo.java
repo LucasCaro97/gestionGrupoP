@@ -67,4 +67,10 @@ public interface CobroRepo extends JpaRepository<Cobro,Long>{
 
     @Query( value = "SELECT * FROM cobro_detalle_cuotas WHERE cobro_id_id = ?" , nativeQuery = true)
     List<CobroDetalleCuotas> obtenerLineasDetalle(Long idCobro);
+
+    @Query(value = "SELECT COUNT (*) FROM cobro_detalle_cuotas WHERE cobro_id_id = ?", nativeQuery = true)
+    Integer existsByCobro(Long idCobro);
+
+    @Query(value = "SELECT COUNT (*) FROM cobro_detalle_cta_cte WHERE cobro_id_id = ?", nativeQuery = true)
+    Integer existsImputacionByCobro(Long idCobro);
 }

@@ -55,4 +55,10 @@ public interface PagoRepo extends JpaRepository<Pago, Long> {
             " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
             nativeQuery = true)
     List<Pago> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Long idFormaPago);
+
+    @Query(value = "SELECT COUNT(*) FROM pago_detalle WHERE fk_pago = ?" , nativeQuery = true)
+    Integer existsByPago(Long idPago);
+
+    @Query(value = "SELECT COUNT(*) FROM pago_detalle_imputacion WHERE fk_pago = ?" , nativeQuery = true)
+    Integer existsImputacionByPago(Long idPago);
 }

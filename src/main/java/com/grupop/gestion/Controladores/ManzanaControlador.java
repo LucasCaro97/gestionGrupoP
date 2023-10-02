@@ -1,6 +1,7 @@
 package com.grupop.gestion.Controladores;
 
 
+import com.grupop.gestion.DTO.ManzanaAltDTO;
 import com.grupop.gestion.Entidades.Lote;
 import com.grupop.gestion.Entidades.Manzana;
 import com.grupop.gestion.Servicios.ManzanaServicio;
@@ -8,11 +9,10 @@ import com.grupop.gestion.Servicios.UrbanizacionServicio;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -75,6 +75,16 @@ public class ManzanaControlador {
             redirect.setUrl("/manzana/form");
         }
         return redirect;
+    }
+
+    @PostMapping("createRest")
+    public ResponseEntity<String> createRest(@RequestBody ManzanaAltDTO dto, RedirectAttributes attributes){
+        try {
+            manzanaServicio.crear(dto);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Se creo el registro correctamente");
     }
 
 

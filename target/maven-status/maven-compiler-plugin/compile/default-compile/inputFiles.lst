@@ -48,7 +48,9 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\UrbanizacionControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\MonedaRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\CobroDetalleCuotasServicio.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\OperacionesExporterExcel.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\DepartamentoRepo.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\ManzanaAltDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\TalonarioRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\VendedorRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\TipoComprobanteServicio.java
@@ -59,6 +61,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\CompraDetalleControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\PagoControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\IndiceCacServicio.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\CobroCuotasDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\CobroDetalleCtaCteDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Impuestos.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\PlanPagoRepo.java
@@ -135,6 +138,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\Empleado.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\CuentasTotalizadoras.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\PagoDetalleServicioCtaCte.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Reportes\AdelantosCuotasExporterExcel.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\CreditoDetalleRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\BancoEmisorControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\CuentasContablesControlador.java
@@ -229,6 +233,7 @@ C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\gru
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Repositorios\EstadoLoteRepo.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\EstadoLoteServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\ProductoServicio.java
+C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\DTO\OperacionesDTO.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Controladores\EstadoLoteControlador.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Servicios\FormaDePagoDetalleSubDetalleServicio.java
 C:\Users\Admin\desarollo_web\gestion_local\gestionBorrador\src\main\java\com\grupop\gestion\Entidades\IndiceCAC.java

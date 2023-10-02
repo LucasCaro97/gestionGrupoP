@@ -28,8 +28,11 @@ public interface CreditoDetalleRepo extends JpaRepository<CreditoDetalle,Long> {
     Integer obtenerUltimoNroCuota(Long idCredito);
 
 
-    @Query(value = "SELECT * FROM credito_detalle WHERE vencimiento < LAST_DAY(CURDATE()) AND saldo > 0", nativeQuery = true)
+    @Query(value = "SELECT * FROM credito_detalle WHERE YEAR(vencimiento) = YEAR(CURDATE()) AND MONTH(vencimiento) = MONTH(CURDATE()) AND saldo > 0", nativeQuery = true)
     List<CreditoDetalle> obtenerCuotasCobrarMensual();
+
+    @Query(value = "SELECT * FROM credito_detalle WHERE vencimiento < CURDATE() AND saldo > 0", nativeQuery = true)
+    List<CreditoDetalle>    obtenerCuotasCobrarAtrasados();
 
     @Query(value = "SELECT vencimiento FROM credito_detalle WHERE fk_credito = ? LIMIT 1;", nativeQuery = true)
     LocalDate obtenerFechaPrimerVencimiento(Long idCredito);

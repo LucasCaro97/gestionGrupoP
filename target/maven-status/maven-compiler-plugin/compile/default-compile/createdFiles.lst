@@ -1,4 +1,5 @@
 com\grupop\gestion\DTO\ImpuestoDto.class
+com\grupop\gestion\Reportes\OperacionesExporterExcel.class
 com\grupop\gestion\Repositorios\CobroDetalleAdelantoRepo.class
 com\grupop\gestion\Servicios\VendedorServicio.class
 com\grupop\gestion\Entidades\PlanPago.class
@@ -11,6 +12,7 @@ com\grupop\gestion\Entidades\ChequeTipo.class
 com\grupop\gestion\Servicios\CreditoDetalleServicio$1.class
 com\grupop\gestion\Repositorios\ClasificacionCtaRepo.class
 com\grupop\gestion\DTO\PagoDTO.class
+com\grupop\gestion\Reportes\AdelantosCuotasExporterExcel.class
 com\grupop\gestion\Controladores\TipoIvaControlador.class
 com\grupop\gestion\Entidades\ChequeSubtipo.class
 com\grupop\gestion\Repositorios\ClienteRepo.class
@@ -57,6 +59,7 @@ com\grupop\gestion\Entidades\Credito.class
 com\grupop\gestion\Controladores\LoteControlador.class
 com\grupop\gestion\Entidades\Errores.class
 com\grupop\gestion\Servicios\ComisionServicio.class
+com\grupop\gestion\DTO\OperacionesDTO.class
 com\grupop\gestion\Controladores\FormaDePagoDetalleSubdetalleControlador.class
 com\grupop\gestion\Servicios\ImageService.class
 com\grupop\gestion\DTO\CompraDetalleImputacionDto.class
@@ -150,6 +153,7 @@ com\grupop\gestion\Entidades\FormaDePago.class
 com\grupop\gestion\Repositorios\TipoComprobanteRepo.class
 com\grupop\gestion\Servicios\ErroresServicio.class
 com\grupop\gestion\Servicios\IndiceCacServicio.class
+com\grupop\gestion\DTO\ManzanaAltDTO.class
 com\grupop\gestion\Entidades\TipoComprobante.class
 com\grupop\gestion\Controladores\CuentasTotalizadorasControlador.class
 com\grupop\gestion\Entidades\Urbanizacion.class
@@ -169,6 +173,7 @@ com\grupop\gestion\Repositorios\EstadoLoteRepo.class
 com\grupop\gestion\Repositorios\VentaDetalleRepo.class
 com\grupop\gestion\Servicios\TipoTotalizadoraServicio.class
 com\grupop\gestion\Repositorios\EntidadBaseRepo.class
+com\grupop\gestion\Servicios\CreditoServicio$1.class
 com\grupop\gestion\Controladores\ChequeSubtipoControlador.class
 com\grupop\gestion\Reportes\CompraExporterExcel.class
 com\grupop\gestion\Entidades\Venta.class
@@ -228,6 +233,7 @@ com\grupop\gestion\Repositorios\TipoOperacionRepo.class
 com\grupop\gestion\GestionApplication.class
 com\grupop\gestion\Entidades\TipoCuentaBanco.class
 com\grupop\gestion\Servicios\EstadoCreditoServicio.class
+com\grupop\gestion\Servicios\CreditoServicio$2.class
 com\grupop\gestion\Repositorios\CompraDetalleImputacionRepo.class
 com\grupop\gestion\Repositorios\ContadorTotalizadoraRepo.class
 com\grupop\gestion\Servicios\CobroDetalleAdelantoServicio.class
@@ -245,6 +251,7 @@ com\grupop\gestion\Controladores\TurnoControlador.class
 com\grupop\gestion\Repositorios\CuentasDeBancoTarjetaRepo.class
 com\grupop\gestion\Entidades\Vendedor.class
 com\grupop\gestion\Servicios\CuentasDeBancoTarjetaServicio.class
+com\grupop\gestion\DTO\CobroCuotasDTO.class
 com\grupop\gestion\Entidades\CuentasDeBancoTarjeta.class
 com\grupop\gestion\Entidades\TipoEmpleado.class
 com\grupop\gestion\Reportes\CuotasAtrasadosAndMensualesExporterExcel.class

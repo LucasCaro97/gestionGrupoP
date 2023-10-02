@@ -3,6 +3,7 @@ package com.grupop.gestion.Servicios;
 import com.grupop.gestion.DTO.CobroDetalleCuotasDto;
 import com.grupop.gestion.DTO.CobroDetalleCuotasReporteDto;
 import com.grupop.gestion.DTO.CobrosDTO;
+import com.grupop.gestion.DTO.OperacionesDTO;
 import com.grupop.gestion.Entidades.Cobro;
 import com.grupop.gestion.Entidades.CobroDetalleCuotas;
 import com.grupop.gestion.Entidades.Credito;
@@ -74,40 +75,45 @@ public class CobroServicio {
     }
 
     @Transactional
-    public void actualizar(Cobro dto, String fechaComprobante, MultipartFile photo) {
-        Cobro c = cobroRepo.findById(dto.getId()).get();
-        Long idFormaDePagoAnterior;
-        try {
-            idFormaDePagoAnterior = c.getFormaDePago().getId();
-        } catch (Exception e) {
-            idFormaDePagoAnterior = null;
-        }
+    public void actualizar(Cobro dto, String fechaComprobante, MultipartFile photo) throws Exception {
+        if (dto.getFormaDePago() == null && existsByCobro(dto.getId())) {
+            throw new Exception("Antes de guardar debe seleccionar una forma de pago");
+        } else {
+            Cobro c = cobroRepo.findById(dto.getId()).get();
+            Long idFormaDePagoAnterior;
 
-        c.setCliente(dto.getCliente());
-        c.setCuit(dto.getCuit());
-        c.setTipoIva(dto.getTipoIva());
-        c.setFechaComprobante(LocalDate.parse(fechaComprobante));
-        c.setTipoComprobante(dto.getTipoComprobante());
-        if (c.getTalonario() != dto.getTalonario()) {
-            talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
-            c.setTalonario(dto.getTalonario());
-        }
-        c.setNroComprobante(dto.getNroComprobante());
-        c.setSector(dto.getSector());
-        c.setMoneda(dto.getMoneda());
-        c.setFormaDePago(dto.getFormaDePago());
-        c.setObservaciones(dto.getObservaciones());
-        if(photo != null && !photo.isEmpty()) c.setImage(imageService.copy(photo));
-        cobroRepo.save(c);
+            try {
+                idFormaDePagoAnterior = c.getFormaDePago().getId();
+            } catch (Exception e) {
+                idFormaDePagoAnterior = null;
+            }
 
-        if (c.getFormaDePago() != null) {
-            // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
-            if ( idFormaDePagoAnterior != c.getFormaDePago().getId() ) {
-                if (c.getFormaDePago().getId() == 53) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
-                    formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
-                } else {            // Si no es aDetallar => generar automaticamente el item detalleDepago
-                    formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
-                    formaDePagoDetalleServicio.crearSubDetalleAutomatico(c.getId(), c.getTipoOperacion().getId(), c.getTotal(), c.getFormaDePago());
+            c.setCliente(dto.getCliente());
+            c.setCuit(dto.getCuit());
+            c.setTipoIva(dto.getTipoIva());
+            c.setFechaComprobante(LocalDate.parse(fechaComprobante));
+            c.setTipoComprobante(dto.getTipoComprobante());
+            if (c.getTalonario() != dto.getTalonario()) {
+                talonarioServicio.aumentarUltimoNro(talonarioServicio.obtenerPorNroTalonario(dto.getTalonario()));
+                c.setTalonario(dto.getTalonario());
+            }
+            c.setNroComprobante(dto.getNroComprobante());
+            c.setSector(dto.getSector());
+            c.setMoneda(dto.getMoneda());
+            c.setFormaDePago(dto.getFormaDePago());
+            c.setObservaciones(dto.getObservaciones());
+            if (photo != null && !photo.isEmpty()) c.setImage(imageService.copy(photo));
+            cobroRepo.save(c);
+
+            if (c.getFormaDePago() != null) {
+                // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
+                if (idFormaDePagoAnterior != c.getFormaDePago().getId()) {
+                    if (c.getFormaDePago().getId() == 53) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                        formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
+                    } else {            // Si no es aDetallar => generar automaticamente el item detalleDepago
+                        formaDePagoDetalleServicio.eliminarSubDetalles(c.getId(), c.getTipoOperacion().getId());
+                        formaDePagoDetalleServicio.crearSubDetalleAutomatico(c.getId(), c.getTipoOperacion().getId(), c.getTotal(), c.getFormaDePago());
+                    }
                 }
             }
         }
@@ -171,42 +177,50 @@ public class CobroServicio {
     public List<CobrosDTO> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Boolean excluirTal, Long idFormaPago ){
         if(excluirTal){
             List<Cobro> listaCobro = cobroRepo.obtenerOperacionesExcluyendoTalonario(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
-            List<CobrosDTO> listaCobrosDTO = new ArrayList<>();
+            List<CobrosDTO> listaOperacionesDTO = new ArrayList<>();
 
             for ( Cobro c : listaCobro ) {
-                CobrosDTO cobrosDTO = new CobrosDTO();
-                cobrosDTO.setId(c.getId());
-                cobrosDTO.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
-                cobrosDTO.setFechaComprobante(c.getFechaComprobante());
-                cobrosDTO.setTalonario(c.getTalonario());
-                cobrosDTO.setNroComprobante(c.getNroComprobante());
-                cobrosDTO.setSector(c.getSector().getDescripcion());
-                cobrosDTO.setFormaPago(c.getFormaDePago().getDescripcion());
-                cobrosDTO.setTotal(c.getTotal());
-                listaCobrosDTO.add(cobrosDTO);
+                CobrosDTO opDto = new CobrosDTO();
+                opDto.setId(c.getId());
+                opDto.setEntidad(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
+                opDto.setFechaComprobante(c.getFechaComprobante());
+                opDto.setTalonario(c.getTalonario());
+                opDto.setNroComprobante(c.getNroComprobante());
+                opDto.setSector(c.getSector().getDescripcion());
+                opDto.setFormaPago(c.getFormaDePago().getDescripcion());
+                opDto.setTotal(c.getTotal());
+                listaOperacionesDTO.add(opDto);
             }
-            return listaCobrosDTO;
+            return listaOperacionesDTO;
         }else {
 
             List<Cobro> listaCobro = cobroRepo.obtenerOperaciones(fechaDesde, fechaHasta, sectorId, talDesde, talHasta, idFormaPago);
-            List<CobrosDTO> listaCobrosDTO = new ArrayList<>();
+            List<CobrosDTO> listaOperacionesDTO = new ArrayList<>();
 
             for (Cobro c: listaCobro) {
-                CobrosDTO cobrosDTO = new CobrosDTO();
-                cobrosDTO.setId(c.getId());
-                cobrosDTO.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
-                cobrosDTO.setFechaComprobante(c.getFechaComprobante());
-                cobrosDTO.setTalonario(c.getTalonario());
-                cobrosDTO.setNroComprobante(c.getNroComprobante());
-                cobrosDTO.setSector(c.getSector().getDescripcion());
-                cobrosDTO.setFormaPago(c.getFormaDePago().getDescripcion());
-                cobrosDTO.setTotal(c.getTotal());
-                listaCobrosDTO.add(cobrosDTO);
+                CobrosDTO opDto = new CobrosDTO();
+                opDto.setId(c.getId());
+                opDto.setEntidad(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
+                opDto.setFechaComprobante(c.getFechaComprobante());
+                opDto.setTalonario(c.getTalonario());
+                opDto.setNroComprobante(c.getNroComprobante());
+                opDto.setSector(c.getSector().getDescripcion());
+                opDto.setFormaPago(c.getFormaDePago().getDescripcion());
+                opDto.setTotal(c.getTotal());
+                listaOperacionesDTO.add(opDto);
             }
-            return listaCobrosDTO;
+            return listaOperacionesDTO;
         }
 
     }
+
+
+    @Transactional(readOnly = true)
+    public boolean existsByCobro(Long idCobro){
+        if(cobroRepo.existsByCobro(idCobro) == 0 && cobroRepo.existsImputacionByCobro(idCobro) == 0) return false;
+        else return true;
+    }
+
 
     public ResponseEntity<byte[]> exportInvoice(Long idCobro) {
         try {

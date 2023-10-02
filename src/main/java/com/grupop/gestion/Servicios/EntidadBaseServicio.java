@@ -227,4 +227,9 @@ public class EntidadBaseServicio {
         String fechaHoraFormateada = fechaHoraActual.format(formateador);
         return "reporte" + fechaHoraFormateada + ".pdf";
     }
+
+    @Transactional(readOnly = true)
+    public EntidadBase obtenerEntidadPorNombre(String nombreCliente) {
+        return entidadBaseRepo.obtenerEntidadPorNombre(nombreCliente);
+    }
 }

@@ -1,20 +1,15 @@
 package com.grupop.gestion.Reportes;
 
+import com.grupop.gestion.DTO.OperacionesDTO;
 import com.grupop.gestion.DTO.VentasDTO;
-import com.grupop.gestion.Entidades.Venta;
-import com.grupop.gestion.Servicios.EntidadBaseServicio;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -93,7 +88,7 @@ public class VentasExporterExcel {
             celda.setCellStyle(estilo);
 
             celda = fila.createCell(1);
-            celda.setCellValue(v.getCliente());
+            celda.setCellValue(v.getEntidad());
             hoja.autoSizeColumn(1);
             celda.setCellStyle(estilo);
 

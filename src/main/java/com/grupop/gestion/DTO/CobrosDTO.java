@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public class CobrosDTO {
 
     private Long id;
-    private String cliente;
+    private String entidad;
     private LocalDate fechaComprobante;
     private Integer talonario;
     private String nroComprobante;

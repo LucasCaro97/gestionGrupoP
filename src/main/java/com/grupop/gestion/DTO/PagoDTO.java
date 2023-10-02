@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class PagoDTO {
 
     private Long id;
-    private String proveedor;
+    private String entidad;
     private LocalDate fechaComprobante;
     private Integer talonario;
     private String nroComprobante;

@@ -27,7 +27,7 @@ public class CobroDetalleAdelantoServicio {
         c.setImporte(importeAdelanto);
         cobroDetalleAdelantoRepo.save(c);
 
-        clienteServicio.actualizarSaldoAFavor(idCliente, importeAdelanto);
+        clienteServicio.descontarSaldoAFavor(idCliente, importeAdelanto);
         cobroServicio.actualizarTotal(idOperacion);
 
     }
@@ -35,7 +35,7 @@ public class CobroDetalleAdelantoServicio {
     @Transactional
     public void eliminarPorId(Long id) {
         CobroDetalleAdelanto c = cobroDetalleAdelantoRepo.findById(id).get();
-        clienteServicio.descontarSaldoAFavor(c.getCliente().getId(), c.getImporte());
+        clienteServicio.devolverSaldoAFavor(c.getCliente().getId(), c.getImporte());
         cobroDetalleAdelantoRepo.deleteById(id);
         cobroServicio.actualizarTotal(c.getCobroId().getId());
     }

@@ -17,10 +17,15 @@
 
 <main class="container mt-2">
         <div class="row">
-            <h1>Cuotas a Cobrar Mensual + Atrasados</h1>
+            <h1 th:text="|Cuotas ${titulo}|"></h1>
             <div class="col">
+                <div th:if="${exito}" th:text="${exito}" class="alert alert-success" role="alert"></div>
+                <div th:if="${exception}" th:text="${exception}" class="alert alert-danger" role="alert"></div>
+
                 <div class="table-responsive">
-                    <a class="btn btn-success mb-2" th:href="@{/reporting/generarExcelAtrasadosAndMensuales}">Exportar a Excel</a>
+<!--                    <div th:if="${corrientes}"><a class="btn btn-success mb-2" th:href="@{/reporting/generarExcelMensuales}">Exportar a Excel</a></div>-->
+<!--                    <div th:if="${atrasados}" ><a class="btn btn-success mb-2" th:href="@{/reporting/generarExcelAtrasados}">Exportar a Excel</a></div>-->
+
 
                     <table class="table table-hover table-bordered">
                         <thead>
@@ -58,13 +63,12 @@
                                     <td th:text="${#numbers.formatDecimal(xxx.total,1,'COMMA',2,'POINT')}"></td>
                                     <td>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Accion
+                                            Accion
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item text-success border border-success-subtle" >Accion 1</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" >Accion 2</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" >Accion 3</a></li>
-                                            <li><a class="dropdown-item text-success border border-success-subtle" >Accion 4</a></li>
+<!--                                            enviarCorreo/{idCliente}/{idCreditoDetalle}/{fechaVencimiento}/{monto}-->
+                                            <li><a class="dropdown-item border" th:href="@{/credito/enviarCorreo/__${xxx.id}__/__${xxx.vencimiento}__/__${xxx.total}__/__${titulo}__}">Enviar Correo</a></li>
+                                            <li><a class="dropdown-item border" id="btnWhatsApp" href="javascript:void(0);" onclick="redirigirWhatsApp(this)">Enviar WP</a></li>
                                         </ul>
                                     </td>
 

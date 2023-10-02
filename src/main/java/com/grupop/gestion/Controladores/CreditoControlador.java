@@ -1,14 +1,12 @@
 package com.grupop.gestion.Controladores;
 
 import com.grupop.gestion.DTO.CreditoDetalleDto;
-import com.grupop.gestion.Entidades.Credito;
-import com.grupop.gestion.Entidades.CreditoDetalle;
-import com.grupop.gestion.Entidades.TipoComprobante;
-import com.grupop.gestion.Entidades.Venta;
+import com.grupop.gestion.Entidades.*;
 import com.grupop.gestion.Servicios.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +43,7 @@ public class CreditoControlador {
     private final CreditoDetalleServicio creditoDetalleServicio;
     private final FormaDePagoDetalleSubDetalleServicio formaDePagoDetalleSubDetalleServicio;
     private final EstadoCreditoServicio estadoCreditoServicio;
+    private final EmailService emailService;
 
 
     @GetMapping
@@ -234,11 +234,65 @@ public class CreditoControlador {
         }
     }
 
+    @GetMapping("/obtenerCuotasCobrarAtrasados")
+    public ModelAndView obtenerCuotasCobrarAtrasados(){
+        ModelAndView mav = new ModelAndView("tabla-cuotasCobrarMensual");
+        mav.addObject("listaCuotas", creditoServicio.obtenerCuotasCobrarAtrasados());
+        mav.addObject("titulo", "Atrasadas");
+        return mav;
+    }
+
+    @GetMapping("/enviarCorreo/{idCreditoDetalle}/{fechaVencimiento}/{monto}/{titulo}")
+    public RedirectView enviarCorreoIndividual(@PathVariable Long idCreditoDetalle, @PathVariable LocalDate fechaVencimiento, @PathVariable BigDecimal monto, @PathVariable String titulo , RedirectAttributes attributes){
+        RedirectView r;
+        if(titulo.equals("Atrasadas")){
+            r = new RedirectView("/credito/obtenerCuotasCobrarAtrasados");
+
+            CreditoDetalle c = creditoDetalleServicio.obtenerPorId(idCreditoDetalle);
+            EntidadBase entidadBase = entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId());
+
+            try{
+                emailService.sendCobranza(entidadBase.getCorreo(), "atrasados",  entidadBase.getRazonSocial(), fechaVencimiento, monto, "Informacion de Cuotas Atrasadas");
+                attributes.addFlashAttribute("exito", "Se envio el correo correctamente");
+            }catch (Exception e){
+                e.printStackTrace();
+                attributes.addFlashAttribute("exception", "Error al enviar el correo");
+            }
+
+        }else{
+            r = new RedirectView("/credito/obtenerCuotasCobrarMensual");
+
+            CreditoDetalle c = creditoDetalleServicio.obtenerPorId(idCreditoDetalle);
+            EntidadBase entidadBase = entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId());
+
+            try{
+                emailService.sendCobranza(entidadBase.getCorreo(), "mensualidad",  entidadBase.getRazonSocial(), fechaVencimiento, monto, "Informacion de Cuota Mensual");
+                attributes.addFlashAttribute("exito", "Se envio el correo correctamente");
+            }catch (Exception e){
+                e.printStackTrace();
+                attributes.addFlashAttribute("exception", "Error al enviar el correo");
+            }
+
+        }
+
+
+        return r;
+    }
+
     @GetMapping("/obtenerCuotasCobrarMensual")
     public ModelAndView obtenerCuotasCobrarMensual(){
         ModelAndView mav = new ModelAndView("tabla-cuotasCobrarMensual");
         mav.addObject("listaCuotas", creditoServicio.obtenerCuotasCobrarMensual());
+        mav.addObject("titulo", "Corrientes");
         return mav;
+    }
+
+
+    @GetMapping("/obtenerTelefonoCliente/{idCreditoDetalle}")
+    public ResponseEntity<Long> obtenerTelefonoByIdCreditoDetalle(@PathVariable Long idCreditoDetalle){
+        CreditoDetalle c = creditoDetalleServicio.obtenerPorId(idCreditoDetalle);
+        EntidadBase e = entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId());
+        return ResponseEntity.ok(e.getTelefono());
     }
 
 

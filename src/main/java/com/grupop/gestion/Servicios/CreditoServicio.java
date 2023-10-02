@@ -1,5 +1,6 @@
 package com.grupop.gestion.Servicios;
 
+import com.grupop.gestion.DTO.CobroCuotasDTO;
 import com.grupop.gestion.DTO.CreditoDetalleDto;
 import com.grupop.gestion.Entidades.*;
 import com.grupop.gestion.Repositorios.CreditoRepo;
@@ -109,9 +110,6 @@ public class CreditoServicio {
         ventaServicio.cerrarVenta(dto.getVenta().getId(), true);
 //        CIERRO EL DETALLE DE PAGO DE LA VENTA
         formaDePagoDetalleServicio.cerrarDetallePago(dto.getVenta().getId(), dto.getVenta().getTipoOperacion().getId());
-//    HAGO UN ENVIO DE EMAIL
-//        String email="lucascaro97@gmail.com";
-//        emailService.send(email, "credito", c.getVenta().getNroComprobante(), c.getCliente().getId(), c.getTotalCredito(), c.getPlanPago());
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -328,7 +326,41 @@ public class CreditoServicio {
         List<CreditoDetalle> listaCuotas = creditoDetalleServicio.obtenerCuotasCobrarMensual();
         List<CreditoDetalleDto> listaCuotasDTO = new ArrayList<>();
 
+        for (CreditoDetalle c: listaCuotas ) {
+            CreditoDetalleDto creditoDetalleDto = new CreditoDetalleDto();
+            creditoDetalleDto.setId(c.getId());
+            creditoDetalleDto.setCliente(entidadBaseServicio.obtenerNombrePorFkCliente(c.getCliente().getId()).getRazonSocial());
+            creditoDetalleDto.setIdCredito(c.getCreditoId().getId());
+            creditoDetalleDto.setNroCuota(c.getNroCuota());
+            creditoDetalleDto.setCapital(c.getCapital());
+            creditoDetalleDto.setGastoAdm(c.getGastoAdm());
+            creditoDetalleDto.setMonto(c.getMonto());
+            creditoDetalleDto.setVencimiento(c.getVencimiento());
+            creditoDetalleDto.setSaldo(c.getSaldo());
+            //CALCULO SI TIENE DIAS ATRASADOS
+            Long diferenciaEnDias = ChronoUnit.DAYS.between(creditoDetalleDto.getVencimiento(), LocalDate.now());
+            creditoDetalleDto.setDiasAtrasados( (diferenciaEnDias > 0 ) ? diferenciaEnDias.toString() : "0");
+            creditoDetalleDto.setAjusteCac(calcularAjuste(creditoDetalleDto.getIdCredito(), creditoDetalleDto.getSaldo()));
+            //SI TIENE DIAS ATRASADOS, CALCULO EL INTERES PUNITORIO DEPENDIENDO DEL % ESTIPULADO EN EL PLAN DE PAGO
+            creditoDetalleDto.setInteresPun((diferenciaEnDias > 0) ? calcularInteresPunitorio(creditoDetalleDto.getIdCredito(), creditoDetalleDto.getSaldo(), diferenciaEnDias, creditoDetalleDto.getAjusteCac()) : BigDecimal.ZERO);
+            creditoDetalleDto.setTotal(creditoDetalleDto.getAjusteCac().add(creditoDetalleDto.getInteresPun()).add(creditoDetalleDto.getSaldo()));
+            listaCuotasDTO.add(creditoDetalleDto);
+        }
 
+        Collections.sort(listaCuotasDTO, new Comparator<CreditoDetalleDto>() {
+            @Override
+            public int compare(CreditoDetalleDto o1, CreditoDetalleDto o2) {
+                return o1.getCliente().compareTo(o2.getCliente());
+            }
+        });
+
+        return listaCuotasDTO;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CreditoDetalleDto> obtenerCuotasCobrarAtrasados() {
+        List<CreditoDetalle> listaCuotas = creditoDetalleServicio.obtenerCuotasCobrarAtrasados();
+        List<CreditoDetalleDto> listaCuotasDTO = new ArrayList<>();
 
         for (CreditoDetalle c: listaCuotas ) {
             CreditoDetalleDto creditoDetalleDto = new CreditoDetalleDto();
@@ -349,15 +381,16 @@ public class CreditoServicio {
             creditoDetalleDto.setInteresPun((diferenciaEnDias > 0) ? calcularInteresPunitorio(creditoDetalleDto.getIdCredito(), creditoDetalleDto.getSaldo(), diferenciaEnDias, creditoDetalleDto.getAjusteCac()) : BigDecimal.ZERO);
             creditoDetalleDto.setTotal(creditoDetalleDto.getAjusteCac().add(creditoDetalleDto.getInteresPun()).add(creditoDetalleDto.getSaldo()));
             listaCuotasDTO.add(creditoDetalleDto);
-
-            System.out.println(creditoDetalleDto);
         }
 
+        Collections.sort(listaCuotasDTO, new Comparator<CreditoDetalleDto>() {
+            @Override
+            public int compare(CreditoDetalleDto o1, CreditoDetalleDto o2) {
+                return o1.getCliente().compareTo(o2.getCliente());
+            }
+        });
+
         return listaCuotasDTO;
-
-
-
-
     }
 
     public BigDecimal calcularInteresPunitorio(Long idCredito, BigDecimal saldo, Long diasVencidos, BigDecimal ajuste){
@@ -376,30 +409,41 @@ public class CreditoServicio {
         if(plan.getTablaCac()){
             LocalDate fechaActual = LocalDate.now();
             fechaActual = fechaActual.minusMonths(2);
-            BigDecimal indiceActual = null;
-            BigDecimal indiceBase = null;
+            BigDecimal indiceActual = BigDecimal.ZERO;
+            BigDecimal indiceBase = BigDecimal.ZERO;
 
 
             //OBTENGO EL INDICE ACTUAL
             do{
                 indiceActual = indiceCacServicio.obtenerIndiceBase(fechaActual.getMonthValue(), fechaActual.getYear());
                 fechaActual = fechaActual.minusMonths(1);
-            }while(indiceActual == null);
+                System.out.println("Buscando indice Actual = " + indiceActual);
+            }while(indiceActual == BigDecimal.ZERO || indiceActual == null);
 
+
+            System.out.println("Buscando indice Base");
             // 3 variantes de formas de obtener el indice BASE
             //PRIMERO VERIFICO QUE EL INDICE BASE ESTE ESTIPULADO EN LA OPERACION DE VENTA SI NO ESTA ==> 0
             indiceBase = ventaServicio.obtenerIndiceBase(credito.getVenta().getId());
+            System.out.println("IB obtenido de la venta: " + indiceBase);
             //SEGUNDO OBTENGO EL INDICE BASE DEL PRIMER VENCIMIENTO  (MES - 2)
             if(indiceBase == BigDecimal.ZERO ){
             LocalDate fechaPrimerVencimiento = creditoDetalleServicio.obtenerFechaPrimerVencimiento(credito.getId());
+                System.out.println("Primer vencimiento: " + fechaPrimerVencimiento);
             fechaPrimerVencimiento = fechaPrimerVencimiento.minusMonths(2);
-            indiceBase = indiceCacServicio.obtenerIndiceBase(fechaPrimerVencimiento.getMonthValue(), fechaPrimerVencimiento.getYear());
+                System.out.println("Fecha indice a buscar: " + fechaPrimerVencimiento);
+            indiceBase = ( indiceCacServicio.obtenerIndiceBase(fechaPrimerVencimiento.getMonthValue(), fechaPrimerVencimiento.getYear()) ) == null ? BigDecimal.ZERO : indiceCacServicio.obtenerIndiceBase(fechaPrimerVencimiento.getMonthValue(), fechaPrimerVencimiento.getYear());
+                System.out.println("Indice base : " + indiceBase);
             }
             //TERCERO OBTENGO EL INDICE BASE DEL PRIMER VENCIMIENTO -3
-            if(indiceBase.compareTo(indiceActual) > 0 ){
+            if(indiceBase == BigDecimal.ZERO ){
+                System.out.println("Busco indice base especial ( -3 )");
                 LocalDate fechaPrimerVencimiento = creditoDetalleServicio.obtenerFechaPrimerVencimiento(credito.getId());
+                System.out.println("Primer vencimiento: " + fechaPrimerVencimiento);
                 fechaPrimerVencimiento = fechaPrimerVencimiento.minusMonths(3);
+                System.out.println("Fecha indice a buscar: " + fechaPrimerVencimiento);
                 indiceBase = indiceCacServicio.obtenerIndiceBase(fechaPrimerVencimiento.getMonthValue() , fechaPrimerVencimiento.getYear());
+                System.out.println("Indice base : " + indiceBase);
             }
 
 
@@ -429,5 +473,42 @@ public class CreditoServicio {
     public boolean verificarSiHayUnCreditoActivoPorFkVenta(Long id) {
         if(creditoRepo.verificarSiHayUnCreditoActivoPorFkVenta(id) == 0) return false;
         else return true;
+    }
+
+    @Transactional(readOnly = true)
+    public List<CobroCuotasDTO> obtenerRegistrosReporte(Long idCliente, String fechaDesde, String fechaHasta, List<String> planPago) {
+
+        System.out.println("Cliente: " + idCliente);
+        System.out.println("FD: " + fechaDesde);
+        System.out.println("FH: " + fechaHasta);
+        System.out.println("Plan: " + planPago);
+
+       List<Object[]> listaCobrosCuotas = creditoRepo.obtenerRegistrosReporte(idCliente, fechaDesde, fechaHasta, planPago);
+       List<CobroCuotasDTO> listaCobrosCuotasDTO = new ArrayList<>();
+
+        for (Object[] row : listaCobrosCuotas ) {
+
+
+            CobroCuotasDTO cobroDTO = new CobroCuotasDTO();
+            cobroDTO.setIdCobro((Long) row[0]);
+            cobroDTO.setTalonario((Integer) row[1]);
+            cobroDTO.setClienteId(entidadBaseServicio.obtenerNombrePorFkCliente((Long) row[2]).getRazonSocial());
+            cobroDTO.setCreditoId((Long) row[3]);
+            cobroDTO.setNroCuota((Integer) row[4]);
+            cobroDTO.setPlanPago(planPagoServicio.obtenerPorId((Long) row[5]).getDescripcion());
+            cobroDTO.setFechaCobro(row[6].toString());
+            cobroDTO.setImporteCuota((BigDecimal) row[7]);
+            cobroDTO.setImporteAjuste((BigDecimal) row[8]);
+            cobroDTO.setImporteIntereses((BigDecimal) row[9]);
+            cobroDTO.setImporteBonificacion((BigDecimal) row[10]);
+            cobroDTO.setImporteACobrar((BigDecimal) row[11]);
+            cobroDTO.setCancelo( (Boolean) row[12]);
+
+            System.out.println(cobroDTO);
+            listaCobrosCuotasDTO.add(cobroDTO);
+        }
+
+        return listaCobrosCuotasDTO;
+
     }
 }

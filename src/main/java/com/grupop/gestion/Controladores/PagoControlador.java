@@ -83,8 +83,9 @@ public class PagoControlador {
     }
 
     @GetMapping("/form/{id}")
-    public ModelAndView getFormUpd(@PathVariable Long id){
+    public ModelAndView getFormUpd(@PathVariable Long id, HttpServletRequest request){
         ModelAndView mav = new ModelAndView("form-pagos");
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         Pago p = pagoServicio.obtenerPorId(id);
         mav.addObject("action", "update");
         mav.addObject("pago", p);
@@ -99,6 +100,7 @@ public class PagoControlador {
         mav.addObject("tablaDetalleImp", pagoDetalleImputacionServicio.obtenerPorPago(p.getId()));
         mav.addObject("fechaComprobante", p.getFechaComprobante());
         mav.addObject("listaAdelanto", pagoDetalleAdelantoServicio.obtenerPorPago(id));
+        if(inputFlashMap != null) mav.addObject("exception" , inputFlashMap.get("exception"));
         return mav;
     }
 
@@ -136,8 +138,7 @@ public class PagoControlador {
 
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
-            attributes.addFlashAttribute("pago", dto);
-            r.setUrl("/pago/form");
+            r.setUrl("/pago/form/" + dto.getId());
         }
         return r;
     }

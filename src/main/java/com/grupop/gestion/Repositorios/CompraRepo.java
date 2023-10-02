@@ -58,4 +58,10 @@ public interface CompraRepo extends JpaRepository<Compra,Long> {
             " AND (:idFormaPago IS NULL OR fk_forma_de_pago >= :idFormaPago) ",
             nativeQuery = true)
     List<Compra> obtenerOperaciones(String fechaDesde, String fechaHasta, Long sectorId, Integer talDesde, Integer talHasta, Long idFormaPago);
+
+    @Query(value = "SELECT COUNT(*) FROM compra_detalle WHERE fk_compra = ?", nativeQuery = true)
+    Integer existsByCompra(Long compraId);
+
+    @Query(value = "SELECT COUNT(*) FROM compra_detalle_imputacion WHERE fk_compra = ?", nativeQuery = true)
+    Integer existsImputacionByCompra(Long compraId);
 }

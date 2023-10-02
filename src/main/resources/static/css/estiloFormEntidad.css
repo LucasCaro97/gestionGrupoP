@@ -48,15 +48,6 @@
     width: 40%
 }
 
-
-#comandos {
-        display: flex;
-        justify-content: space-between;
-        position: absolute;
-        top: 115px;
-        width: 1300px;
-}
-
 .btn-outline-success {
     position: relative;
     top: 47%;

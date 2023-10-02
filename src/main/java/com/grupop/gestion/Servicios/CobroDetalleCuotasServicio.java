@@ -38,7 +38,6 @@ public class CobroDetalleCuotasServicio {
 //            cobroServicio.actualizarTotal(idCobro);
         }
         else {
-            System.out.println("Creando cobro de cuota nro " + nroCuota);
             CobroDetalleCuotas c = new CobroDetalleCuotas();
             c.setVentaId((ventaServicio.obtenerPorId(idVenta)));
             c.setCobroId(cobroServicio.obtenerPorId(idCobro));
@@ -85,9 +84,9 @@ public class CobroDetalleCuotasServicio {
                 c.setImporteBonificacion(item.getImporteBonif());
                 c.setImporteFinal(c.getImporteACobrar().subtract(c.getImporteBonificacion()));
 
+                if( creditoDetalleServicio.actualizarSaldo(item.getIdCredito(), item.getNroCuota(), c.getImporteACobrar()) ) c.setCancelo(true);
+                else c.setCancelo(false);
                 cobroDetalleCuotasRepo.save(c);
-
-                creditoDetalleServicio.actualizarSaldo(item.getIdCredito(), item.getNroCuota(), c.getImporteACobrar());
 
                 if(creditoDetalleServicio.verificarSiEstaCancelado(item.getIdCredito())){
                     creditoServicio.alterarEstado(item.getIdCredito(), 2l);

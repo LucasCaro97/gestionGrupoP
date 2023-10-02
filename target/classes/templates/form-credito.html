@@ -24,6 +24,14 @@
             <h1>Registro de Creditos</h1>
             <form class="row g-3 needs-validation" th:action="@{/credito/__${action}__}" th:object="${credito}"
                   method="post" autocomplete="off">
+                <div id="comandos" class="d-flex justify-content-end">
+                    <a class="btn btn btn-secondary mb-2" id="exportPDF" th:href="@{/credito/exportarPDF/__${credito.id}__}">PDF</a>
+                    <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
+                            class="btn btn-primary"></button>
+
+                    <a class="btn btn-secondary" id="volverAtras" th:href="@{/credito}">Volver</a>
+                </div>
+
                 <input type="hidden" th:field="*{id}">
 
                 <div class="col-md-8">
@@ -171,14 +179,6 @@
                     <label for="observaciones" class="form-label">Observaciones: </label>
                     <textarea type="text" class="form-control" th:field="*{observaciones}"
                               id="observaciones"></textarea>
-                </div>
-
-                <div id="comandos" class="d-flex">
-                    <a class="btn btn btn-secondary mb-2" id="exportPDF" th:href="@{/credito/exportarPDF/__${credito.id}__}">PDF</a>
-                    <button th:text="${action == 'create' ? 'Crear' : 'Guardar'}" type="submit" id="btnAlta"
-                            class="btn btn-primary"></button>
-
-                    <a class="btn btn-secondary" id="volverAtras" th:href="@{/credito}">Volver</a>
                 </div>
             </form>
         </div>

@@ -90,7 +90,7 @@ public class PagoExporterExcel {
             celda.setCellStyle(estilo);
 
             celda = fila.createCell(1);
-            celda.setCellValue(p.getProveedor());
+            celda.setCellValue(p.getEntidad());
             hoja.autoSizeColumn(1);
             celda.setCellStyle(estilo);
 

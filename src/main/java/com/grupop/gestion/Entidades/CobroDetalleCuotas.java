@@ -34,6 +34,7 @@ public class CobroDetalleCuotas {
     private BigDecimal importeBonificacion;
     private Double porcBonificacion;
     private BigDecimal importeFinal;
+    private Boolean cancelo;    
 
 
 }

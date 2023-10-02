@@ -36,13 +36,13 @@ public class FormaDePagoDetalleSubdetalleControlador {
             if(idFormaDePago == 16){
                 //ADELANTO DE CLIENTES ( COBRO )
                 formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
-                Long idCliente = cobroServicio.obtenerCliente(idOperacion);
-                clienteServicio.descontarSaldoAFavor(idCliente, importe);
+//                Long idCliente = cobroServicio.obtenerCliente(idOperacion);
+//                clienteServicio.descontarSaldoAFavor(idCliente, importe);
             } else if (idFormaDePago == 33) {
                 //ADELANTO A PROVEEDORES ( PAGO )
                 formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
-                Long idProveedor = pagoServicio.obtenerProveedor(idOperacion);
-                proveedorServicio.descontarSaldoAFavor(idProveedor, importe);
+//                Long idProveedor = pagoServicio.obtenerProveedor(idOperacion);
+//                proveedorServicio.descontarSaldoAFavor(idProveedor, importe);
             }else{
                 formaDePagoDetalleServicio.crearSubdetalleManual(idOperacion, idTipoOperacion, idFormaDePago, importe);
             }
@@ -63,7 +63,7 @@ public class FormaDePagoDetalleSubdetalleControlador {
 
             if(fsub.getFormaPago().getId() == 16){
                 Long idCliente = cobroServicio.obtenerCliente(f.getIdOperacion());
-                clienteServicio.devolverSaldoAFavor(idCliente, fsub.getMonto());
+//                clienteServicio.devolverSaldoAFavor(idCliente, fsub.getMonto());
             } else if (fsub.getFormaPago().getId() == 33) {
                 Long idProveedor = pagoServicio.obtenerProveedor(f.getIdOperacion());
                 proveedorServicio.devolverSaldoAFavor(idProveedor, fsub.getMonto());

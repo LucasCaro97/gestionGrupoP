@@ -46,14 +46,14 @@ public class ClienteServicio {
                 clienteRepo.save(c);
         }
 
-        @Transactional
+        @Transactional //resta saldo en tabla cliente
         public void descontarSaldoAFavor(Long idCliente, BigDecimal importe) {
                 Cliente c = clienteRepo.findById(idCliente).get();
                 c.setSaldoAFavor(c.getSaldoAFavor().subtract(importe));
                 clienteRepo.save(c);
         }
 
-        @Transactional
+        @Transactional // suma saldo en tabla cliente
         public void devolverSaldoAFavor(Long idCliente, BigDecimal monto) {
                 Cliente c = clienteRepo.findById(idCliente).get();
                 c.setSaldoAFavor(c.getSaldoAFavor().add(monto));

@@ -99,8 +99,9 @@ public class VentaControlador {
     }
 
     @GetMapping("/form/{id}")
-    public ModelAndView getFormUpd(@PathVariable Long id ){
+    public ModelAndView getFormUpd(@PathVariable Long id, HttpServletRequest request ){
         ModelAndView mav = new ModelAndView("form-ventas");
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
         Venta vta = ventaServicio.obtenerPorId(id);
         mav.addObject("venta",vta);
         mav.addObject("action", "update");
@@ -119,6 +120,7 @@ public class VentaControlador {
         mav.addObject("listaComisiones", comisionServicio.obtenerComisionVenta(id));
         mav.addObject("listaIndice", indiceCacServicio.obtenerTodos());
         mav.addObject("fechaComprobante", vta.getFechaComprobante());
+        if(inputFlashMap != null) mav.addObject("exception", inputFlashMap.get("exception"));
         return mav;
     }
 
@@ -159,9 +161,8 @@ public class VentaControlador {
             }
         }catch (Exception e){
             attributes.addFlashAttribute("exception", e.getMessage());
-            attributes.addFlashAttribute("venta", dto);
-            redirect.setUrl("/ventas/form");
-            e.printStackTrace();
+            e.getMessage();
+            redirect.setUrl("/ventas/form/" + dto.getId());
         }
         return redirect;
     }

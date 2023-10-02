@@ -82,4 +82,10 @@ public interface VentaRepo extends JpaRepository<Venta, Long> {
 
     @Query(value = "SELECT fk_producto FROM venta_detalle WHERE fk_venta = ?", nativeQuery = true)
     List<Long> obtenerProductosVinculados(Long idVenta);
+
+    @Query( value = "SELECT COUNT(*) FROM venta_detalle WHERE fk_venta = ?", nativeQuery = true)
+    Integer existsByVenta(Long idVenta);
+
+    @Query( value = "SELECT COUNT(*) FROM venta_detalle_imputacion WHERE fk_venta = ?", nativeQuery = true)
+    Integer existsImputacionByVenta(Long idVenta);
 }
