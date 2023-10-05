@@ -101,7 +101,7 @@ public class VentaServicio {
                 if (vta.getFormaDePago() != null) {
                     // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
                     if (idFormaDePagoAnterior != vta.getFormaDePago().getId()) {
-                        if (vta.getFormaDePago().getId() == 51) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                        if (vta.getFormaDePago().getId() == 59) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
                             formaDePagoDetalleServicio.eliminarSubDetalles(vta.getId(), vta.getTipoOperacion().getId());
                         } else {      // Si no es aDetallar => generar automaticamente el item detalleDepago
                             formaDePagoDetalleServicio.eliminarSubDetalles(vta.getId(), vta.getTipoOperacion().getId());

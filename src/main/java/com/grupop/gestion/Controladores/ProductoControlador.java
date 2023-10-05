@@ -43,12 +43,22 @@ public class ProductoControlador {
         if (inputFlashMap!=null){ mav.addObject("exito", inputFlashMap.get("exito")); }
 
         int page = params.get("page") != null ? ( Integer.valueOf(params.get("page").toString()) -1) : 0;
+
         Page<Producto> pageProducto = productoServicio.obtenerTodos(descripcion,tipoProd,cuenta,page, 50);
+
+        List<Producto> listaProductos = pageProducto.getContent();
+
+        for (Producto producto : listaProductos) {
+            System.out.println(producto);
+        }
+
         int totalPage = pageProducto.getTotalPages();
         if(totalPage > 0){
             List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
             mav.addObject("pages", pages);
         }
+
+
 
         mav.addObject("listaProd", pageProducto.getContent());
         mav.addObject("current", page + 1);

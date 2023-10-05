@@ -486,6 +486,35 @@
                                         </div>
 
                                     </div>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="hFiftyNine">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                    data-bs-target="#cFiftyNine" aria-expanded="false" aria-controls="hFiftyNine"> 1.1.4.5 OTROS SERVICIOS
+                                            </button>
+                                        </h2>
+                                        <div id="cFiftyNine" class="accordion-collapse collapse" aria-labelledby="hFiftyNine">
+                                            <div class="accordion-body">
+
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                    <tr class="table-dark">
+                                                        <th>Id</th>
+                                                        <th>Descripcion</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:each="xxx : ${listaCuentas1144}">
+                                                        <td th:text="${xxx.id}"></td>
+                                                        <td th:text="${xxx.descripcion}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
 
                                 </div>
                             </div>

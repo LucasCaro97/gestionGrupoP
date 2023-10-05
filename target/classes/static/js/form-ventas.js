@@ -291,6 +291,7 @@ async function crearItemsDetalle(){
             })
         });
     };
+
     var tiempoEspera = 500;
     function redireccionar() {
             //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA

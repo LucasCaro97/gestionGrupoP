@@ -45,8 +45,8 @@ public interface ProductoRepo extends JpaRepository<Producto, Long> {
     @Query(value = "SELECT * FROM producto WHERE descripcion LIKE %?1%", nativeQuery = true)
     Producto searchProductoByDescripcion(String descripcion);
 
-    @Query(value = "SELECT * FROM producto WHERE estado = ?", nativeQuery = true)
-    List<Producto> searchByEstado(Boolean estado);
+    @Query(value = "SELECT * FROM producto WHERE estado = ? AND fk_tipo_prod = 1", nativeQuery = true)
+    List<Producto> searchByEstadoAndTipoProd(Boolean estado);
     @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ? AND estado = 1", nativeQuery = true)
     Page<Producto> searchByCuentaPageable(Long idCuenta, Pageable pageable);
     @Query(value = "SELECT * FROM producto WHERE fk_cuentas_contables = ?1 AND descripcion LIKE %?2% AND estado = 1", nativeQuery = true)
@@ -57,4 +57,7 @@ public interface ProductoRepo extends JpaRepository<Producto, Long> {
 
     @Query(value = "SELECT * FROM producto", nativeQuery = true)
     Page<Producto> findAllPageable(Pageable pageable);
+
+    @Query(value = "SELECT * FROM producto WHERE estado = ? AND fk_tipo_prod <> 1", nativeQuery = true)
+    List<Producto> searchByEstadoAndCategoria(Boolean estado);
 }

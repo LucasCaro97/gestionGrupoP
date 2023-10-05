@@ -78,7 +78,7 @@ public class PagoServicio {
             if (p.getFormaDePago() != null) {
                 // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
                 if (idFormaDePagoAnterior != p.getFormaDePago().getId()) {
-                    if (p.getFormaDePago().getId() == 54) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                    if (p.getFormaDePago().getId() == 61) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
                         formaDePagoDetalleServicio.eliminarSubDetalles(p.getId(), p.getTipoOperacion().getId());
                     } else {      // Si no es aDetallar => generar automaticamente el item detalleDepago
                         formaDePagoDetalleServicio.eliminarSubDetalles(p.getId(), p.getTipoOperacion().getId());

@@ -27,14 +27,18 @@ $("#crearLotes").click(function(){
     let idManzana = $("#manzana").val()
     let cantLotes = $("#cantLotes").val()
 
-   //console.log("generarLotes/" + idUrbanizacion + "/" + idManzana + "/" + cantLotes)
-    fetch("/lote/crearLotesPorGrupo/" + idUrbanizacion + "/" + idManzana + "/" + cantLotes, {
-        method : "POST",
-        headers:{
-            "Content-Type" : "application/json"
-            }
-    })
+    async function redireccionar() {
+                //GUARDO EL TOTAL DE LA VENTA EN LA TABLA VENTA
+                await fetch("/lote/crearLotesPorGrupo/" + idUrbanizacion + "/" + idManzana + "/" + cantLotes, {
+                                method : "POST",
+                                headers:{
+                                    "Content-Type" : "application/json"
+                                    }
+                            })
+        window.location.reload();
+        }
 
+    setTimeout(redireccionar, 500);
 })
 
 

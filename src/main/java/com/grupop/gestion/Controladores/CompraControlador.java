@@ -93,7 +93,7 @@ public class CompraControlador {
         mav.addObject("listaTalonario", talonarioServicio.obtenerTodos());
         mav.addObject("listaTipoComp", tipoComprobanteServicio.obtenerTodos());
         mav.addObject("listaSector", sectorServicio.obtenerTodos());
-        mav.addObject("listaProd", productoServicio.obtenerActivos(true));
+        mav.addObject("listaProd", productoServicio.obtenerActivosCompra(true));
         mav.addObject("listaDetalle", compraDetalleServicio.obtenerPorCompra(id));
         mav.addObject("listaFormasPago", formaDePagoServicio.obtenerTodosPorOperacion(2l));
         mav.addObject("tablaDetalleImputacion", compraDetalleImputacionServicio.obtenerPorCompra(id));
@@ -130,7 +130,7 @@ public class CompraControlador {
 
             if(!c.isBloqueado()){
                 if(dto.getFormaDePago() != null || c.getFormaDePago() != null){
-                    if( (dto.getFormaDePago().getId() == 52 || c.getFormaDePago().getId() == 52) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 2l) == 0){
+                    if( (dto.getFormaDePago().getId() == 60 || c.getFormaDePago().getId() == 60) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 2l) == 0){
                         redirect.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "2");
                     }
                 }

@@ -89,7 +89,7 @@ public class CompraServicio {
                 if (compra.getFormaDePago() != null) {
                     // Si ya existe el detalleDePago verifico si cambia la formaDePago para operar
                     if (idFormaDePagoAnterior != compra.getFormaDePago().getId()) {
-                        if (compra.getFormaDePago().getId() == 52) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
+                        if (compra.getFormaDePago().getId() == 60) { //La forma de pago ha cambiado y si es aDetallar => eliminar items detalleDePago
                             formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());
                         } else {
                             formaDePagoDetalleServicio.eliminarSubDetalles(compra.getId(), compra.getTipoOperacion().getId());

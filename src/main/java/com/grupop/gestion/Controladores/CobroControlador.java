@@ -146,7 +146,7 @@ public class CobroControlador {
             Cobro c = cobroServicio.obtenerPorId(dto.getId());
 
             if(dto.getFormaDePago() != null) {
-                if ((dto.getFormaDePago().getId() == 53 || c.getFormaDePago().getId() == 53) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 3l) == 0) {
+                if ((dto.getFormaDePago().getId() == 61 || c.getFormaDePago().getId() == 61) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(c.getId(), 3l) == 0) {
                     r.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "3");
                 }else if( ( dto.getFormaDePago().getId() == 15 || c.getFormaDePago().getId() == 15 ) && chequeServicio.validarExistencia(c.getId()) == 0 ){
                     r.setUrl("/cheque/form");

@@ -154,7 +154,7 @@ public class VentaControlador {
                 if(dto.getFormaDePago() != null || v.getFormaDePago() != null ){
                    if( (dto.getFormaDePago().getId() == 3 || v.getFormaDePago().getId() == 3 ) && creditoServicio.validarExistenciaPorVenta(dto.getId()) == 0){
                        redirect.setUrl("/credito/form/new/"+dto.getId());
-                   }else if( (dto.getFormaDePago().getId() == 51 || v.getFormaDePago().getId() == 51 ) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(v.getId(), 1l) == 0 ){   //Validar tambien luego si existe ya un detalle de pago asignado
+                   }else if( (dto.getFormaDePago().getId() == 59 || v.getFormaDePago().getId() == 59 ) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(v.getId(), 1l) == 0 ){   //Validar tambien luego si existe ya un detalle de pago asignado
                        redirect.setUrl("/detalleDePago/getForm/"+dto.getId() + "/" + "1");
                    }
                 }

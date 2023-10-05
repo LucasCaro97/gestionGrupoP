@@ -131,7 +131,7 @@ public class PagoControlador {
             r.setUrl("/pago/form/" + dto.getId());
             attributes.addFlashAttribute("exito", "Se ha actualizado correctamente el pago");
             if(dto.getFormaDePago() != null) {
-                if ((dto.getFormaDePago().getId() == 54 || p.getFormaDePago().getId() == 54) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(p.getId(), 4l) == 0) {
+                if ((dto.getFormaDePago().getId() == 62 || p.getFormaDePago().getId() == 62) && formaDePagoDetalleServicio.validarExistenciaSubDetalle(p.getId(), 4l) == 0) {
                     r.setUrl("/detalleDePago/getForm/" + dto.getId() + "/" + "4");
                 }
             }

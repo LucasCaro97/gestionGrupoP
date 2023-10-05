@@ -99,7 +99,10 @@ public class ProductoServicio {
         return null;
     }
 
-    public List<Producto> obtenerActivos(Boolean estado){ return productoRepo.searchByEstado(estado); }
+    public List<Producto> obtenerActivos(Boolean estado){ return productoRepo.searchByEstadoAndTipoProd(estado); }
+
+
+    public List<Producto> obtenerActivosCompra(Boolean estado){ return productoRepo.searchByEstadoAndCategoria(estado); }
 
     @Transactional(readOnly = true)
     public Producto buscarPorId(Long id){ return productoRepo.findById(id).get();}
